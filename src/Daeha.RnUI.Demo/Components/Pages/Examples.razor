@@ -1,95 +1,87 @@
 @page "/examples"
 
-<PageTitle>Examples - Shadrazor</PageTitle>
+<PageTitle>Examples - RnUI</PageTitle>
 
 <div class="space-y-8">
     <div>
         <h1 class="text-3xl font-bold tracking-tight">Examples</h1>
-        <p class="text-muted-foreground">Example layouts and compositions using Shadrazor components.</p>
+        <p class="text-muted-foreground">Example layouts and compositions using RnUI components.</p>
     </div>
 
     @* Dialog Example *@
     <section class="space-y-4">
         <h2 class="text-2xl font-semibold">Dialog</h2>
-        <Button OnClick="() => _dialogOpen = true">Open Dialog</Button>
-        <Dialog @bind-Open="_dialogOpen">
-            <DialogHeader>
-                <DialogTitle>Edit Profile</DialogTitle>
-                <DialogDescription>Make changes to your profile here. Click save when you're done.</DialogDescription>
-            </DialogHeader>
+        <RnButton OnClick="() => _dialogOpen = true">Open Dialog</RnButton>
+        <RnDialog @bind-Open="_dialogOpen">
+            <RnDialogHeader>
+                <RnDialogTitle>Edit Profile</RnDialogTitle>
+                <RnDialogDescription>Make changes to your profile here. Click save when you're done.</RnDialogDescription>
+            </RnDialogHeader>
             <div class="grid gap-4 py-4">
                 <div class="space-y-2">
-                    <Label>Name</Label>
-                    <Input Placeholder="Your name" />
+                    <RnLabel>Name</RnLabel>
+                    <RnInput Placeholder="Your name" />
                 </div>
                 <div class="space-y-2">
-                    <Label>Username</Label>
-                    <Input Placeholder="@username" />
+                    <RnLabel>Username</RnLabel>
+                    <RnInput Placeholder="@("@username")" />
                 </div>
             </div>
-            <DialogFooter>
-                <Button Variant="ButtonVariant.Outline" OnClick="() => _dialogOpen = false">Cancel</Button>
-                <Button OnClick="() => _dialogOpen = false">Save changes</Button>
-            </DialogFooter>
-        </Dialog>
+            <RnDialogFooter>
+                <RnButton Variant="ButtonVariant.Outline" OnClick="() => _dialogOpen = false">Cancel</RnButton>
+                <RnButton OnClick="() => _dialogOpen = false">Save changes</RnButton>
+            </RnDialogFooter>
+        </RnDialog>
     </section>
 
-    <Separator />
+    <RnSeparator />
 
     @* Sheet Example *@
     <section class="space-y-4">
         <h2 class="text-2xl font-semibold">Sheet</h2>
         <div class="flex gap-4">
-            <Button Variant="ButtonVariant.Outline" OnClick="() => _sheetOpen = true">Open Sheet (Right)</Button>
+            <RnButton Variant="ButtonVariant.Outline" OnClick="() => _sheetOpen = true">Open Sheet (Right)</RnButton>
         </div>
-        <Sheet @bind-Open="_sheetOpen" Side="Side.Right">
-            <SheetHeader>
-                <SheetTitle>Edit Profile</SheetTitle>
-                <SheetDescription>Make changes to your profile.</SheetDescription>
-            </SheetHeader>
+        <RnSheet @bind-Open="_sheetOpen" Side="Side.Right">
+            <RnSheetHeader>
+                <RnSheetTitle>Edit Profile</RnSheetTitle>
+                <RnSheetDescription>Make changes to your profile.</RnSheetDescription>
+            </RnSheetHeader>
             <div class="grid gap-4 py-4">
                 <div class="space-y-2">
-                    <Label>Name</Label>
-                    <Input Placeholder="Your name" />
+                    <RnLabel>Name</RnLabel>
+                    <RnInput Placeholder="Your name" />
                 </div>
             </div>
-            <SheetFooter>
-                <Button OnClick="() => _sheetOpen = false">Save changes</Button>
-            </SheetFooter>
-        </Sheet>
+            <RnSheetFooter>
+                <RnButton OnClick="() => _sheetOpen = false">Save changes</RnButton>
+            </RnSheetFooter>
+        </RnSheet>
     </section>
 
-    <Separator />
+    <RnSeparator />
 
     @* Accordion Example *@
     <section class="space-y-4">
         <h2 class="text-2xl font-semibold">Accordion</h2>
-        <CascadingValue Value="_accordion" IsFixed="true">
-            <Accordion @bind-ExpandedItem="_expandedItem" Class="max-w-md">
-                <CascadingValue Value="_item1" IsFixed="true">
-                    <AccordionItem Value="item-1">
-                        <AccordionTrigger>Is it accessible?</AccordionTrigger>
-                        <AccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</AccordionContent>
-                    </AccordionItem>
-                </CascadingValue>
-                <CascadingValue Value="_item2" IsFixed="true">
-                    <AccordionItem Value="item-2">
-                        <AccordionTrigger>Is it styled?</AccordionTrigger>
-                        <AccordionContent>
-                            Yes. It comes with default styles that match the other components' aesthetic.
-                        </AccordionContent>
-                    </AccordionItem>
-                </CascadingValue>
-                <CascadingValue Value="_item3" IsFixed="true">
-                    <AccordionItem Value="item-3">
-                        <AccordionTrigger>Is it animated?</AccordionTrigger>
-                        <AccordionContent>
-                            Yes. It's animated by default, but you can disable it if you prefer.
-                        </AccordionContent>
-                    </AccordionItem>
-                </CascadingValue>
-            </Accordion>
-        </CascadingValue>
+        <RnAccordion @bind-ExpandedItem="_expandedItem" Class="max-w-md">
+            <RnAccordionItem Value="item-1">
+                <RnAccordionTrigger>Is it accessible?</RnAccordionTrigger>
+                <RnAccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</RnAccordionContent>
+            </RnAccordionItem>
+            <RnAccordionItem Value="item-2">
+                <RnAccordionTrigger>Is it styled?</RnAccordionTrigger>
+                <RnAccordionContent>
+                    Yes. It comes with default styles that match the other components' aesthetic.
+                </RnAccordionContent>
+            </RnAccordionItem>
+            <RnAccordionItem Value="item-3">
+                <RnAccordionTrigger>Is it animated?</RnAccordionTrigger>
+                <RnAccordionContent>
+                    Yes. It's animated by default, but you can disable it if you prefer.
+                </RnAccordionContent>
+            </RnAccordionItem>
+        </RnAccordion>
     </section>
 </div>
 
@@ -97,6 +89,4 @@
     private bool _dialogOpen;
     private bool _sheetOpen;
     private string? _expandedItem = "item-1";
-    private Accordion? _accordion;
-    private AccordionItem? _item1, _item2, _item3;
 }

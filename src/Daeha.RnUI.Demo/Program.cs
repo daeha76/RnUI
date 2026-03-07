@@ -15,7 +15,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAntiforgery();
 
-app.MapRazorComponents<Daeha.Shadrazor.Demo.Components.App>()
+app.MapRazorComponents<Daeha.RnUI.Demo.Components.App>()
     .AddInteractiveServerRenderMode();
 
 app.Run();

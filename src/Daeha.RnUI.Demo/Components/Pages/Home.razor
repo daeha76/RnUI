@@ -1,10 +1,10 @@
 @page "/"
 
-<PageTitle>Shadrazor - Component Library</PageTitle>
+<PageTitle>RnUI - Component Library</PageTitle>
 
 <div class="space-y-12">
     <div class="space-y-4">
-        <h1 class="text-4xl font-bold tracking-tight">Shadrazor</h1>
+        <h1 class="text-4xl font-bold tracking-tight">RnUI</h1>
         <p class="text-lg text-muted-foreground">
             A Blazor port of shadcn/ui. Beautifully designed components built with Tailwind CSS.
         </p>
@@ -14,242 +14,240 @@
     <section class="space-y-4">
         <h2 class="text-2xl font-semibold tracking-tight">Button</h2>
         <div class="flex flex-wrap gap-4">
-            <Button>Default</Button>
-            <Button Variant="ButtonVariant.Secondary">Secondary</Button>
-            <Button Variant="ButtonVariant.Outline">Outline</Button>
-            <Button Variant="ButtonVariant.Ghost">Ghost</Button>
-            <Button Variant="ButtonVariant.Destructive">Destructive</Button>
-            <Button Variant="ButtonVariant.Link">Link</Button>
+            <RnButton>Default</RnButton>
+            <RnButton Variant="ButtonVariant.Secondary">Secondary</RnButton>
+            <RnButton Variant="ButtonVariant.Outline">Outline</RnButton>
+            <RnButton Variant="ButtonVariant.Ghost">Ghost</RnButton>
+            <RnButton Variant="ButtonVariant.Destructive">Destructive</RnButton>
+            <RnButton Variant="ButtonVariant.Link">Link</RnButton>
         </div>
         <div class="flex flex-wrap gap-4">
-            <Button Size="ButtonSize.Sm">Small</Button>
-            <Button>Default</Button>
-            <Button Size="ButtonSize.Lg">Large</Button>
+            <RnButton Size="ButtonSize.Sm">Small</RnButton>
+            <RnButton>Default</RnButton>
+            <RnButton Size="ButtonSize.Lg">Large</RnButton>
         </div>
     </section>
 
-    <Separator />
+    <RnSeparator />
 
     @* Badge *@
     <section class="space-y-4">
         <h2 class="text-2xl font-semibold tracking-tight">Badge</h2>
         <div class="flex flex-wrap gap-4">
-            <Badge>Default</Badge>
-            <Badge Variant="BadgeVariant.Secondary">Secondary</Badge>
-            <Badge Variant="BadgeVariant.Outline">Outline</Badge>
-            <Badge Variant="BadgeVariant.Destructive">Destructive</Badge>
+            <RnBadge>Default</RnBadge>
+            <RnBadge Variant="BadgeVariant.Secondary">Secondary</RnBadge>
+            <RnBadge Variant="BadgeVariant.Outline">Outline</RnBadge>
+            <RnBadge Variant="BadgeVariant.Destructive">Destructive</RnBadge>
         </div>
     </section>
 
-    <Separator />
+    <RnSeparator />
 
     @* Card *@
     <section class="space-y-4">
         <h2 class="text-2xl font-semibold tracking-tight">Card</h2>
         <div class="grid gap-4 md:grid-cols-2">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Card Title</CardTitle>
-                    <CardDescription>Card description goes here.</CardDescription>
-                </CardHeader>
-                <CardContent>
+            <RnCard>
+                <RnCardHeader>
+                    <RnCardTitle>Card Title</RnCardTitle>
+                    <RnCardDescription>Card description goes here.</RnCardDescription>
+                </RnCardHeader>
+                <RnCardContent>
                     <p>Card content with some example text.</p>
-                </CardContent>
-                <CardFooter>
-                    <Button>Action</Button>
-                </CardFooter>
-            </Card>
-            <Card>
-                <CardHeader>
-                    <CardTitle>Another Card</CardTitle>
-                    <CardDescription>With different content.</CardDescription>
-                </CardHeader>
-                <CardContent>
+                </RnCardContent>
+                <RnCardFooter>
+                    <RnButton>Action</RnButton>
+                </RnCardFooter>
+            </RnCard>
+            <RnCard>
+                <RnCardHeader>
+                    <RnCardTitle>Another Card</RnCardTitle>
+                    <RnCardDescription>With different content.</RnCardDescription>
+                </RnCardHeader>
+                <RnCardContent>
                     <p>More example content here.</p>
-                </CardContent>
-            </Card>
+                </RnCardContent>
+            </RnCard>
         </div>
     </section>
 
-    <Separator />
+    <RnSeparator />
 
     @* Input & Form Controls *@
     <section class="space-y-4">
         <h2 class="text-2xl font-semibold tracking-tight">Form Controls</h2>
         <div class="grid gap-4 max-w-sm">
             <div class="space-y-2">
-                <Label For="email">Email</Label>
-                <Input Type="email" Placeholder="Enter your email" />
+                <RnLabel For="email">Email</RnLabel>
+                <RnInput Type="email" Placeholder="Enter your email" />
             </div>
             <div class="space-y-2">
-                <Label For="message">Message</Label>
-                <Textarea Placeholder="Type your message here" />
+                <RnLabel For="message">Message</RnLabel>
+                <RnTextarea Placeholder="Type your message here" />
             </div>
             <div class="flex items-center space-x-2">
-                <Checkbox @bind-Checked="_checkboxValue" />
-                <Label>Accept terms and conditions</Label>
+                <RnCheckbox @bind-Checked="_checkboxValue" />
+                <RnLabel>Accept terms and conditions</RnLabel>
             </div>
             <div class="flex items-center space-x-2">
-                <Switch @bind-Checked="_switchValue" />
-                <Label>Enable notifications</Label>
+                <RnSwitch @bind-Checked="_switchValue" />
+                <RnLabel>Enable notifications</RnLabel>
             </div>
         </div>
     </section>
 
-    <Separator />
+    <RnSeparator />
 
     @* Alert *@
     <section class="space-y-4">
         <h2 class="text-2xl font-semibold tracking-tight">Alert</h2>
-        <Alert>
-            <AlertTitle>Heads up!</AlertTitle>
-            <AlertDescription>You can add components to your app using the CLI.</AlertDescription>
-        </Alert>
-        <Alert Variant="AlertVariant.Destructive">
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>Your session has expired. Please log in again.</AlertDescription>
-        </Alert>
+        <RnAlert>
+            <RnAlertTitle>Heads up!</RnAlertTitle>
+            <RnAlertDescription>You can add components to your app using the CLI.</RnAlertDescription>
+        </RnAlert>
+        <RnAlert Variant="AlertVariant.Destructive">
+            <RnAlertTitle>Error</RnAlertTitle>
+            <RnAlertDescription>Your session has expired. Please log in again.</RnAlertDescription>
+        </RnAlert>
     </section>
 
-    <Separator />
+    <RnSeparator />
 
     @* Avatar *@
     <section class="space-y-4">
         <h2 class="text-2xl font-semibold tracking-tight">Avatar</h2>
         <div class="flex items-center gap-4">
-            <Avatar Src="https://github.com/shadcn.png" Alt="shadcn" />
-            <Avatar Size="ComponentSize.Sm">
+            <RnAvatar Src="https://github.com/shadcn.png" Alt="shadcn" />
+            <RnAvatar Size="ComponentSize.Sm">
                 <span>CN</span>
-            </Avatar>
-            <Avatar Size="ComponentSize.Lg">
+            </RnAvatar>
+            <RnAvatar Size="ComponentSize.Lg">
                 <span>LG</span>
-            </Avatar>
+            </RnAvatar>
         </div>
     </section>
 
-    <Separator />
+    <RnSeparator />
 
     @* Progress *@
     <section class="space-y-4">
         <h2 class="text-2xl font-semibold tracking-tight">Progress</h2>
-        <Progress Value="60" Class="max-w-md" />
-        <Slider @bind-Value="_sliderValue" Class="max-w-md" />
+        <RnProgress Value="60" Class="max-w-md" />
+        <RnSlider @bind-Value="_sliderValue" Class="max-w-md" />
         <p class="text-sm text-muted-foreground">Slider value: @_sliderValue</p>
     </section>
 
-    <Separator />
+    <RnSeparator />
 
     @* Skeleton *@
     <section class="space-y-4">
         <h2 class="text-2xl font-semibold tracking-tight">Skeleton</h2>
         <div class="flex items-center space-x-4">
-            <Skeleton Class="h-12 w-12 rounded-full" />
+            <RnSkeleton Class="h-12 w-12 rounded-full" />
             <div class="space-y-2">
-                <Skeleton Class="h-4 w-[250px]" />
-                <Skeleton Class="h-4 w-[200px]" />
+                <RnSkeleton Class="h-4 w-[250px]" />
+                <RnSkeleton Class="h-4 w-[200px]" />
             </div>
         </div>
     </section>
 
-    <Separator />
+    <RnSeparator />
 
     @* Tabs *@
     <section class="space-y-4">
         <h2 class="text-2xl font-semibold tracking-tight">Tabs</h2>
-        <CascadingValue Value="_tabs" IsFixed="true">
-            <Tabs @bind-ActiveTab="_activeTab">
-                <TabsList>
-                    <TabsTrigger Value="account">Account</TabsTrigger>
-                    <TabsTrigger Value="password">Password</TabsTrigger>
-                </TabsList>
-                <TabsContent Value="account">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Account</CardTitle>
-                            <CardDescription>Make changes to your account here.</CardDescription>
-                        </CardHeader>
-                        <CardContent>
+        <RnTabs @bind-ActiveTab="_activeTab">
+                <RnTabsList>
+                    <RnTabsTrigger Value="account">Account</RnTabsTrigger>
+                    <RnTabsTrigger Value="password">Password</RnTabsTrigger>
+                </RnTabsList>
+                <RnTabsContent Value="account">
+                    <RnCard>
+                        <RnCardHeader>
+                            <RnCardTitle>Account</RnCardTitle>
+                            <RnCardDescription>Make changes to your account here.</RnCardDescription>
+                        </RnCardHeader>
+                        <RnCardContent>
                             <div class="space-y-2">
-                                <Label>Name</Label>
-                                <Input Placeholder="Your name" />
+                                <RnLabel>Name</RnLabel>
+                                <RnInput Placeholder="Your name" />
                             </div>
-                        </CardContent>
-                    </Card>
-                </TabsContent>
-                <TabsContent Value="password">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Password</CardTitle>
-                            <CardDescription>Change your password here.</CardDescription>
-                        </CardHeader>
-                        <CardContent>
+                        </RnCardContent>
+                    </RnCard>
+                </RnTabsContent>
+                <RnTabsContent Value="password">
+                    <RnCard>
+                        <RnCardHeader>
+                            <RnCardTitle>Password</RnCardTitle>
+                            <RnCardDescription>Change your password here.</RnCardDescription>
+                        </RnCardHeader>
+                        <RnCardContent>
                             <div class="space-y-2">
-                                <Label>New Password</Label>
-                                <Input Type="password" />
+                                <RnLabel>New Password</RnLabel>
+                                <RnInput Type="password" />
                             </div>
-                        </CardContent>
-                    </Card>
-                </TabsContent>
-            </Tabs>
-        </CascadingValue>
+                        </RnCardContent>
+                    </RnCard>
+                </RnTabsContent>
+            </RnTabs>
     </section>
 
-    <Separator />
+    <RnSeparator />
 
     @* Table *@
     <section class="space-y-4">
         <h2 class="text-2xl font-semibold tracking-tight">Table</h2>
-        <Table>
-            <TableHeader>
-                <TableRow>
-                    <TableHead>Invoice</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Method</TableHead>
-                    <TableHead Class="text-right">Amount</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                <TableRow>
-                    <TableCell>INV001</TableCell>
-                    <TableCell><Badge>Paid</Badge></TableCell>
-                    <TableCell>Credit Card</TableCell>
-                    <TableCell Class="text-right">$250.00</TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell>INV002</TableCell>
-                    <TableCell><Badge Variant="BadgeVariant.Outline">Pending</Badge></TableCell>
-                    <TableCell>PayPal</TableCell>
-                    <TableCell Class="text-right">$150.00</TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell>INV003</TableCell>
-                    <TableCell><Badge Variant="BadgeVariant.Destructive">Overdue</Badge></TableCell>
-                    <TableCell>Bank Transfer</TableCell>
-                    <TableCell Class="text-right">$350.00</TableCell>
-                </TableRow>
-            </TableBody>
-        </Table>
+        <RnTable>
+            <RnTableHeader>
+                <RnTableRow>
+                    <RnTableHead>Invoice</RnTableHead>
+                    <RnTableHead>Status</RnTableHead>
+                    <RnTableHead>Method</RnTableHead>
+                    <RnTableHead Class="text-right">Amount</RnTableHead>
+                </RnTableRow>
+            </RnTableHeader>
+            <RnTableBody>
+                <RnTableRow>
+                    <RnTableCell>INV001</RnTableCell>
+                    <RnTableCell><RnBadge>Paid</RnBadge></RnTableCell>
+                    <RnTableCell>Credit Card</RnTableCell>
+                    <RnTableCell Class="text-right">$250.00</RnTableCell>
+                </RnTableRow>
+                <RnTableRow>
+                    <RnTableCell>INV002</RnTableCell>
+                    <RnTableCell><RnBadge Variant="BadgeVariant.Outline">Pending</RnBadge></RnTableCell>
+                    <RnTableCell>PayPal</RnTableCell>
+                    <RnTableCell Class="text-right">$150.00</RnTableCell>
+                </RnTableRow>
+                <RnTableRow>
+                    <RnTableCell>INV003</RnTableCell>
+                    <RnTableCell><RnBadge Variant="BadgeVariant.Destructive">Overdue</RnBadge></RnTableCell>
+                    <RnTableCell>Bank Transfer</RnTableCell>
+                    <RnTableCell Class="text-right">$350.00</RnTableCell>
+                </RnTableRow>
+            </RnTableBody>
+        </RnTable>
     </section>
 
-    <Separator />
+    <RnSeparator />
 
     @* Spinner *@
     <section class="space-y-4">
         <h2 class="text-2xl font-semibold tracking-tight">Spinner</h2>
         <div class="flex gap-4 items-center">
-            <Spinner Size="ComponentSize.Sm" />
-            <Spinner />
-            <Spinner Size="ComponentSize.Lg" />
+            <RnSpinner Size="ComponentSize.Sm" />
+            <RnSpinner />
+            <RnSpinner Size="ComponentSize.Lg" />
         </div>
     </section>
 
-    <Separator />
+    <RnSeparator />
 
     @* Keyboard *@
     <section class="space-y-4">
         <h2 class="text-2xl font-semibold tracking-tight">Keyboard Shortcut</h2>
         <p class="text-sm text-muted-foreground">
-            Press <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd> to open the command palette.
+            Press <RnKbd>Ctrl</RnKbd> + <RnKbd>K</RnKbd> to open the command palette.
         </p>
     </section>
 </div>
@@ -259,5 +257,4 @@
     private bool _switchValue;
     private double _sliderValue = 50;
     private string _activeTab = "account";
-    private Tabs? _tabs;
 }

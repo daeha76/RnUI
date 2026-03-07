@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/" />
     <link rel="stylesheet" href="css/app.css" />
-    <link rel="stylesheet" href="_content/Daeha.Shadrazor/css/shadcn.css" />
-    <HeadOutlet @rendermode="InteractiveServer" />
+    <link rel="stylesheet" href="_content/Daeha.RnUI/css/shadcn.css" />
+    <HeadOutlet @rendermode="@RenderMode.InteractiveServer" />
 </head>
 
 <body class="min-h-screen bg-background text-foreground antialiased">
-    <Routes @rendermode="InteractiveServer" />
+    <Routes @rendermode="@RenderMode.InteractiveServer" />
     <script src="_framework/blazor.web.js"></script>
 </body>
 

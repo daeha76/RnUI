@@ -11,12 +11,12 @@
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         @foreach (var component in _components)
         {
-            <Card>
-                <CardHeader>
-                    <CardTitle>@component.Name</CardTitle>
-                    <CardDescription>@component.Description</CardDescription>
-                </CardHeader>
-            </Card>
+            <RnCard>
+                <RnCardHeader>
+                    <RnCardTitle>@component.Name</RnCardTitle>
+                    <RnCardDescription>@component.Description</RnCardDescription>
+                </RnCardHeader>
+            </RnCard>
         }
     </div>
 </div>
