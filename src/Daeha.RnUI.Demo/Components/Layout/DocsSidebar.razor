@@ -1,0 +1,72 @@
+@inject NavigationManager Navigation
+
+<div class="w-full">
+    <div class="pb-4">
+        <h4 class="mb-1 rounded-md px-2 py-1 text-sm font-semibold">Getting Started</h4>
+        <div class="grid grid-flow-row auto-rows-max text-sm">
+            <a href="/components"
+               class="group flex w-full items-center rounded-md border border-transparent px-2 py-1 hover:underline text-muted-foreground">
+                Introduction
+            </a>
+        </div>
+    </div>
+    <div class="pb-4">
+        <h4 class="mb-1 rounded-md px-2 py-1 text-sm font-semibold">Components</h4>
+        <div class="grid grid-flow-row auto-rows-max text-sm">
+            @foreach (var component in _components)
+            {
+                var href = $"/components/{component.Slug}";
+                var isActive = Navigation.Uri.TrimEnd('/').EndsWith(href, StringComparison.OrdinalIgnoreCase);
+                <a href="@href"
+                   class="group flex w-full items-center rounded-md border border-transparent px-2 py-1 hover:underline @(isActive ? "font-medium text-foreground" : "text-muted-foreground")">
+                    @component.Name
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private record ComponentItem(string Name, string Slug);
+
+    private readonly ComponentItem[] _components =
+    [
+        new("Accordion", "accordion"),
+        new("Alert", "alert"),
+        new("Alert Dialog", "alert-dialog"),
+        new("Aspect Ratio", "aspect-ratio"),
+        new("Avatar", "avatar"),
+        new("Badge", "badge"),
+        new("Breadcrumb", "breadcrumb"),
+        new("Button", "button"),
+        new("Card", "card"),
+        new("Checkbox", "checkbox"),
+        new("Collapsible", "collapsible"),
+        new("Context Menu", "context-menu"),
+        new("Dialog", "dialog"),
+        new("Dropdown Menu", "dropdown-menu"),
+        new("Empty", "empty"),
+        new("Hover Card", "hover-card"),
+        new("Input", "input"),
+        new("Kbd", "kbd"),
+        new("Label", "label"),
+        new("Pagination", "pagination"),
+        new("Popover", "popover"),
+        new("Progress", "progress"),
+        new("Radio Group", "radio-group"),
+        new("Scroll Area", "scroll-area"),
+        new("Select", "select"),
+        new("Separator", "separator"),
+        new("Sheet", "sheet"),
+        new("Sidebar", "sidebar"),
+        new("Skeleton", "skeleton"),
+        new("Slider", "slider"),
+        new("Spinner", "spinner"),
+        new("Switch", "switch"),
+        new("Table", "table"),
+        new("Tabs", "tabs"),
+        new("Textarea", "textarea"),
+        new("Toggle", "toggle"),
+        new("Tooltip", "tooltip"),
+    ];
+}
