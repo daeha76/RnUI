@@ -1,6 +1,6 @@
 @inject IJSRuntime JS
 
-<Button Variant="ButtonVariant.Ghost" Size="ButtonSize.IconSm" OnClick="ToggleTheme">
+<RnButton Variant="ButtonVariant.Ghost" Size="ButtonSize.IconSm" OnClick="ToggleTheme">
     @if (_isDark)
     {
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -19,7 +19,7 @@
         </svg>
     }
     <span class="sr-only">Toggle theme</span>
-</Button>
+</RnButton>
 
 @code {
     private bool _isDark = true;
