@@ -7,6 +7,14 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-amber-50: oklch(98.7% 0.022 95.277);
+    --color-amber-200: oklch(92.4% 0.12 95.746);
+    --color-amber-300: oklch(87.9% 0.169 91.605);
+    --color-amber-400: oklch(82.8% 0.189 84.429);
+    --color-amber-600: oklch(66.6% 0.179 58.318);
+    --color-amber-800: oklch(47.3% 0.137 46.201);
+    --color-amber-900: oklch(41.4% 0.112 45.904);
+    --color-amber-950: oklch(27.9% 0.077 45.635);
     --spacing: 0.25rem;
     --breakpoint-2xl: 96rem;
     --container-xs: 20rem;
@@ -34,9 +42,31 @@
     --default-mono-font-family: var(--font-mono);
     --color-background: oklch(1 0 0);
     --color-foreground: oklch(0.145 0 0);
+    --color-card: oklch(1 0 0);
+    --color-card-foreground: oklch(0.145 0 0);
+    --color-popover: oklch(1 0 0);
+    --color-popover-foreground: oklch(0.145 0 0);
+    --color-primary: oklch(0.205 0 0);
+    --color-primary-foreground: oklch(0.985 0 0);
+    --color-secondary: oklch(0.965 0 0);
+    --color-secondary-foreground: oklch(0.205 0 0);
     --color-muted: oklch(0.965 0 0);
     --color-muted-foreground: oklch(0.556 0 0);
+    --color-accent: oklch(0.965 0 0);
+    --color-accent-foreground: oklch(0.205 0 0);
+    --color-destructive: oklch(0.577 0.245 27.325);
+    --color-destructive-foreground: oklch(0.577 0.245 27.325);
     --color-border: oklch(0.922 0 0);
+    --color-input: oklch(0.922 0 0);
+    --color-ring: oklch(0.708 0 0);
+    --color-sidebar: oklch(0.985 0 0);
+    --color-sidebar-foreground: oklch(0.145 0 0);
+    --color-sidebar-primary: oklch(0.205 0 0);
+    --color-sidebar-primary-foreground: oklch(0.985 0 0);
+    --color-sidebar-accent: oklch(0.965 0 0);
+    --color-sidebar-accent-foreground: oklch(0.205 0 0);
+    --color-sidebar-border: oklch(0.922 0 0);
+    --color-sidebar-ring: oklch(0.708 0 0);
   }
 }
 @layer base {
@@ -322,8 +352,17 @@
   .flex-1 {
     flex: 1;
   }
+  .flex-shrink {
+    flex-shrink: 1;
+  }
   .shrink-0 {
     flex-shrink: 0;
+  }
+  .border-collapse {
+    border-collapse: collapse;
+  }
+  .resize {
+    resize: both;
   }
   .grid-flow-row {
     grid-auto-flow: row;
@@ -439,6 +478,9 @@
     --tw-border-style: dashed;
     border-style: dashed;
   }
+  .border-amber-200 {
+    border-color: var(--color-amber-200);
+  }
   .border-border {
     border-color: var(--color-border);
   }
@@ -450,6 +492,9 @@
   }
   .border-transparent {
     border-color: transparent;
+  }
+  .bg-amber-50 {
+    background-color: var(--color-amber-50);
   }
   .bg-background {
     background-color: var(--color-background);
@@ -542,6 +587,15 @@
     --tw-tracking: var(--tracking-tight);
     letter-spacing: var(--tracking-tight);
   }
+  .text-amber-600 {
+    color: var(--color-amber-600);
+  }
+  .text-amber-800 {
+    color: var(--color-amber-800);
+  }
+  .text-amber-900 {
+    color: var(--color-amber-900);
+  }
   .text-foreground {
     color: var(--color-foreground);
   }
@@ -554,12 +608,23 @@
   .text-muted-foreground {
     color: var(--color-muted-foreground);
   }
+  .underline {
+    text-decoration-line: underline;
+  }
   .antialiased {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  .outline {
+    outline-style: var(--tw-outline-style);
+    outline-width: 1px;
+  }
   .backdrop-blur {
     --tw-backdrop-blur: blur(8px);
+    -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+    backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+  }
+  .backdrop-filter {
     -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
     backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
   }
@@ -698,6 +763,34 @@
       padding-block: calc(var(--spacing) * 8);
     }
   }
+  .dark\:border-amber-800 {
+    @media (prefers-color-scheme: dark) {
+      border-color: var(--color-amber-800);
+    }
+  }
+  .dark\:bg-amber-950\/30 {
+    @media (prefers-color-scheme: dark) {
+      background-color: color-mix(in srgb, oklch(27.9% 0.077 45.635) 30%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        background-color: color-mix(in oklab, var(--color-amber-950) 30%, transparent);
+      }
+    }
+  }
+  .dark\:text-amber-200 {
+    @media (prefers-color-scheme: dark) {
+      color: var(--color-amber-200);
+    }
+  }
+  .dark\:text-amber-300 {
+    @media (prefers-color-scheme: dark) {
+      color: var(--color-amber-300);
+    }
+  }
+  .dark\:text-amber-400 {
+    @media (prefers-color-scheme: dark) {
+      color: var(--color-amber-400);
+    }
+  }
 }
 @keyframes accordion-down {
   from {
@@ -775,6 +868,11 @@
   syntax: "*";
   inherits: false;
 }
+@property --tw-outline-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
 @property --tw-backdrop-blur {
   syntax: "*";
   inherits: false;
@@ -820,6 +918,7 @@
       --tw-leading: initial;
       --tw-font-weight: initial;
       --tw-tracking: initial;
+      --tw-outline-style: solid;
       --tw-backdrop-blur: initial;
       --tw-backdrop-brightness: initial;
       --tw-backdrop-contrast: initial;

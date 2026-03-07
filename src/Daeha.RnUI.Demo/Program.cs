@@ -1,7 +1,11 @@
+using RnLucazor.Blazor;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddRnLucazor();
 
 var app = builder.Build();
 

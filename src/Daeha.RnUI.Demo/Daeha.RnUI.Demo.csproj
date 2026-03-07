@@ -11,4 +11,8 @@
     <ProjectReference Include="..\Daeha.RnUI\Daeha.RnUI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Daeha.RnLucazor.Blazor" Version="0.2.0" />
+  </ItemGroup>
+
 </Project>

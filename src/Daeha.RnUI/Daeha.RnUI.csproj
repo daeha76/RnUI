@@ -9,7 +9,7 @@
 
     <!-- NuGet Package Metadata -->
     <PackageId>Daeha.RnUI</PackageId>
-    <Version>0.1.2</Version>
+    <Version>0.1.3</Version>
     <Authors>Daeha</Authors>
     <Description>RnUI — Beautifully designed, accessible Blazor UI components. A Blazor port of shadcn/ui built with Tailwind CSS.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -43,5 +43,4 @@
     <Content Remove="wwwroot/css/shadcn.src.css" />
     <None Include="wwwroot/css/shadcn.src.css" />
   </ItemGroup>
-
 </Project>

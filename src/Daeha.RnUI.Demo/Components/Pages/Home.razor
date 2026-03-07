@@ -101,15 +101,39 @@
     @* Alert *@
     <section class="space-y-4">
         <h2 class="text-2xl font-semibold tracking-tight">Alert</h2>
+
+        @* Basic *@
         <RnAlert>
+            <RnIcon Icon="RnIcons.Info" />
             <RnAlertTitle>Heads up!</RnAlertTitle>
             <RnAlertDescription>You can add components to your app using the CLI.</RnAlertDescription>
         </RnAlert>
+
+        @* Destructive *@
         <RnAlert Variant="AlertVariant.Destructive">
+            <RnIcon Icon="RnIcons.CircleAlert" />
             <RnAlertTitle>Error</RnAlertTitle>
             <RnAlertDescription>Your session has expired. Please log in again.</RnAlertDescription>
         </RnAlert>
+
+        @* Action *@
+        <RnAlert>
+            <RnIcon Icon="RnIcons.Info" />
+            <RnAlertTitle>New feature available</RnAlertTitle>
+            <RnAlertDescription>You can now add components and dependencies to your app using the CLI.</RnAlertDescription>
+            <RnAlertAction>
+                <RnButton Variant="ButtonVariant.Outline" Size="ButtonSize.Sm">Enable</RnButton>
+            </RnAlertAction>
+        </RnAlert>
+
+        @* Custom Colors - warning / amber *@
+        <RnAlert Class="bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-200">
+            <RnIcon Icon="RnIcons.TriangleAlert" CssClass="text-amber-600 dark:text-amber-400" />
+            <RnAlertTitle>Warning</RnAlertTitle>
+            <RnAlertDescription Class="text-amber-800 dark:text-amber-300">Your free plan quota is almost exhausted. Upgrade to continue.</RnAlertDescription>
+        </RnAlert>
     </section>
+
 
     <RnSeparator />
 
