@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "scripts": {
+    "build:css": "npx @tailwindcss/cli -i wwwroot/css/shadcn.src.css -o wwwroot/css/shadcn.css",
+    "watch:css": "npx @tailwindcss/cli -i wwwroot/css/shadcn.src.css -o wwwroot/css/shadcn.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.2.1",
+    "tailwindcss": "^4.2.1"
+  }
+}
