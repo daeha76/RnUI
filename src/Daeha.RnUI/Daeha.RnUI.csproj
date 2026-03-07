@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>RnUI</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- NuGet Package Metadata -->
+    <PackageId>Daeha.RnUI</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Daeha</Authors>
+    <Description>RnUI — Beautifully designed, accessible Blazor UI components. A Blazor port of shadcn/ui built with Tailwind CSS.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>blazor;components;ui;tailwindcss;shadcn;razor;shadrazor</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/daeha76/RnUI</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/daeha76/RnUI</PackageProjectUrl>
+    <PackageOutputPath>$(MSBuildProjectDirectory)/../nupkgs</PackageOutputPath>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="NUGET_README.md" Pack="true" PackagePath="README.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+</Project>
