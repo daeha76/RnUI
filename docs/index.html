@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RnUI — Blazor port of shadcn/ui</title>
+    <meta name="description" content="Beautifully designed, accessible UI components built with Tailwind CSS for .NET Blazor applications." />
+    <meta property="og:title" content="RnUI — Blazor port of shadcn/ui" />
+    <meta property="og:description" content="37+ component categories, dark mode, zero dependencies. For .NET 8/9/10." />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #ffffff;
+            --bg-secondary: #fafafa;
+            --fg: #0a0a0a;
+            --fg-muted: #737373;
+            --border: #e5e5e5;
+            --primary: #171717;
+            --primary-fg: #fafafa;
+            --accent: #f5f5f5;
+            --destructive: #ef4444;
+            --radius: 0.5rem;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0a0a0a;
+                --bg-secondary: #171717;
+                --fg: #fafafa;
+                --fg-muted: #a3a3a3;
+                --border: #262626;
+                --primary: #fafafa;
+                --primary-fg: #0a0a0a;
+                --accent: #262626;
+            }
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--fg);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* ── Header ── */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: color-mix(in srgb, var(--bg) 80%, transparent);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            height: 3.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .nav { display: flex; gap: 1.5rem; align-items: center; }
+        .nav a {
+            font-size: 0.875rem;
+            color: var(--fg-muted);
+            transition: color 0.15s;
+        }
+        .nav a:hover { color: var(--fg); }
+
+        /* ── Hero ── */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 1.5rem 4rem;
+            text-align: center;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            color: var(--fg-muted);
+            margin-bottom: 1.5rem;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+        }
+        .hero h1 span {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: 1.125rem;
+            color: var(--fg-muted);
+            max-width: 36rem;
+            margin: 0 auto 2rem;
+            line-height: 1.7;
+        }
+        .hero-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1.25rem;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.15s;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: var(--primary-fg);
+        }
+        .btn-primary:hover { opacity: 0.9; }
+        .btn-outline {
+            background: transparent;
+            color: var(--fg);
+            border: 1px solid var(--border);
+        }
+        .btn-outline:hover { background: var(--accent); }
+
+        /* ── Install snippet ── */
+        .install {
+            max-width: 480px;
+            margin: 2rem auto 0;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+        .install code {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--fg-muted);
+        }
+        .install code b { color: var(--fg); font-weight: 500; }
+        .copy-btn {
+            background: none;
+            border: none;
+            color: var(--fg-muted);
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+            transition: color 0.15s;
+            flex-shrink: 0;
+        }
+        .copy-btn:hover { color: var(--fg); }
+        .copy-btn.copied { color: #22c55e; }
+
+        /* ── Section ── */
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .section-header h2 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+        .section-header p {
+            color: var(--fg-muted);
+            font-size: 1rem;
+        }
+
+        /* ── Features grid ── */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+        .feature-card {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .feature-card:hover {
+            border-color: color-mix(in srgb, var(--fg) 20%, transparent);
+            box-shadow: 0 4px 12px color-mix(in srgb, var(--fg) 5%, transparent);
+        }
+        .feature-icon {
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 0.375rem;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+        .feature-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.375rem;
+        }
+        .feature-card p {
+            font-size: 0.875rem;
+            color: var(--fg-muted);
+            line-height: 1.5;
+        }
+
+        /* ── Component showcase ── */
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+        .component-item {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem 1.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .component-item:hover {
+            background: var(--accent);
+            border-color: color-mix(in srgb, var(--fg) 15%, transparent);
+        }
+        .component-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .dot-blue { background: #3b82f6; }
+        .dot-green { background: #22c55e; }
+        .dot-purple { background: #8b5cf6; }
+        .dot-orange { background: #f97316; }
+        .dot-pink { background: #ec4899; }
+        .dot-cyan { background: #06b6d4; }
+
+        /* ── Code example ── */
+        .code-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+        @media (max-width: 768px) {
+            .code-section { grid-template-columns: 1fr; }
+        }
+        .code-block {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        .code-block-header {
+            padding: 0.625rem 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--fg-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .code-block pre {
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            line-height: 1.7;
+            color: var(--fg);
+        }
+        .code-desc {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .code-desc h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        .code-desc p {
+            color: var(--fg-muted);
+            font-size: 0.9375rem;
+            line-height: 1.7;
+            margin-bottom: 0.75rem;
+        }
+        .code-desc ul {
+            list-style: none;
+            padding: 0;
+        }
+        .code-desc ul li {
+            font-size: 0.875rem;
+            color: var(--fg-muted);
+            padding: 0.25rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .code-desc ul li::before {
+            content: '✓';
+            color: #22c55e;
+            font-weight: 600;
+        }
+
+        /* ── Stats ── */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+        @media (max-width: 640px) {
+            .stats { grid-template-columns: repeat(2, 1fr); }
+        }
+        .stat {
+            text-align: center;
+            padding: 1.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--fg-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* ── Footer ── */
+        .footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .footer p {
+            font-size: 0.8rem;
+            color: var(--fg-muted);
+        }
+        .footer-links {
+            display: flex;
+            gap: 1.25rem;
+        }
+        .footer-links a {
+            font-size: 0.8rem;
+            color: var(--fg-muted);
+            transition: color 0.15s;
+        }
+        .footer-links a:hover { color: var(--fg); }
+
+        /* ── Divider ── */
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 0;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .hero { padding: 4rem 1.5rem 3rem; }
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+            .nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <a href="#" class="logo">RnUI</a>
+            <nav class="nav">
+                <a href="#features">Features</a>
+                <a href="#components">Components</a>
+                <a href="#usage">Usage</a>
+                <a href="https://github.com/daeha76/RnUI" target="_blank">GitHub</a>
+                <a href="https://www.nuget.org/packages/Daeha.RnUI" class="btn btn-outline" style="padding: 0.375rem 0.75rem;" target="_blank">
+                    NuGet
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-badge">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            Blazor port of shadcn/ui
+        </div>
+        <h1>Build your Blazor UI<br/>with <span>RnUI</span></h1>
+        <p>
+            아름답게 디자인된, 접근 가능한 UI 컴포넌트 라이브러리.
+            Tailwind CSS 기반, .NET Blazor를 위해 만들어졌습니다.
+        </p>
+        <div class="hero-actions">
+            <a href="#usage" class="btn btn-primary">Get Started</a>
+            <a href="https://github.com/daeha76/RnUI" class="btn btn-outline" target="_blank">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                GitHub
+            </a>
+        </div>
+        <div class="install">
+            <code>$ dotnet add package <b>Daeha.RnUI</b></code>
+            <button class="copy-btn" onclick="copyInstall()" title="Copy to clipboard" id="copyBtn">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+        </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- Stats -->
+    <section class="section">
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">37+</div>
+                <div class="stat-label">Component Categories</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">97</div>
+                <div class="stat-label">Razor Components</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">0</div>
+                <div class="stat-label">External Dependencies</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">3</div>
+                <div class="stat-label">.NET Versions Supported</div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- Features -->
+    <section class="section" id="features">
+        <div class="section-header">
+            <h2>Why RnUI?</h2>
+            <p>shadcn/ui의 디자인 철학을 Blazor 생태계로 가져왔습니다.</p>
+        </div>
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3>shadcn/ui 기반 디자인</h3>
+                <p>웹에서 검증된 모던 디자인 시스템을 Blazor에서 그대로 사용할 수 있습니다.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌗</div>
+                <h3>다크 모드 지원</h3>
+                <p>라이트/다크 모드를 기본으로 지원하며, oklch 컬러 시스템으로 일관된 색상을 제공합니다.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">♿</div>
+                <h3>접근성 우선</h3>
+                <p>접근 가능한 컴포넌트 설계로 모든 사용자에게 최적의 경험을 제공합니다.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📦</div>
+                <h3>외부 의존성 Zero</h3>
+                <p>ASP.NET Core 프레임워크 참조만 사용하여 프로젝트 의존성을 최소화합니다.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>멀티 타겟 지원</h3>
+                <p>.NET 8.0, 9.0, 10.0을 모두 지원하며 Blazor Server와 WebAssembly 호환됩니다.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧩</div>
+                <h3>커스터마이징</h3>
+                <p>CSS 커스텀 프로퍼티로 테마를 자유롭게 변경하고, 컴포넌트별 Class 파라미터를 지원합니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- Components -->
+    <section class="section" id="components">
+        <div class="section-header">
+            <h2>Components</h2>
+            <p>37개 이상의 카테고리에 걸친 풍부한 UI 컴포넌트를 제공합니다.</p>
+        </div>
+        <div class="component-grid">
+            <div class="component-item"><span class="component-dot dot-blue"></span>Button</div>
+            <div class="component-item"><span class="component-dot dot-blue"></span>Input</div>
+            <div class="component-item"><span class="component-dot dot-blue"></span>Textarea</div>
+            <div class="component-item"><span class="component-dot dot-blue"></span>Checkbox</div>
+            <div class="component-item"><span class="component-dot dot-blue"></span>Switch</div>
+            <div class="component-item"><span class="component-dot dot-blue"></span>Select</div>
+            <div class="component-item"><span class="component-dot dot-blue"></span>RadioGroup</div>
+            <div class="component-item"><span class="component-dot dot-blue"></span>Toggle</div>
+            <div class="component-item"><span class="component-dot dot-green"></span>Card</div>
+            <div class="component-item"><span class="component-dot dot-green"></span>Alert</div>
+            <div class="component-item"><span class="component-dot dot-green"></span>Badge</div>
+            <div class="component-item"><span class="component-dot dot-green"></span>Separator</div>
+            <div class="component-item"><span class="component-dot dot-green"></span>ScrollArea</div>
+            <div class="component-item"><span class="component-dot dot-green"></span>AspectRatio</div>
+            <div class="component-item"><span class="component-dot dot-purple"></span>Table</div>
+            <div class="component-item"><span class="component-dot dot-purple"></span>Avatar</div>
+            <div class="component-item"><span class="component-dot dot-purple"></span>Progress</div>
+            <div class="component-item"><span class="component-dot dot-purple"></span>Slider</div>
+            <div class="component-item"><span class="component-dot dot-purple"></span>Skeleton</div>
+            <div class="component-item"><span class="component-dot dot-purple"></span>Spinner</div>
+            <div class="component-item"><span class="component-dot dot-orange"></span>Tabs</div>
+            <div class="component-item"><span class="component-dot dot-orange"></span>Breadcrumb</div>
+            <div class="component-item"><span class="component-dot dot-orange"></span>Pagination</div>
+            <div class="component-item"><span class="component-dot dot-orange"></span>NavigationMenu</div>
+            <div class="component-item"><span class="component-dot dot-orange"></span>Sidebar</div>
+            <div class="component-item"><span class="component-dot dot-pink"></span>Dialog</div>
+            <div class="component-item"><span class="component-dot dot-pink"></span>AlertDialog</div>
+            <div class="component-item"><span class="component-dot dot-pink"></span>Sheet</div>
+            <div class="component-item"><span class="component-dot dot-pink"></span>Popover</div>
+            <div class="component-item"><span class="component-dot dot-pink"></span>Tooltip</div>
+            <div class="component-item"><span class="component-dot dot-pink"></span>HoverCard</div>
+            <div class="component-item"><span class="component-dot dot-pink"></span>DropdownMenu</div>
+            <div class="component-item"><span class="component-dot dot-pink"></span>ContextMenu</div>
+            <div class="component-item"><span class="component-dot dot-cyan"></span>Accordion</div>
+            <div class="component-item"><span class="component-dot dot-cyan"></span>Collapsible</div>
+            <div class="component-item"><span class="component-dot dot-cyan"></span>Kbd</div>
+            <div class="component-item"><span class="component-dot dot-cyan"></span>Empty</div>
+        </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- Usage -->
+    <section class="section" id="usage">
+        <div class="section-header">
+            <h2>Get Started</h2>
+            <p>3단계로 RnUI를 프로젝트에 적용할 수 있습니다.</p>
+        </div>
+
+        <div class="code-section" style="margin-bottom: 2rem;">
+            <div class="code-desc">
+                <h3>Step 1 — Install</h3>
+                <p>NuGet 패키지를 설치합니다.</p>
+                <ul>
+                    <li>.NET 8.0 / 9.0 / 10.0 지원</li>
+                    <li>Blazor Server & WebAssembly 호환</li>
+                    <li>외부 의존성 없음</li>
+                </ul>
+            </div>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                    Terminal
+                </div>
+                <pre>dotnet add package Daeha.RnUI</pre>
+            </div>
+        </div>
+
+        <div class="code-section" style="margin-bottom: 2rem;">
+            <div class="code-desc">
+                <h3>Step 2 — Configure</h3>
+                <p>Import와 스타일시트를 추가합니다.</p>
+                <ul>
+                    <li>_Imports.razor에 using 추가</li>
+                    <li>App.razor에 CSS 링크 추가</li>
+                    <li>Tailwind CSS 스캔 경로 설정</li>
+                </ul>
+            </div>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    _Imports.razor
+                </div>
+                <pre>@using Daeha.RnUI.Components.UI</pre>
+            </div>
+        </div>
+
+        <div class="code-section">
+            <div class="code-desc">
+                <h3>Step 3 — Use</h3>
+                <p>바로 컴포넌트를 사용할 수 있습니다.</p>
+                <ul>
+                    <li>다양한 Variant와 Size 지원</li>
+                    <li>@bind 양방향 바인딩</li>
+                    <li>Class 파라미터로 스타일 확장</li>
+                </ul>
+            </div>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    MyPage.razor
+                </div>
+<pre>&lt;RnCard&gt;
+    &lt;RnCardHeader&gt;
+        &lt;RnCardTitle&gt;Welcome&lt;/RnCardTitle&gt;
+        &lt;RnCardDescription&gt;Get started with RnUI&lt;/RnCardDescription&gt;
+    &lt;/RnCardHeader&gt;
+    &lt;RnCardContent&gt;
+        &lt;RnInput Placeholder="Enter your name" /&gt;
+    &lt;/RnCardContent&gt;
+    &lt;RnCardFooter&gt;
+        &lt;RnButton&gt;Submit&lt;/RnButton&gt;
+        &lt;RnButton Variant="ButtonVariant.Outline"&gt;Cancel&lt;/RnButton&gt;
+    &lt;/RnCardFooter&gt;
+&lt;/RnCard&gt;</pre>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- CTA -->
+    <section class="section" style="text-align: center; padding: 5rem 1.5rem;">
+        <h2 style="font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.75rem;">
+            Ready to build?
+        </h2>
+        <p style="color: var(--fg-muted); font-size: 1rem; margin-bottom: 2rem;">
+            지금 바로 RnUI로 아름다운 Blazor 앱을 만들어 보세요.
+        </p>
+        <div class="hero-actions">
+            <a href="https://www.nuget.org/packages/Daeha.RnUI" class="btn btn-primary" target="_blank">
+                Install from NuGet
+            </a>
+            <a href="https://github.com/daeha76/RnUI" class="btn btn-outline" target="_blank">
+                View on GitHub
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <p>RnUI — Made with love for the Blazor community.</p>
+            <div class="footer-links">
+                <a href="https://github.com/daeha76/RnUI" target="_blank">GitHub</a>
+                <a href="https://www.nuget.org/packages/Daeha.RnUI" target="_blank">NuGet</a>
+                <a href="https://github.com/daeha76/RnUI/blob/main/LICENSE.md" target="_blank">MIT License</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function copyInstall() {
+            navigator.clipboard.writeText('dotnet add package Daeha.RnUI');
+            const btn = document.getElementById('copyBtn');
+            btn.classList.add('copied');
+            btn.innerHTML = '<svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
+            setTimeout(() => {
+                btn.classList.remove('copied');
+                btn.innerHTML = '<svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
