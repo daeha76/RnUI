@@ -1,6 +1,8 @@
-# Shadrazor
+# RnUI
 
 A Blazor port of [shadcn/ui](https://ui.shadcn.com). Beautifully designed, accessible UI components built with Tailwind CSS for .NET Blazor applications.
+
+> 이 라이브러리는 딸 리안(Rian)의 이름을 담아 만든 Blazor UI 컴포넌트 라이브러리입니다. 💕
 
 ## Features
 
@@ -14,7 +16,7 @@ A Blazor port of [shadcn/ui](https://ui.shadcn.com). Beautifully designed, acces
 ## Installation
 
 ```bash
-dotnet add package Daeha.Shadrazor
+dotnet add package Daeha.RnUI
 ```
 
 ## Setup
@@ -24,20 +26,20 @@ dotnet add package Daeha.Shadrazor
 Add the following to your `_Imports.razor`:
 
 ```razor
-@using Daeha.Shadrazor.Components.UI
+@using Daeha.RnUI.Components.UI
 ```
 
 ### 2. Include Stylesheet
 
-Add the Shadrazor CSS to your `App.razor` or `_Host.cshtml`:
+Add the RnUI CSS to your `App.razor` or `_Host.cshtml`:
 
 ```html
-<link rel="stylesheet" href="_content/Daeha.Shadrazor/css/shadcn.css" />
+<link rel="stylesheet" href="_content/Daeha.RnUI/css/shadcn.css" />
 ```
 
 ### 3. Configure Tailwind CSS
 
-Shadrazor uses Tailwind CSS for styling. Make sure Tailwind CSS is set up in your Blazor project and configured to scan the Shadrazor package for class names.
+RnUI uses Tailwind CSS for styling. Make sure Tailwind CSS is set up in your Blazor project and configured to scan the RnUI package for class names.
 
 ## Components
 
@@ -147,7 +149,7 @@ Shadrazor uses Tailwind CSS for styling. Make sure Tailwind CSS is set up in you
 
 ## Customization
 
-Shadrazor uses CSS custom properties for theming. Override the following variables to customize colors:
+RnUI uses CSS custom properties for theming. Override the following variables to customize colors:
 
 ```css
 :root {
@@ -167,10 +169,10 @@ Shadrazor uses CSS custom properties for theming. Override the following variabl
 
 ## Demo
 
-A demo application is included in `src/Daeha.Shadrazor.Demo`. To run it:
+A demo application is included in `src/Daeha.RnUI.Demo`. To run it:
 
 ```bash
-cd src/Daeha.Shadrazor.Demo
+cd src/Daeha.RnUI.Demo
 dotnet run
 ```
 
