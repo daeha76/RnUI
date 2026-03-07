@@ -58,93 +58,95 @@ RnUI uses Tailwind CSS for styling. Make sure Tailwind CSS is set up in your Bla
 ### Button
 
 ```razor
-<Button>Default</Button>
-<Button Variant="ButtonVariant.Secondary">Secondary</Button>
-<Button Variant="ButtonVariant.Outline">Outline</Button>
-<Button Variant="ButtonVariant.Destructive">Destructive</Button>
-<Button Size="ButtonSize.Sm">Small</Button>
-<Button Size="ButtonSize.Lg">Large</Button>
+<RnButton>Default</RnButton>
+<RnButton Variant="ButtonVariant.Secondary">Secondary</RnButton>
+<RnButton Variant="ButtonVariant.Outline">Outline</RnButton>
+<RnButton Variant="ButtonVariant.Destructive">Destructive</RnButton>
+<RnButton Size="ButtonSize.Sm">Small</RnButton>
+<RnButton Size="ButtonSize.Lg">Large</RnButton>
 ```
 
 ### Card
 
 ```razor
-<Card>
-    <CardHeader>
-        <CardTitle>Card Title</CardTitle>
-        <CardDescription>Card description goes here.</CardDescription>
-    </CardHeader>
-    <CardContent>
+<RnCard>
+    <RnCardHeader>
+        <RnCardTitle>Card Title</RnCardTitle>
+        <RnCardDescription>Card description goes here.</RnCardDescription>
+    </RnCardHeader>
+    <RnCardContent>
         <p>Card content with some example text.</p>
-    </CardContent>
-    <CardFooter>
-        <Button>Action</Button>
-    </CardFooter>
-</Card>
+    </RnCardContent>
+    <RnCardFooter>
+        <RnButton>Action</RnButton>
+    </RnCardFooter>
+</RnCard>
 ```
 
 ### Form Controls
 
 ```razor
 <div class="space-y-2">
-    <Label For="email">Email</Label>
-    <Input Type="email" Placeholder="Enter your email" />
+    <RnLabel For="email">Email</RnLabel>
+    <RnInput Type="email" Placeholder="Enter your email" @bind-Value="_email" />
 </div>
 
 <div class="flex items-center space-x-2">
-    <Checkbox @bind-Checked="_checked" />
-    <Label>Accept terms and conditions</Label>
+    <RnCheckbox @bind-Checked="_checked" />
+    <RnLabel>Accept terms and conditions</RnLabel>
 </div>
 
 <div class="flex items-center space-x-2">
-    <Switch @bind-Checked="_switched" />
-    <Label>Enable notifications</Label>
+    <RnSwitch @bind-Checked="_switched" />
+    <RnLabel>Enable notifications</RnLabel>
 </div>
 ```
 
 ### Dialog
 
 ```razor
-<Button OnClick="() => _dialogOpen = true">Open Dialog</Button>
-<Dialog @bind-Open="_dialogOpen">
-    <DialogHeader>
-        <DialogTitle>Edit Profile</DialogTitle>
-        <DialogDescription>Make changes to your profile here.</DialogDescription>
-    </DialogHeader>
-    <DialogContent>
-        <p>Dialog content goes here.</p>
-    </DialogContent>
-    <DialogFooter>
-        <Button Variant="ButtonVariant.Outline" OnClick="() => _dialogOpen = false">Cancel</Button>
-        <Button OnClick="() => _dialogOpen = false">Save</Button>
-    </DialogFooter>
-</Dialog>
+<RnButton OnClick="() => _dialogOpen = true">Open Dialog</RnButton>
+<RnDialog @bind-Open="_dialogOpen">
+    <RnDialogHeader>
+        <RnDialogTitle>Edit Profile</RnDialogTitle>
+        <RnDialogDescription>Make changes to your profile here.</RnDialogDescription>
+    </RnDialogHeader>
+    <p>Dialog content goes here.</p>
+    <RnDialogFooter>
+        <RnButton Variant="ButtonVariant.Outline" OnClick="() => _dialogOpen = false">Cancel</RnButton>
+        <RnButton OnClick="() => _dialogOpen = false">Save</RnButton>
+    </RnDialogFooter>
+</RnDialog>
 ```
 
 ### Tabs
 
 ```razor
-<Tabs @bind-ActiveTab="_activeTab">
-    <TabsList>
-        <TabsTrigger Value="account">Account</TabsTrigger>
-        <TabsTrigger Value="password">Password</TabsTrigger>
-    </TabsList>
-    <TabsContent Value="account">
+<RnTabs @bind-ActiveTab="_activeTab">
+    <RnTabsList>
+        <RnTabsTrigger Value="account">Account</RnTabsTrigger>
+        <RnTabsTrigger Value="password">Password</RnTabsTrigger>
+    </RnTabsList>
+    <RnTabsContent Value="account">
         <p>Account settings here.</p>
-    </TabsContent>
-    <TabsContent Value="password">
+    </RnTabsContent>
+    <RnTabsContent Value="password">
         <p>Password settings here.</p>
-    </TabsContent>
-</Tabs>
+    </RnTabsContent>
+</RnTabs>
 ```
 
 ### Tooltip
 
 ```razor
-<Tooltip Side="Side.Top">
-    <Trigger>Hover me</Trigger>
-    <p>This is the tooltip content.</p>
-</Tooltip>
+<RnTooltip Side="Side.Top">
+    <Trigger>
+        <RnButton>Hover me</RnButton>
+    </Trigger>
+    <ChildContent>
+        <p>This is the tooltip content.</p>
+    </ChildContent>
+</RnTooltip>
 ```
 
 ## Customization
