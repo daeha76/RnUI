@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sidebar — RnUI API Documentation</title>
+    <meta name="description" content="RnUI Sidebar component API documentation. Composable sidebar with menu items for Blazor applications." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #ffffff;
+            --bg-secondary: #fafafa;
+            --fg: #0a0a0a;
+            --fg-muted: #737373;
+            --border: #e5e5e5;
+            --primary: #171717;
+            --primary-fg: #fafafa;
+            --accent: #f5f5f5;
+            --radius: 0.5rem;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0a0a0a;
+                --bg-secondary: #171717;
+                --fg: #fafafa;
+                --fg-muted: #a3a3a3;
+                --border: #262626;
+                --primary: #fafafa;
+                --primary-fg: #0a0a0a;
+                --accent: #262626;
+            }
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--fg);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* ── Header ── */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: color-mix(in srgb, var(--bg) 80%, transparent);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+        .header-inner {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            height: 3.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .nav { display: flex; gap: 1.5rem; align-items: center; }
+        .nav a {
+            font-size: 0.875rem;
+            color: var(--fg-muted);
+            transition: color 0.15s;
+        }
+        .nav a:hover { color: var(--fg); }
+
+        /* ── Main Content ── */
+        .main {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 5rem;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--fg-muted);
+            margin-bottom: 2rem;
+        }
+        .breadcrumb a:hover { color: var(--fg); }
+        .breadcrumb .sep { opacity: 0.4; }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+        .page-desc {
+            font-size: 1.05rem;
+            color: var(--fg-muted);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        /* ── Sections ── */
+        h2 {
+            font-size: 1.375rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin: 3rem 0 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+        h2:first-of-type {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 2rem 0 0.75rem;
+        }
+
+        p {
+            margin-bottom: 0.75rem;
+            color: var(--fg);
+            line-height: 1.7;
+        }
+        p.muted { color: var(--fg-muted); }
+
+        /* ── Code blocks ── */
+        .code-block {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        .code-block-header {
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--fg-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .code-block pre {
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            line-height: 1.7;
+            color: var(--fg);
+        }
+
+        code {
+            font-family: var(--font-mono);
+            font-size: 0.85em;
+            background: var(--accent);
+            padding: 0.15em 0.4em;
+            border-radius: 0.25rem;
+        }
+
+        /* ── Tables ── */
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+        }
+        .api-table th {
+            text-align: left;
+            padding: 0.625rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: var(--fg-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .api-table td {
+            padding: 0.625rem 1rem;
+            border: 1px solid var(--border);
+            vertical-align: top;
+        }
+        .api-table td:first-child {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .api-table td:nth-child(2) {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--fg-muted);
+            white-space: nowrap;
+        }
+
+        /* ── Component cards ── */
+        .component-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .component-card {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem 1.25rem;
+            transition: border-color 0.15s;
+        }
+        .component-card:hover {
+            border-color: color-mix(in srgb, var(--fg) 20%, transparent);
+        }
+        .component-card h4 {
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        .component-card p {
+            font-size: 0.8rem;
+            color: var(--fg-muted);
+            margin: 0;
+            line-height: 1.5;
+        }
+        .component-card .html-tag {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--fg-muted);
+            opacity: 0.7;
+        }
+
+        /* ── Alert box ── */
+        .alert {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            background: var(--bg-secondary);
+        }
+        .alert-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 0.375rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .alert p {
+            font-size: 0.85rem;
+            color: var(--fg-muted);
+            margin: 0;
+            line-height: 1.6;
+        }
+        .alert-warning {
+            border-color: #f59e0b40;
+            background: #f59e0b08;
+        }
+        .alert-info {
+            border-color: #3b82f640;
+            background: #3b82f608;
+        }
+
+        /* ── Hierarchy tree ── */
+        .tree {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            line-height: 2;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+        }
+        .tree .indent { color: var(--fg-muted); opacity: 0.4; user-select: none; }
+        .tree .tag { font-weight: 500; }
+        .tree .comment { color: var(--fg-muted); font-style: italic; }
+
+        /* ── Footer ── */
+        .footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+        .footer-inner {
+            max-width: 960px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .footer p {
+            font-size: 0.8rem;
+            color: var(--fg-muted);
+            margin: 0;
+        }
+        .footer-links { display: flex; gap: 1.25rem; }
+        .footer-links a {
+            font-size: 0.8rem;
+            color: var(--fg-muted);
+            transition: color 0.15s;
+        }
+        .footer-links a:hover { color: var(--fg); }
+
+        @media (max-width: 640px) {
+            .main { padding: 2rem 1rem 3rem; }
+            .page-title { font-size: 1.5rem; }
+            .nav { display: none; }
+            .component-list { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <a href="index.html" class="logo">RnUI</a>
+            <nav class="nav">
+                <a href="index.html">Home</a>
+                <a href="https://github.com/daeha76/RnUI" target="_blank">GitHub</a>
+                <a href="https://www.nuget.org/packages/Daeha.RnUI" target="_blank">NuGet</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="index.html">Docs</a>
+            <span class="sep">/</span>
+            <span>Components</span>
+            <span class="sep">/</span>
+            <span>Sidebar</span>
+        </div>
+
+        <h1 class="page-title">Sidebar</h1>
+        <p class="page-desc">
+            조합 가능한 사이드바 컴포넌트. Header, Content, Footer, Group, Menu 등 9개의 하위 컴포넌트로 구성됩니다.
+        </p>
+
+        <!-- Important differences -->
+        <div class="alert alert-warning">
+            <div class="alert-title">shadcn/ui (React)와의 차이점</div>
+            <p>
+                RnUI의 Sidebar는 React shadcn/ui와 API가 다릅니다.
+                <code>SidebarProvider</code>, <code>SidebarInset</code>, <code>SidebarTrigger</code> 컴포넌트가 없으며,
+                상태 관리는 <code>RnSidebar</code>의 <code>@bind-Open</code>으로 직접 수행합니다.
+                <code>SidebarMenuSub</code>, <code>SidebarMenuSubButton</code>, <code>SidebarMenuSubItem</code> 컴포넌트도 포함되지 않습니다.
+            </p>
+        </div>
+
+        <!-- Component hierarchy -->
+        <h2>Component Hierarchy</h2>
+        <p class="muted">Sidebar를 구성하는 9개 컴포넌트의 계층 구조입니다.</p>
+
+        <div class="tree">
+<span class="tag">RnSidebar</span> <span class="comment">— 최상위 사이드바 컨테이너 (&lt;aside&gt;)</span>
+<span class="indent">├── </span><span class="tag">RnSidebarHeader</span> <span class="comment">— 상단 헤더 영역 (&lt;div&gt;)</span>
+<span class="indent">├── </span><span class="tag">RnSidebarContent</span> <span class="comment">— 스크롤 가능한 콘텐츠 영역 (&lt;div&gt;)</span>
+<span class="indent">│   └── </span><span class="tag">RnSidebarGroup</span> <span class="comment">— 메뉴 그룹 (&lt;div&gt;)</span>
+<span class="indent">│       ├── </span><span class="tag">RnSidebarGroupLabel</span> <span class="comment">— 그룹 라벨/제목 (&lt;div&gt;)</span>
+<span class="indent">│       └── </span><span class="tag">RnSidebarMenu</span> <span class="comment">— 메뉴 목록 (&lt;ul&gt;)</span>
+<span class="indent">│           └── </span><span class="tag">RnSidebarMenuItem</span> <span class="comment">— 메뉴 항목 (&lt;li&gt;)</span>
+<span class="indent">│               └── </span><span class="tag">RnSidebarMenuButton</span> <span class="comment">— 메뉴 버튼/링크 (&lt;a&gt;)</span>
+<span class="indent">└── </span><span class="tag">RnSidebarFooter</span> <span class="comment">— 하단 푸터 영역 (&lt;div&gt;)</span>
+        </div>
+
+        <!-- All components overview -->
+        <h2>Components</h2>
+
+        <div class="component-list">
+            <div class="component-card">
+                <h4>RnSidebar</h4>
+                <span class="html-tag">&lt;aside&gt;</span>
+                <p>최상위 사이드바 컨테이너. Open/Close 상태를 관리합니다.</p>
+            </div>
+            <div class="component-card">
+                <h4>RnSidebarHeader</h4>
+                <span class="html-tag">&lt;div&gt;</span>
+                <p>사이드바 상단 헤더 영역. 로고, 앱 이름 등을 배치합니다.</p>
+            </div>
+            <div class="component-card">
+                <h4>RnSidebarContent</h4>
+                <span class="html-tag">&lt;div&gt;</span>
+                <p>스크롤 가능한 주요 콘텐츠 영역.</p>
+            </div>
+            <div class="component-card">
+                <h4>RnSidebarFooter</h4>
+                <span class="html-tag">&lt;div&gt;</span>
+                <p>사이드바 하단 푸터 영역.</p>
+            </div>
+            <div class="component-card">
+                <h4>RnSidebarGroup</h4>
+                <span class="html-tag">&lt;div&gt;</span>
+                <p>메뉴 항목을 그룹화하는 컨테이너.</p>
+            </div>
+            <div class="component-card">
+                <h4>RnSidebarGroupLabel</h4>
+                <span class="html-tag">&lt;div&gt;</span>
+                <p>그룹의 라벨/제목 텍스트.</p>
+            </div>
+            <div class="component-card">
+                <h4>RnSidebarMenu</h4>
+                <span class="html-tag">&lt;ul&gt;</span>
+                <p>메뉴 항목의 목록 컨테이너.</p>
+            </div>
+            <div class="component-card">
+                <h4>RnSidebarMenuItem</h4>
+                <span class="html-tag">&lt;li&gt;</span>
+                <p>개별 메뉴 항목 래퍼.</p>
+            </div>
+            <div class="component-card">
+                <h4>RnSidebarMenuButton</h4>
+                <span class="html-tag">&lt;a&gt;</span>
+                <p>클릭 가능한 메뉴 버튼/링크. Href와 IsActive를 지원합니다.</p>
+            </div>
+        </div>
+
+        <!-- API Reference -->
+        <h2>API Reference</h2>
+
+        <!-- RnSidebar -->
+        <h3>RnSidebar</h3>
+        <p class="muted">사이드바의 최상위 컨테이너. <code>&lt;aside&gt;</code>로 렌더링됩니다.</p>
+        <table class="api-table">
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Open</td>
+                    <td>bool</td>
+                    <td>true</td>
+                    <td>사이드바의 열림/닫힘 상태. <code>@bind-Open</code>으로 양방향 바인딩 가능.</td>
+                </tr>
+                <tr>
+                    <td>OpenChanged</td>
+                    <td>EventCallback&lt;bool&gt;</td>
+                    <td>—</td>
+                    <td>Open 상태 변경 시 호출되는 콜백. <code>@bind-Open</code> 사용 시 자동 바인딩.</td>
+                </tr>
+                <tr>
+                    <td>Width</td>
+                    <td>string</td>
+                    <td>"16rem"</td>
+                    <td>사이드바 너비. CSS 단위를 포함한 문자열 (예: "16rem", "256px").</td>
+                </tr>
+                <tr>
+                    <td>Class</td>
+                    <td>string?</td>
+                    <td>null</td>
+                    <td>추가 CSS 클래스.</td>
+                </tr>
+                <tr>
+                    <td>ChildContent</td>
+                    <td>RenderFragment?</td>
+                    <td>null</td>
+                    <td>하위 컴포넌트 콘텐츠.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="muted"><strong>Method:</strong> <code>Toggle()</code> — Open 상태를 반전시킵니다. <code>@ref</code>로 참조하여 호출할 수 있습니다.</p>
+
+        <!-- RnSidebarMenuButton -->
+        <h3>RnSidebarMenuButton</h3>
+        <p class="muted">메뉴 버튼/링크. <code>&lt;a&gt;</code>로 렌더링됩니다.</p>
+
+        <div class="alert alert-info">
+            <div class="alert-title">shadcn/ui와 다른 점</div>
+            <p>
+                React shadcn/ui의 SidebarMenuButton은 <code>size</code>, <code>tooltip</code>, <code>asChild</code> 등의 props를 제공하지만,
+                RnUI에서는 <code>Href</code>와 <code>IsActive</code>만 지원합니다.
+            </p>
+        </div>
+
+        <table class="api-table">
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Href</td>
+                    <td>string?</td>
+                    <td>null</td>
+                    <td>링크 URL.</td>
+                </tr>
+                <tr>
+                    <td>IsActive</td>
+                    <td>bool</td>
+                    <td>false</td>
+                    <td>활성 상태 여부. true이면 <code>bg-sidebar-accent</code> 스타일이 적용됩니다.</td>
+                </tr>
+                <tr>
+                    <td>Class</td>
+                    <td>string?</td>
+                    <td>null</td>
+                    <td>추가 CSS 클래스.</td>
+                </tr>
+                <tr>
+                    <td>ChildContent</td>
+                    <td>RenderFragment?</td>
+                    <td>null</td>
+                    <td>버튼 콘텐츠 (아이콘, 텍스트 등).</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Shared parameters -->
+        <h3>RnSidebarHeader / Content / Footer / Group / GroupLabel / Menu / MenuItem</h3>
+        <p class="muted">나머지 컴포넌트는 모두 동일한 기본 파라미터를 가집니다.</p>
+        <table class="api-table">
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Class</td>
+                    <td>string?</td>
+                    <td>null</td>
+                    <td>추가 CSS 클래스.</td>
+                </tr>
+                <tr>
+                    <td>ChildContent</td>
+                    <td>RenderFragment?</td>
+                    <td>null</td>
+                    <td>하위 콘텐츠.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="muted">모든 컴포넌트는 <code>[Parameter(CaptureUnmatchedValues = true)]</code>를 통해 추가 HTML 속성을 지원합니다.</p>
+
+        <!-- CSS -->
+        <h2>CSS Classes</h2>
+        <p class="muted">
+            스타일은 <code>_content/Daeha.RnUI/css/shadcn.css</code>에 정의되어 있습니다.
+            (<code>rnui.css</code>가 아닌 <code>shadcn.css</code>입니다.)
+        </p>
+        <table class="api-table">
+            <thead>
+                <tr>
+                    <th>CSS Class</th>
+                    <th>Component</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>cn-sidebar</td>
+                    <td>RnSidebar</td>
+                    <td>Flex column, full height, sidebar background/foreground colors</td>
+                </tr>
+                <tr>
+                    <td>cn-sidebar-header</td>
+                    <td>RnSidebarHeader</td>
+                    <td>Flex column with gap and padding</td>
+                </tr>
+                <tr>
+                    <td>cn-sidebar-content</td>
+                    <td>RnSidebarContent</td>
+                    <td>Flex column, flex-1, overflow auto (scrollable)</td>
+                </tr>
+                <tr>
+                    <td>cn-sidebar-footer</td>
+                    <td>RnSidebarFooter</td>
+                    <td>Flex column with gap and padding</td>
+                </tr>
+                <tr>
+                    <td>cn-sidebar-group</td>
+                    <td>RnSidebarGroup</td>
+                    <td>Flex column, full width</td>
+                </tr>
+                <tr>
+                    <td>cn-sidebar-group-label</td>
+                    <td>RnSidebarGroupLabel</td>
+                    <td>Flex row, small text, muted color</td>
+                </tr>
+                <tr>
+                    <td>cn-sidebar-menu</td>
+                    <td>RnSidebarMenu</td>
+                    <td>Flex column with gap</td>
+                </tr>
+                <tr>
+                    <td>cn-sidebar-menu-item</td>
+                    <td>RnSidebarMenuItem</td>
+                    <td>Relative positioning for menu item</td>
+                </tr>
+                <tr>
+                    <td>cn-sidebar-menu-button</td>
+                    <td>RnSidebarMenuButton</td>
+                    <td>Flex row, rounded, hover/active/focus styles</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Design Tokens -->
+        <h3>Sidebar Design Tokens</h3>
+        <p class="muted">Tailwind CSS 커스텀 프로퍼티로 사이드바 테마를 정의합니다.</p>
+        <div class="code-block">
+            <div class="code-block-header">shadcn.css — Design Tokens</div>
+<pre>/* Light Mode */
+--color-sidebar: oklch(0.985 0 0);
+--color-sidebar-foreground: oklch(0.145 0 0);
+--color-sidebar-primary: oklch(0.205 0 0);
+--color-sidebar-primary-foreground: oklch(0.985 0 0);
+--color-sidebar-accent: oklch(0.965 0 0);
+--color-sidebar-accent-foreground: oklch(0.205 0 0);
+--color-sidebar-border: oklch(0.922 0 0);
+--color-sidebar-ring: oklch(0.708 0 0);
+
+/* Dark Mode */
+--color-sidebar: oklch(0.175 0 0);
+--color-sidebar-foreground: oklch(0.985 0 0);</pre>
+        </div>
+
+        <!-- Usage Examples -->
+        <h2>Usage Examples</h2>
+
+        <h3>Basic Sidebar</h3>
+        <div class="code-block">
+            <div class="code-block-header">MySidebarLayout.razor</div>
+<pre>&lt;div class="flex h-screen"&gt;
+    &lt;RnSidebar @bind-Open="_sidebarOpen"&gt;
+        &lt;RnSidebarHeader&gt;
+            &lt;h2 class="text-lg font-semibold"&gt;My App&lt;/h2&gt;
+        &lt;/RnSidebarHeader&gt;
+
+        &lt;RnSidebarContent&gt;
+            &lt;RnSidebarGroup&gt;
+                &lt;RnSidebarGroupLabel&gt;Navigation&lt;/RnSidebarGroupLabel&gt;
+                &lt;RnSidebarMenu&gt;
+                    &lt;RnSidebarMenuItem&gt;
+                        &lt;RnSidebarMenuButton Href="/" IsActive="true"&gt;
+                            Home
+                        &lt;/RnSidebarMenuButton&gt;
+                    &lt;/RnSidebarMenuItem&gt;
+                    &lt;RnSidebarMenuItem&gt;
+                        &lt;RnSidebarMenuButton Href="/settings"&gt;
+                            Settings
+                        &lt;/RnSidebarMenuButton&gt;
+                    &lt;/RnSidebarMenuItem&gt;
+                &lt;/RnSidebarMenu&gt;
+            &lt;/RnSidebarGroup&gt;
+        &lt;/RnSidebarContent&gt;
+
+        &lt;RnSidebarFooter&gt;
+            &lt;p class="text-xs text-muted-foreground"&gt;v1.0.0&lt;/p&gt;
+        &lt;/RnSidebarFooter&gt;
+    &lt;/RnSidebar&gt;
+
+    &lt;main class="flex-1 p-6"&gt;
+        @Body
+    &lt;/main&gt;
+&lt;/div&gt;
+
+@code {
+    private bool _sidebarOpen = true;
+}</pre>
+        </div>
+
+        <h3>Toggle Sidebar with @ref</h3>
+        <div class="code-block">
+            <div class="code-block-header">ToggleExample.razor</div>
+<pre>&lt;RnButton OnClick="() =&gt; _sidebar.Toggle()"&gt;
+    Toggle Sidebar
+&lt;/RnButton&gt;
+
+&lt;RnSidebar @ref="_sidebar" @bind-Open="_open"&gt;
+    &lt;RnSidebarContent&gt;
+        &lt;RnSidebarGroup&gt;
+            &lt;RnSidebarMenu&gt;
+                &lt;RnSidebarMenuItem&gt;
+                    &lt;RnSidebarMenuButton Href="/dashboard"&gt;
+                        Dashboard
+                    &lt;/RnSidebarMenuButton&gt;
+                &lt;/RnSidebarMenuItem&gt;
+            &lt;/RnSidebarMenu&gt;
+        &lt;/RnSidebarGroup&gt;
+    &lt;/RnSidebarContent&gt;
+&lt;/RnSidebar&gt;
+
+@code {
+    private RnSidebar _sidebar = default!;
+    private bool _open = true;
+}</pre>
+        </div>
+
+        <h3>Multiple Groups</h3>
+        <div class="code-block">
+            <div class="code-block-header">MultiGroupSidebar.razor</div>
+<pre>&lt;RnSidebar @bind-Open="_open"&gt;
+    &lt;RnSidebarHeader&gt;
+        &lt;span class="text-lg font-bold"&gt;Admin Panel&lt;/span&gt;
+    &lt;/RnSidebarHeader&gt;
+
+    &lt;RnSidebarContent&gt;
+        &lt;RnSidebarGroup&gt;
+            &lt;RnSidebarGroupLabel&gt;General&lt;/RnSidebarGroupLabel&gt;
+            &lt;RnSidebarMenu&gt;
+                &lt;RnSidebarMenuItem&gt;
+                    &lt;RnSidebarMenuButton Href="/dashboard" IsActive="true"&gt;
+                        Dashboard
+                    &lt;/RnSidebarMenuButton&gt;
+                &lt;/RnSidebarMenuItem&gt;
+                &lt;RnSidebarMenuItem&gt;
+                    &lt;RnSidebarMenuButton Href="/analytics"&gt;
+                        Analytics
+                    &lt;/RnSidebarMenuButton&gt;
+                &lt;/RnSidebarMenuItem&gt;
+            &lt;/RnSidebarMenu&gt;
+        &lt;/RnSidebarGroup&gt;
+
+        &lt;RnSidebarGroup&gt;
+            &lt;RnSidebarGroupLabel&gt;Management&lt;/RnSidebarGroupLabel&gt;
+            &lt;RnSidebarMenu&gt;
+                &lt;RnSidebarMenuItem&gt;
+                    &lt;RnSidebarMenuButton Href="/users"&gt;
+                        Users
+                    &lt;/RnSidebarMenuButton&gt;
+                &lt;/RnSidebarMenuItem&gt;
+                &lt;RnSidebarMenuItem&gt;
+                    &lt;RnSidebarMenuButton Href="/settings"&gt;
+                        Settings
+                    &lt;/RnSidebarMenuButton&gt;
+                &lt;/RnSidebarMenuItem&gt;
+            &lt;/RnSidebarMenu&gt;
+        &lt;/RnSidebarGroup&gt;
+    &lt;/RnSidebarContent&gt;
+
+    &lt;RnSidebarFooter&gt;
+        &lt;RnSidebarMenu&gt;
+            &lt;RnSidebarMenuItem&gt;
+                &lt;RnSidebarMenuButton Href="/profile"&gt;
+                    My Profile
+                &lt;/RnSidebarMenuButton&gt;
+            &lt;/RnSidebarMenuItem&gt;
+        &lt;/RnSidebarMenu&gt;
+    &lt;/RnSidebarFooter&gt;
+&lt;/RnSidebar&gt;
+
+@code {
+    private bool _open = true;
+}</pre>
+        </div>
+
+        <h3>Custom Width</h3>
+        <div class="code-block">
+            <div class="code-block-header">CustomWidth.razor</div>
+<pre>&lt;!-- Narrow sidebar --&gt;
+&lt;RnSidebar @bind-Open="_open" Width="12rem"&gt;
+    ...
+&lt;/RnSidebar&gt;
+
+&lt;!-- Wide sidebar --&gt;
+&lt;RnSidebar @bind-Open="_open" Width="20rem"&gt;
+    ...
+&lt;/RnSidebar&gt;</pre>
+        </div>
+
+        <!-- Setup -->
+        <h2>Setup</h2>
+
+        <h3>1. CSS Reference</h3>
+        <div class="code-block">
+            <div class="code-block-header">App.razor</div>
+<pre>&lt;link rel="stylesheet" href="_content/Daeha.RnUI/css/shadcn.css" /&gt;</pre>
+        </div>
+
+        <div class="alert alert-warning">
+            <div class="alert-title">CSS file name</div>
+            <p>CSS 파일명은 <code>rnui.css</code>가 아닌 <code>shadcn.css</code>입니다.</p>
+        </div>
+
+        <h3>2. Import</h3>
+        <div class="code-block">
+            <div class="code-block-header">_Imports.razor</div>
+<pre>@using Daeha.RnUI.Components.UI</pre>
+        </div>
+
+        <h3>3. Tailwind CSS Configuration</h3>
+        <p class="muted">Tailwind CSS가 RnUI 패키지의 클래스명을 스캔하도록 구성합니다.</p>
+        <div class="code-block">
+            <div class="code-block-header">tailwind.config.js</div>
+<pre>module.exports = {
+  content: [
+    "./**/*.razor",
+    "./node_modules/@anthropic-ai/**/*.js", // if applicable
+    // RnUI package classes
+    "./bin/**/Daeha.RnUI.dll"
+  ]
+}</pre>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <p>RnUI — Made with love for the Blazor community.</p>
+            <div class="footer-links">
+                <a href="https://github.com/daeha76/RnUI" target="_blank">GitHub</a>
+                <a href="https://www.nuget.org/packages/Daeha.RnUI" target="_blank">NuGet</a>
+                <a href="https://github.com/daeha76/RnUI/blob/main/LICENSE.md" target="_blank">MIT License</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
