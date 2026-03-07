@@ -1,33 +1,56 @@
 @inject NavigationManager Navigation
+@implements IDisposable
 
-<div class="w-full">
-    <div class="pb-4">
-        <h4 class="mb-1 rounded-md px-2 py-1 text-sm font-semibold">Getting Started</h4>
-        <div class="grid grid-flow-row auto-rows-max text-sm">
-            <a href="/components"
-               class="group flex w-full items-center rounded-md border border-transparent px-2 py-1 hover:underline text-muted-foreground">
-                Introduction
-            </a>
-        </div>
-    </div>
-    <div class="pb-4">
-        <h4 class="mb-1 rounded-md px-2 py-1 text-sm font-semibold">Components</h4>
-        <div class="grid grid-flow-row auto-rows-max text-sm">
-            @foreach (var component in _components)
-            {
-                var href = $"/components/{component.Slug}";
-                var isActive = Navigation.Uri.TrimEnd('/').EndsWith(href, StringComparison.OrdinalIgnoreCase);
-                <a href="@href"
-                   class="group flex w-full items-center rounded-md border border-transparent px-2 py-1 hover:underline @(isActive ? "font-medium text-foreground" : "text-muted-foreground")">
-                    @component.Name
-                </a>
-            }
-        </div>
-    </div>
-</div>
+<RnSidebar Open="true" Width="100%">
+    <RnSidebarContent>
+        <RnSidebarGroup>
+            <RnSidebarGroupLabel>Getting Started</RnSidebarGroupLabel>
+            <RnSidebarMenu>
+                <RnSidebarMenuItem>
+                    <RnSidebarMenuButton Href="/components" IsActive="@IsCurrentPage("/components")">
+                        Introduction
+                    </RnSidebarMenuButton>
+                </RnSidebarMenuItem>
+            </RnSidebarMenu>
+        </RnSidebarGroup>
+
+        <RnSidebarGroup>
+            <RnSidebarGroupLabel>Components</RnSidebarGroupLabel>
+            <RnSidebarMenu>
+                @foreach (var component in _components)
+                {
+                    var href = $"/components/{component.Slug}";
+                    <RnSidebarMenuItem>
+                        <RnSidebarMenuButton Href="@href" IsActive="@IsCurrentPage(href)">
+                            @component.Name
+                        </RnSidebarMenuButton>
+                    </RnSidebarMenuItem>
+                }
+            </RnSidebarMenu>
+        </RnSidebarGroup>
+    </RnSidebarContent>
+</RnSidebar>
 
 @code {
     private record ComponentItem(string Name, string Slug);
+
+    protected override void OnInitialized()
+    {
+        Navigation.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= OnLocationChanged;
+    }
+
+    private bool IsCurrentPage(string href) =>
+        Navigation.Uri.TrimEnd('/').EndsWith(href, StringComparison.OrdinalIgnoreCase);
 
     private readonly ComponentItem[] _components =
     [
