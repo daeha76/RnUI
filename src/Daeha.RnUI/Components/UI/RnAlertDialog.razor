@@ -2,10 +2,14 @@
 
 @if (Open)
 {
-    <div data-slot="alert-dialog" role="alertdialog">
-        <div data-slot="alert-dialog-overlay" class="cn-alert-dialog-overlay fixed inset-0 z-50"></div>
+    <div data-slot="alert-dialog">
+        @* Overlay - fixed backdrop *@
+        <div data-slot="alert-dialog-overlay"
+             class="fixed inset-0 z-50 bg-black/80" style="backdrop-filter: blur(4px);"></div>
+
+        @* Content - centered dialog panel *@
         <div data-slot="alert-dialog-content"
-             class="@CssUtils.Cn("cn-alert-dialog-content", Class)"
+             class="@CssUtils.Cn("fixed left-1/2 top-1/2 z-50 grid w-full max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 border border-border bg-background p-6 shadow-lg sm:rounded-lg duration-200", Class)"
              @attributes="AdditionalAttributes">
             @ChildContent
         </div>

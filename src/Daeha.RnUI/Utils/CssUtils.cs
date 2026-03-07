@@ -1,4 +1,4 @@
-namespace RnUI.Components.UI;
+namespace RnUI.Utils;
 
 /// <summary>
 /// Utility class for merging CSS class names, equivalent to the cn() utility in shadcn/ui.

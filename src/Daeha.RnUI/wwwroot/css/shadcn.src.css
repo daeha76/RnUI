@@ -84,45 +84,59 @@
 .cn-button {
   @apply rounded-md font-medium text-sm cursor-pointer;
 }
+
 .cn-button-variant-default {
   @apply bg-primary text-primary-foreground shadow-xs hover:bg-primary/90;
 }
+
 .cn-button-variant-destructive {
   @apply bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60;
 }
+
 .cn-button-variant-outline {
   @apply border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground;
 }
+
 .cn-button-variant-secondary {
   @apply bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80;
 }
+
 .cn-button-variant-ghost {
   @apply hover:bg-accent hover:text-accent-foreground;
 }
+
 .cn-button-variant-link {
   @apply text-primary underline-offset-4 hover:underline;
 }
+
 .cn-button-size-default {
   @apply h-9 px-4 py-2;
 }
+
 .cn-button-size-xs {
   @apply h-7 px-2 text-xs rounded;
 }
+
 .cn-button-size-sm {
   @apply h-8 rounded-md px-3 text-xs;
 }
+
 .cn-button-size-lg {
   @apply h-10 rounded-md px-6;
 }
+
 .cn-button-size-icon {
   @apply size-9;
 }
+
 .cn-button-size-icon-xs {
   @apply size-7;
 }
+
 .cn-button-size-icon-sm {
   @apply size-8;
 }
+
 .cn-button-size-icon-lg {
   @apply size-10;
 }
@@ -146,21 +160,27 @@
 .cn-card {
   @apply rounded-xl border border-border bg-card text-card-foreground shadow-sm;
 }
+
 .cn-card-header {
   @apply px-6 pt-6 pb-2;
 }
+
 .cn-card-title {
   @apply font-semibold leading-none tracking-tight;
 }
+
 .cn-card-description {
   @apply text-sm text-muted-foreground;
 }
+
 .cn-card-action {
   @apply col-start-2 row-span-2 row-start-1 self-start justify-self-end;
 }
+
 .cn-card-content {
   @apply px-6 pb-4;
 }
+
 .cn-card-footer {
   @apply px-6 pb-6;
 }
@@ -169,64 +189,93 @@
 .cn-badge {
   @apply rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors;
 }
+
 .cn-badge-variant-default {
   @apply border-transparent bg-primary text-primary-foreground shadow-sm;
 }
+
 .cn-badge-variant-secondary {
   @apply border-transparent bg-secondary text-secondary-foreground;
 }
+
 .cn-badge-variant-destructive {
   @apply border-transparent bg-destructive text-white shadow-sm;
 }
+
 .cn-badge-variant-outline {
   @apply text-foreground;
 }
+
 .cn-badge-variant-ghost {
   @apply border-transparent text-foreground;
 }
+
 .cn-badge-variant-link {
   @apply border-transparent text-primary underline-offset-4 hover:underline;
 }
 
 /* Alert */
 .cn-alert {
-  @apply rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground;
+  @apply relative w-full rounded-lg border px-4 py-3 text-sm flex items-start gap-3;
 }
+
 .cn-alert-variant-default {
   @apply bg-background text-foreground;
 }
+
 .cn-alert-variant-destructive {
-  @apply border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive;
+  @apply border-destructive/50 text-destructive dark:border-destructive;
 }
+
+.cn-alert-icon {
+  @apply size-4 mt-0.5 shrink-0;
+}
+
+.cn-alert-icon-destructive {
+  @apply text-destructive;
+}
+
+.cn-alert-body {
+  @apply flex-1 min-w-0;
+}
+
 .cn-alert-title {
-  @apply mb-1 font-medium leading-none tracking-tight;
+  @apply mb-1 font-semibold leading-none tracking-tight;
 }
+
 .cn-alert-description {
   @apply text-sm [&_p]:leading-relaxed;
 }
+
 .cn-alert-action {
-  @apply mt-2;
+  @apply shrink-0;
 }
 
 /* Dialog */
 .cn-dialog-overlay {
   @apply bg-black/80;
 }
+
 .cn-dialog-content {
   @apply grid w-full max-w-lg gap-4 rounded-lg border border-border bg-background p-6 shadow-lg sm:rounded-lg;
 }
+
 .cn-dialog-close {
   @apply absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none;
 }
+
 .cn-dialog-header {
   @apply gap-1.5 text-center sm:text-left;
 }
+
 .cn-dialog-footer {
   @apply gap-2 sm:flex-row sm:justify-end;
 }
+
 .cn-dialog-title {
   @apply text-lg font-semibold leading-none tracking-tight;
 }
+
 .cn-dialog-description {
   @apply text-sm text-muted-foreground;
 }
@@ -235,33 +284,43 @@
 .cn-sheet-overlay {
   @apply bg-black/80;
 }
+
 .cn-sheet-content {
   @apply fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out;
 }
+
 .cn-sheet-content[data-side="top"] {
   @apply inset-x-0 top-0 border-b;
 }
+
 .cn-sheet-content[data-side="bottom"] {
   @apply inset-x-0 bottom-0 border-t;
 }
+
 .cn-sheet-content[data-side="left"] {
   @apply inset-y-0 left-0 h-full w-3/4 border-r sm:max-w-sm;
 }
+
 .cn-sheet-content[data-side="right"] {
   @apply inset-y-0 right-0 h-full w-3/4 border-l sm:max-w-sm;
 }
+
 .cn-sheet-close {
   @apply absolute right-4 top-4;
 }
+
 .cn-sheet-header {
   @apply gap-1.5 text-center sm:text-left;
 }
+
 .cn-sheet-footer {
   @apply gap-2 sm:flex-row sm:justify-end;
 }
+
 .cn-sheet-title {
   @apply text-lg font-semibold text-foreground;
 }
+
 .cn-sheet-description {
   @apply text-sm text-muted-foreground;
 }
@@ -270,12 +329,15 @@
 .cn-popover-content {
   @apply rounded-md border border-border bg-popover p-4 text-popover-foreground shadow-md outline-none;
 }
+
 .cn-popover-header {
   @apply mb-2;
 }
+
 .cn-popover-title {
   @apply font-medium leading-none;
 }
+
 .cn-popover-description {
   @apply text-sm text-muted-foreground;
 }
@@ -289,18 +351,23 @@
 .cn-tabs {
   @apply gap-2;
 }
+
 .cn-tabs-list {
   @apply rounded-lg p-1 h-9;
 }
+
 .cn-tabs-list-variant-default {
   @apply bg-muted;
 }
+
 .cn-tabs-list-variant-line {
   @apply bg-transparent border-b border-border rounded-none;
 }
+
 .cn-tabs-trigger {
   @apply rounded-md px-3 py-1 text-sm font-medium;
 }
+
 .cn-tabs-content {
   @apply mt-2;
 }
@@ -309,18 +376,23 @@
 .cn-accordion {
   @apply gap-0;
 }
+
 .cn-accordion-item {
   @apply border-b border-border;
 }
+
 .cn-accordion-trigger {
   @apply py-4 text-sm font-medium hover:underline [&[aria-expanded=true]>svg]:rotate-180;
 }
+
 .cn-accordion-trigger-icon {
   @apply size-4 transition-transform duration-200;
 }
+
 .cn-accordion-content {
   @apply text-sm;
 }
+
 .cn-accordion-content-inner {
   @apply pb-4 pt-0;
 }
@@ -329,15 +401,19 @@
 .cn-avatar {
   @apply size-10 overflow-hidden rounded-full;
 }
+
 .cn-avatar[data-size="sm"] {
   @apply size-8;
 }
+
 .cn-avatar[data-size="lg"] {
   @apply size-12;
 }
+
 .cn-avatar-image {
   @apply aspect-square size-full object-cover;
 }
+
 .cn-avatar-fallback {
   @apply bg-muted;
 }
@@ -351,9 +427,11 @@
 .cn-checkbox {
   @apply size-4 rounded-sm border border-primary shadow-sm focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50;
 }
+
 .cn-checkbox[data-checked] {
   @apply bg-primary text-primary-foreground;
 }
+
 .cn-checkbox-indicator {
   @apply size-full;
 }
@@ -362,12 +440,15 @@
 .cn-switch {
   @apply h-5 w-9 rounded-full border-2 border-transparent bg-input cursor-pointer;
 }
+
 .cn-switch[data-checked] {
   @apply bg-primary;
 }
+
 .cn-switch-thumb {
   @apply size-4 rounded-full bg-background shadow-lg transition-transform;
 }
+
 .cn-switch[data-checked] .cn-switch-thumb {
   @apply translate-x-4;
 }
@@ -376,27 +457,35 @@
 .cn-select-trigger {
   @apply h-9 rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs focus:outline-none focus:ring-[3px] focus:ring-ring/50;
 }
+
 .cn-select-trigger-icon {
   @apply ml-2 size-4 opacity-50;
 }
+
 .cn-select-content {
   @apply rounded-md border border-border bg-popover text-popover-foreground shadow-md;
 }
+
 .cn-select-item {
   @apply relative cursor-default select-none py-1.5 pl-2 pr-8 text-sm outline-none hover:bg-accent hover:text-accent-foreground;
 }
+
 .cn-select-item[data-selected] {
   @apply bg-accent text-accent-foreground;
 }
+
 .cn-select-item-indicator {
   @apply absolute right-2 flex size-3.5 items-center justify-center;
 }
+
 .cn-select-label {
   @apply px-2 py-1.5 text-sm font-semibold;
 }
+
 .cn-select-separator {
   @apply -mx-1 my-1 h-px bg-muted;
 }
+
 .cn-select-value {
   @apply truncate;
 }
@@ -405,33 +494,43 @@
 .cn-dropdown-menu-content {
   @apply min-w-[8rem] rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md;
 }
+
 .cn-dropdown-menu-item {
   @apply rounded-sm px-2 py-1.5 text-sm cursor-default hover:bg-accent hover:text-accent-foreground;
 }
+
 .cn-dropdown-menu-item[data-variant="destructive"] {
   @apply text-destructive hover:bg-destructive/10;
 }
+
 .cn-dropdown-menu-label {
   @apply px-2 py-1.5 text-sm font-semibold;
 }
+
 .cn-dropdown-menu-separator {
   @apply -mx-1 my-1 h-px bg-muted;
 }
+
 .cn-dropdown-menu-shortcut {
   @apply ml-auto text-xs tracking-widest text-muted-foreground;
 }
+
 .cn-dropdown-menu-checkbox-item {
   @apply rounded-sm py-1.5 pl-8 pr-2 text-sm cursor-default hover:bg-accent hover:text-accent-foreground;
 }
+
 .cn-dropdown-menu-radio-item {
   @apply rounded-sm py-1.5 pl-8 pr-2 text-sm cursor-default hover:bg-accent hover:text-accent-foreground;
 }
+
 .cn-dropdown-menu-item-indicator {
   @apply absolute left-2 flex size-3.5 items-center justify-center;
 }
+
 .cn-dropdown-menu-sub-trigger {
   @apply rounded-sm px-2 py-1.5 text-sm cursor-default hover:bg-accent hover:text-accent-foreground;
 }
+
 .cn-dropdown-menu-sub-content {
   @apply min-w-[8rem];
 }
@@ -440,21 +539,27 @@
 .cn-navigation-menu {
   @apply z-10;
 }
+
 .cn-navigation-menu-list {
   @apply gap-1;
 }
+
 .cn-navigation-menu-item {
   @apply relative;
 }
+
 .cn-navigation-menu-trigger {
   @apply rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground;
 }
+
 .cn-navigation-menu-trigger-icon {
   @apply relative top-px ml-1 size-3 transition-transform duration-200 group-data-[state=open]:rotate-180;
 }
+
 .cn-navigation-menu-content {
   @apply left-0 top-0 w-full;
 }
+
 .cn-navigation-menu-link {
   @apply block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground;
 }
@@ -463,15 +568,19 @@
 .cn-progress-root {
   @apply items-center;
 }
+
 .cn-progress-track {
   @apply h-2 overflow-hidden rounded-full bg-primary/20;
 }
+
 .cn-progress-indicator {
   @apply bg-primary rounded-full;
 }
+
 .cn-progress-label {
   @apply text-sm font-medium;
 }
+
 .cn-progress-value {
   @apply ml-auto text-sm text-muted-foreground;
 }
@@ -485,15 +594,19 @@
 .cn-breadcrumb-list {
   @apply flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground sm:gap-2.5;
 }
+
 .cn-breadcrumb-item {
   @apply inline-flex items-center gap-1.5;
 }
+
 .cn-breadcrumb-link {
   @apply transition-colors hover:text-foreground;
 }
+
 .cn-breadcrumb-page {
   @apply font-normal text-foreground;
 }
+
 .cn-breadcrumb-separator {
   @apply [&>svg]:size-3.5;
 }
@@ -502,24 +615,31 @@
 .cn-table {
   @apply w-full caption-bottom text-sm;
 }
+
 .cn-table-header {
   @apply [&_tr]:border-b;
 }
+
 .cn-table-body {
   @apply [&_tr:last-child]:border-0;
 }
+
 .cn-table-footer {
   @apply border-t bg-muted/50 font-medium [&>tr]:last:border-b-0;
 }
+
 .cn-table-row {
   @apply border-b border-border transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted;
 }
+
 .cn-table-head {
   @apply h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px];
 }
+
 .cn-table-cell {
   @apply p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px];
 }
+
 .cn-table-caption {
   @apply mt-4 text-sm text-muted-foreground;
 }
@@ -528,15 +648,19 @@
 .cn-toggle {
   @apply rounded-md text-sm font-medium transition-colors hover:bg-muted hover:text-muted-foreground data-[state=on]:bg-accent data-[state=on]:text-accent-foreground;
 }
+
 .cn-toggle-variant-outline {
   @apply border border-input bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground;
 }
+
 .cn-toggle-size-default {
   @apply h-9 min-w-9 px-2;
 }
+
 .cn-toggle-size-sm {
   @apply h-8 min-w-8 px-1.5;
 }
+
 .cn-toggle-size-lg {
   @apply h-10 min-w-10 px-2.5;
 }
@@ -545,15 +669,19 @@
 .cn-pagination {
   @apply mx-auto flex w-full justify-center;
 }
+
 .cn-pagination-content {
   @apply flex flex-row items-center gap-1;
 }
+
 .cn-pagination-item {
   @apply list-none;
 }
+
 .cn-pagination-link {
   @apply inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-9 min-w-9;
 }
+
 .cn-pagination-link[data-active] {
   @apply border border-input bg-background shadow-xs;
 }
@@ -562,12 +690,15 @@
 .cn-slider {
   @apply relative flex w-full touch-none select-none items-center;
 }
+
 .cn-slider-track {
   @apply relative h-1.5 w-full grow overflow-hidden rounded-full bg-primary/20;
 }
+
 .cn-slider-range {
   @apply absolute h-full bg-primary;
 }
+
 .cn-slider-thumb {
   @apply block size-4 rounded-full border border-primary/50 bg-background shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50;
 }
@@ -576,15 +707,19 @@
 .cn-scroll-area {
   @apply relative overflow-hidden;
 }
+
 .cn-scrollbar {
   @apply flex touch-none select-none transition-colors;
 }
+
 .cn-scrollbar[data-orientation="vertical"] {
   @apply h-full w-2.5 border-l border-l-transparent p-px;
 }
+
 .cn-scrollbar[data-orientation="horizontal"] {
   @apply h-2.5 flex-col border-t border-t-transparent p-px;
 }
+
 .cn-scrollbar-thumb {
   @apply relative flex-1 rounded-full bg-border;
 }
@@ -603,9 +738,11 @@
 .cn-radio-group {
   @apply grid gap-2;
 }
+
 .cn-radio-group-item {
   @apply aspect-square size-4 rounded-full border border-primary text-primary shadow-sm focus:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50;
 }
+
 .cn-radio-group-item[data-checked] {
   @apply border-4;
 }
@@ -613,19 +750,25 @@
 /* Alert Dialog */
 .cn-alert-dialog-overlay {
   @apply fixed inset-0 z-50 bg-black/80;
+  backdrop-filter: blur(4px);
 }
+
 .cn-alert-dialog-content {
   @apply fixed left-1/2 top-1/2 z-50 grid w-full max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 border border-border bg-background p-6 shadow-lg sm:rounded-lg;
 }
+
 .cn-alert-dialog-header {
   @apply flex flex-col space-y-2 text-center sm:text-left;
 }
+
 .cn-alert-dialog-footer {
   @apply flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2;
 }
+
 .cn-alert-dialog-title {
   @apply text-lg font-semibold;
 }
+
 .cn-alert-dialog-description {
   @apply text-sm text-muted-foreground;
 }
@@ -634,6 +777,7 @@
 .cn-context-menu-content {
   @apply z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md;
 }
+
 .cn-context-menu-item {
   @apply relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground;
 }
@@ -652,27 +796,35 @@
 .cn-sidebar {
   @apply flex h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground;
 }
+
 .cn-sidebar-header {
   @apply flex flex-col gap-2 p-2;
 }
+
 .cn-sidebar-content {
   @apply flex min-h-0 flex-1 flex-col gap-2 overflow-auto p-2;
 }
+
 .cn-sidebar-footer {
   @apply flex flex-col gap-2 p-2;
 }
+
 .cn-sidebar-group {
   @apply relative flex w-full min-w-0 flex-col p-2;
 }
+
 .cn-sidebar-group-label {
   @apply flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70;
 }
+
 .cn-sidebar-menu {
   @apply flex w-full min-w-0 flex-col gap-1;
 }
+
 .cn-sidebar-menu-item {
   @apply relative;
 }
+
 .cn-sidebar-menu-button {
   @apply flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-none ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50;
 }
@@ -681,9 +833,11 @@
 .cn-carousel {
   @apply relative;
 }
+
 .cn-carousel-content {
   @apply flex;
 }
+
 .cn-carousel-item {
   @apply min-w-0 shrink-0 grow-0 basis-full;
 }
@@ -692,6 +846,7 @@
 .cn-resizable-panel-group {
   @apply flex h-full w-full;
 }
+
 .cn-resize-handle {
   @apply relative flex w-px items-center justify-center bg-border after:absolute after:inset-y-0 after:left-1/2 after:w-1 after:-translate-x-1/2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1;
 }

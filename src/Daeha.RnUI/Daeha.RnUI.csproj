@@ -36,7 +36,7 @@
 
   <!-- Build Tailwind CSS: compile source CSS into browser-ready output -->
   <Target Name="BuildTailwindCSS" BeforeTargets="Build" Inputs="wwwroot/css/shadcn.src.css" Outputs="wwwroot/css/shadcn.css">
-    <Exec Command="npx @tailwindcss/cli -i wwwroot/css/shadcn.src.css -o wwwroot/css/shadcn.css" WorkingDirectory="$(MSBuildProjectDirectory)" />
+    <Exec Command="npm run build:css" WorkingDirectory="$(MSBuildProjectDirectory)" />
   </Target>
 
   <ItemGroup>
