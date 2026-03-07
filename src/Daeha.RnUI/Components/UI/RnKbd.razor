@@ -1,8 +1,8 @@
 ﻿@* RnKbd component - Blazor port of shadcn/ui RnKbd *@
 
-<RnKbd data-slot="kbd" class="@CssUtils.Cn("cn-kbd", Class)" @attributes="AdditionalAttributes">
+<kbd data-slot="kbd" class="@CssUtils.Cn("cn-kbd", Class)" @attributes="AdditionalAttributes">
     @ChildContent
-</RnKbd>
+</kbd>
 
 @code {
     [Parameter] public RenderFragment? ChildContent { get; set; }
