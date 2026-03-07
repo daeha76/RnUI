@@ -212,6 +212,44 @@ else
             </div>
         ),
 
+        new("Button Group", "button-group", "A container that groups related buttons together with consistent styling.",
+            @<div class="space-y-6">
+                <div class="space-y-2">
+                    <h3 class="text-sm font-medium">Horizontal (Default)</h3>
+                    <RnButtonGroup>
+                        <RnButton Variant="ButtonVariant.Outline">Button 1</RnButton>
+                        <RnButton Variant="ButtonVariant.Outline">Button 2</RnButton>
+                        <RnButton Variant="ButtonVariant.Outline">Button 3</RnButton>
+                    </RnButtonGroup>
+                </div>
+                <div class="space-y-2">
+                    <h3 class="text-sm font-medium">Vertical</h3>
+                    <RnButtonGroup Orientation="ButtonGroupOrientation.Vertical">
+                        <RnButton Variant="ButtonVariant.Outline">Button 1</RnButton>
+                        <RnButton Variant="ButtonVariant.Outline">Button 2</RnButton>
+                        <RnButton Variant="ButtonVariant.Outline">Button 3</RnButton>
+                    </RnButtonGroup>
+                </div>
+                <div class="space-y-2">
+                    <h3 class="text-sm font-medium">With Separator</h3>
+                    <RnButtonGroup>
+                        <RnButton Variant="ButtonVariant.Outline">Cut</RnButton>
+                        <RnButtonGroupSeparator />
+                        <RnButton Variant="ButtonVariant.Outline">Copy</RnButton>
+                        <RnButtonGroupSeparator />
+                        <RnButton Variant="ButtonVariant.Outline">Paste</RnButton>
+                    </RnButtonGroup>
+                </div>
+                <div class="space-y-2">
+                    <h3 class="text-sm font-medium">With Text</h3>
+                    <RnButtonGroup>
+                        <RnButtonGroupText>Prefix</RnButtonGroupText>
+                        <RnButton Variant="ButtonVariant.Outline">Button</RnButton>
+                    </RnButtonGroup>
+                </div>
+            </div>
+        ),
+
         new("Card", "card", "Displays a card with header, content, and footer.",
             @<div class="grid gap-4 md:grid-cols-2">
                 <RnCard>

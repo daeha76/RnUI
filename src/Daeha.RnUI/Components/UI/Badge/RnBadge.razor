@@ -1,6 +1,6 @@
-﻿@* RnBadge component - Blazor port of shadcn/ui RnBadge *@
+﻿@* RnBadge component - Blazor port of shadcn/ui Badge *@
 
-<span data-slot="badge" class="@ComputedClass" @attributes="AdditionalAttributes">
+<span data-slot="badge" data-variant="@Variant.ToString().ToLower()" class="@ComputedClass" @attributes="AdditionalAttributes">
     @ChildContent
 </span>
 
@@ -11,7 +11,7 @@
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
     private string ComputedClass => CssUtils.Cn(
-        "cn-badge group/badge inline-flex w-fit shrink-0 items-center justify-center overflow-hidden whitespace-nowrap focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [&>svg]:pointer-events-none",
+        "cn-badge",
         VariantClass,
         Class
     );
@@ -27,3 +27,4 @@
         _ => "cn-badge-variant-default"
     };
 }
+

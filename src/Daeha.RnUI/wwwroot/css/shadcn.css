@@ -3,10 +3,8 @@
 @layer theme, base, components, utilities;
 @layer theme {
   :root, :host {
-    --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-      "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-      "Courier New", monospace;
+    --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "Geist Mono", ui-monospace, monospace;
     --color-black: #000;
     --color-white: #fff;
     --spacing: 0.25rem;
@@ -820,11 +818,6 @@
       border-width: 0px;
     }
   }
-  .\[\&\>svg\]\:pointer-events-none {
-    &>svg {
-      pointer-events: none;
-    }
-  }
   .\[\&\>svg\]\:size-3\.5 {
     &>svg {
       width: calc(var(--spacing) * 3.5);
@@ -860,6 +853,16 @@
   --color-sidebar-accent-foreground: oklch(0.985 0 0);
   --color-sidebar-border: oklch(0.269 0 0);
   --color-sidebar-ring: oklch(0.439 0 0);
+}
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
 }
 .cn-button {
   cursor: pointer;
@@ -1010,6 +1013,78 @@
   width: calc(var(--spacing) * 10);
   height: calc(var(--spacing) * 10);
 }
+.cn-button-group {
+  display: flex;
+  width: fit-content;
+  align-items: stretch;
+}
+.cn-button-group:has(> [data-slot="button-group"]) {
+  gap: calc(var(--spacing) * 2);
+}
+.cn-button-group>*:focus-visible {
+  position: relative;
+  z-index: 10;
+}
+.cn-button-group-horizontal>*:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left-style: var(--tw-border-style);
+  border-left-width: 0px;
+}
+.cn-button-group-horizontal>*:not(:last-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.cn-button-group-vertical {
+  flex-direction: column;
+}
+.cn-button-group-vertical>*:not(:first-child) {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top-style: var(--tw-border-style);
+  border-top-width: 0px;
+}
+.cn-button-group-vertical>*:not(:last-child) {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.cn-button-group-separator {
+  position: relative;
+  margin: calc(var(--spacing) * 0);
+  align-self: stretch;
+  background-color: var(--color-input);
+}
+.cn-button-group-separator[data-orientation="vertical"] {
+  height: auto;
+  width: 1px;
+}
+.cn-button-group-separator[data-orientation="horizontal"] {
+  height: 1px;
+  width: auto;
+}
+.cn-button-group-text {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing) * 2);
+  border-radius: var(--radius-md);
+  border-style: var(--tw-border-style);
+  border-width: 1px;
+  background-color: var(--color-muted);
+  padding-inline: calc(var(--spacing) * 4);
+  font-size: var(--text-sm);
+  line-height: var(--tw-leading, var(--text-sm--line-height));
+  --tw-font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-medium);
+  --tw-shadow: 0 1px 2px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.05));
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  & svg {
+    pointer-events: none;
+  }
+  & svg:not([class*='size-']) {
+    width: calc(var(--spacing) * 4);
+    height: calc(var(--spacing) * 4);
+  }
+}
 .cn-input {
   height: calc(var(--spacing) * 9);
   border-radius: var(--radius-md);
@@ -1126,7 +1201,13 @@
   padding-bottom: calc(var(--spacing) * 6);
 }
 .cn-badge {
-  border-radius: var(--radius-md);
+  display: inline-flex;
+  width: fit-content;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--spacing) * 1);
+  border-radius: calc(infinity * 1px);
   border-style: var(--tw-border-style);
   border-width: 1px;
   padding-inline: calc(var(--spacing) * 2.5);
@@ -1135,35 +1216,117 @@
   line-height: var(--tw-leading, var(--text-xs--line-height));
   --tw-font-weight: var(--font-weight-semibold);
   font-weight: var(--font-weight-semibold);
-  transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
+  white-space: nowrap;
+  transition-property: all;
   transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
   transition-duration: var(--tw-duration, var(--default-transition-duration));
+  --tw-outline-style: none;
+  outline-style: none;
+  &:focus-visible {
+    border-color: var(--color-ring);
+  }
+  &:focus-visible {
+    --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  &:focus-visible {
+    --tw-ring-color: color-mix(in srgb, oklch(0.708 0 0) 50%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      --tw-ring-color: color-mix(in oklab, var(--color-ring) 50%, transparent);
+    }
+  }
+  &:disabled {
+    pointer-events: none;
+  }
+  &:disabled {
+    opacity: 50%;
+  }
+  & svg {
+    pointer-events: none;
+  }
+  & svg {
+    flex-shrink: 0;
+  }
+  & svg:not([class*='size-']) {
+    width: calc(var(--spacing) * 3);
+    height: calc(var(--spacing) * 3);
+  }
 }
 .cn-badge-variant-default {
   border-color: transparent;
   background-color: var(--color-primary);
   color: var(--color-primary-foreground);
-  --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
-  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  &:hover {
+    @media (hover: hover) {
+      background-color: color-mix(in srgb, oklch(0.205 0 0) 80%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        background-color: color-mix(in oklab, var(--color-primary) 80%, transparent);
+      }
+    }
+  }
 }
 .cn-badge-variant-secondary {
   border-color: transparent;
   background-color: var(--color-secondary);
   color: var(--color-secondary-foreground);
+  &:hover {
+    @media (hover: hover) {
+      background-color: color-mix(in srgb, oklch(0.965 0 0) 80%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        background-color: color-mix(in oklab, var(--color-secondary) 80%, transparent);
+      }
+    }
+  }
 }
 .cn-badge-variant-destructive {
   border-color: transparent;
-  background-color: var(--color-destructive);
-  color: var(--color-white);
-  --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
-  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  background-color: color-mix(in srgb, oklch(0.577 0.245 27.325) 15%, transparent);
+  @supports (color: color-mix(in lab, red, red)) {
+    background-color: color-mix(in oklab, var(--color-destructive) 15%, transparent);
+  }
+  color: var(--color-destructive);
+  &:hover {
+    @media (hover: hover) {
+      background-color: color-mix(in srgb, oklch(0.577 0.245 27.325) 25%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        background-color: color-mix(in oklab, var(--color-destructive) 25%, transparent);
+      }
+    }
+  }
+  @media (prefers-color-scheme: dark) {
+    background-color: color-mix(in srgb, oklch(0.577 0.245 27.325) 25%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-destructive) 25%, transparent);
+    }
+  }
 }
 .cn-badge-variant-outline {
+  border-color: var(--color-border);
+  background-color: transparent;
   color: var(--color-foreground);
+  &:hover {
+    @media (hover: hover) {
+      background-color: var(--color-accent);
+    }
+  }
+  &:hover {
+    @media (hover: hover) {
+      color: var(--color-accent-foreground);
+    }
+  }
 }
 .cn-badge-variant-ghost {
   border-color: transparent;
-  color: var(--color-foreground);
+  background-color: var(--color-accent);
+  color: var(--color-accent-foreground);
+  &:hover {
+    @media (hover: hover) {
+      background-color: color-mix(in srgb, oklch(0.965 0 0) 80%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        background-color: color-mix(in oklab, var(--color-accent) 80%, transparent);
+      }
+    }
+  }
 }
 .cn-badge-variant-link {
   border-color: transparent;
@@ -2556,9 +2719,6 @@
   font-size: var(--text-sm);
   line-height: var(--tw-leading, var(--text-sm--line-height));
   --tw-ring-color: var(--color-sidebar-ring);
-  transition-property: width,height,padding;
-  transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
-  transition-duration: var(--tw-duration, var(--default-transition-duration));
   --tw-outline-style: none;
   outline-style: none;
   &:hover {
@@ -2593,6 +2753,9 @@
   &[aria-disabled="true"] {
     opacity: 50%;
   }
+  transition-property: width, height, padding;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }
 .cn-carousel {
   position: relative;

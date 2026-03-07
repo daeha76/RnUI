@@ -1,4 +1,4 @@
-﻿@using RnUI.Components.UI.Accordion
+@using RnUI.Components.UI.Accordion
 @using RnUI.Components.UI.Alert
 @using RnUI.Components.UI.AlertDialog
 @using RnUI.Components.UI.AspectRatio
@@ -6,6 +6,7 @@
 @using RnUI.Components.UI.Badge
 @using RnUI.Components.UI.Breadcrumb
 @using RnUI.Components.UI.Button
+@using RnUI.Components.UI.ButtonGroup
 @using RnUI.Components.UI.Card
 @using RnUI.Components.UI.Checkbox
 @using RnUI.Components.UI.Collapsible

@@ -6,6 +6,10 @@
  */
 
 @theme {
+  /* Font tokens */
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+
   /* Border radius tokens */
   --radius-lg: 0.5rem;
   --radius-md: calc(var(--radius-lg) - 2px);
@@ -27,7 +31,7 @@
   --color-accent: oklch(0.965 0 0);
   --color-accent-foreground: oklch(0.205 0 0);
   --color-destructive: oklch(0.577 0.245 27.325);
-  --color-destructive-foreground: oklch(0.577 0.245 27.325);
+  --color-destructive-foreground: oklch(0.985 0 0);
   --color-border: oklch(0.922 0 0);
   --color-input: oklch(0.922 0 0);
   --color-ring: oklch(0.708 0 0);
@@ -74,6 +78,20 @@
   --color-sidebar-accent-foreground: oklch(0.985 0 0);
   --color-sidebar-border: oklch(0.269 0 0);
   --color-sidebar-ring: oklch(0.439 0 0);
+}
+
+/*
+ * Base layer
+ */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
 }
 
 /*
@@ -141,7 +159,62 @@
   @apply size-10;
 }
 
-/* Input */
+/* Button Group */
+.cn-button-group {
+  @apply flex w-fit items-stretch;
+}
+
+/* Gap between nested button groups */
+.cn-button-group:has(> [data-slot="button-group"]) {
+  @apply gap-2;
+}
+
+/* Focus visible z-index for children */
+.cn-button-group>*:focus-visible {
+  @apply relative z-10;
+}
+
+/* Horizontal orientation (default) */
+.cn-button-group-horizontal>*:not(:first-child) {
+  @apply rounded-l-none border-l-0;
+}
+
+.cn-button-group-horizontal>*:not(:last-child) {
+  @apply rounded-r-none;
+}
+
+/* Vertical orientation */
+.cn-button-group-vertical {
+  @apply flex-col;
+}
+
+.cn-button-group-vertical>*:not(:first-child) {
+  @apply rounded-t-none border-t-0;
+}
+
+.cn-button-group-vertical>*:not(:last-child) {
+  @apply rounded-b-none;
+}
+
+/* Button Group Separator */
+.cn-button-group-separator {
+  @apply relative m-0 self-stretch bg-input;
+}
+
+.cn-button-group-separator[data-orientation="vertical"] {
+  @apply w-px h-auto;
+}
+
+.cn-button-group-separator[data-orientation="horizontal"] {
+  @apply h-px w-auto;
+}
+
+/* Button Group Text */
+.cn-button-group-text {
+  @apply flex items-center gap-2 rounded-md border bg-muted px-4 text-sm font-medium shadow-xs [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4;
+}
+
+
 .cn-input {
   @apply h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:border-ring;
 }
@@ -187,27 +260,27 @@
 
 /* Badge */
 .cn-badge {
-  @apply rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors;
+  @apply inline-flex w-fit shrink-0 items-center justify-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3;
 }
 
 .cn-badge-variant-default {
-  @apply border-transparent bg-primary text-primary-foreground shadow-sm;
+  @apply border-transparent bg-primary text-primary-foreground hover:bg-primary/80;
 }
 
 .cn-badge-variant-secondary {
-  @apply border-transparent bg-secondary text-secondary-foreground;
+  @apply border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80;
 }
 
 .cn-badge-variant-destructive {
-  @apply border-transparent bg-destructive text-white shadow-sm;
+  @apply border-transparent bg-destructive/15 text-destructive dark:bg-destructive/25 hover:bg-destructive/25;
 }
 
 .cn-badge-variant-outline {
-  @apply text-foreground;
+  @apply border-border bg-transparent text-foreground hover:bg-accent hover:text-accent-foreground;
 }
 
 .cn-badge-variant-ghost {
-  @apply border-transparent text-foreground;
+  @apply border-transparent bg-accent text-accent-foreground hover:bg-accent/80;
 }
 
 .cn-badge-variant-link {
@@ -826,7 +899,10 @@
 }
 
 .cn-sidebar-menu-button {
-  @apply flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-none ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50;
+  @apply flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-none ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50;
+  transition-property: width, height, padding;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }
 
 /* Carousel */
