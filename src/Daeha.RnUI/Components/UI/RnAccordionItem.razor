@@ -1,10 +1,32 @@
-<div data-slot="accordion-item" class="@CssUtils.Cn("cn-accordion-item", Class)" @attributes="AdditionalAttributes">
-    @ChildContent
-</div>
+<CascadingValue Value="this" IsFixed="false">
+    <div data-slot="accordion-item"
+         data-state="@(IsExpanded ? "open" : "closed")"
+         class="@CssUtils.Cn("border-b border-border last:border-b-0", Class)"
+         @attributes="AdditionalAttributes">
+        @ChildContent
+    </div>
+</CascadingValue>
 
 @code {
+    [CascadingParameter] public RnAccordion? Accordion { get; set; }
+
     [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Unique identifier for this accordion item.</summary>
     [Parameter] public string Value { get; set; } = "";
+
+    /// <summary>When true, this item is disabled and cannot be interacted with.</summary>
+    [Parameter] public bool Disabled { get; set; }
+
     [Parameter] public string? Class { get; set; }
+
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    internal bool IsExpanded => Accordion?.IsItemExpanded(Value) ?? false;
+
+    internal async Task Toggle()
+    {
+        if (!Disabled && Accordion is not null)
+            await Accordion.Toggle(Value);
+    }
 }

@@ -81,7 +81,7 @@ else
     private ComponentDemo[] _componentDemos => [
         new("Accordion", "accordion", "A vertically stacked set of expandable items.",
             @<div class="space-y-4 max-w-md">
-                <RnAccordion @bind-ExpandedItem="_expandedItem">
+                <RnAccordion @bind-Value="_expandedItem">
                     <RnAccordionItem Value="item-1">
                         <RnAccordionTrigger>Is it accessible?</RnAccordionTrigger>
                         <RnAccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</RnAccordionContent>

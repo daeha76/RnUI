@@ -1,11 +1,40 @@
 @import "tailwindcss";
 
+/* Accordion keyframe animations */
+@keyframes accordion-down {
+  from {
+    height: 0;
+    overflow: hidden;
+  }
+
+  to {
+    height: var(--accordion-content-height, 100%);
+    overflow: hidden;
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--accordion-content-height, 100%);
+    overflow: hidden;
+  }
+
+  to {
+    height: 0;
+    overflow: hidden;
+  }
+}
+
 /*
  * shadcn/ui Blazor - Design Tokens & Theme Variables
  * Tailwind CSS only. No Bootstrap.
  */
 
 @theme {
+  /* Accordion animations */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
   /* Border radius tokens */
   --radius-lg: 0.5rem;
   --radius-md: calc(var(--radius-lg) - 2px);

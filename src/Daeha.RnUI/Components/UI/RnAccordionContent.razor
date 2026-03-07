@@ -1,18 +1,22 @@
-﻿@if (IsExpanded)
-{
-    <div data-slot="accordion-content" class="cn-accordion-content overflow-hidden">
-        <div class="@CssUtils.Cn("cn-accordion-content-inner", Class)" @attributes="AdditionalAttributes">
+﻿<div data-slot="accordion-content"
+     data-state="@(IsExpanded ? "open" : "closed")"
+     style="display:grid; grid-template-rows: @(IsExpanded ? "1fr" : "0fr"); transition: grid-template-rows 200ms ease-out;"
+     class="@CssUtils.Cn("text-sm", Class)"
+     @attributes="AdditionalAttributes">
+    <div class="overflow-hidden">
+        <div class="pt-0 pb-4">
             @ChildContent
         </div>
     </div>
-}
+</div>
 
 @code {
-    [CascadingParameter] public RnAccordion? AccordionParent { get; set; }
-    [CascadingParameter] public RnAccordionItem? ItemParent { get; set; }
+    [CascadingParameter] public RnAccordionItem? Item { get; set; }
+
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public string? Class { get; set; }
+
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
-    private bool IsExpanded => AccordionParent?.IsExpanded(ItemParent?.Value ?? "") ?? false;
+    private bool IsExpanded => Item?.IsExpanded ?? false;
 }

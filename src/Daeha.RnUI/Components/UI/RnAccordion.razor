@@ -1,23 +1,28 @@
-﻿@* RnAccordion component - Blazor port of shadcn/ui RnAccordion *@
+﻿@* RnAccordion component - Blazor port of shadcn/ui Accordion *@
 
-<div data-slot="accordion"
-     class="@CssUtils.Cn("cn-accordion flex w-full flex-col", Class)"
-     @attributes="AdditionalAttributes">
-    @ChildContent
-</div>
+<CascadingValue Value="this" IsFixed="false">
+    <div data-slot="accordion"
+         class="@CssUtils.Cn("flex w-full flex-col", Class)"
+         @attributes="AdditionalAttributes">
+        @ChildContent
+    </div>
+</CascadingValue>
 
 @code {
     /// <summary>Child content containing RnAccordionItem components.</summary>
     [Parameter] public RenderFragment? ChildContent { get; set; }
 
-    /// <summary>The currently expanded item value (single-RnSelect mode).</summary>
-    [Parameter] public string? ExpandedItem { get; set; }
+    /// <summary>The currently expanded item value (single mode).</summary>
+    [Parameter] public string? Value { get; set; }
 
     /// <summary>Callback when the expanded item changes.</summary>
-    [Parameter] public EventCallback<string?> ExpandedItemChanged { get; set; }
+    [Parameter] public EventCallback<string?> ValueChanged { get; set; }
 
-    /// <summary>When true, allows multiple items to be expanded simultaneously.</summary>
-    [Parameter] public bool Multiple { get; set; }
+    /// <summary>When "multiple", allows multiple items to be expanded simultaneously. Default is "single".</summary>
+    [Parameter] public string Type { get; set; } = "single";
+
+    /// <summary>When true and type is "single", allows the expanded item to be collapsed.</summary>
+    [Parameter] public bool Collapsible { get; set; } = true;
 
     /// <summary>Additional CSS classes.</summary>
     [Parameter] public string? Class { get; set; }
@@ -26,12 +31,12 @@
 
     private readonly HashSet<string> _expandedItems = new();
 
-    internal bool IsExpanded(string value)
-        => Multiple ? _expandedItems.Contains(value) : ExpandedItem == value;
+    internal bool IsItemExpanded(string value)
+        => Type == "multiple" ? _expandedItems.Contains(value) : Value == value;
 
     internal async Task Toggle(string value)
     {
-        if (Multiple)
+        if (Type == "multiple")
         {
             if (!_expandedItems.Remove(value))
                 _expandedItems.Add(value);
@@ -39,9 +44,13 @@
         }
         else
         {
-            ExpandedItem = ExpandedItem == value ? null : value;
-        }
+            if (Value == value && Collapsible)
+                Value = null;
+            else
+                Value = value;
 
-        await ExpandedItemChanged.InvokeAsync(ExpandedItem);
+            await ValueChanged.InvokeAsync(Value);
+            StateHasChanged();
+        }
     }
 }
