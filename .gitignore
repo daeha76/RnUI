@@ -3,6 +3,7 @@
 bin
 obj
 nupkgs
+.claude/worktrees
 
 # dependencies
 node_modules
