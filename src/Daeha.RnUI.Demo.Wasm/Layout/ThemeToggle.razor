@@ -27,7 +27,13 @@
     private async Task ToggleTheme()
     {
         _isDark = !_isDark;
-        var theme = _isDark ? "dark" : "light";
-        await JS.InvokeVoidAsync("eval", $"document.documentElement.className = '{theme}'");
+        if (_isDark)
+        {
+            await JS.InvokeVoidAsync("document.documentElement.classList.add", "dark");
+        }
+        else
+        {
+            await JS.InvokeVoidAsync("document.documentElement.classList.remove", "dark");
+        }
     }
 }
