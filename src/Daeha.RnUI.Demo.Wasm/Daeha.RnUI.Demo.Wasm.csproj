@@ -16,4 +16,10 @@
     <ProjectReference Include="..\Daeha.RnUI\Daeha.RnUI.csproj" />
   </ItemGroup>
 
+  <Target Name="BuildTailwindCSS" BeforeTargets="Build"
+          Inputs="wwwroot/input.css"
+          Outputs="wwwroot/css/tailwindcss.css">
+    <Exec Command="npm run build:css" WorkingDirectory="$(MSBuildProjectDirectory)" />
+  </Target>
+
 </Project>
