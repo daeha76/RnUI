@@ -16,6 +16,11 @@
     <ProjectReference Include="..\Daeha.RnUI\Daeha.RnUI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="package-lock.json" />
+    <None Include="package-lock.json" Exclude="bin/**;obj/**" />
+  </ItemGroup>
+
   <Target Name="BuildTailwindCSS" BeforeTargets="Build"
           Inputs="wwwroot/input.css"
           Outputs="wwwroot/css/tailwindcss.css">

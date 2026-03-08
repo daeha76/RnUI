@@ -51,4 +51,9 @@
     <Content Remove="wwwroot/css/shadcn.src.css" />
     <None Include="wwwroot/css/shadcn.src.css" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="package-lock.json" />
+    <None Include="package-lock.json" Exclude="bin/**;obj/**" />
+  </ItemGroup>
 </Project>
