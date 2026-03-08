@@ -1,4 +1,7 @@
+@inject NavigationManager Navigation
+
 <a data-slot="sidebar-menu-button" href="@Href"
+   @onclick="HandleClick" @onclick:preventDefault="true"
    class="@CssUtils.Cn("cn-sidebar-menu-button", IsActive ? "bg-sidebar-accent text-sidebar-accent-foreground" : "", Class)"
    @attributes="AdditionalAttributes">
     @ChildContent
@@ -10,4 +13,12 @@
     [Parameter] public bool IsActive { get; set; }
     [Parameter] public string? Class { get; set; }
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private void HandleClick()
+    {
+        if (!string.IsNullOrEmpty(Href))
+        {
+            Navigation.NavigateTo(Href);
+        }
+    }
 }
