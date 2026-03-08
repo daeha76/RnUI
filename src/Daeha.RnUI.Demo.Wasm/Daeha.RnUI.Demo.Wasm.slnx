@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../Daeha.RnUI/Daeha.RnUI.csproj" />
+  <Project Path="Daeha.RnUI.Demo.Wasm.csproj" />
+</Solution>

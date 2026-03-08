@@ -1,0 +1,975 @@
+@page "/components"
+@page "/components/{Slug}"
+
+<PageTitle>@(_currentComponent?.Name ?? "Components") - RnUI</PageTitle>
+
+@if (string.IsNullOrEmpty(Slug))
+{
+    <div class="space-y-6">
+        <div>
+            <h1 class="text-3xl font-bold tracking-tight">Components</h1>
+            <p class="text-lg text-muted-foreground">
+                Beautifully designed components built with Tailwind CSS for Blazor.
+            </p>
+        </div>
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            @foreach (var component in _componentDemos)
+            {
+                <a href="/components/@component.Slug" class="group">
+                    <RnCard Class="transition-colors hover:border-foreground/50">
+                        <RnCardHeader>
+                            <RnCardTitle>@component.Name</RnCardTitle>
+                            <RnCardDescription>@component.Description</RnCardDescription>
+                        </RnCardHeader>
+                    </RnCard>
+                </a>
+            }
+        </div>
+    </div>
+}
+else if (_currentComponent is not null)
+{
+    <div class="space-y-6">
+        <div>
+            <h1 class="text-3xl font-bold tracking-tight">@_currentComponent.Name</h1>
+            <p class="text-lg text-muted-foreground">@_currentComponent.Description</p>
+        </div>
+        <RnSeparator />
+        <div class="rounded-lg border p-6 bg-card">
+            @_currentComponent.Demo
+        </div>
+    </div>
+}
+else
+{
+    <div class="space-y-4">
+        <h1 class="text-3xl font-bold tracking-tight">Component not found</h1>
+        <p class="text-muted-foreground">The component "@Slug" does not exist.</p>
+        <RnButton OnClick="@(() => Navigation.NavigateTo("/components"))">Back to Components</RnButton>
+    </div>
+}
+
+@inject ToastService ToastService
+
+@code {
+    [Parameter] public string? Slug { get; set; }
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
+
+    private ComponentDemo? _currentComponent;
+
+    // State for interactive demos
+    private bool _checkboxValue;
+    private bool _switchValue;
+    private double _sliderValue = 50;
+    private string _activeTab = "account";
+    private bool _dialogOpen;
+    private bool _sheetOpen;
+    private bool _alertDialogOpen;
+    private string? _expandedItem = "item-1";
+    private bool _collapsibleOpen;
+    private string? _selectValue;
+    private string? _radioValue = "option-1";
+    private bool _togglePressed;
+    private int _currentPage = 1;
+    private DateTime? _calendarDate;
+    private DateTime? _datePickerValue;
+    private string? _comboboxValue;
+    private bool _drawerOpen;
+    private string? _toggleGroupValue = "center";
+    private string _otpValue = "";
+
+    protected override void OnParametersSet()
+    {
+        _currentComponent = string.IsNullOrEmpty(Slug)
+            ? null
+            : _componentDemos.FirstOrDefault(c => c.Slug == Slug);
+    }
+
+    private void ShowToast() => ToastService.Show("Event Created", "Your event has been created successfully.");
+    private void ShowDestructiveToast() => ToastService.Show("Error", "Something went wrong.", ToastVariant.Destructive);
+
+    private record ComponentDemo(string Name, string Slug, string Description, RenderFragment Demo);
+
+    private ComponentDemo[] _componentDemos =>
+    [
+        new("Accordion", "accordion", "A vertically stacked set of expandable items.",
+            @<div class="space-y-4 max-w-md">
+                <RnAccordion @bind-Value="_expandedItem">
+                    <RnAccordionItem Value="item-1">
+                        <RnAccordionTrigger>Is it accessible?</RnAccordionTrigger>
+                        <RnAccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</RnAccordionContent>
+                    </RnAccordionItem>
+                    <RnAccordionItem Value="item-2">
+                        <RnAccordionTrigger>Is it styled?</RnAccordionTrigger>
+                        <RnAccordionContent>Yes. It comes with default styles that match the other components' aesthetic.</RnAccordionContent>
+                    </RnAccordionItem>
+                    <RnAccordionItem Value="item-3">
+                        <RnAccordionTrigger>Is it animated?</RnAccordionTrigger>
+                        <RnAccordionContent>Yes. It's animated by default, but you can disable it if you prefer.</RnAccordionContent>
+                    </RnAccordionItem>
+                </RnAccordion>
+            </div>
+        ),
+
+        new("Alert", "alert", "Displays a callout for important information.",
+            @<div class="space-y-4 max-w-lg">
+                <RnAlert>
+                    <RnAlertTitle>Heads up!</RnAlertTitle>
+                    <RnAlertDescription>You can add components to your app using the CLI.</RnAlertDescription>
+                </RnAlert>
+                <RnAlert Variant="AlertVariant.Destructive">
+                    <RnAlertTitle>Error</RnAlertTitle>
+                    <RnAlertDescription>Your session has expired. Please log in again.</RnAlertDescription>
+                </RnAlert>
+            </div>
+        ),
+
+        new("Alert Dialog", "alert-dialog", "A modal dialog that interrupts with important content.",
+            @<div class="space-y-4">
+                <RnButton Variant="ButtonVariant.Outline" OnClick="() => _alertDialogOpen = true">Show Alert Dialog</RnButton>
+                <RnAlertDialog @bind-Open="_alertDialogOpen">
+                    <RnAlertDialogHeader>
+                        <RnAlertDialogTitle>Are you absolutely sure?</RnAlertDialogTitle>
+                        <RnAlertDialogDescription>
+                            This action cannot be undone. This will permanently delete your account
+                            and remove your data from our servers.
+                        </RnAlertDialogDescription>
+                    </RnAlertDialogHeader>
+                    <RnAlertDialogFooter>
+                        <RnButton Variant="ButtonVariant.Outline" OnClick="() => _alertDialogOpen = false">Cancel</RnButton>
+                        <RnButton OnClick="() => _alertDialogOpen = false">Continue</RnButton>
+                    </RnAlertDialogFooter>
+                </RnAlertDialog>
+            </div>
+        ),
+
+        new("Aspect Ratio", "aspect-ratio", "Displays content within a desired ratio.",
+            @<div class="space-y-4 max-w-md">
+                <h3 class="text-sm font-medium">16:9 Ratio</h3>
+                <RnAspectRatio Ratio="16.0 / 9.0" Class="bg-muted rounded-md overflow-hidden">
+                    <div class="flex items-center justify-center h-full text-muted-foreground">
+                        16:9 Content
+                    </div>
+                </RnAspectRatio>
+                <h3 class="text-sm font-medium">4:3 Ratio</h3>
+                <RnAspectRatio Ratio="4.0 / 3.0" Class="bg-muted rounded-md overflow-hidden">
+                    <div class="flex items-center justify-center h-full text-muted-foreground">
+                        4:3 Content
+                    </div>
+                </RnAspectRatio>
+            </div>
+        ),
+
+        new("Avatar", "avatar", "An image element with a fallback for user profile images.",
+            @<div class="space-y-4">
+                <h3 class="text-sm font-medium">Sizes</h3>
+                <div class="flex items-center gap-4">
+                    <RnAvatar Size="ComponentSize.Sm"><span>SM</span></RnAvatar>
+                    <RnAvatar Src="https://github.com/shadcn.png" Alt="shadcn" />
+                    <RnAvatar Size="ComponentSize.Lg"><span>LG</span></RnAvatar>
+                </div>
+                <h3 class="text-sm font-medium">Avatar Group</h3>
+                <RnAvatarGroup>
+                    <RnAvatar><span>A</span></RnAvatar>
+                    <RnAvatar><span>B</span></RnAvatar>
+                    <RnAvatar><span>C</span></RnAvatar>
+                    <RnAvatar><span>+2</span></RnAvatar>
+                </RnAvatarGroup>
+            </div>
+        ),
+
+        new("Badge", "badge", "Displays a badge or label.",
+            @<div class="flex flex-wrap gap-4">
+                <RnBadge>Default</RnBadge>
+                <RnBadge Variant="BadgeVariant.Secondary">Secondary</RnBadge>
+                <RnBadge Variant="BadgeVariant.Outline">Outline</RnBadge>
+                <RnBadge Variant="BadgeVariant.Destructive">Destructive</RnBadge>
+            </div>
+        ),
+
+        new("Breadcrumb", "breadcrumb", "Displays the path to the current resource.",
+            @<div>
+                <RnBreadcrumb>
+                    <RnBreadcrumbItem>
+                        <RnBreadcrumbLink Href="/">Home</RnBreadcrumbLink>
+                    </RnBreadcrumbItem>
+                    <RnBreadcrumbSeparator />
+                    <RnBreadcrumbItem>
+                        <RnBreadcrumbLink Href="/components">Components</RnBreadcrumbLink>
+                    </RnBreadcrumbItem>
+                    <RnBreadcrumbSeparator />
+                    <RnBreadcrumbItem>
+                        <RnBreadcrumbPage>Breadcrumb</RnBreadcrumbPage>
+                    </RnBreadcrumbItem>
+                </RnBreadcrumb>
+            </div>
+        ),
+
+        new("Button", "button", "Displays a button or a component that looks like a button.",
+            @<div class="space-y-4">
+                <h3 class="text-sm font-medium">Variants</h3>
+                <div class="flex flex-wrap gap-4">
+                    <RnButton>Default</RnButton>
+                    <RnButton Variant="ButtonVariant.Secondary">Secondary</RnButton>
+                    <RnButton Variant="ButtonVariant.Outline">Outline</RnButton>
+                    <RnButton Variant="ButtonVariant.Ghost">Ghost</RnButton>
+                    <RnButton Variant="ButtonVariant.Destructive">Destructive</RnButton>
+                    <RnButton Variant="ButtonVariant.Link">Link</RnButton>
+                </div>
+                <h3 class="text-sm font-medium">Sizes</h3>
+                <div class="flex flex-wrap items-center gap-4">
+                    <RnButton Size="ButtonSize.Sm">Small</RnButton>
+                    <RnButton>Default</RnButton>
+                    <RnButton Size="ButtonSize.Lg">Large</RnButton>
+                </div>
+            </div>
+        ),
+
+        new("Button Group", "button-group", "A container that groups related buttons together.",
+            @<div class="space-y-6">
+                <div class="space-y-2">
+                    <h3 class="text-sm font-medium">Horizontal</h3>
+                    <RnButtonGroup>
+                        <RnButton Variant="ButtonVariant.Outline">Button 1</RnButton>
+                        <RnButton Variant="ButtonVariant.Outline">Button 2</RnButton>
+                        <RnButton Variant="ButtonVariant.Outline">Button 3</RnButton>
+                    </RnButtonGroup>
+                </div>
+                <div class="space-y-2">
+                    <h3 class="text-sm font-medium">Vertical</h3>
+                    <RnButtonGroup Orientation="ButtonGroupOrientation.Vertical">
+                        <RnButton Variant="ButtonVariant.Outline">Button 1</RnButton>
+                        <RnButton Variant="ButtonVariant.Outline">Button 2</RnButton>
+                        <RnButton Variant="ButtonVariant.Outline">Button 3</RnButton>
+                    </RnButtonGroup>
+                </div>
+            </div>
+        ),
+
+        new("Calendar", "calendar", "A date field component that allows users to enter and edit date.",
+            @<div class="max-w-xs">
+                <RnCalendar @bind-Selected="_calendarDate" />
+                <p class="text-sm text-muted-foreground mt-2">Selected: @(_calendarDate?.ToString("MMM dd, yyyy") ?? "None")</p>
+            </div>
+        ),
+
+        new("Card", "card", "Displays a card with header, content, and footer.",
+            @<div class="grid gap-4 md:grid-cols-2">
+                <RnCard>
+                    <RnCardHeader>
+                        <RnCardTitle>Card Title</RnCardTitle>
+                        <RnCardDescription>Card description goes here.</RnCardDescription>
+                    </RnCardHeader>
+                    <RnCardContent>
+                        <p>Card content with some example text.</p>
+                    </RnCardContent>
+                    <RnCardFooter>
+                        <RnButton>Action</RnButton>
+                    </RnCardFooter>
+                </RnCard>
+                <RnCard>
+                    <RnCardHeader>
+                        <RnCardTitle>Another Card</RnCardTitle>
+                        <RnCardDescription>With different content.</RnCardDescription>
+                    </RnCardHeader>
+                    <RnCardContent>
+                        <p>More example content here.</p>
+                    </RnCardContent>
+                </RnCard>
+            </div>
+        ),
+
+        new("Carousel", "carousel", "A carousel with motion and swipe built on top of a slide container.",
+            @<div class="max-w-xs mx-auto">
+                <RnCarousel>
+                    <RnCarouselContent>
+                        @for (var i = 1; i <= 5; i++)
+                        {
+                            var index = i;
+                            <RnCarouselItem>
+                                <div class="p-1">
+                                    <RnCard>
+                                        <RnCardContent Class="flex aspect-square items-center justify-center p-6">
+                                            <span class="text-4xl font-semibold">@index</span>
+                                        </RnCardContent>
+                                    </RnCard>
+                                </div>
+                            </RnCarouselItem>
+                        }
+                    </RnCarouselContent>
+                    <RnCarouselPrevious />
+                    <RnCarouselNext />
+                </RnCarousel>
+            </div>
+        ),
+
+        new("Checkbox", "checkbox", "A control that allows toggling between checked and unchecked.",
+            @<div class="space-y-4">
+                <div class="flex items-center space-x-2">
+                    <RnCheckbox @bind-Checked="_checkboxValue" />
+                    <RnLabel>Accept terms and conditions</RnLabel>
+                </div>
+                <p class="text-sm text-muted-foreground">Checked: @_checkboxValue</p>
+            </div>
+        ),
+
+        new("Collapsible", "collapsible", "An interactive component that expands/collapses.",
+            @<div class="max-w-md">
+                <RnCollapsible @bind-Open="_collapsibleOpen">
+                    <Trigger>
+                        <div class="flex items-center justify-between space-x-4 px-4">
+                            <h4 class="text-sm font-semibold">starred repositories</h4>
+                            <RnButton Variant="ButtonVariant.Ghost" Size="ButtonSize.Sm">
+                                @(_collapsibleOpen ? "Hide" : "Show")
+                            </RnButton>
+                        </div>
+                    </Trigger>
+                    <ChildContent>
+                        <div class="space-y-2 px-4 pt-2">
+                            <div class="rounded-md border px-4 py-3 text-sm">shadcn/ui</div>
+                            <div class="rounded-md border px-4 py-3 text-sm">tailwindcss/tailwindcss</div>
+                            <div class="rounded-md border px-4 py-3 text-sm">dotnet/aspnetcore</div>
+                        </div>
+                    </ChildContent>
+                </RnCollapsible>
+            </div>
+        ),
+
+        new("Combobox", "combobox", "Autocomplete input and command palette with a list of suggestions.",
+            @<div class="space-y-4">
+                <RnCombobox @bind-Value="_comboboxValue" Placeholder="Select framework...">
+                    <RnComboboxItem Value="next" Label="Next.js">Next.js</RnComboboxItem>
+                    <RnComboboxItem Value="sveltekit" Label="SvelteKit">SvelteKit</RnComboboxItem>
+                    <RnComboboxItem Value="nuxt" Label="Nuxt.js">Nuxt.js</RnComboboxItem>
+                    <RnComboboxItem Value="remix" Label="Remix">Remix</RnComboboxItem>
+                    <RnComboboxItem Value="astro" Label="Astro">Astro</RnComboboxItem>
+                </RnCombobox>
+                <p class="text-sm text-muted-foreground">Selected: @(_comboboxValue ?? "None")</p>
+            </div>
+        ),
+
+        new("Command", "command", "Fast, composable, unstyled command menu.",
+            @<div class="space-y-4 max-w-md">
+                <RnCommand Class="rounded-lg border shadow-md">
+                    <RnCommandInput Placeholder="Type a command or search..." />
+                    <RnCommandList>
+                        <RnCommandEmpty>No results found.</RnCommandEmpty>
+                        <RnCommandGroup Heading="Suggestions">
+                            <RnCommandItem>Calendar</RnCommandItem>
+                            <RnCommandItem>Search Emoji</RnCommandItem>
+                            <RnCommandItem>Calculator</RnCommandItem>
+                        </RnCommandGroup>
+                        <RnCommandSeparator />
+                        <RnCommandGroup Heading="Settings">
+                            <RnCommandItem>Profile</RnCommandItem>
+                            <RnCommandItem>Billing</RnCommandItem>
+                            <RnCommandItem>Settings</RnCommandItem>
+                        </RnCommandGroup>
+                    </RnCommandList>
+                </RnCommand>
+            </div>
+        ),
+
+        new("Context Menu", "context-menu", "A menu displayed on right-click.",
+            @<div>
+                <RnContextMenu>
+                    <Trigger>
+                        <div class="flex h-[150px] w-[300px] items-center justify-center rounded-md border border-dashed text-sm">
+                            Right click here
+                        </div>
+                    </Trigger>
+                    <ChildContent>
+                        <RnDropdownMenuLabel>Actions</RnDropdownMenuLabel>
+                        <RnDropdownMenuSeparator />
+                        <RnDropdownMenuItem>Back</RnDropdownMenuItem>
+                        <RnDropdownMenuItem>Forward</RnDropdownMenuItem>
+                        <RnDropdownMenuItem>Reload</RnDropdownMenuItem>
+                    </ChildContent>
+                </RnContextMenu>
+            </div>
+        ),
+
+        new("Date Picker", "date-picker", "A date picker component with a calendar popup.",
+            @<div class="space-y-4">
+                <RnDatePicker @bind-Value="_datePickerValue" Placeholder="Pick a date" />
+                <p class="text-sm text-muted-foreground">Selected: @(_datePickerValue?.ToString("MMM dd, yyyy") ?? "None")</p>
+            </div>
+        ),
+
+        new("Dialog", "dialog", "A window overlaid on the primary content.",
+            @<div class="space-y-4">
+                <RnButton OnClick="() => _dialogOpen = true">Open Dialog</RnButton>
+                <RnDialog @bind-Open="_dialogOpen">
+                    <RnDialogHeader>
+                        <RnDialogTitle>Edit Profile</RnDialogTitle>
+                        <RnDialogDescription>Make changes to your profile here. Click save when you're done.</RnDialogDescription>
+                    </RnDialogHeader>
+                    <div class="grid gap-4 py-4">
+                        <div class="space-y-2">
+                            <RnLabel>Name</RnLabel>
+                            <RnInput Placeholder="Your name" />
+                        </div>
+                        <div class="space-y-2">
+                            <RnLabel>Username</RnLabel>
+                            <RnInput Placeholder="@("@username")" />
+                        </div>
+                    </div>
+                    <RnDialogFooter>
+                        <RnButton Variant="ButtonVariant.Outline" OnClick="() => _dialogOpen = false">Cancel</RnButton>
+                        <RnButton OnClick="() => _dialogOpen = false">Save changes</RnButton>
+                    </RnDialogFooter>
+                </RnDialog>
+            </div>
+        ),
+
+        new("Drawer", "drawer", "A drawer component that slides from the bottom of the screen.",
+            @<div class="space-y-4">
+                <RnButton Variant="ButtonVariant.Outline" OnClick="() => _drawerOpen = true">Open Drawer</RnButton>
+                <RnDrawer @bind-Open="_drawerOpen">
+                    <RnDrawerContent>
+                        <RnDrawerHeader>
+                            <RnDrawerTitle>Move Goal</RnDrawerTitle>
+                            <RnDrawerDescription>Set your daily activity goal.</RnDrawerDescription>
+                        </RnDrawerHeader>
+                        <div class="p-4">
+                            <RnProgress Value="66" Class="w-full" />
+                        </div>
+                        <RnDrawerFooter>
+                            <RnButton OnClick="() => _drawerOpen = false">Submit</RnButton>
+                            <RnButton Variant="ButtonVariant.Outline" OnClick="() => _drawerOpen = false">Cancel</RnButton>
+                        </RnDrawerFooter>
+                    </RnDrawerContent>
+                </RnDrawer>
+            </div>
+        ),
+
+        new("Dropdown Menu", "dropdown-menu", "A menu displayed on trigger click.",
+            @<div>
+                <RnDropdownMenu>
+                    <Trigger>
+                        <RnButton Variant="ButtonVariant.Outline">Open Menu</RnButton>
+                    </Trigger>
+                    <ChildContent>
+                        <RnDropdownMenuLabel>My Account</RnDropdownMenuLabel>
+                        <RnDropdownMenuSeparator />
+                        <RnDropdownMenuItem>Profile</RnDropdownMenuItem>
+                        <RnDropdownMenuItem>Settings</RnDropdownMenuItem>
+                        <RnDropdownMenuItem>Billing</RnDropdownMenuItem>
+                        <RnDropdownMenuSeparator />
+                        <RnDropdownMenuItem>Log out</RnDropdownMenuItem>
+                    </ChildContent>
+                </RnDropdownMenu>
+            </div>
+        ),
+
+        new("Empty", "empty", "Empty state placeholder.",
+            @<div class="max-w-md">
+                <RnEmpty Class="border rounded-md py-12">
+                    <p class="text-muted-foreground">No items to display.</p>
+                </RnEmpty>
+            </div>
+        ),
+
+        new("Form", "form", "Building forms with validation and accessible error messages.",
+            @<div class="max-w-sm space-y-4">
+                <RnFormItem>
+                    <RnFormLabel For="username">Username</RnFormLabel>
+                    <RnInput id="username" Placeholder="shadcn" />
+                    <RnFormDescription>This is your public display name.</RnFormDescription>
+                </RnFormItem>
+                <RnFormItem>
+                    <RnFormLabel For="email">Email</RnFormLabel>
+                    <RnInput id="email" Type="email" Placeholder="m@example.com" />
+                    <RnFormMessage Message="Please enter a valid email address." />
+                </RnFormItem>
+            </div>
+        ),
+
+        new("Hover Card", "hover-card", "Allows sighted users to preview content behind a link.",
+            @<div>
+                <RnHoverCard>
+                    <Trigger>
+                        <RnButton Variant="ButtonVariant.Link">Hover over me</RnButton>
+                    </Trigger>
+                    <ChildContent>
+                        <div class="space-y-2">
+                            <h4 class="text-sm font-semibold">RnUI</h4>
+                            <p class="text-sm text-muted-foreground">A Blazor port of shadcn/ui components.</p>
+                        </div>
+                    </ChildContent>
+                </RnHoverCard>
+            </div>
+        ),
+
+        new("Input", "input", "Displays a form input field.",
+            @<div class="space-y-4 max-w-sm">
+                <div class="space-y-2">
+                    <RnLabel>Email</RnLabel>
+                    <RnInput Type="email" Placeholder="Enter your email" />
+                </div>
+                <div class="space-y-2">
+                    <RnLabel>Password</RnLabel>
+                    <RnInput Type="password" Placeholder="Enter your password" />
+                </div>
+                <div class="space-y-2">
+                    <RnLabel>Disabled</RnLabel>
+                    <RnInput Placeholder="Disabled input" Disabled="true" />
+                </div>
+            </div>
+        ),
+
+        new("Input OTP", "input-otp", "Accessible one-time password component with copy paste functionality.",
+            @<div class="space-y-4">
+                <RnInputOTP @bind-Value="_otpValue" MaxLength="6">
+                    <RnInputOTPGroup>
+                        <RnInputOTPSlot Index="0" />
+                        <RnInputOTPSlot Index="1" />
+                        <RnInputOTPSlot Index="2" />
+                    </RnInputOTPGroup>
+                    <RnInputOTPSeparator />
+                    <RnInputOTPGroup>
+                        <RnInputOTPSlot Index="3" />
+                        <RnInputOTPSlot Index="4" />
+                        <RnInputOTPSlot Index="5" />
+                    </RnInputOTPGroup>
+                </RnInputOTP>
+                <p class="text-sm text-muted-foreground">Value: @(_otpValue)</p>
+            </div>
+        ),
+
+        new("Kbd", "kbd", "Displays keyboard shortcut styling.",
+            @<div class="space-y-4">
+                <p class="text-sm text-muted-foreground">
+                    Press <RnKbd>Ctrl</RnKbd> + <RnKbd>K</RnKbd> to open the command palette.
+                </p>
+                <p class="text-sm text-muted-foreground">
+                    Press <RnKbd>Esc</RnKbd> to close.
+                </p>
+            </div>
+        ),
+
+        new("Label", "label", "Renders an accessible label for form controls.",
+            @<div class="space-y-4 max-w-sm">
+                <div class="space-y-2">
+                    <RnLabel For="name-input">Your Name</RnLabel>
+                    <RnInput id="name-input" Placeholder="Enter your name" />
+                </div>
+            </div>
+        ),
+
+        new("Menubar", "menubar", "A visually persistent menu common in desktop applications.",
+            @<div>
+                <RnMenubar>
+                    <RnMenubarMenu>
+                        <RnMenubarTrigger>File</RnMenubarTrigger>
+                        <RnMenubarContent>
+                            <RnMenubarItem>New Tab</RnMenubarItem>
+                            <RnMenubarItem>New Window</RnMenubarItem>
+                            <RnMenubarSeparator />
+                            <RnMenubarItem>Share</RnMenubarItem>
+                            <RnMenubarSeparator />
+                            <RnMenubarItem>Print</RnMenubarItem>
+                        </RnMenubarContent>
+                    </RnMenubarMenu>
+                    <RnMenubarMenu>
+                        <RnMenubarTrigger>Edit</RnMenubarTrigger>
+                        <RnMenubarContent>
+                            <RnMenubarItem>Undo</RnMenubarItem>
+                            <RnMenubarItem>Redo</RnMenubarItem>
+                            <RnMenubarSeparator />
+                            <RnMenubarItem>Cut</RnMenubarItem>
+                            <RnMenubarItem>Copy</RnMenubarItem>
+                            <RnMenubarItem>Paste</RnMenubarItem>
+                        </RnMenubarContent>
+                    </RnMenubarMenu>
+                    <RnMenubarMenu>
+                        <RnMenubarTrigger>View</RnMenubarTrigger>
+                        <RnMenubarContent>
+                            <RnMenubarItem>Zoom In</RnMenubarItem>
+                            <RnMenubarItem>Zoom Out</RnMenubarItem>
+                        </RnMenubarContent>
+                    </RnMenubarMenu>
+                </RnMenubar>
+            </div>
+        ),
+
+        new("Navigation Menu", "navigation-menu", "A collection of links for navigating websites.",
+            @<div>
+                <RnNavigationMenu>
+                    <RnNavigationMenuList>
+                        <RnNavigationMenuItem>
+                            <RnNavigationMenuTrigger>Getting Started</RnNavigationMenuTrigger>
+                            <RnNavigationMenuContent>
+                                <div class="grid gap-3 p-4 w-[400px]">
+                                    <RnNavigationMenuLink Href="#">Introduction</RnNavigationMenuLink>
+                                    <RnNavigationMenuLink Href="#">Installation</RnNavigationMenuLink>
+                                    <RnNavigationMenuLink Href="#">Typography</RnNavigationMenuLink>
+                                </div>
+                            </RnNavigationMenuContent>
+                        </RnNavigationMenuItem>
+                        <RnNavigationMenuItem>
+                            <RnNavigationMenuTrigger>Components</RnNavigationMenuTrigger>
+                            <RnNavigationMenuContent>
+                                <div class="grid gap-3 p-4 w-[400px]">
+                                    <RnNavigationMenuLink Href="#">Alert Dialog</RnNavigationMenuLink>
+                                    <RnNavigationMenuLink Href="#">Hover Card</RnNavigationMenuLink>
+                                    <RnNavigationMenuLink Href="#">Progress</RnNavigationMenuLink>
+                                </div>
+                            </RnNavigationMenuContent>
+                        </RnNavigationMenuItem>
+                    </RnNavigationMenuList>
+                </RnNavigationMenu>
+            </div>
+        ),
+
+        new("Pagination", "pagination", "Navigation for paged content.",
+            @<div class="space-y-4">
+                <RnPagination @bind-CurrentPage="_currentPage" TotalPages="10" />
+                <p class="text-sm text-muted-foreground text-center">Current page: @_currentPage</p>
+            </div>
+        ),
+
+        new("Popover", "popover", "Displays rich content in a portal triggered by a button.",
+            @<div>
+                <RnPopover>
+                    <Trigger>
+                        <RnButton Variant="ButtonVariant.Outline">Open Popover</RnButton>
+                    </Trigger>
+                    <ChildContent>
+                        <div class="space-y-2">
+                            <h4 class="font-medium leading-none">Dimensions</h4>
+                            <p class="text-sm text-muted-foreground">Set the dimensions for the layer.</p>
+                            <div class="grid gap-2 pt-2">
+                                <div class="space-y-1">
+                                    <RnLabel>Width</RnLabel>
+                                    <RnInput Placeholder="100%" />
+                                </div>
+                                <div class="space-y-1">
+                                    <RnLabel>Height</RnLabel>
+                                    <RnInput Placeholder="25px" />
+                                </div>
+                            </div>
+                        </div>
+                    </ChildContent>
+                </RnPopover>
+            </div>
+        ),
+
+        new("Progress", "progress", "Displays a progress indicator.",
+            @<div class="space-y-4 max-w-md">
+                <RnProgress Value="20" />
+                <RnProgress Value="60" />
+                <RnProgress Value="100" />
+            </div>
+        ),
+
+        new("Radio Group", "radio-group", "A set of checkable buttons where only one can be checked.",
+            @<div class="space-y-4">
+                <RnRadioGroup @bind-Value="_radioValue">
+                    <div class="flex items-center space-x-2">
+                        <RnRadioGroupItem Value="option-1" />
+                        <RnLabel>Option 1</RnLabel>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <RnRadioGroupItem Value="option-2" />
+                        <RnLabel>Option 2</RnLabel>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <RnRadioGroupItem Value="option-3" />
+                        <RnLabel>Option 3</RnLabel>
+                    </div>
+                </RnRadioGroup>
+                <p class="text-sm text-muted-foreground">Selected: @_radioValue</p>
+            </div>
+        ),
+
+        new("Resizable", "resizable", "Accessible resizable panel groups and layouts.",
+            @<div class="max-w-md">
+                <RnResizablePanelGroup Direction="horizontal" Class="min-h-[200px] rounded-lg border">
+                    <RnResizablePanel DefaultSize="50">
+                        <div class="flex h-full items-center justify-center p-6">
+                            <span class="font-semibold">One</span>
+                        </div>
+                    </RnResizablePanel>
+                    <RnResizableHandle />
+                    <RnResizablePanel DefaultSize="50">
+                        <div class="flex h-full items-center justify-center p-6">
+                            <span class="font-semibold">Two</span>
+                        </div>
+                    </RnResizablePanel>
+                </RnResizablePanelGroup>
+            </div>
+        ),
+
+        new("Scroll Area", "scroll-area", "Augments native scroll functionality for custom styling.",
+            @<div>
+                <RnScrollArea MaxHeight="200px" Class="w-48 rounded-md border">
+                    <div class="p-4">
+                        @for (var i = 1; i <= 20; i++)
+                        {
+                            <div class="text-sm py-1">Item @i</div>
+                        }
+                    </div>
+                </RnScrollArea>
+            </div>
+        ),
+
+        new("Select", "select", "Displays a list of options for the user to pick from.",
+            @<div class="space-y-4 max-w-xs">
+                <RnSelect @bind-Value="_selectValue" Placeholder="Select a fruit">
+                    <RnSelectItem Value="apple">Apple</RnSelectItem>
+                    <RnSelectItem Value="banana">Banana</RnSelectItem>
+                    <RnSelectItem Value="orange">Orange</RnSelectItem>
+                    <RnSelectItem Value="grape">Grape</RnSelectItem>
+                </RnSelect>
+                <p class="text-sm text-muted-foreground">Selected: @(_selectValue ?? "None")</p>
+            </div>
+        ),
+
+        new("Separator", "separator", "Visually separates content.",
+            @<div class="space-y-4 max-w-md">
+                <div>
+                    <h4 class="text-sm font-medium leading-none">RnUI</h4>
+                    <p class="text-sm text-muted-foreground">A Blazor port of shadcn/ui.</p>
+                </div>
+                <RnSeparator />
+                <div class="flex h-5 items-center space-x-4 text-sm">
+                    <div>Blog</div>
+                    <RnSeparator Orientation="Orientation.Vertical" />
+                    <div>Docs</div>
+                    <RnSeparator Orientation="Orientation.Vertical" />
+                    <div>Source</div>
+                </div>
+            </div>
+        ),
+
+        new("Sheet", "sheet", "A panel that slides from the edge of the screen.",
+            @<div class="space-y-4">
+                <RnButton Variant="ButtonVariant.Outline" OnClick="() => _sheetOpen = true">Open Sheet</RnButton>
+                <RnSheet @bind-Open="_sheetOpen" Side="Side.Right">
+                    <RnSheetHeader>
+                        <RnSheetTitle>Edit Profile</RnSheetTitle>
+                        <RnSheetDescription>Make changes to your profile.</RnSheetDescription>
+                    </RnSheetHeader>
+                    <div class="grid gap-4 py-4">
+                        <div class="space-y-2">
+                            <RnLabel>Name</RnLabel>
+                            <RnInput Placeholder="Your name" />
+                        </div>
+                    </div>
+                    <RnSheetFooter>
+                        <RnButton OnClick="() => _sheetOpen = false">Save changes</RnButton>
+                    </RnSheetFooter>
+                </RnSheet>
+            </div>
+        ),
+
+        new("Sidebar", "sidebar", "A composable sidebar component with menu items.",
+            @<div class="space-y-4">
+                <div class="border rounded-md overflow-hidden max-w-xs">
+                    <RnSidebar Open="true" Width="100%">
+                        <RnSidebarHeader>
+                            <span class="font-semibold px-2">Application</span>
+                        </RnSidebarHeader>
+                        <RnSidebarContent>
+                            <RnSidebarGroup>
+                                <RnSidebarGroupLabel>Platform</RnSidebarGroupLabel>
+                                <RnSidebarMenu>
+                                    <RnSidebarMenuItem>
+                                        <RnSidebarMenuButton Href="#" IsActive="true">Dashboard</RnSidebarMenuButton>
+                                    </RnSidebarMenuItem>
+                                    <RnSidebarMenuItem>
+                                        <RnSidebarMenuButton Href="#">Settings</RnSidebarMenuButton>
+                                    </RnSidebarMenuItem>
+                                    <RnSidebarMenuItem>
+                                        <RnSidebarMenuButton Href="#">Users</RnSidebarMenuButton>
+                                    </RnSidebarMenuItem>
+                                </RnSidebarMenu>
+                            </RnSidebarGroup>
+                        </RnSidebarContent>
+                        <RnSidebarFooter>
+                            <span class="text-sm text-muted-foreground px-2">v1.0.0</span>
+                        </RnSidebarFooter>
+                    </RnSidebar>
+                </div>
+            </div>
+        ),
+
+        new("Skeleton", "skeleton", "Used to show a placeholder while content is loading.",
+            @<div class="flex items-center space-x-4">
+                <RnSkeleton Class="h-12 w-12 rounded-full" />
+                <div class="space-y-2">
+                    <RnSkeleton Class="h-4 w-[250px]" />
+                    <RnSkeleton Class="h-4 w-[200px]" />
+                </div>
+            </div>
+        ),
+
+        new("Slider", "slider", "An input where the user selects a value from a range.",
+            @<div class="space-y-4 max-w-md">
+                <RnSlider @bind-Value="_sliderValue" />
+                <p class="text-sm text-muted-foreground">Value: @_sliderValue</p>
+            </div>
+        ),
+
+        new("Spinner", "spinner", "An animated loading indicator.",
+            @<div class="flex gap-4 items-center">
+                <RnSpinner Size="ComponentSize.Sm" />
+                <RnSpinner />
+                <RnSpinner Size="ComponentSize.Lg" />
+            </div>
+        ),
+
+        new("Switch", "switch", "A toggle control for switching between two states.",
+            @<div class="space-y-4">
+                <div class="flex items-center space-x-2">
+                    <RnSwitch @bind-Checked="_switchValue" />
+                    <RnLabel>Enable notifications</RnLabel>
+                </div>
+                <p class="text-sm text-muted-foreground">Enabled: @_switchValue</p>
+            </div>
+        ),
+
+        new("Table", "table", "A responsive table component.",
+            @<div>
+                <RnTable>
+                    <RnTableHeader>
+                        <RnTableRow>
+                            <RnTableHead>Invoice</RnTableHead>
+                            <RnTableHead>Status</RnTableHead>
+                            <RnTableHead>Method</RnTableHead>
+                            <RnTableHead Class="text-right">Amount</RnTableHead>
+                        </RnTableRow>
+                    </RnTableHeader>
+                    <RnTableBody>
+                        <RnTableRow>
+                            <RnTableCell>INV001</RnTableCell>
+                            <RnTableCell><RnBadge>Paid</RnBadge></RnTableCell>
+                            <RnTableCell>Credit Card</RnTableCell>
+                            <RnTableCell Class="text-right">$250.00</RnTableCell>
+                        </RnTableRow>
+                        <RnTableRow>
+                            <RnTableCell>INV002</RnTableCell>
+                            <RnTableCell><RnBadge Variant="BadgeVariant.Outline">Pending</RnBadge></RnTableCell>
+                            <RnTableCell>PayPal</RnTableCell>
+                            <RnTableCell Class="text-right">$150.00</RnTableCell>
+                        </RnTableRow>
+                        <RnTableRow>
+                            <RnTableCell>INV003</RnTableCell>
+                            <RnTableCell><RnBadge Variant="BadgeVariant.Destructive">Overdue</RnBadge></RnTableCell>
+                            <RnTableCell>Bank Transfer</RnTableCell>
+                            <RnTableCell Class="text-right">$350.00</RnTableCell>
+                        </RnTableRow>
+                    </RnTableBody>
+                </RnTable>
+            </div>
+        ),
+
+        new("Tabs", "tabs", "A set of layered sections of content, shown one at a time.",
+            @<div>
+                <RnTabs @bind-ActiveTab="_activeTab">
+                    <RnTabsList>
+                        <RnTabsTrigger Value="account">Account</RnTabsTrigger>
+                        <RnTabsTrigger Value="password">Password</RnTabsTrigger>
+                    </RnTabsList>
+                    <RnTabsContent Value="account">
+                        <RnCard>
+                            <RnCardHeader>
+                                <RnCardTitle>Account</RnCardTitle>
+                                <RnCardDescription>Make changes to your account here.</RnCardDescription>
+                            </RnCardHeader>
+                            <RnCardContent>
+                                <div class="space-y-2">
+                                    <RnLabel>Name</RnLabel>
+                                    <RnInput Placeholder="Your name" />
+                                </div>
+                            </RnCardContent>
+                        </RnCard>
+                    </RnTabsContent>
+                    <RnTabsContent Value="password">
+                        <RnCard>
+                            <RnCardHeader>
+                                <RnCardTitle>Password</RnCardTitle>
+                                <RnCardDescription>Change your password here.</RnCardDescription>
+                            </RnCardHeader>
+                            <RnCardContent>
+                                <div class="space-y-2">
+                                    <RnLabel>New Password</RnLabel>
+                                    <RnInput Type="password" />
+                                </div>
+                            </RnCardContent>
+                        </RnCard>
+                    </RnTabsContent>
+                </RnTabs>
+            </div>
+        ),
+
+        new("Textarea", "textarea", "Displays a form textarea field.",
+            @<div class="space-y-4 max-w-sm">
+                <div class="space-y-2">
+                    <RnLabel>Message</RnLabel>
+                    <RnTextarea Placeholder="Type your message here" />
+                </div>
+            </div>
+        ),
+
+        new("Toast", "toast", "A succinct message that is displayed temporarily.",
+            @<div class="space-y-4">
+                <RnButton OnClick="ShowToast">Show Toast</RnButton>
+                <RnButton Variant="ButtonVariant.Destructive" OnClick="ShowDestructiveToast">Destructive Toast</RnButton>
+            </div>
+        ),
+
+        new("Toggle", "toggle", "A two-state button that can be on or off.",
+            @<div class="space-y-4">
+                <div class="flex gap-4">
+                    <RnToggle @bind-Pressed="_togglePressed">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>
+                        </svg>
+                        Bold
+                    </RnToggle>
+                    <RnToggle Variant="ToggleVariant.Outline">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" x2="10" y1="4" y2="4"/><line x1="14" x2="5" y1="20" y2="20"/><line x1="15" x2="9" y1="4" y2="20"/>
+                        </svg>
+                        Italic
+                    </RnToggle>
+                </div>
+                <p class="text-sm text-muted-foreground">Bold pressed: @_togglePressed</p>
+            </div>
+        ),
+
+        new("Toggle Group", "toggle-group", "A set of two-state buttons that can be toggled on or off.",
+            @<div class="space-y-4">
+                <RnToggleGroup @bind-Value="_toggleGroupValue">
+                    <RnToggleGroupItem Value="left">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="3" y1="6" y2="6"/><line x1="15" x2="3" y1="12" y2="12"/><line x1="17" x2="3" y1="18" y2="18"/></svg>
+                    </RnToggleGroupItem>
+                    <RnToggleGroupItem Value="center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="3" y1="6" y2="6"/><line x1="18" x2="6" y1="12" y2="12"/><line x1="21" x2="3" y1="18" y2="18"/></svg>
+                    </RnToggleGroupItem>
+                    <RnToggleGroupItem Value="right">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="3" y1="6" y2="6"/><line x1="21" x2="9" y1="12" y2="12"/><line x1="21" x2="7" y1="18" y2="18"/></svg>
+                    </RnToggleGroupItem>
+                </RnToggleGroup>
+                <p class="text-sm text-muted-foreground">Alignment: @(_toggleGroupValue ?? "None")</p>
+            </div>
+        ),
+
+        new("Tooltip", "tooltip", "A popup that displays information on hover.",
+            @<div>
+                <RnTooltip>
+                    <Trigger>
+                        <RnButton Variant="ButtonVariant.Outline">Hover me</RnButton>
+                    </Trigger>
+                    <ChildContent>
+                        <p>Add to library</p>
+                    </ChildContent>
+                </RnTooltip>
+            </div>
+        ),
+    ];
+}

@@ -1,18 +1,23 @@
-@page "/"
+﻿@page "/"
 
-<PageTitle>RnUI - Blazor UI Components</PageTitle>
+<PageTitle>RnUI - Blazor Component Library</PageTitle>
 
 <div class="space-y-12">
-    <div class="space-y-4">
-        <h1 class="text-4xl font-bold tracking-tight">RnUI</h1>
-        <p class="text-lg text-muted-foreground">
-            A Blazor port of shadcn/ui. Beautifully designed components built with Tailwind CSS.
+    <div class="flex flex-col items-center text-center space-y-4 py-16">
+        <RnBadge Variant="BadgeVariant.Secondary" Class="mb-2">New Components Available</RnBadge>
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">
+            Build your Blazor UI
+            <br />
+            <span class="text-primary">with shadcn/ui style</span>
+        </h1>
+        <p class="text-lg text-muted-foreground max-w-[600px]">
+            Beautifully designed, accessible components for Blazor.
+            Built with Tailwind CSS. Open source.
         </p>
-        <div class="flex flex-wrap gap-2">
-            <RnBadge>Blazor</RnBadge>
-            <RnBadge Variant="BadgeVariant.Secondary">Tailwind CSS</RnBadge>
-            <RnBadge Variant="BadgeVariant.Outline">shadcn/ui</RnBadge>
-            <RnBadge Variant="BadgeVariant.Outline">.NET 10</RnBadge>
+        <div class="flex gap-4 pt-4 flex-wrap justify-center">
+            <a href="/docs/getting-started" class="cn-button cn-button-variant-default cn-button-size-default">Get Started</a>
+            <a href="/components" class="cn-button cn-button-variant-outline cn-button-size-default">Browse Components</a>
+            <a href="https://github.com/daeha76/RnUI" target="_blank" class="cn-button cn-button-variant-ghost cn-button-size-default">GitHub</a>
         </div>
     </div>
 
@@ -27,7 +32,7 @@
             <RnButton Variant="ButtonVariant.Destructive">Destructive</RnButton>
             <RnButton Variant="ButtonVariant.Link">Link</RnButton>
         </div>
-        <div class="flex flex-wrap gap-4 items-center">
+        <div class="flex flex-wrap gap-4">
             <RnButton Size="ButtonSize.Sm">Small</RnButton>
             <RnButton>Default</RnButton>
             <RnButton Size="ButtonSize.Lg">Large</RnButton>
@@ -79,7 +84,7 @@
 
     <RnSeparator />
 
-    @* Input & Form Controls *@
+    @* Form Controls *@
     <section class="space-y-4">
         <h2 class="text-2xl font-semibold tracking-tight">Form Controls</h2>
         <div class="grid gap-4 max-w-sm">
@@ -249,18 +254,25 @@
 
     <RnSeparator />
 
-    @* Keyboard *@
+    @* Toast *@
     <section class="space-y-4">
-        <h2 class="text-2xl font-semibold tracking-tight">Keyboard Shortcut</h2>
-        <p class="text-sm text-muted-foreground">
-            Press <RnKbd>Ctrl</RnKbd> + <RnKbd>K</RnKbd> to open the command palette.
-        </p>
+        <h2 class="text-2xl font-semibold tracking-tight">Toast</h2>
+        <div class="flex gap-4">
+            <RnButton OnClick="ShowToast">Show Toast</RnButton>
+            <RnButton Variant="ButtonVariant.Destructive" OnClick="ShowDestructiveToast">Destructive Toast</RnButton>
+        </div>
     </section>
+
 </div>
+
+@inject ToastService ToastService
 
 @code {
     private bool _checkboxValue;
     private bool _switchValue;
     private double _sliderValue = 50;
     private string _activeTab = "account";
+
+    private void ShowToast() => ToastService.Show("Event Created", "Your event has been created successfully.");
+    private void ShowDestructiveToast() => ToastService.Show("Error", "Something went wrong.", ToastVariant.Destructive);
 }
