@@ -1,7 +1,9 @@
-﻿@* RnCollapsible component - Blazor port of shadcn/ui RnCollapsible *@
+@* RnCollapsible component - Blazor port of shadcn/ui RnCollapsible *@
 
 <div data-slot="collapsible" class="@CssUtils.Cn(Class)" @attributes="AdditionalAttributes">
-    <div data-slot="collapsible-trigger" @onclick="Toggle">
+    <div data-slot="collapsible-trigger"
+         aria-expanded="@(Open.ToString().ToLower())"
+         @onclick="Toggle">
         @Trigger
     </div>
 

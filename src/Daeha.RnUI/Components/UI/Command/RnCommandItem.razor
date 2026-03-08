@@ -1,0 +1,56 @@
+@* RnCommandItem - individual command item that supports filtering *@
+
+@if (IsVisible)
+{
+    <div data-slot="command-item"
+         role="option"
+         data-selected="@(_selected.ToString().ToLower())"
+         data-disabled="@(Disabled.ToString().ToLower())"
+         class="@CssUtils.Cn("cn-command-item", Class)"
+         @onclick="HandleClick"
+         @onmouseenter="() => _selected = true"
+         @onmouseleave="() => _selected = false"
+         @attributes="AdditionalAttributes">
+        @ChildContent
+    </div>
+}
+
+@code {
+    [CascadingParameter] private RnCommand? Command { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Text value used for filtering. If not set, no filtering is applied.</summary>
+    [Parameter] public string? Value { get; set; }
+
+    /// <summary>Whether this item is disabled.</summary>
+    [Parameter] public bool Disabled { get; set; }
+
+    /// <summary>Callback when the item is selected.</summary>
+    [Parameter] public EventCallback OnSelect { get; set; }
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private bool _selected;
+
+    private bool IsVisible
+    {
+        get
+        {
+            if (Command is null || string.IsNullOrWhiteSpace(Command.SearchTerm))
+                return true;
+            if (string.IsNullOrEmpty(Value))
+                return true;
+            return Value.Contains(Command.SearchTerm, StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
+    private async Task HandleClick()
+    {
+        if (!Disabled)
+            await OnSelect.InvokeAsync();
+    }
+}

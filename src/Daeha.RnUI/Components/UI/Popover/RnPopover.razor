@@ -1,13 +1,19 @@
-﻿@* RnPopover component - Blazor port of shadcn/ui RnPopover *@
+@* RnPopover component - Blazor port of shadcn/ui RnPopover *@
+@implements IAsyncDisposable
+@inject RnUIInteropService Interop
 
 <div data-slot="popover" class="relative inline-block" @attributes="AdditionalAttributes">
-    <div data-slot="popover-trigger" @onclick="ToggleOpen">
+    <div data-slot="popover-trigger"
+         aria-expanded="@_open"
+         aria-haspopup="true"
+         @onclick="ToggleOpen">
         @Trigger
     </div>
 
     @if (_open)
     {
-        <div data-slot="popover-content"
+        <div @ref="_contentRef"
+             data-slot="popover-content"
              class="@CssUtils.Cn("cn-popover-content absolute z-50 w-72 outline-none", Class)"
              style="@PositionUtils.GetPositionStyle(Side, Align)">
             @ChildContent
@@ -30,7 +36,47 @@
 
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
+    private readonly string _id = Guid.NewGuid().ToString("N")[..8];
+    private ElementReference _contentRef;
+    private DotNetObjectReference<RnPopover>? _dotNetRef;
     private bool _open;
+    private bool _previousOpen;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+        }
+
+        if (_open && !_previousOpen)
+        {
+            _previousOpen = true;
+            await Interop.AddClickOutsideListenerAsync(_id, _contentRef, _dotNetRef!, nameof(ClosePopover));
+            await Interop.AddEscapeListenerAsync(_id, _dotNetRef!, nameof(ClosePopover));
+        }
+        else if (!_open && _previousOpen)
+        {
+            _previousOpen = false;
+            await Interop.DisposeAllAsync(_id);
+        }
+    }
 
     private void ToggleOpen() => _open = !_open;
+
+    [JSInvokable]
+    public void ClosePopover()
+    {
+        _open = false;
+        StateHasChanged();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_previousOpen)
+        {
+            await Interop.DisposeAllAsync(_id);
+        }
+        _dotNetRef?.Dispose();
+    }
 }

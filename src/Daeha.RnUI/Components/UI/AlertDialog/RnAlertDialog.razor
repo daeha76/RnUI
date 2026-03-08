@@ -1,4 +1,6 @@
-﻿@* RnAlertDialog component - Blazor port of shadcn/ui RnAlertDialog *@
+@* RnAlertDialog component - Blazor port of shadcn/ui RnAlertDialog *@
+@implements IAsyncDisposable
+@inject RnUIInteropService Interop
 
 @if (Open)
 {
@@ -8,7 +10,12 @@
              class="fixed inset-0 z-50 bg-black/80" style="backdrop-filter: blur(4px);"></div>
 
         @* Content - centered dialog panel *@
-        <div data-slot="alert-dialog-content"
+        <div @ref="_contentRef"
+             data-slot="alert-dialog-content"
+             role="alertdialog"
+             aria-modal="true"
+             aria-labelledby="@(_id + "-title")"
+             id="@_id"
              class="@CssUtils.Cn("fixed left-1/2 top-1/2 z-50 grid w-full max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 border border-border bg-background p-6 shadow-lg sm:rounded-lg duration-200", Class)"
              @attributes="AdditionalAttributes">
             @ChildContent
@@ -22,4 +29,44 @@
     [Parameter] public EventCallback<bool> OpenChanged { get; set; }
     [Parameter] public string? Class { get; set; }
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private readonly string _id = Guid.NewGuid().ToString("N")[..8];
+    private ElementReference _contentRef;
+    private DotNetObjectReference<RnAlertDialog>? _dotNetRef;
+    private bool _previousOpen;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+        }
+
+        if (Open && !_previousOpen)
+        {
+            _previousOpen = true;
+            await Interop.LockBodyScrollAsync();
+            await Interop.EnableFocusTrapAsync(_id, _contentRef);
+            await Interop.AddEscapeListenerAsync(_id, _dotNetRef!, nameof(Close));
+        }
+        else if (!Open && _previousOpen)
+        {
+            _previousOpen = false;
+            await Interop.DisposeAllAsync(_id);
+            await Interop.UnlockBodyScrollAsync();
+        }
+    }
+
+    [JSInvokable]
+    public async Task Close() => await OpenChanged.InvokeAsync(false);
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_previousOpen)
+        {
+            await Interop.DisposeAllAsync(_id);
+            await Interop.UnlockBodyScrollAsync();
+        }
+        _dotNetRef?.Dispose();
+    }
 }

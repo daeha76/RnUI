@@ -1,9 +1,11 @@
-﻿@* RnRadioGroup component - Blazor port of shadcn/ui RnRadioGroup *@
+@* RnRadioGroup component - Blazor port of shadcn/ui RnRadioGroup *@
 
 <div data-slot="radio-group" role="radiogroup"
      class="@CssUtils.Cn("cn-radio-group", Class)"
      @attributes="AdditionalAttributes">
-    @ChildContent
+    <CascadingValue Value="this" IsFixed="false">
+        @ChildContent
+    </CascadingValue>
 </div>
 
 @code {

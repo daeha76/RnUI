@@ -1,0 +1,22 @@
+@* RnCommandDialog - Command palette displayed inside a Dialog *@
+
+<RnDialog Open="@Open" OpenChanged="@OpenChanged" ShowCloseButton="false" Class="overflow-hidden p-0">
+    <RnCommand Class="@Class" @attributes="AdditionalAttributes">
+        @ChildContent
+    </RnCommand>
+</RnDialog>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Whether the command dialog is open.</summary>
+    [Parameter] public bool Open { get; set; }
+
+    /// <summary>Callback when open state changes.</summary>
+    [Parameter] public EventCallback<bool> OpenChanged { get; set; }
+
+    /// <summary>Additional CSS classes for the command container.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

@@ -1,6 +1,8 @@
-﻿@* RnSelectItem component *@
+@* RnSelectItem component *@
 
 <div data-slot="select-item"
+     role="option"
+     aria-selected="@IsSelected.ToString().ToLower()"
      data-selected="@(IsSelected ? "" : null)"
      class="cn-select-item relative flex w-full cursor-default items-center outline-none select-none"
      @onclick="HandleClick">

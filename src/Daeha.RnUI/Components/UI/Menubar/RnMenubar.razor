@@ -1,0 +1,17 @@
+@* RnMenubar component - Blazor port of shadcn/ui Menubar *@
+
+<div data-slot="menubar"
+     role="menubar"
+     class="@CssUtils.Cn("cn-menubar", Class)"
+     @attributes="AdditionalAttributes">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

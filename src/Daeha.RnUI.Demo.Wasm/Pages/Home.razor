@@ -1,0 +1,266 @@
+@page "/"
+
+<PageTitle>RnUI - Blazor UI Components</PageTitle>
+
+<div class="space-y-12">
+    <div class="space-y-4">
+        <h1 class="text-4xl font-bold tracking-tight">RnUI</h1>
+        <p class="text-lg text-muted-foreground">
+            A Blazor port of shadcn/ui. Beautifully designed components built with Tailwind CSS.
+        </p>
+        <div class="flex flex-wrap gap-2">
+            <RnBadge>Blazor</RnBadge>
+            <RnBadge Variant="BadgeVariant.Secondary">Tailwind CSS</RnBadge>
+            <RnBadge Variant="BadgeVariant.Outline">shadcn/ui</RnBadge>
+            <RnBadge Variant="BadgeVariant.Outline">.NET 10</RnBadge>
+        </div>
+    </div>
+
+    @* Buttons *@
+    <section class="space-y-4">
+        <h2 class="text-2xl font-semibold tracking-tight">Button</h2>
+        <div class="flex flex-wrap gap-4">
+            <RnButton>Default</RnButton>
+            <RnButton Variant="ButtonVariant.Secondary">Secondary</RnButton>
+            <RnButton Variant="ButtonVariant.Outline">Outline</RnButton>
+            <RnButton Variant="ButtonVariant.Ghost">Ghost</RnButton>
+            <RnButton Variant="ButtonVariant.Destructive">Destructive</RnButton>
+            <RnButton Variant="ButtonVariant.Link">Link</RnButton>
+        </div>
+        <div class="flex flex-wrap gap-4 items-center">
+            <RnButton Size="ButtonSize.Sm">Small</RnButton>
+            <RnButton>Default</RnButton>
+            <RnButton Size="ButtonSize.Lg">Large</RnButton>
+        </div>
+    </section>
+
+    <RnSeparator />
+
+    @* Badge *@
+    <section class="space-y-4">
+        <h2 class="text-2xl font-semibold tracking-tight">Badge</h2>
+        <div class="flex flex-wrap gap-4">
+            <RnBadge>Default</RnBadge>
+            <RnBadge Variant="BadgeVariant.Secondary">Secondary</RnBadge>
+            <RnBadge Variant="BadgeVariant.Outline">Outline</RnBadge>
+            <RnBadge Variant="BadgeVariant.Destructive">Destructive</RnBadge>
+        </div>
+    </section>
+
+    <RnSeparator />
+
+    @* Card *@
+    <section class="space-y-4">
+        <h2 class="text-2xl font-semibold tracking-tight">Card</h2>
+        <div class="grid gap-4 md:grid-cols-2">
+            <RnCard>
+                <RnCardHeader>
+                    <RnCardTitle>Card Title</RnCardTitle>
+                    <RnCardDescription>Card description goes here.</RnCardDescription>
+                </RnCardHeader>
+                <RnCardContent>
+                    <p>Card content with some example text.</p>
+                </RnCardContent>
+                <RnCardFooter>
+                    <RnButton>Action</RnButton>
+                </RnCardFooter>
+            </RnCard>
+            <RnCard>
+                <RnCardHeader>
+                    <RnCardTitle>Another Card</RnCardTitle>
+                    <RnCardDescription>With different content.</RnCardDescription>
+                </RnCardHeader>
+                <RnCardContent>
+                    <p>More example content here.</p>
+                </RnCardContent>
+            </RnCard>
+        </div>
+    </section>
+
+    <RnSeparator />
+
+    @* Input & Form Controls *@
+    <section class="space-y-4">
+        <h2 class="text-2xl font-semibold tracking-tight">Form Controls</h2>
+        <div class="grid gap-4 max-w-sm">
+            <div class="space-y-2">
+                <RnLabel For="email">Email</RnLabel>
+                <RnInput Type="email" Placeholder="Enter your email" />
+            </div>
+            <div class="space-y-2">
+                <RnLabel For="message">Message</RnLabel>
+                <RnTextarea Placeholder="Type your message here" />
+            </div>
+            <div class="flex items-center space-x-2">
+                <RnCheckbox @bind-Checked="_checkboxValue" />
+                <RnLabel>Accept terms and conditions</RnLabel>
+            </div>
+            <div class="flex items-center space-x-2">
+                <RnSwitch @bind-Checked="_switchValue" />
+                <RnLabel>Enable notifications</RnLabel>
+            </div>
+        </div>
+    </section>
+
+    <RnSeparator />
+
+    @* Alert *@
+    <section class="space-y-4">
+        <h2 class="text-2xl font-semibold tracking-tight">Alert</h2>
+        <RnAlert>
+            <RnAlertTitle>Heads up!</RnAlertTitle>
+            <RnAlertDescription>You can add components to your app using the CLI.</RnAlertDescription>
+        </RnAlert>
+        <RnAlert Variant="AlertVariant.Destructive">
+            <RnAlertTitle>Error</RnAlertTitle>
+            <RnAlertDescription>Your session has expired. Please log in again.</RnAlertDescription>
+        </RnAlert>
+    </section>
+
+    <RnSeparator />
+
+    @* Avatar *@
+    <section class="space-y-4">
+        <h2 class="text-2xl font-semibold tracking-tight">Avatar</h2>
+        <div class="flex items-center gap-4">
+            <RnAvatar Src="https://github.com/shadcn.png" Alt="shadcn" />
+            <RnAvatar Size="ComponentSize.Sm">
+                <span>CN</span>
+            </RnAvatar>
+            <RnAvatar Size="ComponentSize.Lg">
+                <span>LG</span>
+            </RnAvatar>
+        </div>
+    </section>
+
+    <RnSeparator />
+
+    @* Progress *@
+    <section class="space-y-4">
+        <h2 class="text-2xl font-semibold tracking-tight">Progress</h2>
+        <RnProgress Value="60" Class="max-w-md" />
+        <RnSlider @bind-Value="_sliderValue" Class="max-w-md" />
+        <p class="text-sm text-muted-foreground">Slider value: @_sliderValue</p>
+    </section>
+
+    <RnSeparator />
+
+    @* Skeleton *@
+    <section class="space-y-4">
+        <h2 class="text-2xl font-semibold tracking-tight">Skeleton</h2>
+        <div class="flex items-center space-x-4">
+            <RnSkeleton Class="h-12 w-12 rounded-full" />
+            <div class="space-y-2">
+                <RnSkeleton Class="h-4 w-[250px]" />
+                <RnSkeleton Class="h-4 w-[200px]" />
+            </div>
+        </div>
+    </section>
+
+    <RnSeparator />
+
+    @* Tabs *@
+    <section class="space-y-4">
+        <h2 class="text-2xl font-semibold tracking-tight">Tabs</h2>
+        <RnTabs @bind-ActiveTab="_activeTab">
+            <RnTabsList>
+                <RnTabsTrigger Value="account">Account</RnTabsTrigger>
+                <RnTabsTrigger Value="password">Password</RnTabsTrigger>
+            </RnTabsList>
+            <RnTabsContent Value="account">
+                <RnCard>
+                    <RnCardHeader>
+                        <RnCardTitle>Account</RnCardTitle>
+                        <RnCardDescription>Make changes to your account here.</RnCardDescription>
+                    </RnCardHeader>
+                    <RnCardContent>
+                        <div class="space-y-2">
+                            <RnLabel>Name</RnLabel>
+                            <RnInput Placeholder="Your name" />
+                        </div>
+                    </RnCardContent>
+                </RnCard>
+            </RnTabsContent>
+            <RnTabsContent Value="password">
+                <RnCard>
+                    <RnCardHeader>
+                        <RnCardTitle>Password</RnCardTitle>
+                        <RnCardDescription>Change your password here.</RnCardDescription>
+                    </RnCardHeader>
+                    <RnCardContent>
+                        <div class="space-y-2">
+                            <RnLabel>New Password</RnLabel>
+                            <RnInput Type="password" />
+                        </div>
+                    </RnCardContent>
+                </RnCard>
+            </RnTabsContent>
+        </RnTabs>
+    </section>
+
+    <RnSeparator />
+
+    @* Table *@
+    <section class="space-y-4">
+        <h2 class="text-2xl font-semibold tracking-tight">Table</h2>
+        <RnTable>
+            <RnTableHeader>
+                <RnTableRow>
+                    <RnTableHead>Invoice</RnTableHead>
+                    <RnTableHead>Status</RnTableHead>
+                    <RnTableHead>Method</RnTableHead>
+                    <RnTableHead Class="text-right">Amount</RnTableHead>
+                </RnTableRow>
+            </RnTableHeader>
+            <RnTableBody>
+                <RnTableRow>
+                    <RnTableCell>INV001</RnTableCell>
+                    <RnTableCell><RnBadge>Paid</RnBadge></RnTableCell>
+                    <RnTableCell>Credit Card</RnTableCell>
+                    <RnTableCell Class="text-right">$250.00</RnTableCell>
+                </RnTableRow>
+                <RnTableRow>
+                    <RnTableCell>INV002</RnTableCell>
+                    <RnTableCell><RnBadge Variant="BadgeVariant.Outline">Pending</RnBadge></RnTableCell>
+                    <RnTableCell>PayPal</RnTableCell>
+                    <RnTableCell Class="text-right">$150.00</RnTableCell>
+                </RnTableRow>
+                <RnTableRow>
+                    <RnTableCell>INV003</RnTableCell>
+                    <RnTableCell><RnBadge Variant="BadgeVariant.Destructive">Overdue</RnBadge></RnTableCell>
+                    <RnTableCell>Bank Transfer</RnTableCell>
+                    <RnTableCell Class="text-right">$350.00</RnTableCell>
+                </RnTableRow>
+            </RnTableBody>
+        </RnTable>
+    </section>
+
+    <RnSeparator />
+
+    @* Spinner *@
+    <section class="space-y-4">
+        <h2 class="text-2xl font-semibold tracking-tight">Spinner</h2>
+        <div class="flex gap-4 items-center">
+            <RnSpinner Size="ComponentSize.Sm" />
+            <RnSpinner />
+            <RnSpinner Size="ComponentSize.Lg" />
+        </div>
+    </section>
+
+    <RnSeparator />
+
+    @* Keyboard *@
+    <section class="space-y-4">
+        <h2 class="text-2xl font-semibold tracking-tight">Keyboard Shortcut</h2>
+        <p class="text-sm text-muted-foreground">
+            Press <RnKbd>Ctrl</RnKbd> + <RnKbd>K</RnKbd> to open the command palette.
+        </p>
+    </section>
+</div>
+
+@code {
+    private bool _checkboxValue;
+    private bool _switchValue;
+    private double _sliderValue = 50;
+    private string _activeTab = "account";
+}

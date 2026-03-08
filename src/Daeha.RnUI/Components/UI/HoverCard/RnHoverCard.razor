@@ -1,4 +1,6 @@
-﻿@* RnHoverCard component - Blazor port of shadcn/ui RnHoverCard *@
+@* RnHoverCard component - Blazor port of shadcn/ui RnHoverCard *@
+@implements IAsyncDisposable
+@inject RnUIInteropService Interop
 
 <div data-slot="hover-card" class="relative inline-block"
      @onmouseenter="Show" @onmouseleave="Hide"
@@ -32,8 +34,46 @@
 
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
+    private readonly string _id = Guid.NewGuid().ToString("N")[..8];
+    private DotNetObjectReference<RnHoverCard>? _dotNetRef;
     private bool _visible;
+    private bool _previousVisible;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+        }
+
+        if (_visible && !_previousVisible)
+        {
+            _previousVisible = true;
+            await Interop.AddEscapeListenerAsync(_id, _dotNetRef!, nameof(HideCard));
+        }
+        else if (!_visible && _previousVisible)
+        {
+            _previousVisible = false;
+            await Interop.RemoveEscapeListenerAsync(_id);
+        }
+    }
 
     private void Show() => _visible = true;
     private void Hide() => _visible = false;
+
+    [JSInvokable]
+    public void HideCard()
+    {
+        _visible = false;
+        StateHasChanged();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_previousVisible)
+        {
+            await Interop.RemoveEscapeListenerAsync(_id);
+        }
+        _dotNetRef?.Dispose();
+    }
 }

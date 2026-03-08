@@ -1,0 +1,65 @@
+@page "/docs/getting-started"
+@layout DocsLayout
+
+<PageTitle>Getting Started - RnUI</PageTitle>
+
+<div class="space-y-8 max-w-3xl">
+    <div>
+        <h1 class="text-3xl font-bold tracking-tight">Getting Started</h1>
+        <p class="text-lg text-muted-foreground mt-2">
+            Install and configure RnUI in your Blazor project.
+        </p>
+    </div>
+
+    <RnSeparator />
+
+    <section class="space-y-4">
+        <h2 class="text-2xl font-semibold tracking-tight">Installation</h2>
+        <p class="text-muted-foreground">Install the NuGet package:</p>
+        <div class="rounded-md bg-muted p-4">
+            <code class="text-sm">dotnet add package Daeha.RnUI</code>
+        </div>
+    </section>
+
+    <section class="space-y-4">
+        <h2 class="text-2xl font-semibold tracking-tight">Setup</h2>
+
+        <div class="space-y-3">
+            <h3 class="text-lg font-medium">1. Add CSS Reference</h3>
+            <p class="text-sm text-muted-foreground">Add the RnUI stylesheet to your HTML head:</p>
+            <div class="rounded-md bg-muted p-4 overflow-x-auto">
+                <pre class="text-sm"><code>&lt;link rel="stylesheet" href="_content/Daeha.RnUI/css/shadcn.css" /&gt;</code></pre>
+            </div>
+        </div>
+
+        <div class="space-y-3">
+            <h3 class="text-lg font-medium">2. Register Services</h3>
+            <p class="text-sm text-muted-foreground">Add RnUI services in Program.cs:</p>
+            <div class="rounded-md bg-muted p-4 overflow-x-auto">
+                <pre class="text-sm"><code>builder.Services.AddRnUI();</code></pre>
+            </div>
+        </div>
+
+        <div class="space-y-3">
+            <h3 class="text-lg font-medium">3. Add Imports</h3>
+            <p class="text-sm text-muted-foreground">Add to your _Imports.razor:</p>
+            <div class="rounded-md bg-muted p-4 overflow-x-auto">
+                <pre class="text-sm"><code>@@using RnUI.Components.UI
+@@using RnUI.Components.UI.Button
+@@using RnUI.Components.UI.Card
+@* ... add namespaces for components you use *@</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="space-y-4">
+        <h2 class="text-2xl font-semibold tracking-tight">Usage</h2>
+        <p class="text-sm text-muted-foreground">Now you can use RnUI components:</p>
+        <div class="rounded-md bg-muted p-4 overflow-x-auto">
+            <pre class="text-sm"><code>&lt;RnButton Variant="ButtonVariant.Outline"&gt;Click me&lt;/RnButton&gt;</code></pre>
+        </div>
+        <div class="mt-4">
+            <RnButton Variant="ButtonVariant.Outline">Click me</RnButton>
+        </div>
+    </section>
+</div>

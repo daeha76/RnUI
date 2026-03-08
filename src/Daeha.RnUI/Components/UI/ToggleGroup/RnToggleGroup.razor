@@ -1,0 +1,67 @@
+@* RnToggleGroup - Blazor port of shadcn/ui ToggleGroup *@
+
+<CascadingValue Value="this" IsFixed="false">
+    <div data-slot="toggle-group"
+         role="group"
+         class="@CssUtils.Cn("cn-toggle-group flex items-center justify-center gap-1", Class)"
+         @attributes="AdditionalAttributes">
+        @ChildContent
+    </div>
+</CascadingValue>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Selection type: Single allows one item; Multiple allows many.</summary>
+    [Parameter] public ToggleGroupType Type { get; set; } = ToggleGroupType.Single;
+
+    /// <summary>Currently selected value(s). Use Value for Single, Values for Multiple.</summary>
+    [Parameter] public string? Value { get; set; }
+
+    /// <summary>Callback when the selected value changes (Single mode).</summary>
+    [Parameter] public EventCallback<string?> ValueChanged { get; set; }
+
+    /// <summary>Currently selected values for Multiple mode.</summary>
+    [Parameter] public IReadOnlyList<string> Values { get; set; } = Array.Empty<string>();
+
+    /// <summary>Callback when selected values change (Multiple mode).</summary>
+    [Parameter] public EventCallback<IReadOnlyList<string>> ValuesChanged { get; set; }
+
+    /// <summary>Visual variant applied to all items.</summary>
+    [Parameter] public ToggleVariant Variant { get; set; } = ToggleVariant.Default;
+
+    /// <summary>Size applied to all items.</summary>
+    [Parameter] public ToggleSize Size { get; set; } = ToggleSize.Default;
+
+    [Parameter] public string? Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    internal bool IsItemActive(string itemValue)
+    {
+        return Type == ToggleGroupType.Single
+            ? Value == itemValue
+            : Values.Contains(itemValue);
+    }
+
+    internal async Task ToggleItem(string itemValue)
+    {
+        if (Type == ToggleGroupType.Single)
+        {
+            var newValue = Value == itemValue ? null : itemValue;
+            Value = newValue;
+            await ValueChanged.InvokeAsync(newValue);
+        }
+        else
+        {
+            var list = Values.ToList();
+            if (list.Contains(itemValue))
+                list.Remove(itemValue);
+            else
+                list.Add(itemValue);
+
+            var readOnly = (IReadOnlyList<string>)list;
+            Values = readOnly;
+            await ValuesChanged.InvokeAsync(readOnly);
+        }
+    }
+}

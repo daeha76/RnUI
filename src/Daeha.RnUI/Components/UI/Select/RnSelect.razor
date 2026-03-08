@@ -1,9 +1,11 @@
-﻿@* RnSelect component - Blazor port of shadcn/ui RnSelect *@
+@* RnSelect component - Blazor port of shadcn/ui RnSelect *@
 
 <div data-slot="select" class="@CssUtils.Cn("relative", Class)" @attributes="AdditionalAttributes">
     <RnButton type="button" data-slot="select-trigger" data-size="@SizeValue"
             class="cn-select-trigger flex w-fit items-center justify-between whitespace-nowrap outline-none disabled:cursor-not-allowed disabled:opacity-50"
-            disabled="@Disabled"
+            Disabled="@Disabled"
+            aria-expanded="@(_open.ToString().ToLower())"
+            aria-haspopup="listbox"
             @onclick="ToggleOpen">
         <span data-slot="select-value" class="cn-select-value">
             @if (!string.IsNullOrEmpty(Value))
@@ -24,8 +26,10 @@
 
     @if (_open)
     {
-        <div data-slot="select-content" class="cn-select-content absolute z-50 mt-1 min-w-[8rem]">
-            @ChildContent
+        <div data-slot="select-content" role="listbox" class="cn-select-content absolute z-50 mt-1 min-w-[8rem]">
+            <CascadingValue Value="this" IsFixed="false">
+                @ChildContent
+            </CascadingValue>
         </div>
     }
 </div>

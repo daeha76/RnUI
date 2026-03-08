@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install npm dependencies
+        run: npm install
+        working-directory: src/Daeha.RnUI
+
+      - name: Build RnUI Library
+        run: dotnet build src/Daeha.RnUI/Daeha.RnUI.csproj -c Release
+
+      - name: Build Demo
+        run: dotnet build src/Daeha.RnUI.Demo/Daeha.RnUI.Demo.csproj -c Release
+
+      - name: Build WASM Demo
+        run: dotnet build src/Daeha.RnUI.Demo.Wasm/Daeha.RnUI.Demo.Wasm.csproj -c Release

@@ -3,7 +3,7 @@
 <textarea data-slot="textarea"
           class="@ComputedClass"
           placeholder="@Placeholder"
-          disabled="@Disabled"
+          disabled="@(Disabled ? true : (object?)null)"
           rows="@Rows"
           @oninput="HandleInput"
           @attributes="AdditionalAttributes">@Value</textarea>

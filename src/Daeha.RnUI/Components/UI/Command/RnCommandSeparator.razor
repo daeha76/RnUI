@@ -1,0 +1,10 @@
+<div data-slot="command-separator"
+     role="separator"
+     class="@CssUtils.Cn("cn-command-separator", Class)"
+     @attributes="AdditionalAttributes">
+</div>
+
+@code {
+    [Parameter] public string? Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

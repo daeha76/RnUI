@@ -1,0 +1,52 @@
+@* RnResizablePanel - individual resizable panel *@
+@implements IDisposable
+
+<div data-slot="resizable-panel"
+     style="@PanelStyle"
+     class="@CssUtils.Cn("overflow-hidden", Class)"
+     @attributes="AdditionalAttributes">
+    @ChildContent
+</div>
+
+@code {
+    [CascadingParameter] private RnResizablePanelGroup? Group { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Default size as a percentage (0-100). Default is 50.</summary>
+    [Parameter] public double DefaultSize { get; set; } = 50;
+
+    /// <summary>Minimum size as a percentage (0-100). Default is 10.</summary>
+    [Parameter] public double MinSize { get; set; } = 10;
+
+    /// <summary>Maximum size as a percentage (0-100). Default is 90.</summary>
+    [Parameter] public double MaxSize { get; set; } = 90;
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private double _size;
+
+    private string PanelStyle => Group?.Direction == "vertical"
+        ? $"height:{_size}%;flex-shrink:0;"
+        : $"width:{_size}%;flex-shrink:0;";
+
+    protected override void OnInitialized()
+    {
+        _size = DefaultSize;
+        Group?.RegisterPanel(this);
+    }
+
+    internal void SetSize(double size)
+    {
+        _size = Math.Clamp(size, MinSize, MaxSize);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        Group?.UnregisterPanel(this);
+    }
+}

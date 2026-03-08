@@ -1,4 +1,6 @@
-﻿@* RnSheet component - Blazor port of shadcn/ui RnSheet *@
+@* RnSheet component - Blazor port of shadcn/ui RnSheet *@
+@implements IAsyncDisposable
+@inject RnUIInteropService Interop
 
 @if (Open)
 {
@@ -7,7 +9,13 @@
              class="cn-sheet-overlay fixed inset-0 z-50"
              @onclick="Close"></div>
 
-        <div data-slot="sheet-content" data-side="@SideValue"
+        <div @ref="_contentRef"
+             data-slot="sheet-content"
+             data-side="@SideValue"
+             role="dialog"
+             aria-modal="true"
+             aria-labelledby="@(_id + "-title")"
+             id="@_id"
              class="@CssUtils.Cn("cn-sheet-content", Class)"
              @attributes="AdditionalAttributes">
             @ChildContent
@@ -46,6 +54,11 @@
 
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
+    private readonly string _id = Guid.NewGuid().ToString("N")[..8];
+    private ElementReference _contentRef;
+    private DotNetObjectReference<RnSheet>? _dotNetRef;
+    private bool _previousOpen;
+
     private string SideValue => Side switch
     {
         Side.Top => "top",
@@ -54,5 +67,38 @@
         _ => "right"
     };
 
-    private async Task Close() => await OpenChanged.InvokeAsync(false);
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+        }
+
+        if (Open && !_previousOpen)
+        {
+            _previousOpen = true;
+            await Interop.LockBodyScrollAsync();
+            await Interop.EnableFocusTrapAsync(_id, _contentRef);
+            await Interop.AddEscapeListenerAsync(_id, _dotNetRef!, nameof(Close));
+        }
+        else if (!Open && _previousOpen)
+        {
+            _previousOpen = false;
+            await Interop.DisposeAllAsync(_id);
+            await Interop.UnlockBodyScrollAsync();
+        }
+    }
+
+    [JSInvokable]
+    public async Task Close() => await OpenChanged.InvokeAsync(false);
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_previousOpen)
+        {
+            await Interop.DisposeAllAsync(_id);
+            await Interop.UnlockBodyScrollAsync();
+        }
+        _dotNetRef?.Dispose();
+    }
 }

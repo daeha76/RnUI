@@ -1,0 +1,16 @@
+@* RnNavigationMenuLink - Link item within navigation menu content *@
+
+<li data-slot="navigation-menu-link">
+    <a href="@Href"
+       class="@CssUtils.Cn("cn-navigation-menu-link block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground", Class)"
+       @attributes="AdditionalAttributes">
+        @ChildContent
+    </a>
+</li>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string Href { get; set; } = "#";
+    [Parameter] public string? Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

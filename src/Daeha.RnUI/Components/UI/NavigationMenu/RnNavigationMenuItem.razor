@@ -1,0 +1,26 @@
+@* RnNavigationMenuItem - Individual navigation menu item *@
+
+<CascadingValue Value="this" IsFixed="false">
+    <li data-slot="navigation-menu-item"
+        class="@CssUtils.Cn("cn-navigation-menu-item relative", Class)"
+        @attributes="AdditionalAttributes">
+        @ChildContent
+    </li>
+</CascadingValue>
+
+@code {
+    [CascadingParameter] public RnNavigationMenu? Menu { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    internal readonly string ItemId = Guid.NewGuid().ToString("N")[..8];
+
+    internal bool IsOpen => Menu?.ActiveItem == ItemId;
+
+    internal void Toggle()
+    {
+        Menu?.SetActiveItem(ItemId);
+    }
+}

@@ -1,0 +1,28 @@
+@* RnCarouselItem - Individual slide within a carousel *@
+@implements IDisposable
+
+<div data-slot="carousel-item"
+     role="group"
+     aria-roledescription="slide"
+     class="@CssUtils.Cn("cn-carousel-item min-w-0 shrink-0 grow-0 basis-full", Class)"
+     @attributes="AdditionalAttributes">
+    @ChildContent
+</div>
+
+@code {
+    [CascadingParameter] public RnCarousel? Carousel { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Carousel?.RegisterItem();
+    }
+
+    public void Dispose()
+    {
+        Carousel?.UnregisterItem();
+    }
+}

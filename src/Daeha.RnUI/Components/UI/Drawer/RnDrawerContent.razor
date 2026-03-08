@@ -1,0 +1,9 @@
+<div data-slot="drawer-content-inner" class="@CssUtils.Cn("flex flex-col flex-1 overflow-auto", Class)" @attributes="AdditionalAttributes">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

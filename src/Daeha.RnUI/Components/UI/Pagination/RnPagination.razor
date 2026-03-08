@@ -1,4 +1,4 @@
-﻿@* RnPagination component - Blazor port of shadcn/ui RnPagination *@
+@* RnPagination component - Blazor port of shadcn/ui RnPagination *@
 
 <nav data-slot="pagination" role="navigation" aria-label="pagination"
      class="@CssUtils.Cn("cn-pagination mx-auto flex w-full justify-center", Class)"
@@ -17,17 +17,26 @@
             </li>
         }
 
-        @for (int i = 1; i <= TotalPages; i++)
+        @foreach (var item in GetPageNumbers())
         {
-            var page = i;
-            <li class="cn-pagination-item">
-                <RnButton type="button"
-                        class="cn-pagination-link"
-                        data-active="@(page == CurrentPage ? "" : null)"
-                        @onclick="() => GoToPage(page)">
-                    @(page)
-                </RnButton>
-            </li>
+            @if (item.IsEllipsis)
+            {
+                <li class="cn-pagination-item">
+                    <span class="cn-pagination-ellipsis flex h-9 w-9 items-center justify-center">&#8230;</span>
+                </li>
+            }
+            else
+            {
+                var page = item.Page!.Value;
+                <li class="cn-pagination-item">
+                    <RnButton type="button"
+                            class="cn-pagination-link"
+                            data-active="@(page == CurrentPage ? "" : null)"
+                            @onclick="() => GoToPage(page)">
+                        @(page)
+                    </RnButton>
+                </li>
+            }
         }
 
         @if (CurrentPage < TotalPages)
@@ -56,5 +65,38 @@
     {
         CurrentPage = page;
         await CurrentPageChanged.InvokeAsync(page);
+    }
+
+    private IEnumerable<(int? Page, bool IsEllipsis)> GetPageNumbers()
+    {
+        var pages = new List<(int?, bool)>();
+
+        if (TotalPages <= 7)
+        {
+            for (int i = 1; i <= TotalPages; i++)
+                pages.Add((i, false));
+            return pages;
+        }
+
+        // Always first page
+        pages.Add((1, false));
+
+        if (CurrentPage > 3)
+            pages.Add((null, true)); // Leading ellipsis
+
+        // Pages around current
+        int start = Math.Max(2, CurrentPage - 1);
+        int end = Math.Min(TotalPages - 1, CurrentPage + 1);
+
+        for (int i = start; i <= end; i++)
+            pages.Add((i, false));
+
+        if (CurrentPage < TotalPages - 2)
+            pages.Add((null, true)); // Trailing ellipsis
+
+        // Always last page
+        pages.Add((TotalPages, false));
+
+        return pages;
     }
 }

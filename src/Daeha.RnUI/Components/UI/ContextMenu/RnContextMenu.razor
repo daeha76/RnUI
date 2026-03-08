@@ -1,4 +1,6 @@
-﻿@* RnContextMenu component - Blazor port of shadcn/ui RnContextMenu *@
+@* RnContextMenu component - Blazor port of shadcn/ui RnContextMenu *@
+@implements IAsyncDisposable
+@inject RnUIInteropService Interop
 
 <div data-slot="context-menu" class="relative" @oncontextmenu="HandleContextMenu" @oncontextmenu:preventDefault
      @attributes="AdditionalAttributes">
@@ -6,7 +8,9 @@
 
     @if (_open)
     {
-        <div data-slot="context-menu-content"
+        <div @ref="_contentRef"
+             data-slot="context-menu-content"
+             role="menu"
              class="@CssUtils.Cn("cn-context-menu-content fixed z-50", Class)"
              style="left: @(_x)px; top: @(_y)px;">
             @ChildContent
@@ -20,13 +24,53 @@
     [Parameter] public string? Class { get; set; }
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
+    private readonly string _id = Guid.NewGuid().ToString("N")[..8];
+    private ElementReference _contentRef;
+    private DotNetObjectReference<RnContextMenu>? _dotNetRef;
     private bool _open;
+    private bool _previousOpen;
     private double _x, _y;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+        }
+
+        if (_open && !_previousOpen)
+        {
+            _previousOpen = true;
+            await Interop.AddClickOutsideListenerAsync(_id, _contentRef, _dotNetRef!, nameof(CloseMenu));
+            await Interop.AddEscapeListenerAsync(_id, _dotNetRef!, nameof(CloseMenu));
+        }
+        else if (!_open && _previousOpen)
+        {
+            _previousOpen = false;
+            await Interop.DisposeAllAsync(_id);
+        }
+    }
 
     private void HandleContextMenu(MouseEventArgs e)
     {
         _x = e.ClientX;
         _y = e.ClientY;
-        _open = !_open;
+        _open = true;
+    }
+
+    [JSInvokable]
+    public void CloseMenu()
+    {
+        _open = false;
+        StateHasChanged();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_previousOpen)
+        {
+            await Interop.DisposeAllAsync(_id);
+        }
+        _dotNetRef?.Dispose();
     }
 }

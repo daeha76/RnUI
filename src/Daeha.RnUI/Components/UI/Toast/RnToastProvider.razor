@@ -1,0 +1,82 @@
+@* RnToastProvider - Blazor port of shadcn/ui Toast (Viewport + auto-dismiss) *@
+@implements IDisposable
+@inject ToastService ToastService
+
+<div data-slot="toast-viewport" class="cn-toast-viewport">
+    @foreach (var toast in _toasts)
+    {
+        <RnToast Variant="toast.Variant" OnClose="() => RemoveToast(toast.Id)">
+            <RnToastTitle>@toast.Title</RnToastTitle>
+            @if (!string.IsNullOrEmpty(toast.Description))
+            {
+                <RnToastDescription>@toast.Description</RnToastDescription>
+            }
+            <RnToastClose OnClose="() => RemoveToast(toast.Id)" />
+        </RnToast>
+    }
+</div>
+
+@code {
+    private readonly List<ToastMessage> _toasts = new();
+    private readonly Dictionary<string, System.Timers.Timer> _timers = new();
+
+    protected override void OnInitialized()
+    {
+        ToastService.OnShow += HandleShow;
+        ToastService.OnDismiss += HandleDismiss;
+    }
+
+    private void HandleShow(ToastMessage message)
+    {
+        InvokeAsync(() =>
+        {
+            _toasts.Add(message);
+            StateHasChanged();
+
+            if (message.DurationMs > 0)
+            {
+                var timer = new System.Timers.Timer(message.DurationMs);
+                timer.Elapsed += (_, _) =>
+                {
+                    timer.Stop();
+                    RemoveToast(message.Id);
+                };
+                timer.AutoReset = false;
+                _timers[message.Id] = timer;
+                timer.Start();
+            }
+        });
+    }
+
+    private void HandleDismiss(string id)
+    {
+        InvokeAsync(() => RemoveToast(id));
+    }
+
+    private void RemoveToast(string id)
+    {
+        InvokeAsync(() =>
+        {
+            _toasts.RemoveAll(t => t.Id == id);
+            if (_timers.TryGetValue(id, out var timer))
+            {
+                timer.Stop();
+                timer.Dispose();
+                _timers.Remove(id);
+            }
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose()
+    {
+        ToastService.OnShow -= HandleShow;
+        ToastService.OnDismiss -= HandleDismiss;
+        foreach (var timer in _timers.Values)
+        {
+            timer.Stop();
+            timer.Dispose();
+        }
+        _timers.Clear();
+    }
+}

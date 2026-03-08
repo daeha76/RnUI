@@ -1,4 +1,5 @@
 using RnLucazor.Blazor;
+using RnUI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +7,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddRnLucazor();
+builder.Services.AddRnUI();
 
 var app = builder.Build();
 
