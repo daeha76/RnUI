@@ -1,0 +1,50 @@
+@* RnCarousel - Blazor port of shadcn/ui Carousel *@
+
+<CascadingValue Value="this" IsFixed="false">
+    <div data-slot="carousel"
+         role="region"
+         aria-roledescription="carousel"
+         class="@CssUtils.Cn("cn-carousel relative", Class)"
+         @attributes="AdditionalAttributes">
+        @ChildContent
+    </div>
+</CascadingValue>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    internal int CurrentIndex { get; private set; }
+    internal int ItemCount { get; private set; }
+
+    internal void RegisterItem() => ItemCount++;
+
+    internal void UnregisterItem()
+    {
+        ItemCount = Math.Max(0, ItemCount - 1);
+        if (CurrentIndex >= ItemCount)
+            CurrentIndex = Math.Max(0, ItemCount - 1);
+    }
+
+    internal void Next()
+    {
+        if (ItemCount > 0)
+        {
+            CurrentIndex = (CurrentIndex + 1) % ItemCount;
+            StateHasChanged();
+        }
+    }
+
+    internal void Previous()
+    {
+        if (ItemCount > 0)
+        {
+            CurrentIndex = (CurrentIndex - 1 + ItemCount) % ItemCount;
+            StateHasChanged();
+        }
+    }
+
+    internal bool CanGoPrevious => ItemCount > 1;
+    internal bool CanGoNext => ItemCount > 1;
+}

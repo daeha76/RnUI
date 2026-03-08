@@ -1,6 +1,8 @@
-﻿@if (IsActive)
+@if (IsActive)
 {
     <div data-slot="tabs-content" role="tabpanel"
+         id="@($"tab-content-{Value}")"
+         aria-labelledby="@($"tab-trigger-{Value}")"
          class="@CssUtils.Cn("cn-tabs-content flex-1 outline-none", Class)"
          @attributes="AdditionalAttributes">
         @ChildContent

@@ -1,0 +1,24 @@
+@* RnNavigationMenu - Blazor port of shadcn/ui NavigationMenu *@
+
+<CascadingValue Value="this" IsFixed="false">
+    <nav data-slot="navigation-menu"
+         aria-label="Main"
+         class="@CssUtils.Cn("cn-navigation-menu relative z-10 flex max-w-max flex-1 items-center justify-center", Class)"
+         @attributes="AdditionalAttributes">
+        @ChildContent
+    </nav>
+</CascadingValue>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    internal string? ActiveItem { get; private set; }
+
+    internal void SetActiveItem(string? itemId)
+    {
+        ActiveItem = ActiveItem == itemId ? null : itemId;
+        StateHasChanged();
+    }
+}

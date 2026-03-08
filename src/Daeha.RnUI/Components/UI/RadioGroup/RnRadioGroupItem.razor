@@ -1,11 +1,11 @@
-﻿@* RnRadioGroupItem component *@
+@* RnRadioGroupItem component *@
 
 <RnButton type="button" role="radio"
         data-slot="radio-group-item"
         aria-checked="@IsSelected.ToString().ToLower()"
         data-checked="@(IsSelected ? "" : null)"
         class="@CssUtils.Cn("cn-radio-group-item", Class)"
-        disabled="@Disabled"
+        Disabled="@Disabled"
         @onclick="HandleClick"
         @attributes="AdditionalAttributes">
     @if (IsSelected)

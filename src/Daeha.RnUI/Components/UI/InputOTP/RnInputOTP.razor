@@ -1,0 +1,93 @@
+@* RnInputOTP component - Blazor port of shadcn/ui InputOTP *@
+
+<div data-slot="input-otp-container"
+     class="@CssUtils.Cn("cn-input-otp-container relative", Class)"
+     @attributes="AdditionalAttributes">
+    @* Hidden actual input for capturing keyboard input *@
+    <input @ref="_inputRef"
+           type="text"
+           inputmode="numeric"
+           autocomplete="one-time-code"
+           maxlength="@MaxLength"
+           value="@Value"
+           style="position:absolute;opacity:0;width:1px;height:1px;pointer-events:none;"
+           @oninput="HandleInput"
+           @onkeydown="HandleKeyDown"
+           @onfocus="HandleFocus"
+           @onblur="HandleBlur" />
+
+    <CascadingValue Value="this" IsFixed="false">
+        @ChildContent
+    </CascadingValue>
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Current OTP value.</summary>
+    [Parameter] public string? Value { get; set; }
+
+    /// <summary>Callback when the OTP value changes.</summary>
+    [Parameter] public EventCallback<string> ValueChanged { get; set; }
+
+    /// <summary>Maximum number of characters (default 6).</summary>
+    [Parameter] public int MaxLength { get; set; } = 6;
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private ElementReference _inputRef;
+    private bool _isFocused;
+
+    /// <summary>Returns the character at the given slot index, or null if not entered.</summary>
+    public char? GetSlotChar(int index)
+    {
+        if (string.IsNullOrEmpty(Value) || index >= Value.Length)
+            return null;
+        return Value[index];
+    }
+
+    /// <summary>Returns whether the given slot index is the active (cursor) slot.</summary>
+    public bool IsSlotActive(int index)
+        => _isFocused && (string.IsNullOrEmpty(Value) ? index == 0 : index == Value.Length);
+
+    private async Task HandleInput(ChangeEventArgs e)
+    {
+        var raw = e.Value?.ToString() ?? string.Empty;
+        // Only accept digits
+        var filtered = new string(raw.Where(char.IsDigit).ToArray());
+        if (filtered.Length > MaxLength)
+            filtered = filtered[..MaxLength];
+
+        Value = filtered;
+        await ValueChanged.InvokeAsync(Value);
+        StateHasChanged();
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Backspace" && string.IsNullOrEmpty(Value))
+            return;
+        await Task.CompletedTask;
+    }
+
+    private void HandleFocus()
+    {
+        _isFocused = true;
+        StateHasChanged();
+    }
+
+    private void HandleBlur()
+    {
+        _isFocused = false;
+        StateHasChanged();
+    }
+
+    /// <summary>Focuses the hidden input element to start capturing OTP input.</summary>
+    public async Task FocusAsync()
+    {
+        await _inputRef.FocusAsync();
+    }
+}

@@ -7,8 +7,18 @@
             <RnSidebarGroupLabel>Getting Started</RnSidebarGroupLabel>
             <RnSidebarMenu>
                 <RnSidebarMenuItem>
+                    <RnSidebarMenuButton Href="/docs/getting-started" IsActive="@IsCurrentPage("/docs/getting-started")">
+                        Getting Started
+                    </RnSidebarMenuButton>
+                </RnSidebarMenuItem>
+                <RnSidebarMenuItem>
+                    <RnSidebarMenuButton Href="/docs/theming" IsActive="@IsCurrentPage("/docs/theming")">
+                        Theming
+                    </RnSidebarMenuButton>
+                </RnSidebarMenuItem>
+                <RnSidebarMenuItem>
                     <RnSidebarMenuButton Href="/components" IsActive="@IsCurrentPage("/components")">
-                        Introduction
+                        Components
                     </RnSidebarMenuButton>
                 </RnSidebarMenuItem>
             </RnSidebarMenu>
@@ -62,21 +72,32 @@
         new("Badge", "badge"),
         new("Breadcrumb", "breadcrumb"),
         new("Button", "button"),
+        new("Calendar", "calendar"),
         new("Card", "card"),
+        new("Carousel", "carousel"),
         new("Checkbox", "checkbox"),
         new("Collapsible", "collapsible"),
+        new("Combobox", "combobox"),
+        new("Command", "command"),
         new("Context Menu", "context-menu"),
+        new("Date Picker", "date-picker"),
         new("Dialog", "dialog"),
+        new("Drawer", "drawer"),
         new("Dropdown Menu", "dropdown-menu"),
         new("Empty", "empty"),
+        new("Form", "form"),
         new("Hover Card", "hover-card"),
         new("Input", "input"),
+        new("Input OTP", "input-otp"),
         new("Kbd", "kbd"),
         new("Label", "label"),
+        new("Menubar", "menubar"),
+        new("Navigation Menu", "navigation-menu"),
         new("Pagination", "pagination"),
         new("Popover", "popover"),
         new("Progress", "progress"),
         new("Radio Group", "radio-group"),
+        new("Resizable", "resizable"),
         new("Scroll Area", "scroll-area"),
         new("Select", "select"),
         new("Separator", "separator"),
@@ -89,7 +110,9 @@
         new("Table", "table"),
         new("Tabs", "tabs"),
         new("Textarea", "textarea"),
+        new("Toast", "toast"),
         new("Toggle", "toggle"),
+        new("Toggle Group", "toggle-group"),
         new("Tooltip", "tooltip"),
     ];
 }

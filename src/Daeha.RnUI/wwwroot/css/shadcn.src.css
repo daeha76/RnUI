@@ -6,6 +6,10 @@
  */
 
 @theme {
+  /* Font tokens */
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+
   /* Border radius tokens */
   --radius-lg: 0.5rem;
   --radius-md: calc(var(--radius-lg) - 2px);
@@ -27,7 +31,7 @@
   --color-accent: oklch(0.965 0 0);
   --color-accent-foreground: oklch(0.205 0 0);
   --color-destructive: oklch(0.577 0.245 27.325);
-  --color-destructive-foreground: oklch(0.577 0.245 27.325);
+  --color-destructive-foreground: oklch(0.985 0 0);
   --color-border: oklch(0.922 0 0);
   --color-input: oklch(0.922 0 0);
   --color-ring: oklch(0.708 0 0);
@@ -77,12 +81,26 @@
 }
 
 /*
+ * Base layer
+ */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/*
  * Component base styles - shadcn/ui pattern classes
  */
 
 /* Button */
 .cn-button {
-  @apply rounded-md font-medium text-sm cursor-pointer;
+  @apply inline-flex items-center justify-center gap-2 rounded-md font-medium text-sm cursor-pointer whitespace-nowrap transition-all disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4;
 }
 
 .cn-button-variant-default {
@@ -110,7 +128,7 @@
 }
 
 .cn-button-size-default {
-  @apply h-9 px-4 py-2;
+  @apply h-9 px-4 py-2 has-[>svg]:px-3;
 }
 
 .cn-button-size-xs {
@@ -118,11 +136,11 @@
 }
 
 .cn-button-size-sm {
-  @apply h-8 rounded-md px-3 text-xs;
+  @apply h-8 rounded-md px-3 text-xs gap-1.5;
 }
 
 .cn-button-size-lg {
-  @apply h-10 rounded-md px-6;
+  @apply h-10 rounded-md px-6 has-[>svg]:px-4;
 }
 
 .cn-button-size-icon {
@@ -141,9 +159,64 @@
   @apply size-10;
 }
 
-/* Input */
+/* Button Group */
+.cn-button-group {
+  @apply flex w-fit items-stretch;
+}
+
+/* Gap between nested button groups */
+.cn-button-group:has(> [data-slot="button-group"]) {
+  @apply gap-2;
+}
+
+/* Focus visible z-index for children */
+.cn-button-group>*:focus-visible {
+  @apply relative z-10;
+}
+
+/* Horizontal orientation (default) */
+.cn-button-group-horizontal>*:not(:first-child) {
+  @apply rounded-l-none border-l-0;
+}
+
+.cn-button-group-horizontal>*:not(:last-child) {
+  @apply rounded-r-none;
+}
+
+/* Vertical orientation */
+.cn-button-group-vertical {
+  @apply flex-col;
+}
+
+.cn-button-group-vertical>*:not(:first-child) {
+  @apply rounded-t-none border-t-0;
+}
+
+.cn-button-group-vertical>*:not(:last-child) {
+  @apply rounded-b-none;
+}
+
+/* Button Group Separator */
+.cn-button-group-separator {
+  @apply relative m-0 self-stretch bg-input;
+}
+
+.cn-button-group-separator[data-orientation="vertical"] {
+  @apply w-px h-auto;
+}
+
+.cn-button-group-separator[data-orientation="horizontal"] {
+  @apply h-px w-auto;
+}
+
+/* Button Group Text */
+.cn-button-group-text {
+  @apply flex items-center gap-2 rounded-md border bg-muted px-4 text-sm font-medium shadow-xs [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4;
+}
+
+
 .cn-input {
-  @apply h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:border-ring;
+  @apply h-9 rounded-md border border-input bg-transparent px-3 py-1 text-base md:text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:border-ring selection:bg-primary selection:text-primary-foreground dark:bg-input/30 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive;
 }
 
 /* Textarea */
@@ -158,15 +231,15 @@
 
 /* Card */
 .cn-card {
-  @apply rounded-xl border border-border bg-card text-card-foreground shadow-sm;
+  @apply rounded-xl border border-border bg-card text-card-foreground shadow-sm flex flex-col gap-6;
 }
 
 .cn-card-header {
-  @apply px-6 pt-6 pb-2;
+  @apply px-6 gap-1.5;
 }
 
 .cn-card-title {
-  @apply font-semibold leading-none tracking-tight;
+  @apply font-semibold leading-none;
 }
 
 .cn-card-description {
@@ -178,36 +251,36 @@
 }
 
 .cn-card-content {
-  @apply px-6 pb-4;
+  @apply px-6;
 }
 
 .cn-card-footer {
-  @apply px-6 pb-6;
+  @apply px-6 [.border-t]:pt-6;
 }
 
 /* Badge */
 .cn-badge {
-  @apply rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors;
+  @apply inline-flex w-fit shrink-0 items-center justify-center gap-1 rounded-md overflow-hidden border px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3;
 }
 
 .cn-badge-variant-default {
-  @apply border-transparent bg-primary text-primary-foreground shadow-sm;
+  @apply border-transparent bg-primary text-primary-foreground shadow-sm hover:bg-primary/80;
 }
 
 .cn-badge-variant-secondary {
-  @apply border-transparent bg-secondary text-secondary-foreground;
+  @apply border-transparent bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80;
 }
 
 .cn-badge-variant-destructive {
-  @apply border-transparent bg-destructive text-white shadow-sm;
+  @apply border-transparent bg-destructive text-white shadow-sm hover:bg-destructive/90;
 }
 
 .cn-badge-variant-outline {
-  @apply text-foreground;
+  @apply border-border bg-transparent text-foreground hover:bg-accent hover:text-accent-foreground;
 }
 
 .cn-badge-variant-ghost {
-  @apply border-transparent text-foreground;
+  @apply border-transparent bg-accent text-accent-foreground hover:bg-accent/80;
 }
 
 .cn-badge-variant-link {
@@ -220,7 +293,7 @@
 }
 
 .cn-alert-variant-default {
-  @apply bg-background text-foreground;
+  @apply bg-card text-card-foreground;
 }
 
 .cn-alert-variant-destructive {
@@ -244,7 +317,7 @@
 }
 
 .cn-alert-description {
-  @apply text-sm [&_p]:leading-relaxed;
+  @apply text-sm text-muted-foreground [&_p]:leading-relaxed;
 }
 
 .cn-alert-action {
@@ -353,7 +426,7 @@
 }
 
 .cn-tabs-list {
-  @apply rounded-lg p-1 h-9;
+  @apply rounded-lg p-[3px] h-9;
 }
 
 .cn-tabs-list-variant-default {
@@ -365,7 +438,7 @@
 }
 
 .cn-tabs-trigger {
-  @apply rounded-md px-3 py-1 text-sm font-medium;
+  @apply rounded-md px-3 py-1 text-sm font-medium gap-1.5 whitespace-nowrap outline-none transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] data-[state=active]:shadow-sm dark:data-[state=active]:bg-input/30 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4;
 }
 
 .cn-tabs-content {
@@ -455,7 +528,7 @@
 
 /* Select */
 .cn-select-trigger {
-  @apply h-9 rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs focus:outline-none focus:ring-[3px] focus:ring-ring/50;
+  @apply h-9 rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs focus:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px];
 }
 
 .cn-select-trigger-icon {
@@ -750,7 +823,6 @@
 /* Alert Dialog */
 .cn-alert-dialog-overlay {
   @apply fixed inset-0 z-50 bg-black/80;
-  backdrop-filter: blur(4px);
 }
 
 .cn-alert-dialog-content {
@@ -826,7 +898,10 @@
 }
 
 .cn-sidebar-menu-button {
-  @apply flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-none ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50;
+  @apply flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-none ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50;
+  transition-property: width, height, padding;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }
 
 /* Carousel */
@@ -854,6 +929,195 @@
 /* Empty */
 .cn-empty {
   @apply flex flex-col items-center justify-center py-10 text-center;
+}
+
+/* Toast */
+.cn-toast-viewport {
+  @apply fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:top-auto sm:bottom-0 sm:right-0 sm:flex-col md:max-w-[420px];
+}
+
+.cn-toast {
+  @apply pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-md border p-4 pr-8 shadow-lg transition-all;
+}
+
+.cn-toast-variant-default {
+  @apply border bg-background text-foreground;
+}
+
+.cn-toast-variant-destructive {
+  @apply border-destructive bg-destructive text-white;
+}
+
+.cn-toast-title {
+  @apply text-sm font-semibold;
+}
+
+.cn-toast-description {
+  @apply text-sm opacity-90;
+}
+
+.cn-toast-action {
+  @apply inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium transition-colors hover:bg-secondary;
+}
+
+.cn-toast-close {
+  @apply absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground hover:opacity-100 focus:opacity-100 focus:outline-none;
+}
+
+/* Toggle Group */
+.cn-toggle-group {
+  @apply flex items-center justify-center gap-1;
+}
+
+.cn-toggle-group-item {
+  @apply rounded-md text-sm font-medium transition-colors hover:bg-muted hover:text-muted-foreground data-[state=on]:bg-accent data-[state=on]:text-accent-foreground;
+}
+
+/* Carousel Previous/Next buttons */
+.cn-carousel-previous,
+.cn-carousel-next {
+  @apply absolute h-8 w-8 rounded-full;
+}
+
+.cn-carousel-previous {
+  @apply -left-12 top-1/2 -translate-y-1/2;
+}
+
+.cn-carousel-next {
+  @apply -right-12 top-1/2 -translate-y-1/2;
+}
+
+/* Drawer */
+.cn-drawer-overlay {
+  @apply fixed inset-0 z-50 bg-black/80;
+}
+
+.cn-drawer-content {
+  @apply fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border bg-background;
+}
+
+.cn-drawer-handle {
+  @apply mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted;
+}
+
+.cn-drawer-header {
+  @apply grid gap-1.5 p-4 text-center sm:text-left;
+}
+
+.cn-drawer-footer {
+  @apply mt-auto flex flex-col gap-2 p-4;
+}
+
+.cn-drawer-title {
+  @apply text-lg font-semibold leading-none tracking-tight;
+}
+
+.cn-drawer-description {
+  @apply text-sm text-muted-foreground;
+}
+
+/* Command */
+.cn-command {
+  @apply flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground;
+}
+
+.cn-command-input-wrapper {
+  @apply flex items-center border-b px-3;
+}
+
+.cn-command-input {
+  @apply flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.cn-command-list {
+  @apply max-h-[300px] overflow-y-auto overflow-x-hidden;
+}
+
+.cn-command-empty {
+  @apply py-6 text-center text-sm;
+}
+
+.cn-command-group {
+  @apply overflow-hidden p-1 text-foreground;
+}
+
+.cn-command-group-heading {
+  @apply px-2 py-1.5 text-xs font-medium text-muted-foreground;
+}
+
+.cn-command-item {
+  @apply relative flex cursor-default gap-2 select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50;
+}
+
+.cn-command-separator {
+  @apply -mx-1 h-px bg-border;
+}
+
+/* Input OTP */
+.cn-input-otp-container {
+  @apply flex items-center gap-2;
+}
+
+.cn-input-otp-group {
+  @apply flex items-center;
+}
+
+.cn-input-otp-slot {
+  @apply relative flex h-10 w-10 items-center justify-center border-y border-r border-input text-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md;
+}
+
+.cn-input-otp-slot-active {
+  @apply z-10 ring-2 ring-ring ring-offset-background;
+}
+
+.cn-input-otp-separator {
+  @apply flex items-center text-muted-foreground;
+}
+
+/* Menubar */
+.cn-menubar {
+  @apply flex h-10 items-center space-x-1 rounded-md border bg-background p-1;
+}
+
+.cn-menubar-trigger {
+  @apply flex cursor-default select-none items-center rounded-sm px-3 py-1.5 text-sm font-medium outline-none focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground;
+}
+
+.cn-menubar-content {
+  @apply z-50 min-w-[12rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md;
+}
+
+.cn-menubar-item {
+  @apply relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+}
+
+.cn-menubar-separator {
+  @apply -mx-1 my-1 h-px bg-muted;
+}
+
+.cn-menubar-label {
+  @apply px-2 py-1.5 text-sm font-semibold;
+}
+
+.cn-menubar-shortcut {
+  @apply ml-auto text-xs tracking-widest opacity-60;
+}
+
+/* Form */
+.cn-form-item {
+  @apply space-y-2;
+}
+
+.cn-form-label {
+  @apply text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70;
+}
+
+.cn-form-description {
+  @apply text-sm text-muted-foreground;
+}
+
+.cn-form-message {
+  @apply text-sm font-medium text-destructive;
 }
 
 /* sr-only utility */

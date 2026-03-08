@@ -1,0 +1,36 @@
+@* RnCommandInput component - search input for the command palette *@
+
+<div data-slot="command-input-wrapper" class="@CssUtils.Cn("cn-command-input-wrapper", Class)" @attributes="AdditionalAttributes">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+         class="mr-2 shrink-0 opacity-50">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+    </svg>
+    <input type="text"
+           data-slot="command-input"
+           class="cn-command-input"
+           placeholder="@Placeholder"
+           value="@_value"
+           @oninput="HandleInput"
+           aria-label="@(Placeholder ?? "Search")" />
+</div>
+
+@code {
+    [CascadingParameter] private RnCommand? Command { get; set; }
+
+    /// <summary>Placeholder text for the search input.</summary>
+    [Parameter] public string? Placeholder { get; set; } = "Search...";
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string _value = string.Empty;
+
+    private void HandleInput(ChangeEventArgs e)
+    {
+        _value = e.Value?.ToString() ?? string.Empty;
+        Command?.UpdateSearchTerm(_value);
+    }
+}

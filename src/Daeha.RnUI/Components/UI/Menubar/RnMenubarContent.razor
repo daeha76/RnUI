@@ -1,0 +1,31 @@
+@if (Menu?.IsOpen == true)
+{
+    <div @ref="_ref"
+         data-slot="menubar-content"
+         role="menu"
+         class="@CssUtils.Cn("cn-menubar-content absolute top-full left-0 z-50 mt-1", Class)"
+         @attributes="AdditionalAttributes">
+        @ChildContent
+    </div>
+}
+
+@code {
+    [CascadingParameter] private RnMenubarMenu? Menu { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private ElementReference _ref;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (Menu is not null && Menu.IsOpen)
+        {
+            Menu.ContentRef = _ref;
+        }
+    }
+}

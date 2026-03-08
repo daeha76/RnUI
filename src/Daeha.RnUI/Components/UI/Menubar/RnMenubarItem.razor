@@ -1,0 +1,42 @@
+<div data-slot="menubar-item"
+     role="menuitem"
+     data-disabled="@(Disabled ? "true" : null)"
+     tabindex="-1"
+     class="@CssUtils.Cn("cn-menubar-item", Class)"
+     @onclick="HandleClick"
+     @attributes="AdditionalAttributes">
+    @ChildContent
+    @if (!string.IsNullOrEmpty(Shortcut))
+    {
+        <span data-slot="menubar-shortcut" class="cn-menubar-shortcut">@Shortcut</span>
+    }
+</div>
+
+@code {
+    [CascadingParameter] private RnMenubarMenu? Menu { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Whether this item is disabled.</summary>
+    [Parameter] public bool Disabled { get; set; }
+
+    /// <summary>Optional keyboard shortcut label (display only).</summary>
+    [Parameter] public string? Shortcut { get; set; }
+
+    /// <summary>Callback when the item is clicked.</summary>
+    [Parameter] public EventCallback OnClick { get; set; }
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private async Task HandleClick()
+    {
+        if (!Disabled)
+        {
+            await OnClick.InvokeAsync();
+            Menu?.Close();
+        }
+    }
+}

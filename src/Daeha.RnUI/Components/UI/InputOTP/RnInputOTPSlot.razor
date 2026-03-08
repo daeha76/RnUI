@@ -1,0 +1,44 @@
+@* RnInputOTPSlot - individual character slot for OTP input *@
+
+<div data-slot="input-otp-slot"
+     class="@ComputedClass"
+     @onclick="HandleClick"
+     @attributes="AdditionalAttributes">
+    @if (_char.HasValue)
+    {
+        <span>@_char.Value</span>
+    }
+    @if (IsActive)
+    {
+        <div class="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <div class="animate-caret-blink h-4 w-px duration-1000 bg-foreground"></div>
+        </div>
+    }
+</div>
+
+@code {
+    [CascadingParameter] private RnInputOTP? OTP { get; set; }
+
+    /// <summary>The zero-based index of this slot.</summary>
+    [Parameter] public int Index { get; set; }
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private char? _char => OTP?.GetSlotChar(Index);
+    private bool IsActive => OTP?.IsSlotActive(Index) ?? false;
+
+    private string ComputedClass => CssUtils.Cn(
+        "cn-input-otp-slot",
+        IsActive ? "cn-input-otp-slot-active" : null,
+        Class
+    );
+
+    private async Task HandleClick()
+    {
+        if (OTP is not null)
+            await OTP.FocusAsync();
+    }
+}

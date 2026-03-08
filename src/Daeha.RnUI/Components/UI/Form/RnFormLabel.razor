@@ -1,0 +1,18 @@
+<label data-slot="form-label"
+       for="@For"
+       class="@CssUtils.Cn("cn-form-label", Class)"
+       @attributes="AdditionalAttributes">
+    @ChildContent
+</label>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>The 'for' attribute linking the label to an input by id.</summary>
+    [Parameter] public string? For { get; set; }
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

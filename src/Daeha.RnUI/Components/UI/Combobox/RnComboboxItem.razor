@@ -1,0 +1,62 @@
+@* RnComboboxItem component - Individual item within RnCombobox *@
+
+@if (_isVisible)
+{
+    <div data-slot="combobox-item"
+         role="option"
+         aria-selected="@IsSelected"
+         class="@CssUtils.Cn("relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none", IsSelected ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground", "cursor-pointer")"
+         @onclick="HandleClick">
+        <span class="@CssUtils.Cn("mr-2 flex h-4 w-4 items-center justify-center", IsSelected ? "opacity-100" : "opacity-0")">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 6 9 17l-5-5"/>
+            </svg>
+        </span>
+        @if (ChildContent is not null)
+        {
+            @ChildContent
+        }
+        else
+        {
+            @(Label ?? Value)
+        }
+    </div>
+}
+
+@code {
+    /// <summary>The value of this item.</summary>
+    [Parameter, EditorRequired] public string Value { get; set; } = string.Empty;
+
+    /// <summary>Display label for the item. Falls back to ChildContent or Value if not set.</summary>
+    [Parameter] public string? Label { get; set; }
+
+    /// <summary>Display content for the item.</summary>
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    [CascadingParameter] private RnCombobox? Parent { get; set; }
+
+    private bool _isVisible = true;
+
+    private bool IsSelected => Parent?.Value == Value;
+
+    private string DisplayLabel => Label ?? Value;
+
+    protected override void OnParametersSet()
+    {
+        // Register this item's label with the parent for display text lookup
+        Parent?.RegisterItem(Value, DisplayLabel);
+
+        // Check visibility based on search term
+        _isVisible = Parent?.IsItemVisible(Value, DisplayLabel) ?? true;
+    }
+
+    private async Task HandleClick()
+    {
+        if (Parent is not null)
+        {
+            await Parent.SelectItem(Value);
+        }
+    }
+}

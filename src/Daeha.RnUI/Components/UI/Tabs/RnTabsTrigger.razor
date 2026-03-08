@@ -1,8 +1,11 @@
-﻿<RnButton type="button" data-slot="tabs-trigger" role="tab"
+<RnButton type="button" data-slot="tabs-trigger" role="tab"
+        id="@($"tab-trigger-{Value}")"
         data-active="@(IsActive ? "" : null)"
         aria-selected="@IsActive.ToString().ToLower()"
+        aria-controls="@($"tab-content-{Value}")"
         class="@CssUtils.Cn("cn-tabs-trigger", IsActive ? "data-active:bg-background data-active:text-foreground" : "text-foreground/60", Class)"
         @onclick="HandleClick"
+        @onkeydown="HandleKeyDown"
         @attributes="AdditionalAttributes">
     @ChildContent
 </RnButton>
@@ -20,5 +23,11 @@
     {
         if (Parent is not null)
             await Parent.SetActiveTab(Value);
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key is "Enter" or " ")
+            await HandleClick();
     }
 }

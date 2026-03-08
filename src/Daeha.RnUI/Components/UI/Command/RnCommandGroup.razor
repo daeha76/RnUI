@@ -1,0 +1,22 @@
+<div data-slot="command-group"
+     role="group"
+     class="@CssUtils.Cn("cn-command-group", Class)"
+     @attributes="AdditionalAttributes">
+    @if (!string.IsNullOrEmpty(Heading))
+    {
+        <div data-slot="command-group-heading" class="cn-command-group-heading">@Heading</div>
+    }
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Optional heading for the group.</summary>
+    [Parameter] public string? Heading { get; set; }
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

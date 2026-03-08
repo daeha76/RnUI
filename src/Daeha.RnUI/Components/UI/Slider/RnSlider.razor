@@ -1,6 +1,10 @@
-﻿@* RnSlider component - Blazor port of shadcn/ui RnSlider *@
+@* RnSlider component - Blazor port of shadcn/ui RnSlider *@
 
 <div data-slot="slider"
+     role="slider"
+     aria-valuemin="@Min"
+     aria-valuemax="@Max"
+     aria-valuenow="@Value"
      class="@CssUtils.Cn("cn-slider relative flex w-full touch-none select-none items-center", Disabled ? "opacity-50" : "", Class)"
      @attributes="AdditionalAttributes">
     <div class="cn-slider-track relative h-1.5 w-full grow overflow-hidden rounded-full bg-primary/20">
@@ -8,7 +12,7 @@
     </div>
     <input type="range" min="@Min" max="@Max" step="@Step" value="@Value"
            class="absolute inset-0 cursor-pointer opacity-0"
-           disabled="@Disabled"
+           disabled="@(Disabled ? true : (object?)null)"
            @oninput="HandleInput" />
 </div>
 

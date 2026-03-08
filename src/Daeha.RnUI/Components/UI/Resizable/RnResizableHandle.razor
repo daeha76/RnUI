@@ -1,0 +1,72 @@
+@* RnResizableHandle - drag handle between resizable panels *@
+
+<div data-slot="resizable-handle"
+     role="separator"
+     aria-orientation="@(Group?.Direction == "vertical" ? "horizontal" : "vertical")"
+     tabindex="0"
+     class="@CssUtils.Cn("cn-resize-handle", HandleClass, Class)"
+     @onmousedown="HandleMouseDown"
+     @onmousemove="HandleMouseMove"
+     @onmouseup="HandleMouseUp"
+     @onmouseleave="HandleMouseUp"
+     @attributes="AdditionalAttributes">
+    @if (WithHandle)
+    {
+        <div class="z-10 flex h-4 w-3 items-center justify-center rounded-sm border bg-border">
+            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="14" viewBox="0 0 8 14" fill="none"
+                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                <line x1="1" y1="1" x2="1" y2="13"/><line x1="4" y1="1" x2="4" y2="13"/><line x1="7" y1="1" x2="7" y2="13"/>
+            </svg>
+        </div>
+    }
+</div>
+
+@code {
+    [CascadingParameter] private RnResizablePanelGroup? Group { get; set; }
+
+    /// <summary>Panel before this handle (the one that gets resized on drag).</summary>
+    [Parameter] public RnResizablePanel? Panel { get; set; }
+
+    /// <summary>Panel after this handle.</summary>
+    [Parameter] public RnResizablePanel? NextPanel { get; set; }
+
+    /// <summary>Whether to show the visual grip handle icon.</summary>
+    [Parameter] public bool WithHandle { get; set; }
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private bool _isDragging;
+    private double _lastX;
+    private double _lastY;
+
+    private string HandleClass => Group?.Direction == "vertical"
+        ? "h-px w-full cursor-row-resize"
+        : "w-px h-full cursor-col-resize";
+
+    private void HandleMouseDown(MouseEventArgs e)
+    {
+        _isDragging = true;
+        _lastX = e.ClientX;
+        _lastY = e.ClientY;
+    }
+
+    private void HandleMouseMove(MouseEventArgs e)
+    {
+        if (!_isDragging || Panel is null || NextPanel is null)
+            return;
+
+        // Update last position for next delta calculation
+        _lastX = e.ClientX;
+        _lastY = e.ClientY;
+
+        StateHasChanged();
+    }
+
+    private void HandleMouseUp(MouseEventArgs e)
+    {
+        _isDragging = false;
+    }
+}

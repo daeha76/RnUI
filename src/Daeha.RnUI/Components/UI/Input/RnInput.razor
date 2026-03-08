@@ -5,7 +5,7 @@
        class="@ComputedClass"
        value="@Value"
        placeholder="@Placeholder"
-       disabled="@Disabled"
+       disabled="@(Disabled ? true : (object?)null)"
        @oninput="HandleInput"
        @attributes="AdditionalAttributes" />
 

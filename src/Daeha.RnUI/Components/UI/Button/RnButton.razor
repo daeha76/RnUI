@@ -3,7 +3,7 @@
 <button type="@Type"
         data-slot="button"
         class="@ComputedClass"
-        disabled="@Disabled"
+        disabled="@(Disabled ? true : (object?)null)"
         @onclick="OnClick"
         @attributes="AdditionalAttributes">
     @ChildContent

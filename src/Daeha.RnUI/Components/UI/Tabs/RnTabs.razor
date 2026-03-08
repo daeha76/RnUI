@@ -1,10 +1,12 @@
 ﻿@* RnTabs component - Blazor port of shadcn/ui RnTabs *@
 
-<div data-slot="tabs" data-orientation="@Orientation"
-     class="@CssUtils.Cn("cn-tabs group/tabs flex", Orientation == Orientation.Horizontal ? "flex-col" : "flex-row", Class)"
-     @attributes="AdditionalAttributes">
-    @ChildContent
-</div>
+<CascadingValue Value="this" IsFixed="false">
+    <div data-slot="tabs" data-orientation="@Orientation"
+         class="@CssUtils.Cn("cn-tabs group/tabs flex", Orientation == Orientation.Horizontal ? "flex-col" : "flex-row", Class)"
+         @attributes="AdditionalAttributes">
+        @ChildContent
+    </div>
+</CascadingValue>
 
 @code {
     [Parameter] public RenderFragment? ChildContent { get; set; }

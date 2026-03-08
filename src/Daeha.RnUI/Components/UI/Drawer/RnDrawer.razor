@@ -1,0 +1,93 @@
+@* RnDrawer component - Blazor port of shadcn/ui Drawer *@
+@implements IAsyncDisposable
+@inject RnUIInteropService Interop
+
+@if (Open)
+{
+    <div data-slot="drawer">
+        @* Overlay *@
+        <div data-slot="drawer-overlay"
+             class="@CssUtils.Cn("cn-drawer-overlay", OverlayClass)"
+             @onclick="HandleOverlayClick"></div>
+
+        @* Content *@
+        <div @ref="_contentRef"
+             data-slot="drawer-content"
+             role="dialog"
+             aria-modal="true"
+             aria-labelledby="@(_id + "-title")"
+             id="@_id"
+             class="@CssUtils.Cn("cn-drawer-content", Class)"
+             @attributes="AdditionalAttributes">
+            <div data-slot="drawer-handle" class="cn-drawer-handle"></div>
+            @ChildContent
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Whether the drawer is open.</summary>
+    [Parameter] public bool Open { get; set; }
+
+    /// <summary>Callback when open state changes.</summary>
+    [Parameter] public EventCallback<bool> OpenChanged { get; set; }
+
+    /// <summary>Whether clicking the overlay closes the drawer.</summary>
+    [Parameter] public bool CloseOnOverlayClick { get; set; } = true;
+
+    /// <summary>Additional CSS classes for the drawer content.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    /// <summary>Additional CSS classes for the overlay.</summary>
+    [Parameter] public string? OverlayClass { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private readonly string _id = Guid.NewGuid().ToString("N")[..8];
+    private ElementReference _contentRef;
+    private DotNetObjectReference<RnDrawer>? _dotNetRef;
+    private bool _previousOpen;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+        }
+
+        if (Open && !_previousOpen)
+        {
+            _previousOpen = true;
+            await Interop.LockBodyScrollAsync();
+            await Interop.EnableFocusTrapAsync(_id, _contentRef);
+            await Interop.AddEscapeListenerAsync(_id, _dotNetRef!, nameof(Close));
+        }
+        else if (!Open && _previousOpen)
+        {
+            _previousOpen = false;
+            await Interop.DisposeAllAsync(_id);
+            await Interop.UnlockBodyScrollAsync();
+        }
+    }
+
+    [JSInvokable]
+    public async Task Close() => await OpenChanged.InvokeAsync(false);
+
+    private async Task HandleOverlayClick()
+    {
+        if (CloseOnOverlayClick)
+            await Close();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_previousOpen)
+        {
+            await Interop.DisposeAllAsync(_id);
+            await Interop.UnlockBodyScrollAsync();
+        }
+        _dotNetRef?.Dispose();
+    }
+}

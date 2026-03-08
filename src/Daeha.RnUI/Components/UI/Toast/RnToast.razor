@@ -1,0 +1,32 @@
+@* RnToast - Individual toast component *@
+
+<div data-slot="toast"
+     role="status"
+     aria-live="polite"
+     class="@ComputedClass"
+     @attributes="AdditionalAttributes">
+    <div class="flex flex-col gap-1 flex-1">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Visual variant of the toast.</summary>
+    [Parameter] public ToastVariant Variant { get; set; } = ToastVariant.Default;
+
+    /// <summary>Callback when the toast is closed.</summary>
+    [Parameter] public EventCallback OnClose { get; set; }
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string ComputedClass => CssUtils.Cn(
+        "cn-toast",
+        Variant == ToastVariant.Destructive ? "cn-toast-variant-destructive" : "cn-toast-variant-default",
+        Class
+    );
+}

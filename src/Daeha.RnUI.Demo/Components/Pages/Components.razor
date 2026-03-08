@@ -48,6 +48,8 @@ else
     </div>
 }
 
+@inject ToastService ToastService
+
 @code {
     [Parameter] public string? Slug { get; set; }
     [Inject] private NavigationManager Navigation { get; set; } = default!;
@@ -69,12 +71,23 @@ else
     private bool _togglePressed;
     private int _currentPage = 1;
 
+    // State for new component demos
+    private DateTime? _calendarDate;
+    private DateTime? _datePickerValue;
+    private string? _comboboxValue;
+    private bool _drawerOpen;
+    private string? _toggleGroupValue = "center";
+    private string _otpValue = "";
+
     protected override void OnParametersSet()
     {
         _currentComponent = string.IsNullOrEmpty(Slug)
             ? null
             : _componentDemos.FirstOrDefault(c => c.Slug == Slug);
     }
+
+    private void ShowToast() => ToastService.Show("Event Created", "Your event has been created successfully.");
+    private void ShowDestructiveToast() => ToastService.Show("Error", "Something went wrong.", ToastVariant.Destructive);
 
     private record ComponentDemo(string Name, string Slug, string Description, RenderFragment Demo);
 
@@ -192,6 +205,37 @@ else
             </div>
         ),
 
+        new("Calendar", "calendar", "A date field component that allows users to enter and edit date.",
+            @<div class="max-w-xs">
+                <RnCalendar @bind-Selected="_calendarDate" />
+                <p class="text-sm text-muted-foreground mt-2">Selected: @(_calendarDate?.ToString("MMM dd, yyyy") ?? "None")</p>
+            </div>
+        ),
+
+        new("Carousel", "carousel", "A carousel with motion and swipe built on top of a slide container.",
+            @<div class="max-w-xs mx-auto">
+                <RnCarousel>
+                    <RnCarouselContent>
+                        @for (var i = 1; i <= 5; i++)
+                        {
+                            var index = i;
+                            <RnCarouselItem>
+                                <div class="p-1">
+                                    <RnCard>
+                                        <RnCardContent Class="flex aspect-square items-center justify-center p-6">
+                                            <span class="text-4xl font-semibold">@index</span>
+                                        </RnCardContent>
+                                    </RnCard>
+                                </div>
+                            </RnCarouselItem>
+                        }
+                    </RnCarouselContent>
+                    <RnCarouselPrevious />
+                    <RnCarouselNext />
+                </RnCarousel>
+            </div>
+        ),
+
         new("Button", "button", "Displays a button or a component that looks like a button.",
             @<div class="space-y-4">
                 <h3 class="text-sm font-medium">Variants</h3>
@@ -208,6 +252,44 @@ else
                     <RnButton Size="ButtonSize.Sm">Small</RnButton>
                     <RnButton>Default</RnButton>
                     <RnButton Size="ButtonSize.Lg">Large</RnButton>
+                </div>
+            </div>
+        ),
+
+        new("Button Group", "button-group", "A container that groups related buttons together with consistent styling.",
+            @<div class="space-y-6">
+                <div class="space-y-2">
+                    <h3 class="text-sm font-medium">Horizontal (Default)</h3>
+                    <RnButtonGroup>
+                        <RnButton Variant="ButtonVariant.Outline">Button 1</RnButton>
+                        <RnButton Variant="ButtonVariant.Outline">Button 2</RnButton>
+                        <RnButton Variant="ButtonVariant.Outline">Button 3</RnButton>
+                    </RnButtonGroup>
+                </div>
+                <div class="space-y-2">
+                    <h3 class="text-sm font-medium">Vertical</h3>
+                    <RnButtonGroup Orientation="ButtonGroupOrientation.Vertical">
+                        <RnButton Variant="ButtonVariant.Outline">Button 1</RnButton>
+                        <RnButton Variant="ButtonVariant.Outline">Button 2</RnButton>
+                        <RnButton Variant="ButtonVariant.Outline">Button 3</RnButton>
+                    </RnButtonGroup>
+                </div>
+                <div class="space-y-2">
+                    <h3 class="text-sm font-medium">With Separator</h3>
+                    <RnButtonGroup>
+                        <RnButton Variant="ButtonVariant.Outline">Cut</RnButton>
+                        <RnButtonGroupSeparator />
+                        <RnButton Variant="ButtonVariant.Outline">Copy</RnButton>
+                        <RnButtonGroupSeparator />
+                        <RnButton Variant="ButtonVariant.Outline">Paste</RnButton>
+                    </RnButtonGroup>
+                </div>
+                <div class="space-y-2">
+                    <h3 class="text-sm font-medium">With Text</h3>
+                    <RnButtonGroup>
+                        <RnButtonGroupText>Prefix</RnButtonGroupText>
+                        <RnButton Variant="ButtonVariant.Outline">Button</RnButton>
+                    </RnButtonGroup>
                 </div>
             </div>
         ),
@@ -270,6 +352,41 @@ else
             </div>
         ),
 
+        new("Combobox", "combobox", "Autocomplete input and command palette with a list of suggestions.",
+            @<div class="space-y-4">
+                <RnCombobox @bind-Value="_comboboxValue" Placeholder="Select framework...">
+                    <RnComboboxItem Value="next" Label="Next.js">Next.js</RnComboboxItem>
+                    <RnComboboxItem Value="sveltekit" Label="SvelteKit">SvelteKit</RnComboboxItem>
+                    <RnComboboxItem Value="nuxt" Label="Nuxt.js">Nuxt.js</RnComboboxItem>
+                    <RnComboboxItem Value="remix" Label="Remix">Remix</RnComboboxItem>
+                    <RnComboboxItem Value="astro" Label="Astro">Astro</RnComboboxItem>
+                </RnCombobox>
+                <p class="text-sm text-muted-foreground">Selected: @(_comboboxValue ?? "None")</p>
+            </div>
+        ),
+
+        new("Command", "command", "Fast, composable, unstyled command menu.",
+            @<div class="space-y-4 max-w-md">
+                <RnCommand Class="rounded-lg border shadow-md">
+                    <RnCommandInput Placeholder="Type a command or search..." />
+                    <RnCommandList>
+                        <RnCommandEmpty>No results found.</RnCommandEmpty>
+                        <RnCommandGroup Heading="Suggestions">
+                            <RnCommandItem>Calendar</RnCommandItem>
+                            <RnCommandItem>Search Emoji</RnCommandItem>
+                            <RnCommandItem>Calculator</RnCommandItem>
+                        </RnCommandGroup>
+                        <RnCommandSeparator />
+                        <RnCommandGroup Heading="Settings">
+                            <RnCommandItem>Profile</RnCommandItem>
+                            <RnCommandItem>Billing</RnCommandItem>
+                            <RnCommandItem>Settings</RnCommandItem>
+                        </RnCommandGroup>
+                    </RnCommandList>
+                </RnCommand>
+            </div>
+        ),
+
         new("Context Menu", "context-menu", "A menu displayed on right-click.",
             @<div>
                 <RnContextMenu>
@@ -315,6 +432,34 @@ else
             </div>
         ),
 
+        new("Date Picker", "date-picker", "A date picker component with a calendar popup.",
+            @<div class="space-y-4">
+                <RnDatePicker @bind-Value="_datePickerValue" Placeholder="Pick a date" />
+                <p class="text-sm text-muted-foreground">Selected: @(_datePickerValue?.ToString("MMM dd, yyyy") ?? "None")</p>
+            </div>
+        ),
+
+        new("Drawer", "drawer", "A drawer component that slides from the bottom of the screen.",
+            @<div class="space-y-4">
+                <RnButton Variant="ButtonVariant.Outline" OnClick="() => _drawerOpen = true">Open Drawer</RnButton>
+                <RnDrawer @bind-Open="_drawerOpen">
+                    <RnDrawerContent>
+                        <RnDrawerHeader>
+                            <RnDrawerTitle>Move Goal</RnDrawerTitle>
+                            <RnDrawerDescription>Set your daily activity goal.</RnDrawerDescription>
+                        </RnDrawerHeader>
+                        <div class="p-4">
+                            <RnProgress Value="66" Class="w-full" />
+                        </div>
+                        <RnDrawerFooter>
+                            <RnButton OnClick="() => _drawerOpen = false">Submit</RnButton>
+                            <RnButton Variant="ButtonVariant.Outline" OnClick="() => _drawerOpen = false">Cancel</RnButton>
+                        </RnDrawerFooter>
+                    </RnDrawerContent>
+                </RnDrawer>
+            </div>
+        ),
+
         new("Dropdown Menu", "dropdown-menu", "A menu displayed on trigger click.",
             @<div>
                 <RnDropdownMenu>
@@ -339,6 +484,21 @@ else
                 <RnEmpty Class="border rounded-md py-12">
                     <p class="text-muted-foreground">No items to display.</p>
                 </RnEmpty>
+            </div>
+        ),
+
+        new("Form", "form", "Building forms with validation and accessible error messages.",
+            @<div class="max-w-sm space-y-4">
+                <RnFormItem>
+                    <RnFormLabel For="username">Username</RnFormLabel>
+                    <RnInput id="username" Placeholder="shadcn" />
+                    <RnFormDescription>This is your public display name.</RnFormDescription>
+                </RnFormItem>
+                <RnFormItem>
+                    <RnFormLabel For="email">Email</RnFormLabel>
+                    <RnInput id="email" Type="email" Placeholder="m@example.com" />
+                    <RnFormMessage Message="Please enter a valid email address." />
+                </RnFormItem>
             </div>
         ),
 
@@ -375,6 +535,25 @@ else
             </div>
         ),
 
+        new("Input OTP", "input-otp", "Accessible one-time password component with copy paste functionality.",
+            @<div class="space-y-4">
+                <RnInputOTP @bind-Value="_otpValue" MaxLength="6">
+                    <RnInputOTPGroup>
+                        <RnInputOTPSlot Index="0" />
+                        <RnInputOTPSlot Index="1" />
+                        <RnInputOTPSlot Index="2" />
+                    </RnInputOTPGroup>
+                    <RnInputOTPSeparator />
+                    <RnInputOTPGroup>
+                        <RnInputOTPSlot Index="3" />
+                        <RnInputOTPSlot Index="4" />
+                        <RnInputOTPSlot Index="5" />
+                    </RnInputOTPGroup>
+                </RnInputOTP>
+                <p class="text-sm text-muted-foreground">Value: @(_otpValue)</p>
+            </div>
+        ),
+
         new("Kbd", "kbd", "Displays keyboard shortcut styling.",
             @<div class="space-y-4">
                 <p class="text-sm text-muted-foreground">
@@ -392,6 +571,71 @@ else
                     <RnLabel For="name-input">Your Name</RnLabel>
                     <RnInput id="name-input" Placeholder="Enter your name" />
                 </div>
+            </div>
+        ),
+
+        new("Menubar", "menubar", "A visually persistent menu common in desktop applications.",
+            @<div>
+                <RnMenubar>
+                    <RnMenubarMenu>
+                        <RnMenubarTrigger>File</RnMenubarTrigger>
+                        <RnMenubarContent>
+                            <RnMenubarItem>New Tab</RnMenubarItem>
+                            <RnMenubarItem>New Window</RnMenubarItem>
+                            <RnMenubarSeparator />
+                            <RnMenubarItem>Share</RnMenubarItem>
+                            <RnMenubarSeparator />
+                            <RnMenubarItem>Print</RnMenubarItem>
+                        </RnMenubarContent>
+                    </RnMenubarMenu>
+                    <RnMenubarMenu>
+                        <RnMenubarTrigger>Edit</RnMenubarTrigger>
+                        <RnMenubarContent>
+                            <RnMenubarItem>Undo</RnMenubarItem>
+                            <RnMenubarItem>Redo</RnMenubarItem>
+                            <RnMenubarSeparator />
+                            <RnMenubarItem>Cut</RnMenubarItem>
+                            <RnMenubarItem>Copy</RnMenubarItem>
+                            <RnMenubarItem>Paste</RnMenubarItem>
+                        </RnMenubarContent>
+                    </RnMenubarMenu>
+                    <RnMenubarMenu>
+                        <RnMenubarTrigger>View</RnMenubarTrigger>
+                        <RnMenubarContent>
+                            <RnMenubarItem>Zoom In</RnMenubarItem>
+                            <RnMenubarItem>Zoom Out</RnMenubarItem>
+                        </RnMenubarContent>
+                    </RnMenubarMenu>
+                </RnMenubar>
+            </div>
+        ),
+
+        new("Navigation Menu", "navigation-menu", "A collection of links for navigating websites.",
+            @<div>
+                <RnNavigationMenu>
+                    <RnNavigationMenuList>
+                        <RnNavigationMenuItem>
+                            <RnNavigationMenuTrigger>Getting Started</RnNavigationMenuTrigger>
+                            <RnNavigationMenuContent>
+                                <div class="grid gap-3 p-4 w-[400px]">
+                                    <RnNavigationMenuLink Href="#">Introduction</RnNavigationMenuLink>
+                                    <RnNavigationMenuLink Href="#">Installation</RnNavigationMenuLink>
+                                    <RnNavigationMenuLink Href="#">Typography</RnNavigationMenuLink>
+                                </div>
+                            </RnNavigationMenuContent>
+                        </RnNavigationMenuItem>
+                        <RnNavigationMenuItem>
+                            <RnNavigationMenuTrigger>Components</RnNavigationMenuTrigger>
+                            <RnNavigationMenuContent>
+                                <div class="grid gap-3 p-4 w-[400px]">
+                                    <RnNavigationMenuLink Href="#">Alert Dialog</RnNavigationMenuLink>
+                                    <RnNavigationMenuLink Href="#">Hover Card</RnNavigationMenuLink>
+                                    <RnNavigationMenuLink Href="#">Progress</RnNavigationMenuLink>
+                                </div>
+                            </RnNavigationMenuContent>
+                        </RnNavigationMenuItem>
+                    </RnNavigationMenuList>
+                </RnNavigationMenu>
             </div>
         ),
 
@@ -453,6 +697,24 @@ else
                     </div>
                 </RnRadioGroup>
                 <p class="text-sm text-muted-foreground">Selected: @_radioValue</p>
+            </div>
+        ),
+
+        new("Resizable", "resizable", "Accessible resizable panel groups and layouts.",
+            @<div class="max-w-md">
+                <RnResizablePanelGroup Direction="horizontal" Class="min-h-[200px] rounded-lg border">
+                    <RnResizablePanel DefaultSize="50">
+                        <div class="flex h-full items-center justify-center p-6">
+                            <span class="font-semibold">One</span>
+                        </div>
+                    </RnResizablePanel>
+                    <RnResizableHandle />
+                    <RnResizablePanel DefaultSize="50">
+                        <div class="flex h-full items-center justify-center p-6">
+                            <span class="font-semibold">Two</span>
+                        </div>
+                    </RnResizablePanel>
+                </RnResizablePanelGroup>
             </div>
         ),
 
@@ -668,6 +930,13 @@ else
             </div>
         ),
 
+        new("Toast", "toast", "A succinct message that is displayed temporarily.",
+            @<div class="space-y-4">
+                <RnButton OnClick="ShowToast">Show Toast</RnButton>
+                <RnButton Variant="ButtonVariant.Destructive" OnClick="ShowDestructiveToast">Destructive Toast</RnButton>
+            </div>
+        ),
+
         new("Toggle", "toggle", "A two-state button that can be on or off.",
             @<div class="space-y-4">
                 <div class="flex gap-4">
@@ -687,6 +956,23 @@ else
                     </RnToggle>
                 </div>
                 <p class="text-sm text-muted-foreground">Bold pressed: @_togglePressed</p>
+            </div>
+        ),
+
+        new("Toggle Group", "toggle-group", "A set of two-state buttons that can be toggled on or off.",
+            @<div class="space-y-4">
+                <RnToggleGroup @bind-Value="_toggleGroupValue">
+                    <RnToggleGroupItem Value="left">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="3" y1="6" y2="6"/><line x1="15" x2="3" y1="12" y2="12"/><line x1="17" x2="3" y1="18" y2="18"/></svg>
+                    </RnToggleGroupItem>
+                    <RnToggleGroupItem Value="center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="3" y1="6" y2="6"/><line x1="18" x2="6" y1="12" y2="12"/><line x1="21" x2="3" y1="18" y2="18"/></svg>
+                    </RnToggleGroupItem>
+                    <RnToggleGroupItem Value="right">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="3" y1="6" y2="6"/><line x1="21" x2="9" y1="12" y2="12"/><line x1="21" x2="7" y1="18" y2="18"/></svg>
+                    </RnToggleGroupItem>
+                </RnToggleGroup>
+                <p class="text-sm text-muted-foreground">Alignment: @(_toggleGroupValue ?? "None")</p>
             </div>
         ),
 

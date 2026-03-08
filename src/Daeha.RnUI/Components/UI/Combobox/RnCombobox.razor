@@ -1,0 +1,164 @@
+@* RnCombobox component - Blazor port of shadcn/ui Combobox *@
+@implements IAsyncDisposable
+@inject RnUIInteropService Interop
+
+<div data-slot="combobox" class="@CssUtils.Cn("relative inline-block", Class)" @attributes="AdditionalAttributes">
+    <button type="button"
+            data-slot="combobox-trigger"
+            disabled="@(Disabled ? true : (object?)null)"
+            class="@CssUtils.Cn("cn-button cn-button-variant-outline cn-button-size-default w-[200px] justify-between inline-flex items-center", _isOpen ? "ring-2 ring-ring" : "")"
+            @onclick="ToggleOpen">
+        <span class="@(string.IsNullOrEmpty(Value) ? "text-muted-foreground" : "") truncate">
+            @GetDisplayText()
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 shrink-0 opacity-50">
+            <path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/>
+        </svg>
+    </button>
+
+    @if (_isOpen)
+    {
+        <div @ref="_contentRef"
+             data-slot="combobox-content"
+             class="absolute z-50 mt-1 w-full min-w-[200px] rounded-md border bg-popover p-0 text-popover-foreground shadow-md outline-none">
+            <div class="flex items-center border-b px-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 shrink-0 opacity-50">
+                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                </svg>
+                <input type="text"
+                       placeholder="@SearchPlaceholder"
+                       class="flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                       value="@_searchTerm"
+                       @oninput="HandleSearch" />
+            </div>
+            <div class="max-h-[200px] overflow-y-auto p-1">
+                <CascadingValue Value="this" IsFixed="false">
+                    @ChildContent
+                </CascadingValue>
+                @if (!_hasVisibleItems)
+                {
+                    <div class="py-6 text-center text-sm text-muted-foreground">No results found.</div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    /// <summary>Currently selected value.</summary>
+    [Parameter] public string? Value { get; set; }
+
+    /// <summary>Callback when the selected value changes.</summary>
+    [Parameter] public EventCallback<string?> ValueChanged { get; set; }
+
+    /// <summary>Placeholder text when no item is selected.</summary>
+    [Parameter] public string Placeholder { get; set; } = "Select...";
+
+    /// <summary>Placeholder text for the search input.</summary>
+    [Parameter] public string SearchPlaceholder { get; set; } = "Search...";
+
+    /// <summary>Whether the combobox is disabled.</summary>
+    [Parameter] public bool Disabled { get; set; }
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    /// <summary>Child content containing RnComboboxItem elements.</summary>
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private readonly string _id = Guid.NewGuid().ToString("N")[..8];
+    private ElementReference _contentRef;
+    private DotNetObjectReference<RnCombobox>? _dotNetRef;
+    private bool _isOpen;
+    private bool _previousOpen;
+    private string _searchTerm = string.Empty;
+    private bool _hasVisibleItems = true;
+
+    // Registry of items for display text lookup
+    private readonly Dictionary<string, string> _itemLabels = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+        }
+
+        if (_isOpen && !_previousOpen)
+        {
+            _previousOpen = true;
+            await Interop.AddClickOutsideListenerAsync(_id, _contentRef, _dotNetRef!, nameof(CloseCombobox));
+            await Interop.AddEscapeListenerAsync(_id, _dotNetRef!, nameof(CloseCombobox));
+        }
+        else if (!_isOpen && _previousOpen)
+        {
+            _previousOpen = false;
+            await Interop.DisposeAllAsync(_id);
+        }
+    }
+
+    private void ToggleOpen()
+    {
+        if (!Disabled)
+        {
+            _isOpen = !_isOpen;
+            if (!_isOpen)
+            {
+                _searchTerm = string.Empty;
+            }
+        }
+    }
+
+    [JSInvokable]
+    public void CloseCombobox()
+    {
+        _isOpen = false;
+        _searchTerm = string.Empty;
+        StateHasChanged();
+    }
+
+    private void HandleSearch(ChangeEventArgs e)
+    {
+        _searchTerm = e.Value?.ToString() ?? string.Empty;
+    }
+
+    internal bool IsItemVisible(string itemValue, string itemLabel)
+    {
+        if (string.IsNullOrWhiteSpace(_searchTerm)) return true;
+        return itemValue.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ||
+               itemLabel.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase);
+    }
+
+    internal void RegisterItem(string itemValue, string itemLabel)
+    {
+        _itemLabels[itemValue] = itemLabel;
+    }
+
+    internal async Task SelectItem(string itemValue)
+    {
+        Value = itemValue;
+        _isOpen = false;
+        _searchTerm = string.Empty;
+        await ValueChanged.InvokeAsync(Value);
+    }
+
+    internal string GetSearchTerm() => _searchTerm;
+
+    private string GetDisplayText()
+    {
+        if (string.IsNullOrEmpty(Value)) return Placeholder;
+        if (_itemLabels.TryGetValue(Value, out var label)) return label;
+        return Value;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_previousOpen)
+        {
+            await Interop.DisposeAllAsync(_id);
+        }
+        _dotNetRef?.Dispose();
+    }
+}

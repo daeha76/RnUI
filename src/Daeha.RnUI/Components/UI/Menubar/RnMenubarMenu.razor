@@ -1,0 +1,84 @@
+@* RnMenubarMenu - individual menu entry in the menubar *@
+@implements IAsyncDisposable
+@inject RnUIInteropService Interop
+
+<div data-slot="menubar-menu"
+     class="relative"
+     @attributes="AdditionalAttributes">
+    <CascadingValue Value="this" IsFixed="false">
+        @ChildContent
+    </CascadingValue>
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private readonly string _id = Guid.NewGuid().ToString("N")[..8];
+    private ElementReference _contentRef;
+    private DotNetObjectReference<RnMenubarMenu>? _dotNetRef;
+    private bool _open;
+    private bool _previousOpen;
+
+    /// <summary>Whether this menu is open.</summary>
+    public bool IsOpen => _open;
+
+    /// <summary>The element reference for the content (set by RnMenubarContent).</summary>
+    internal ElementReference ContentRef
+    {
+        get => _contentRef;
+        set => _contentRef = value;
+    }
+
+    /// <summary>The id for this menu (used for JS interop).</summary>
+    internal string MenuId => _id;
+
+    internal void Toggle()
+    {
+        _open = !_open;
+        StateHasChanged();
+    }
+
+    internal void Close()
+    {
+        _open = false;
+        StateHasChanged();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+        }
+
+        if (_open && !_previousOpen)
+        {
+            _previousOpen = true;
+            await Interop.AddClickOutsideListenerAsync(_id, _contentRef, _dotNetRef!, nameof(CloseFromJs));
+            await Interop.AddEscapeListenerAsync(_id, _dotNetRef!, nameof(CloseFromJs));
+        }
+        else if (!_open && _previousOpen)
+        {
+            _previousOpen = false;
+            await Interop.DisposeAllAsync(_id);
+        }
+    }
+
+    [JSInvokable]
+    public void CloseFromJs()
+    {
+        _open = false;
+        StateHasChanged();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_previousOpen)
+        {
+            await Interop.DisposeAllAsync(_id);
+        }
+        _dotNetRef?.Dispose();
+    }
+}

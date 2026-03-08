@@ -1,0 +1,37 @@
+@* RnResizablePanelGroup - container for resizable panels *@
+
+<div data-slot="resizable-panel-group"
+     data-direction="@Direction"
+     class="@CssUtils.Cn("cn-resizable-panel-group", DirectionClass, Class)"
+     @attributes="AdditionalAttributes">
+    <CascadingValue Value="this" IsFixed="false">
+        @ChildContent
+    </CascadingValue>
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Layout direction: "horizontal" or "vertical".</summary>
+    [Parameter] public string Direction { get; set; } = "horizontal";
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private readonly List<RnResizablePanel> _panels = new();
+
+    private string DirectionClass => Direction == "vertical" ? "flex-col" : "flex-row";
+
+    internal void RegisterPanel(RnResizablePanel panel)
+    {
+        if (!_panels.Contains(panel))
+            _panels.Add(panel);
+    }
+
+    internal void UnregisterPanel(RnResizablePanel panel)
+    {
+        _panels.Remove(panel);
+    }
+}

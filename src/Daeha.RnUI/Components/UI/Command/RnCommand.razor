@@ -1,0 +1,29 @@
+@* RnCommand component - Blazor port of shadcn/ui Command *@
+
+<div data-slot="command"
+     class="@CssUtils.Cn("cn-command", Class)"
+     @attributes="AdditionalAttributes">
+    <CascadingValue Value="this" IsFixed="false">
+        @ChildContent
+    </CascadingValue>
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string _searchTerm = string.Empty;
+
+    /// <summary>The current search/filter term entered in the command input.</summary>
+    public string SearchTerm => _searchTerm;
+
+    internal void UpdateSearchTerm(string term)
+    {
+        _searchTerm = term;
+        StateHasChanged();
+    }
+}

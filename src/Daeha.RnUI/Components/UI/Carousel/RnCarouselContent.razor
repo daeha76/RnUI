@@ -1,0 +1,22 @@
+@* RnCarouselContent - Slide track container for carousel *@
+
+<div data-slot="carousel-content"
+     aria-live="polite"
+     class="overflow-hidden">
+    <div class="@CssUtils.Cn("cn-carousel-content flex", Class)"
+         style="@TrackStyle"
+         @attributes="AdditionalAttributes">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    [CascadingParameter] public RnCarousel? Carousel { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string TrackStyle =>
+        $"transform: translateX(-{(Carousel?.CurrentIndex ?? 0) * 100}%); transition: transform 0.3s ease;";
+}

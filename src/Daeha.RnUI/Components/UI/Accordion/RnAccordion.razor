@@ -1,4 +1,4 @@
-﻿@* RnAccordion component - Blazor port of shadcn/ui Accordion *@
+@* RnAccordion component - Blazor port of shadcn/ui Accordion *@
 
 <CascadingValue Value="this" IsFixed="false">
     <div data-slot="accordion"
@@ -18,10 +18,10 @@
     /// <summary>Callback when the expanded item changes.</summary>
     [Parameter] public EventCallback<string?> ValueChanged { get; set; }
 
-    /// <summary>When "multiple", allows multiple items to be expanded simultaneously. Default is "single".</summary>
-    [Parameter] public string Type { get; set; } = "single";
+    /// <summary>When Multiple, allows multiple items to be expanded simultaneously. Default is Single.</summary>
+    [Parameter] public AccordionType Type { get; set; } = AccordionType.Single;
 
-    /// <summary>When true and type is "single", allows the expanded item to be collapsed.</summary>
+    /// <summary>When true and type is Single, allows the expanded item to be collapsed.</summary>
     [Parameter] public bool Collapsible { get; set; } = true;
 
     /// <summary>Additional CSS classes.</summary>
@@ -32,11 +32,11 @@
     private readonly HashSet<string> _expandedItems = new();
 
     internal bool IsItemExpanded(string value)
-        => Type == "multiple" ? _expandedItems.Contains(value) : Value == value;
+        => Type == AccordionType.Multiple ? _expandedItems.Contains(value) : Value == value;
 
     internal async Task Toggle(string value)
     {
-        if (Type == "multiple")
+        if (Type == AccordionType.Multiple)
         {
             if (!_expandedItems.Remove(value))
                 _expandedItems.Add(value);

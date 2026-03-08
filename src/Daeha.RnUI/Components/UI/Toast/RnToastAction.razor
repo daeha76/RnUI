@@ -1,0 +1,16 @@
+@* RnToastAction - Toast action button *@
+
+<button type="button"
+        data-slot="toast-action"
+        class="@CssUtils.Cn("cn-toast-action", Class)"
+        @onclick="OnClick"
+        @attributes="AdditionalAttributes">
+    @ChildContent
+</button>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public EventCallback OnClick { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

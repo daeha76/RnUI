@@ -1,13 +1,20 @@
-﻿@* RnDropdownMenu component - Blazor port of shadcn/ui RnDropdownMenu *@
+@* RnDropdownMenu component - Blazor port of shadcn/ui RnDropdownMenu *@
+@implements IAsyncDisposable
+@inject RnUIInteropService Interop
 
 <div data-slot="dropdown-menu" class="relative inline-block" @attributes="AdditionalAttributes">
-    <div data-slot="dropdown-menu-trigger" @onclick="ToggleOpen">
+    <div data-slot="dropdown-menu-trigger"
+         aria-expanded="@_open"
+         aria-haspopup="menu"
+         @onclick="ToggleOpen">
         @Trigger
     </div>
 
     @if (_open)
     {
-        <div data-slot="dropdown-menu-content"
+        <div @ref="_contentRef"
+             data-slot="dropdown-menu-content"
+             role="menu"
              class="@CssUtils.Cn("cn-dropdown-menu-content absolute z-50 min-w-[8rem] origin-top-right", Class)"
              style="@PositionUtils.GetPositionStyle(Side, Align)">
             @ChildContent
@@ -30,9 +37,47 @@
 
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
+    private readonly string _id = Guid.NewGuid().ToString("N")[..8];
+    private ElementReference _contentRef;
+    private DotNetObjectReference<RnDropdownMenu>? _dotNetRef;
     private bool _open;
+    private bool _previousOpen;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+        }
+
+        if (_open && !_previousOpen)
+        {
+            _previousOpen = true;
+            await Interop.AddClickOutsideListenerAsync(_id, _contentRef, _dotNetRef!, nameof(CloseMenu));
+            await Interop.AddEscapeListenerAsync(_id, _dotNetRef!, nameof(CloseMenu));
+        }
+        else if (!_open && _previousOpen)
+        {
+            _previousOpen = false;
+            await Interop.DisposeAllAsync(_id);
+        }
+    }
 
     private void ToggleOpen() => _open = !_open;
 
-    internal void CloseMenu() { _open = false; StateHasChanged(); }
+    [JSInvokable]
+    public void CloseMenu()
+    {
+        _open = false;
+        StateHasChanged();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_previousOpen)
+        {
+            await Interop.DisposeAllAsync(_id);
+        }
+        _dotNetRef?.Dispose();
+    }
 }
