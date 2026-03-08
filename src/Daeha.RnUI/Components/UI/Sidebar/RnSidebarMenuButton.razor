@@ -18,7 +18,7 @@
     {
         if (!string.IsNullOrEmpty(Href))
         {
-            Navigation.NavigateTo(Href);
+            Navigation.NavigateTo(Href.TrimStart('/'));
         }
     }
 }

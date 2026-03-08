@@ -43,6 +43,9 @@ jobs:
       - name: Add .nojekyll
         run: touch output/wwwroot/.nojekyll
 
+      - name: Add 404.html for SPA fallback
+        run: cp output/wwwroot/index.html output/wwwroot/404.html
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
