@@ -7,21 +7,26 @@
 {
     <div class="space-y-6">
         <div>
-            <h1 class="text-3xl font-bold tracking-tight">Components</h1>
-            <p class="text-lg text-muted-foreground">
+            <h1 class="scroll-m-20 text-3xl font-semibold tracking-tight">Components</h1>
+            <p class="text-base text-muted-foreground leading-relaxed">
                 Beautifully designed components built with Tailwind CSS for Blazor.
             </p>
         </div>
         <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             @foreach (var component in _componentDemos)
             {
-                <a href="/components/@component.Slug" class="group">
-                    <RnCard Class="transition-colors hover:border-foreground/50">
-                        <RnCardHeader>
-                            <RnCardTitle>@component.Name</RnCardTitle>
-                            <RnCardDescription>@component.Description</RnCardDescription>
-                        </RnCardHeader>
-                    </RnCard>
+                <a href="/components/@component.Slug" class="group block">
+                    <div class="rounded-xl border border-border bg-card transition-colors hover:border-foreground/30">
+                        <div class="flex h-[140px] items-center justify-center border-b border-border p-4">
+                            <div class="scale-[0.8] pointer-events-none">
+                                @component.Thumbnail
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="text-sm font-medium">@component.Name</h3>
+                            <p class="text-xs text-muted-foreground mt-1 line-clamp-1">@component.Description</p>
+                        </div>
+                    </div>
                 </a>
             }
         </div>
@@ -29,21 +34,46 @@
 }
 else if (_currentComponent is not null)
 {
-    <div class="space-y-6">
+    <div class="space-y-8">
         <div>
-            <h1 class="text-3xl font-bold tracking-tight">@_currentComponent.Name</h1>
-            <p class="text-lg text-muted-foreground">@_currentComponent.Description</p>
+            <h1 class="scroll-m-20 text-3xl font-semibold tracking-tight">@_currentComponent.Name</h1>
+            <p class="text-base text-muted-foreground leading-relaxed mt-1.5">@_currentComponent.Description</p>
         </div>
-        <RnSeparator />
-        <div class="rounded-lg border p-6 bg-card">
+
+        <ComponentPreview Code="@_currentComponent.Code">
             @_currentComponent.Demo
+        </ComponentPreview>
+
+        <div class="space-y-4">
+            <h2 class="scroll-m-20 border-b border-border pb-2 text-xl font-medium tracking-tight">Usage</h2>
+            <CodeBlock Code="@_currentComponent.UsageCode" FileName="MyPage.razor" />
         </div>
+
+        @if (_currentComponent.Examples is not null)
+        {
+            <div class="space-y-6">
+                <h2 class="scroll-m-20 border-b border-border pb-2 text-xl font-medium tracking-tight">Examples</h2>
+                @foreach (var example in _currentComponent.Examples)
+                {
+                    <div class="space-y-2">
+                        <h3 class="text-base font-medium">@example.Title</h3>
+                        @if (!string.IsNullOrEmpty(example.Description))
+                        {
+                            <p class="text-sm text-muted-foreground">@example.Description</p>
+                        }
+                        <ComponentPreview Code="@example.Code" Title="@example.Title">
+                            @example.Demo
+                        </ComponentPreview>
+                    </div>
+                }
+            </div>
+        }
     </div>
 }
 else
 {
     <div class="space-y-4">
-        <h1 class="text-3xl font-bold tracking-tight">Component not found</h1>
+        <h1 class="text-3xl font-semibold tracking-tight">Component not found</h1>
         <p class="text-muted-foreground">The component "@Slug" does not exist.</p>
         <RnButton OnClick="@(() => Navigation.NavigateTo("/components"))">Back to Components</RnButton>
     </div>
@@ -88,12 +118,22 @@ else
     private void ShowToast() => ToastService.Show("Event Created", "Your event has been created successfully.");
     private void ShowDestructiveToast() => ToastService.Show("Error", "Something went wrong.", ToastVariant.Destructive);
 
-    private record ComponentDemo(string Name, string Slug, string Description, RenderFragment Demo);
+    private record ComponentExample(string Title, string? Description, RenderFragment Demo, string Code);
+    private record ComponentDemo(
+        string Name,
+        string Slug,
+        string Description,
+        RenderFragment Demo,
+        RenderFragment Thumbnail,
+        string Code,
+        string UsageCode,
+        ComponentExample[]? Examples = null);
 
     private ComponentDemo[] _componentDemos =>
     [
-        new("Accordion", "accordion", "A vertically stacked set of expandable items.",
-            @<div class="space-y-4 max-w-md">
+        // ==================== Accordion ====================
+        new("Accordion", "accordion", "A vertically stacked set of interactive headings that each reveal a section of content.",
+            Demo: @<div class="w-full max-w-md">
                 <RnAccordion @bind-Value="_expandedItem">
                     <RnAccordionItem Value="item-1">
                         <RnAccordionTrigger>Is it accessible?</RnAccordionTrigger>
@@ -108,11 +148,46 @@ else
                         <RnAccordionContent>Yes. It's animated by default, but you can disable it if you prefer.</RnAccordionContent>
                     </RnAccordionItem>
                 </RnAccordion>
-            </div>
+            </div>,
+            Thumbnail: @<div class="w-full max-w-[200px]">
+                <RnAccordion Value="item-1">
+                    <RnAccordionItem Value="item-1">
+                        <RnAccordionTrigger>Is it accessible?</RnAccordionTrigger>
+                        <RnAccordionContent>Yes.</RnAccordionContent>
+                    </RnAccordionItem>
+                </RnAccordion>
+            </div>,
+            Code: @"<RnAccordion @bind-Value=""_expandedItem"">
+    <RnAccordionItem Value=""item-1"">
+        <RnAccordionTrigger>Is it accessible?</RnAccordionTrigger>
+        <RnAccordionContent>
+            Yes. It adheres to the WAI-ARIA design pattern.
+        </RnAccordionContent>
+    </RnAccordionItem>
+    <RnAccordionItem Value=""item-2"">
+        <RnAccordionTrigger>Is it styled?</RnAccordionTrigger>
+        <RnAccordionContent>
+            Yes. It comes with default styles.
+        </RnAccordionContent>
+    </RnAccordionItem>
+</RnAccordion>",
+            UsageCode: @"@using RnUI.Components.UI.Accordion
+
+<RnAccordion @bind-Value=""_value"">
+    <RnAccordionItem Value=""item-1"">
+        <RnAccordionTrigger>Title</RnAccordionTrigger>
+        <RnAccordionContent>Content</RnAccordionContent>
+    </RnAccordionItem>
+</RnAccordion>
+
+@code {
+    private string? _value = ""item-1"";
+}"
         ),
 
+        // ==================== Alert ====================
         new("Alert", "alert", "Displays a callout for important information.",
-            @<div class="space-y-4 max-w-lg">
+            Demo: @<div class="w-full max-w-lg space-y-4">
                 <RnAlert>
                     <RnAlertTitle>Heads up!</RnAlertTitle>
                     <RnAlertDescription>You can add components to your app using the CLI.</RnAlertDescription>
@@ -121,11 +196,42 @@ else
                     <RnAlertTitle>Error</RnAlertTitle>
                     <RnAlertDescription>Your session has expired. Please log in again.</RnAlertDescription>
                 </RnAlert>
-            </div>
+            </div>,
+            Thumbnail: @<div class="w-[200px]">
+                <RnAlert>
+                    <RnAlertTitle>Heads up!</RnAlertTitle>
+                    <RnAlertDescription>Important info.</RnAlertDescription>
+                </RnAlert>
+            </div>,
+            Code: @"<RnAlert>
+    <RnAlertTitle>Heads up!</RnAlertTitle>
+    <RnAlertDescription>
+        You can add components to your app using the CLI.
+    </RnAlertDescription>
+</RnAlert>",
+            UsageCode: @"@using RnUI.Components.UI.Alert
+
+<RnAlert>
+    <RnAlertTitle>Title</RnAlertTitle>
+    <RnAlertDescription>Description</RnAlertDescription>
+</RnAlert>",
+            Examples:
+            [
+                new("Destructive", "Use the Destructive variant for error messages.",
+                    @<RnAlert Variant="AlertVariant.Destructive">
+                        <RnAlertTitle>Error</RnAlertTitle>
+                        <RnAlertDescription>Your session has expired.</RnAlertDescription>
+                    </RnAlert>,
+                    @"<RnAlert Variant=""AlertVariant.Destructive"">
+    <RnAlertTitle>Error</RnAlertTitle>
+    <RnAlertDescription>Your session has expired.</RnAlertDescription>
+</RnAlert>")
+            ]
         ),
 
-        new("Alert Dialog", "alert-dialog", "A modal dialog that interrupts with important content.",
-            @<div class="space-y-4">
+        // ==================== Alert Dialog ====================
+        new("Alert Dialog", "alert-dialog", "A modal dialog that interrupts the user with important content and expects a response.",
+            Demo: @<div>
                 <RnButton Variant="ButtonVariant.Outline" OnClick="() => _alertDialogOpen = true">Show Alert Dialog</RnButton>
                 <RnAlertDialog @bind-Open="_alertDialogOpen">
                     <RnAlertDialogHeader>
@@ -140,95 +246,264 @@ else
                         <RnButton OnClick="() => _alertDialogOpen = false">Continue</RnButton>
                     </RnAlertDialogFooter>
                 </RnAlertDialog>
-            </div>
+            </div>,
+            Thumbnail: @<RnButton Variant="ButtonVariant.Outline" Size="ButtonSize.Sm">Show Alert Dialog</RnButton>,
+            Code: @"<RnButton Variant=""ButtonVariant.Outline""
+        OnClick=""() => _open = true"">
+    Show Alert Dialog
+</RnButton>
+<RnAlertDialog @bind-Open=""_open"">
+    <RnAlertDialogHeader>
+        <RnAlertDialogTitle>Are you absolutely sure?</RnAlertDialogTitle>
+        <RnAlertDialogDescription>
+            This action cannot be undone.
+        </RnAlertDialogDescription>
+    </RnAlertDialogHeader>
+    <RnAlertDialogFooter>
+        <RnButton Variant=""ButtonVariant.Outline""
+                  OnClick=""() => _open = false"">Cancel</RnButton>
+        <RnButton OnClick=""() => _open = false"">Continue</RnButton>
+    </RnAlertDialogFooter>
+</RnAlertDialog>",
+            UsageCode: @"@using RnUI.Components.UI.AlertDialog
+
+<RnAlertDialog @bind-Open=""_open"">
+    <RnAlertDialogHeader>
+        <RnAlertDialogTitle>Title</RnAlertDialogTitle>
+        <RnAlertDialogDescription>Description</RnAlertDialogDescription>
+    </RnAlertDialogHeader>
+    <RnAlertDialogFooter>
+        <RnButton OnClick=""() => _open = false"">OK</RnButton>
+    </RnAlertDialogFooter>
+</RnAlertDialog>
+
+@code {
+    private bool _open;
+}"
         ),
 
+        // ==================== Aspect Ratio ====================
         new("Aspect Ratio", "aspect-ratio", "Displays content within a desired ratio.",
-            @<div class="space-y-4 max-w-md">
-                <h3 class="text-sm font-medium">16:9 Ratio</h3>
-                <RnAspectRatio Ratio="16.0 / 9.0" Class="bg-muted rounded-md overflow-hidden">
-                    <div class="flex items-center justify-center h-full text-muted-foreground">
-                        16:9 Content
-                    </div>
-                </RnAspectRatio>
-                <h3 class="text-sm font-medium">4:3 Ratio</h3>
-                <RnAspectRatio Ratio="4.0 / 3.0" Class="bg-muted rounded-md overflow-hidden">
-                    <div class="flex items-center justify-center h-full text-muted-foreground">
-                        4:3 Content
-                    </div>
-                </RnAspectRatio>
-            </div>
-        ),
-
-        new("Avatar", "avatar", "An image element with a fallback for user profile images.",
-            @<div class="space-y-4">
-                <h3 class="text-sm font-medium">Sizes</h3>
-                <div class="flex items-center gap-4">
-                    <RnAvatar Size="ComponentSize.Sm"><span>SM</span></RnAvatar>
-                    <RnAvatar Src="https://github.com/shadcn.png" Alt="shadcn" />
-                    <RnAvatar Size="ComponentSize.Lg"><span>LG</span></RnAvatar>
+            Demo: @<div class="w-full max-w-md space-y-6">
+                <div class="space-y-2">
+                    <p class="text-sm font-medium">16:9</p>
+                    <RnAspectRatio Ratio="16.0 / 9.0" Class="bg-muted rounded-md overflow-hidden">
+                        <div class="flex items-center justify-center h-full text-muted-foreground">16:9 Content</div>
+                    </RnAspectRatio>
                 </div>
-                <h3 class="text-sm font-medium">Avatar Group</h3>
-                <RnAvatarGroup>
-                    <RnAvatar><span>A</span></RnAvatar>
-                    <RnAvatar><span>B</span></RnAvatar>
-                    <RnAvatar><span>C</span></RnAvatar>
-                    <RnAvatar><span>+2</span></RnAvatar>
-                </RnAvatarGroup>
-            </div>
+                <div class="space-y-2">
+                    <p class="text-sm font-medium">4:3</p>
+                    <RnAspectRatio Ratio="4.0 / 3.0" Class="bg-muted rounded-md overflow-hidden">
+                        <div class="flex items-center justify-center h-full text-muted-foreground">4:3 Content</div>
+                    </RnAspectRatio>
+                </div>
+            </div>,
+            Thumbnail: @<div class="w-[160px]">
+                <RnAspectRatio Ratio="16.0 / 9.0" Class="bg-muted rounded-md">
+                    <div class="flex items-center justify-center h-full text-xs text-muted-foreground">16:9</div>
+                </RnAspectRatio>
+            </div>,
+            Code: @"<RnAspectRatio Ratio=""16.0 / 9.0""
+               Class=""bg-muted rounded-md overflow-hidden"">
+    <div class=""flex items-center justify-center h-full"">
+        16:9 Content
+    </div>
+</RnAspectRatio>",
+            UsageCode: @"@using RnUI.Components.UI.AspectRatio
+
+<RnAspectRatio Ratio=""16.0 / 9.0"">
+    <img src=""photo.jpg"" alt=""Photo"" />
+</RnAspectRatio>"
         ),
 
-        new("Badge", "badge", "Displays a badge or label.",
-            @<div class="flex flex-wrap gap-4">
+        // ==================== Avatar ====================
+        new("Avatar", "avatar", "An image element with a fallback for representing the user.",
+            Demo: @<div class="space-y-6">
+                <div class="space-y-2">
+                    <p class="text-sm font-medium">Sizes</p>
+                    <div class="flex items-center gap-4">
+                        <RnAvatar Size="ComponentSize.Sm"><span>SM</span></RnAvatar>
+                        <RnAvatar Src="https://github.com/shadcn.png" Alt="shadcn" />
+                        <RnAvatar Size="ComponentSize.Lg"><span>LG</span></RnAvatar>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <p class="text-sm font-medium">Group</p>
+                    <RnAvatarGroup>
+                        <RnAvatar><span>A</span></RnAvatar>
+                        <RnAvatar><span>B</span></RnAvatar>
+                        <RnAvatar><span>C</span></RnAvatar>
+                        <RnAvatar><span>+2</span></RnAvatar>
+                    </RnAvatarGroup>
+                </div>
+            </div>,
+            Thumbnail: @<div class="flex gap-2">
+                <RnAvatar Size="ComponentSize.Sm"><span>CN</span></RnAvatar>
+                <RnAvatar Size="ComponentSize.Sm"><span>AB</span></RnAvatar>
+            </div>,
+            Code: @"<RnAvatar Src=""https://github.com/shadcn.png""
+         Alt=""shadcn"" />
+
+<RnAvatar Size=""ComponentSize.Sm"">
+    <span>CN</span>
+</RnAvatar>",
+            UsageCode: @"@using RnUI.Components.UI.Avatar
+
+<RnAvatar Src=""avatar.png"" Alt=""User"" />
+<RnAvatar><span>CN</span></RnAvatar>"
+        ),
+
+        // ==================== Badge ====================
+        new("Badge", "badge", "Displays a badge or a component that looks like a badge.",
+            Demo: @<div class="flex flex-wrap gap-4">
                 <RnBadge>Default</RnBadge>
                 <RnBadge Variant="BadgeVariant.Secondary">Secondary</RnBadge>
                 <RnBadge Variant="BadgeVariant.Outline">Outline</RnBadge>
                 <RnBadge Variant="BadgeVariant.Destructive">Destructive</RnBadge>
-            </div>
+            </div>,
+            Thumbnail: @<div class="flex gap-2">
+                <RnBadge>Badge</RnBadge>
+                <RnBadge Variant="BadgeVariant.Secondary">New</RnBadge>
+            </div>,
+            Code: @"<RnBadge>Default</RnBadge>
+<RnBadge Variant=""BadgeVariant.Secondary"">Secondary</RnBadge>
+<RnBadge Variant=""BadgeVariant.Outline"">Outline</RnBadge>
+<RnBadge Variant=""BadgeVariant.Destructive"">Destructive</RnBadge>",
+            UsageCode: @"@using RnUI.Components.UI.Badge
+
+<RnBadge>Badge</RnBadge>
+<RnBadge Variant=""BadgeVariant.Secondary"">Secondary</RnBadge>",
+            Examples:
+            [
+                new("Secondary", null,
+                    @<RnBadge Variant="BadgeVariant.Secondary">Secondary</RnBadge>,
+                    @"<RnBadge Variant=""BadgeVariant.Secondary"">Secondary</RnBadge>"),
+                new("Outline", null,
+                    @<RnBadge Variant="BadgeVariant.Outline">Outline</RnBadge>,
+                    @"<RnBadge Variant=""BadgeVariant.Outline"">Outline</RnBadge>"),
+                new("Destructive", null,
+                    @<RnBadge Variant="BadgeVariant.Destructive">Destructive</RnBadge>,
+                    @"<RnBadge Variant=""BadgeVariant.Destructive"">Destructive</RnBadge>")
+            ]
         ),
 
-        new("Breadcrumb", "breadcrumb", "Displays the path to the current resource.",
-            @<div>
-                <RnBreadcrumb>
-                    <RnBreadcrumbItem>
-                        <RnBreadcrumbLink Href="/">Home</RnBreadcrumbLink>
-                    </RnBreadcrumbItem>
-                    <RnBreadcrumbSeparator />
-                    <RnBreadcrumbItem>
-                        <RnBreadcrumbLink Href="/components">Components</RnBreadcrumbLink>
-                    </RnBreadcrumbItem>
-                    <RnBreadcrumbSeparator />
-                    <RnBreadcrumbItem>
-                        <RnBreadcrumbPage>Breadcrumb</RnBreadcrumbPage>
-                    </RnBreadcrumbItem>
-                </RnBreadcrumb>
-            </div>
+        // ==================== Breadcrumb ====================
+        new("Breadcrumb", "breadcrumb", "Displays the path to the current resource using a hierarchy of links.",
+            Demo: @<RnBreadcrumb>
+                <RnBreadcrumbItem>
+                    <RnBreadcrumbLink Href="/">Home</RnBreadcrumbLink>
+                </RnBreadcrumbItem>
+                <RnBreadcrumbSeparator />
+                <RnBreadcrumbItem>
+                    <RnBreadcrumbLink Href="/components">Components</RnBreadcrumbLink>
+                </RnBreadcrumbItem>
+                <RnBreadcrumbSeparator />
+                <RnBreadcrumbItem>
+                    <RnBreadcrumbPage>Breadcrumb</RnBreadcrumbPage>
+                </RnBreadcrumbItem>
+            </RnBreadcrumb>,
+            Thumbnail: @<RnBreadcrumb>
+                <RnBreadcrumbItem><RnBreadcrumbLink Href="#">Home</RnBreadcrumbLink></RnBreadcrumbItem>
+                <RnBreadcrumbSeparator />
+                <RnBreadcrumbItem><RnBreadcrumbPage>Page</RnBreadcrumbPage></RnBreadcrumbItem>
+            </RnBreadcrumb>,
+            Code: @"<RnBreadcrumb>
+    <RnBreadcrumbItem>
+        <RnBreadcrumbLink Href=""/"">Home</RnBreadcrumbLink>
+    </RnBreadcrumbItem>
+    <RnBreadcrumbSeparator />
+    <RnBreadcrumbItem>
+        <RnBreadcrumbLink Href=""/components"">Components</RnBreadcrumbLink>
+    </RnBreadcrumbItem>
+    <RnBreadcrumbSeparator />
+    <RnBreadcrumbItem>
+        <RnBreadcrumbPage>Breadcrumb</RnBreadcrumbPage>
+    </RnBreadcrumbItem>
+</RnBreadcrumb>",
+            UsageCode: @"@using RnUI.Components.UI.Breadcrumb
+
+<RnBreadcrumb>
+    <RnBreadcrumbItem>
+        <RnBreadcrumbLink Href=""/"">Home</RnBreadcrumbLink>
+    </RnBreadcrumbItem>
+    <RnBreadcrumbSeparator />
+    <RnBreadcrumbItem>
+        <RnBreadcrumbPage>Current</RnBreadcrumbPage>
+    </RnBreadcrumbItem>
+</RnBreadcrumb>"
         ),
 
+        // ==================== Button ====================
         new("Button", "button", "Displays a button or a component that looks like a button.",
-            @<div class="space-y-4">
-                <h3 class="text-sm font-medium">Variants</h3>
-                <div class="flex flex-wrap gap-4">
-                    <RnButton>Default</RnButton>
-                    <RnButton Variant="ButtonVariant.Secondary">Secondary</RnButton>
-                    <RnButton Variant="ButtonVariant.Outline">Outline</RnButton>
-                    <RnButton Variant="ButtonVariant.Ghost">Ghost</RnButton>
-                    <RnButton Variant="ButtonVariant.Destructive">Destructive</RnButton>
-                    <RnButton Variant="ButtonVariant.Link">Link</RnButton>
+            Demo: @<div class="space-y-6">
+                <div class="space-y-2">
+                    <p class="text-sm font-medium">Variants</p>
+                    <div class="flex flex-wrap gap-4">
+                        <RnButton>Default</RnButton>
+                        <RnButton Variant="ButtonVariant.Secondary">Secondary</RnButton>
+                        <RnButton Variant="ButtonVariant.Outline">Outline</RnButton>
+                        <RnButton Variant="ButtonVariant.Ghost">Ghost</RnButton>
+                        <RnButton Variant="ButtonVariant.Destructive">Destructive</RnButton>
+                        <RnButton Variant="ButtonVariant.Link">Link</RnButton>
+                    </div>
                 </div>
-                <h3 class="text-sm font-medium">Sizes</h3>
-                <div class="flex flex-wrap items-center gap-4">
-                    <RnButton Size="ButtonSize.Sm">Small</RnButton>
-                    <RnButton>Default</RnButton>
-                    <RnButton Size="ButtonSize.Lg">Large</RnButton>
+                <div class="space-y-2">
+                    <p class="text-sm font-medium">Sizes</p>
+                    <div class="flex flex-wrap items-center gap-4">
+                        <RnButton Size="ButtonSize.Sm">Small</RnButton>
+                        <RnButton>Default</RnButton>
+                        <RnButton Size="ButtonSize.Lg">Large</RnButton>
+                    </div>
                 </div>
-            </div>
+            </div>,
+            Thumbnail: @<div class="flex gap-2">
+                <RnButton Size="ButtonSize.Sm">Button</RnButton>
+                <RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">Outline</RnButton>
+            </div>,
+            Code: @"<RnButton>Default</RnButton>
+<RnButton Variant=""ButtonVariant.Secondary"">Secondary</RnButton>
+<RnButton Variant=""ButtonVariant.Outline"">Outline</RnButton>
+<RnButton Variant=""ButtonVariant.Ghost"">Ghost</RnButton>
+<RnButton Variant=""ButtonVariant.Destructive"">Destructive</RnButton>
+<RnButton Variant=""ButtonVariant.Link"">Link</RnButton>",
+            UsageCode: @"@using RnUI.Components.UI.Button
+
+<RnButton OnClick=""HandleClick"">Click me</RnButton>
+
+@code {
+    private void HandleClick() { }
+}",
+            Examples:
+            [
+                new("Secondary", null,
+                    @<RnButton Variant="ButtonVariant.Secondary">Secondary</RnButton>,
+                    @"<RnButton Variant=""ButtonVariant.Secondary"">Secondary</RnButton>"),
+                new("Outline", null,
+                    @<RnButton Variant="ButtonVariant.Outline">Outline</RnButton>,
+                    @"<RnButton Variant=""ButtonVariant.Outline"">Outline</RnButton>"),
+                new("Ghost", null,
+                    @<RnButton Variant="ButtonVariant.Ghost">Ghost</RnButton>,
+                    @"<RnButton Variant=""ButtonVariant.Ghost"">Ghost</RnButton>"),
+                new("Destructive", null,
+                    @<RnButton Variant="ButtonVariant.Destructive">Destructive</RnButton>,
+                    @"<RnButton Variant=""ButtonVariant.Destructive"">Destructive</RnButton>"),
+                new("Link", null,
+                    @<RnButton Variant="ButtonVariant.Link">Link</RnButton>,
+                    @"<RnButton Variant=""ButtonVariant.Link"">Link</RnButton>"),
+                new("Small", null,
+                    @<RnButton Size="ButtonSize.Sm">Small</RnButton>,
+                    @"<RnButton Size=""ButtonSize.Sm"">Small</RnButton>"),
+                new("Large", null,
+                    @<RnButton Size="ButtonSize.Lg">Large</RnButton>,
+                    @"<RnButton Size=""ButtonSize.Lg"">Large</RnButton>")
+            ]
         ),
 
-        new("Button Group", "button-group", "A container that groups related buttons together.",
-            @<div class="space-y-6">
+        // ==================== Button Group ====================
+        new("Button Group", "button-group", "Groups related buttons together.",
+            Demo: @<div class="space-y-6">
                 <div class="space-y-2">
-                    <h3 class="text-sm font-medium">Horizontal</h3>
+                    <p class="text-sm font-medium">Horizontal</p>
                     <RnButtonGroup>
                         <RnButton Variant="ButtonVariant.Outline">Button 1</RnButton>
                         <RnButton Variant="ButtonVariant.Outline">Button 2</RnButton>
@@ -236,25 +511,56 @@ else
                     </RnButtonGroup>
                 </div>
                 <div class="space-y-2">
-                    <h3 class="text-sm font-medium">Vertical</h3>
+                    <p class="text-sm font-medium">Vertical</p>
                     <RnButtonGroup Orientation="ButtonGroupOrientation.Vertical">
                         <RnButton Variant="ButtonVariant.Outline">Button 1</RnButton>
                         <RnButton Variant="ButtonVariant.Outline">Button 2</RnButton>
                         <RnButton Variant="ButtonVariant.Outline">Button 3</RnButton>
                     </RnButtonGroup>
                 </div>
-            </div>
+            </div>,
+            Thumbnail: @<RnButtonGroup>
+                <RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">A</RnButton>
+                <RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">B</RnButton>
+                <RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">C</RnButton>
+            </RnButtonGroup>,
+            Code: @"<RnButtonGroup>
+    <RnButton Variant=""ButtonVariant.Outline"">Button 1</RnButton>
+    <RnButton Variant=""ButtonVariant.Outline"">Button 2</RnButton>
+    <RnButton Variant=""ButtonVariant.Outline"">Button 3</RnButton>
+</RnButtonGroup>",
+            UsageCode: @"@using RnUI.Components.UI.ButtonGroup
+
+<RnButtonGroup>
+    <RnButton>A</RnButton>
+    <RnButton>B</RnButton>
+</RnButtonGroup>"
         ),
 
+        // ==================== Calendar ====================
         new("Calendar", "calendar", "A date field component that allows users to enter and edit date.",
-            @<div class="max-w-xs">
+            Demo: @<div>
                 <RnCalendar @bind-Selected="_calendarDate" />
                 <p class="text-sm text-muted-foreground mt-2">Selected: @(_calendarDate?.ToString("MMM dd, yyyy") ?? "None")</p>
-            </div>
+            </div>,
+            Thumbnail: @<div class="text-xs text-muted-foreground">Calendar</div>,
+            Code: @"<RnCalendar @bind-Selected=""_date"" />
+
+@code {
+    private DateTime? _date;
+}",
+            UsageCode: @"@using RnUI.Components.UI.Calendar
+
+<RnCalendar @bind-Selected=""_date"" />
+
+@code {
+    private DateTime? _date;
+}"
         ),
 
+        // ==================== Card ====================
         new("Card", "card", "Displays a card with header, content, and footer.",
-            @<div class="grid gap-4 md:grid-cols-2">
+            Demo: @<div class="w-full max-w-sm">
                 <RnCard>
                     <RnCardHeader>
                         <RnCardTitle>Card Title</RnCardTitle>
@@ -267,20 +573,42 @@ else
                         <RnButton>Action</RnButton>
                     </RnCardFooter>
                 </RnCard>
+            </div>,
+            Thumbnail: @<div class="w-[180px]">
                 <RnCard>
                     <RnCardHeader>
-                        <RnCardTitle>Another Card</RnCardTitle>
-                        <RnCardDescription>With different content.</RnCardDescription>
+                        <RnCardTitle>Card</RnCardTitle>
+                        <RnCardDescription>Description</RnCardDescription>
                     </RnCardHeader>
-                    <RnCardContent>
-                        <p>More example content here.</p>
-                    </RnCardContent>
                 </RnCard>
-            </div>
+            </div>,
+            Code: @"<RnCard>
+    <RnCardHeader>
+        <RnCardTitle>Card Title</RnCardTitle>
+        <RnCardDescription>Card description.</RnCardDescription>
+    </RnCardHeader>
+    <RnCardContent>
+        <p>Card content with some example text.</p>
+    </RnCardContent>
+    <RnCardFooter>
+        <RnButton>Action</RnButton>
+    </RnCardFooter>
+</RnCard>",
+            UsageCode: @"@using RnUI.Components.UI.Card
+
+<RnCard>
+    <RnCardHeader>
+        <RnCardTitle>Title</RnCardTitle>
+        <RnCardDescription>Description</RnCardDescription>
+    </RnCardHeader>
+    <RnCardContent>Content</RnCardContent>
+    <RnCardFooter>Footer</RnCardFooter>
+</RnCard>"
         ),
 
-        new("Carousel", "carousel", "A carousel with motion and swipe built on top of a slide container.",
-            @<div class="max-w-xs mx-auto">
+        // ==================== Carousel ====================
+        new("Carousel", "carousel", "A carousel with motion and swipe built using Embla.",
+            Demo: @<div class="w-full max-w-xs mx-auto">
                 <RnCarousel>
                     <RnCarouselContent>
                         @for (var i = 1; i <= 5; i++)
@@ -300,21 +628,66 @@ else
                     <RnCarouselPrevious />
                     <RnCarouselNext />
                 </RnCarousel>
-            </div>
+            </div>,
+            Thumbnail: @<div class="text-xs text-muted-foreground">Carousel</div>,
+            Code: @"<RnCarousel>
+    <RnCarouselContent>
+        <RnCarouselItem>
+            <RnCard>
+                <RnCardContent Class=""flex aspect-square items-center justify-center p-6"">
+                    <span class=""text-4xl font-semibold"">1</span>
+                </RnCardContent>
+            </RnCard>
+        </RnCarouselItem>
+    </RnCarouselContent>
+    <RnCarouselPrevious />
+    <RnCarouselNext />
+</RnCarousel>",
+            UsageCode: @"@using RnUI.Components.UI.Carousel
+
+<RnCarousel>
+    <RnCarouselContent>
+        <RnCarouselItem>Slide 1</RnCarouselItem>
+        <RnCarouselItem>Slide 2</RnCarouselItem>
+    </RnCarouselContent>
+    <RnCarouselPrevious />
+    <RnCarouselNext />
+</RnCarousel>"
         ),
 
-        new("Checkbox", "checkbox", "A control that allows toggling between checked and unchecked.",
-            @<div class="space-y-4">
+        // ==================== Checkbox ====================
+        new("Checkbox", "checkbox", "A control that allows the user to toggle between checked and not checked.",
+            Demo: @<div class="space-y-4">
                 <div class="flex items-center space-x-2">
                     <RnCheckbox @bind-Checked="_checkboxValue" />
                     <RnLabel>Accept terms and conditions</RnLabel>
                 </div>
                 <p class="text-sm text-muted-foreground">Checked: @_checkboxValue</p>
-            </div>
+            </div>,
+            Thumbnail: @<div class="flex items-center gap-2">
+                <RnCheckbox Checked="true" />
+                <span class="text-xs">Checked</span>
+            </div>,
+            Code: @"<div class=""flex items-center space-x-2"">
+    <RnCheckbox @bind-Checked=""_checked"" />
+    <RnLabel>Accept terms and conditions</RnLabel>
+</div>
+
+@code {
+    private bool _checked;
+}",
+            UsageCode: @"@using RnUI.Components.UI.Checkbox
+
+<RnCheckbox @bind-Checked=""_checked"" />
+
+@code {
+    private bool _checked;
+}"
         ),
 
-        new("Collapsible", "collapsible", "An interactive component that expands/collapses.",
-            @<div class="max-w-md">
+        // ==================== Collapsible ====================
+        new("Collapsible", "collapsible", "An interactive component which expands/collapses a panel.",
+            Demo: @<div class="w-full max-w-md">
                 <RnCollapsible @bind-Open="_collapsibleOpen">
                     <Trigger>
                         <div class="flex items-center justify-between space-x-4 px-4">
@@ -332,11 +705,38 @@ else
                         </div>
                     </ChildContent>
                 </RnCollapsible>
-            </div>
+            </div>,
+            Thumbnail: @<div class="text-xs text-muted-foreground">Collapsible</div>,
+            Code: @"<RnCollapsible @bind-Open=""_open"">
+    <Trigger>
+        <div class=""flex items-center justify-between"">
+            <h4>starred repositories</h4>
+            <RnButton Variant=""ButtonVariant.Ghost"" Size=""ButtonSize.Sm"">
+                @(_open ? ""Hide"" : ""Show"")
+            </RnButton>
+        </div>
+    </Trigger>
+    <ChildContent>
+        <div class=""rounded-md border px-4 py-3 text-sm"">
+            shadcn/ui
+        </div>
+    </ChildContent>
+</RnCollapsible>",
+            UsageCode: @"@using RnUI.Components.UI.Collapsible
+
+<RnCollapsible @bind-Open=""_open"">
+    <Trigger>Toggle</Trigger>
+    <ChildContent>Content</ChildContent>
+</RnCollapsible>
+
+@code {
+    private bool _open;
+}"
         ),
 
+        // ==================== Combobox ====================
         new("Combobox", "combobox", "Autocomplete input and command palette with a list of suggestions.",
-            @<div class="space-y-4">
+            Demo: @<div class="space-y-4">
                 <RnCombobox @bind-Value="_comboboxValue" Placeholder="Select framework...">
                     <RnComboboxItem Value="next" Label="Next.js">Next.js</RnComboboxItem>
                     <RnComboboxItem Value="sveltekit" Label="SvelteKit">SvelteKit</RnComboboxItem>
@@ -345,11 +745,32 @@ else
                     <RnComboboxItem Value="astro" Label="Astro">Astro</RnComboboxItem>
                 </RnCombobox>
                 <p class="text-sm text-muted-foreground">Selected: @(_comboboxValue ?? "None")</p>
-            </div>
+            </div>,
+            Thumbnail: @<div class="text-xs text-muted-foreground">Combobox</div>,
+            Code: @"<RnCombobox @bind-Value=""_value"" Placeholder=""Select framework..."">
+    <RnComboboxItem Value=""next"" Label=""Next.js"">Next.js</RnComboboxItem>
+    <RnComboboxItem Value=""sveltekit"" Label=""SvelteKit"">SvelteKit</RnComboboxItem>
+    <RnComboboxItem Value=""nuxt"" Label=""Nuxt.js"">Nuxt.js</RnComboboxItem>
+</RnCombobox>
+
+@code {
+    private string? _value;
+}",
+            UsageCode: @"@using RnUI.Components.UI.Combobox
+
+<RnCombobox @bind-Value=""_value"" Placeholder=""Select..."">
+    <RnComboboxItem Value=""a"" Label=""Option A"">Option A</RnComboboxItem>
+    <RnComboboxItem Value=""b"" Label=""Option B"">Option B</RnComboboxItem>
+</RnCombobox>
+
+@code {
+    private string? _value;
+}"
         ),
 
+        // ==================== Command ====================
         new("Command", "command", "Fast, composable, unstyled command menu.",
-            @<div class="space-y-4 max-w-md">
+            Demo: @<div class="w-full max-w-md">
                 <RnCommand Class="rounded-lg border shadow-md">
                     <RnCommandInput Placeholder="Type a command or search..." />
                     <RnCommandList>
@@ -367,37 +788,94 @@ else
                         </RnCommandGroup>
                     </RnCommandList>
                 </RnCommand>
-            </div>
+            </div>,
+            Thumbnail: @<div class="text-xs text-muted-foreground">Command</div>,
+            Code: @"<RnCommand Class=""rounded-lg border shadow-md"">
+    <RnCommandInput Placeholder=""Type a command..."" />
+    <RnCommandList>
+        <RnCommandEmpty>No results found.</RnCommandEmpty>
+        <RnCommandGroup Heading=""Suggestions"">
+            <RnCommandItem>Calendar</RnCommandItem>
+            <RnCommandItem>Search Emoji</RnCommandItem>
+        </RnCommandGroup>
+    </RnCommandList>
+</RnCommand>",
+            UsageCode: @"@using RnUI.Components.UI.Command
+
+<RnCommand>
+    <RnCommandInput Placeholder=""Search..."" />
+    <RnCommandList>
+        <RnCommandGroup Heading=""Group"">
+            <RnCommandItem>Item</RnCommandItem>
+        </RnCommandGroup>
+    </RnCommandList>
+</RnCommand>"
         ),
 
-        new("Context Menu", "context-menu", "A menu displayed on right-click.",
-            @<div>
-                <RnContextMenu>
-                    <Trigger>
-                        <div class="flex h-[150px] w-[300px] items-center justify-center rounded-md border border-dashed text-sm">
-                            Right click here
-                        </div>
-                    </Trigger>
-                    <ChildContent>
-                        <RnDropdownMenuLabel>Actions</RnDropdownMenuLabel>
-                        <RnDropdownMenuSeparator />
-                        <RnDropdownMenuItem>Back</RnDropdownMenuItem>
-                        <RnDropdownMenuItem>Forward</RnDropdownMenuItem>
-                        <RnDropdownMenuItem>Reload</RnDropdownMenuItem>
-                    </ChildContent>
-                </RnContextMenu>
-            </div>
+        // ==================== Context Menu ====================
+        new("Context Menu", "context-menu", "Displays a menu to the user on right click.",
+            Demo: @<RnContextMenu>
+                <Trigger>
+                    <div class="flex h-[150px] w-[300px] items-center justify-center rounded-md border border-dashed text-sm">
+                        Right click here
+                    </div>
+                </Trigger>
+                <ChildContent>
+                    <RnDropdownMenuLabel>Actions</RnDropdownMenuLabel>
+                    <RnDropdownMenuSeparator />
+                    <RnDropdownMenuItem>Back</RnDropdownMenuItem>
+                    <RnDropdownMenuItem>Forward</RnDropdownMenuItem>
+                    <RnDropdownMenuItem>Reload</RnDropdownMenuItem>
+                </ChildContent>
+            </RnContextMenu>,
+            Thumbnail: @<div class="flex h-[60px] w-[120px] items-center justify-center rounded-md border border-dashed text-xs text-muted-foreground">Right click</div>,
+            Code: @"<RnContextMenu>
+    <Trigger>
+        <div class=""flex h-[150px] w-[300px] items-center justify-center rounded-md border border-dashed text-sm"">
+            Right click here
+        </div>
+    </Trigger>
+    <ChildContent>
+        <RnDropdownMenuLabel>Actions</RnDropdownMenuLabel>
+        <RnDropdownMenuSeparator />
+        <RnDropdownMenuItem>Back</RnDropdownMenuItem>
+        <RnDropdownMenuItem>Forward</RnDropdownMenuItem>
+    </ChildContent>
+</RnContextMenu>",
+            UsageCode: @"@using RnUI.Components.UI.ContextMenu
+
+<RnContextMenu>
+    <Trigger>Right click target</Trigger>
+    <ChildContent>
+        <RnDropdownMenuItem>Action</RnDropdownMenuItem>
+    </ChildContent>
+</RnContextMenu>"
         ),
 
-        new("Date Picker", "date-picker", "A date picker component with a calendar popup.",
-            @<div class="space-y-4">
+        // ==================== Date Picker ====================
+        new("Date Picker", "date-picker", "A date picker component with calendar popup.",
+            Demo: @<div class="space-y-4">
                 <RnDatePicker @bind-Value="_datePickerValue" Placeholder="Pick a date" />
                 <p class="text-sm text-muted-foreground">Selected: @(_datePickerValue?.ToString("MMM dd, yyyy") ?? "None")</p>
-            </div>
+            </div>,
+            Thumbnail: @<div class="text-xs text-muted-foreground">Date Picker</div>,
+            Code: @"<RnDatePicker @bind-Value=""_date"" Placeholder=""Pick a date"" />
+
+@code {
+    private DateTime? _date;
+}",
+            UsageCode: @"@using RnUI.Components.UI.DatePicker
+
+<RnDatePicker @bind-Value=""_date"" Placeholder=""Pick a date"" />
+
+@code {
+    private DateTime? _date;
+}"
         ),
 
-        new("Dialog", "dialog", "A window overlaid on the primary content.",
-            @<div class="space-y-4">
+        // ==================== Dialog ====================
+        new("Dialog", "dialog", "A window overlaid on either the primary window or another dialog window.",
+            Demo: @<div>
                 <RnButton OnClick="() => _dialogOpen = true">Open Dialog</RnButton>
                 <RnDialog @bind-Open="_dialogOpen">
                     <RnDialogHeader>
@@ -419,11 +897,46 @@ else
                         <RnButton OnClick="() => _dialogOpen = false">Save changes</RnButton>
                     </RnDialogFooter>
                 </RnDialog>
-            </div>
+            </div>,
+            Thumbnail: @<RnButton Size="ButtonSize.Sm">Open Dialog</RnButton>,
+            Code: @"<RnButton OnClick=""() => _open = true"">Open Dialog</RnButton>
+<RnDialog @bind-Open=""_open"">
+    <RnDialogHeader>
+        <RnDialogTitle>Edit Profile</RnDialogTitle>
+        <RnDialogDescription>
+            Make changes to your profile here.
+        </RnDialogDescription>
+    </RnDialogHeader>
+    <div class=""grid gap-4 py-4"">
+        <RnLabel>Name</RnLabel>
+        <RnInput Placeholder=""Your name"" />
+    </div>
+    <RnDialogFooter>
+        <RnButton OnClick=""() => _open = false"">Save</RnButton>
+    </RnDialogFooter>
+</RnDialog>
+
+@code {
+    private bool _open;
+}",
+            UsageCode: @"@using RnUI.Components.UI.Dialog
+
+<RnDialog @bind-Open=""_open"">
+    <RnDialogHeader>
+        <RnDialogTitle>Title</RnDialogTitle>
+    </RnDialogHeader>
+    Content
+    <RnDialogFooter>Footer</RnDialogFooter>
+</RnDialog>
+
+@code {
+    private bool _open;
+}"
         ),
 
-        new("Drawer", "drawer", "A drawer component that slides from the bottom of the screen.",
-            @<div class="space-y-4">
+        // ==================== Drawer ====================
+        new("Drawer", "drawer", "A drawer component for mobile interfaces.",
+            Demo: @<div>
                 <RnButton Variant="ButtonVariant.Outline" OnClick="() => _drawerOpen = true">Open Drawer</RnButton>
                 <RnDrawer @bind-Open="_drawerOpen">
                     <RnDrawerContent>
@@ -440,38 +953,104 @@ else
                         </RnDrawerFooter>
                     </RnDrawerContent>
                 </RnDrawer>
-            </div>
+            </div>,
+            Thumbnail: @<RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">Open Drawer</RnButton>,
+            Code: @"<RnButton OnClick=""() => _open = true"">Open Drawer</RnButton>
+<RnDrawer @bind-Open=""_open"">
+    <RnDrawerContent>
+        <RnDrawerHeader>
+            <RnDrawerTitle>Title</RnDrawerTitle>
+            <RnDrawerDescription>Description</RnDrawerDescription>
+        </RnDrawerHeader>
+        <div class=""p-4"">Content</div>
+        <RnDrawerFooter>
+            <RnButton OnClick=""() => _open = false"">Submit</RnButton>
+        </RnDrawerFooter>
+    </RnDrawerContent>
+</RnDrawer>
+
+@code {
+    private bool _open;
+}",
+            UsageCode: @"@using RnUI.Components.UI.Drawer
+
+<RnDrawer @bind-Open=""_open"">
+    <RnDrawerContent>
+        <RnDrawerHeader>
+            <RnDrawerTitle>Title</RnDrawerTitle>
+        </RnDrawerHeader>
+        Content
+    </RnDrawerContent>
+</RnDrawer>
+
+@code {
+    private bool _open;
+}"
         ),
 
-        new("Dropdown Menu", "dropdown-menu", "A menu displayed on trigger click.",
-            @<div>
-                <RnDropdownMenu>
-                    <Trigger>
-                        <RnButton Variant="ButtonVariant.Outline">Open Menu</RnButton>
-                    </Trigger>
-                    <ChildContent>
-                        <RnDropdownMenuLabel>My Account</RnDropdownMenuLabel>
-                        <RnDropdownMenuSeparator />
-                        <RnDropdownMenuItem>Profile</RnDropdownMenuItem>
-                        <RnDropdownMenuItem>Settings</RnDropdownMenuItem>
-                        <RnDropdownMenuItem>Billing</RnDropdownMenuItem>
-                        <RnDropdownMenuSeparator />
-                        <RnDropdownMenuItem>Log out</RnDropdownMenuItem>
-                    </ChildContent>
-                </RnDropdownMenu>
-            </div>
+        // ==================== Dropdown Menu ====================
+        new("Dropdown Menu", "dropdown-menu", "Displays a menu to the user triggered by a button.",
+            Demo: @<RnDropdownMenu>
+                <Trigger>
+                    <RnButton Variant="ButtonVariant.Outline">Open Menu</RnButton>
+                </Trigger>
+                <ChildContent>
+                    <RnDropdownMenuLabel>My Account</RnDropdownMenuLabel>
+                    <RnDropdownMenuSeparator />
+                    <RnDropdownMenuItem>Profile</RnDropdownMenuItem>
+                    <RnDropdownMenuItem>Settings</RnDropdownMenuItem>
+                    <RnDropdownMenuItem>Billing</RnDropdownMenuItem>
+                    <RnDropdownMenuSeparator />
+                    <RnDropdownMenuItem>Log out</RnDropdownMenuItem>
+                </ChildContent>
+            </RnDropdownMenu>,
+            Thumbnail: @<RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">Menu</RnButton>,
+            Code: @"<RnDropdownMenu>
+    <Trigger>
+        <RnButton Variant=""ButtonVariant.Outline"">Open Menu</RnButton>
+    </Trigger>
+    <ChildContent>
+        <RnDropdownMenuLabel>My Account</RnDropdownMenuLabel>
+        <RnDropdownMenuSeparator />
+        <RnDropdownMenuItem>Profile</RnDropdownMenuItem>
+        <RnDropdownMenuItem>Settings</RnDropdownMenuItem>
+        <RnDropdownMenuSeparator />
+        <RnDropdownMenuItem>Log out</RnDropdownMenuItem>
+    </ChildContent>
+</RnDropdownMenu>",
+            UsageCode: @"@using RnUI.Components.UI.DropdownMenu
+
+<RnDropdownMenu>
+    <Trigger>
+        <RnButton>Menu</RnButton>
+    </Trigger>
+    <ChildContent>
+        <RnDropdownMenuItem>Item</RnDropdownMenuItem>
+    </ChildContent>
+</RnDropdownMenu>"
         ),
 
-        new("Empty", "empty", "Empty state placeholder.",
-            @<div class="max-w-md">
+        // ==================== Empty ====================
+        new("Empty", "empty", "Empty state placeholder for when there is no data.",
+            Demo: @<div class="w-full max-w-md">
                 <RnEmpty Class="border rounded-md py-12">
                     <p class="text-muted-foreground">No items to display.</p>
                 </RnEmpty>
-            </div>
+            </div>,
+            Thumbnail: @<div class="w-[140px] text-center text-xs text-muted-foreground border rounded-md py-4">No items</div>,
+            Code: @"<RnEmpty Class=""border rounded-md py-12"">
+    <p class=""text-muted-foreground"">No items to display.</p>
+</RnEmpty>",
+            UsageCode: @"@using RnUI.Components.UI.Empty
+
+<RnEmpty>
+    <p>No data available.</p>
+</RnEmpty>"
         ),
 
+        // ==================== Form ====================
         new("Form", "form", "Building forms with validation and accessible error messages.",
-            @<div class="max-w-sm space-y-4">
+            Demo: @<div class="w-full max-w-sm space-y-4">
                 <RnFormItem>
                     <RnFormLabel For="username">Username</RnFormLabel>
                     <RnInput id="username" Placeholder="shadcn" />
@@ -482,27 +1061,71 @@ else
                     <RnInput id="email" Type="email" Placeholder="m@example.com" />
                     <RnFormMessage Message="Please enter a valid email address." />
                 </RnFormItem>
-            </div>
+            </div>,
+            Thumbnail: @<div class="w-[160px] space-y-2">
+                <div class="text-xs font-medium">Username</div>
+                <div class="h-6 rounded-md border bg-background"></div>
+            </div>,
+            Code: @"<RnFormItem>
+    <RnFormLabel For=""username"">Username</RnFormLabel>
+    <RnInput id=""username"" Placeholder=""shadcn"" />
+    <RnFormDescription>
+        This is your public display name.
+    </RnFormDescription>
+</RnFormItem>
+<RnFormItem>
+    <RnFormLabel For=""email"">Email</RnFormLabel>
+    <RnInput id=""email"" Type=""email"" Placeholder=""m@example.com"" />
+    <RnFormMessage Message=""Please enter a valid email."" />
+</RnFormItem>",
+            UsageCode: @"@using RnUI.Components.UI.Form
+
+<RnFormItem>
+    <RnFormLabel For=""field"">Label</RnFormLabel>
+    <RnInput id=""field"" />
+    <RnFormDescription>Help text</RnFormDescription>
+    <RnFormMessage Message=""Error message"" />
+</RnFormItem>"
         ),
 
-        new("Hover Card", "hover-card", "Allows sighted users to preview content behind a link.",
-            @<div>
-                <RnHoverCard>
-                    <Trigger>
-                        <RnButton Variant="ButtonVariant.Link">Hover over me</RnButton>
-                    </Trigger>
-                    <ChildContent>
-                        <div class="space-y-2">
-                            <h4 class="text-sm font-semibold">RnUI</h4>
-                            <p class="text-sm text-muted-foreground">A Blazor port of shadcn/ui components.</p>
-                        </div>
-                    </ChildContent>
-                </RnHoverCard>
-            </div>
+        // ==================== Hover Card ====================
+        new("Hover Card", "hover-card", "For sighted users to preview content available behind a link.",
+            Demo: @<RnHoverCard>
+                <Trigger>
+                    <RnButton Variant="ButtonVariant.Link">Hover over me</RnButton>
+                </Trigger>
+                <ChildContent>
+                    <div class="space-y-2">
+                        <h4 class="text-sm font-semibold">RnUI</h4>
+                        <p class="text-sm text-muted-foreground">A Blazor port of shadcn/ui components.</p>
+                    </div>
+                </ChildContent>
+            </RnHoverCard>,
+            Thumbnail: @<RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Link">Hover me</RnButton>,
+            Code: @"<RnHoverCard>
+    <Trigger>
+        <RnButton Variant=""ButtonVariant.Link"">Hover over me</RnButton>
+    </Trigger>
+    <ChildContent>
+        <div class=""space-y-2"">
+            <h4 class=""text-sm font-semibold"">RnUI</h4>
+            <p class=""text-sm text-muted-foreground"">
+                A Blazor port of shadcn/ui.
+            </p>
+        </div>
+    </ChildContent>
+</RnHoverCard>",
+            UsageCode: @"@using RnUI.Components.UI.HoverCard
+
+<RnHoverCard>
+    <Trigger>Hover target</Trigger>
+    <ChildContent>Popup content</ChildContent>
+</RnHoverCard>"
         ),
 
-        new("Input", "input", "Displays a form input field.",
-            @<div class="space-y-4 max-w-sm">
+        // ==================== Input ====================
+        new("Input", "input", "Displays a form input field or a component that looks like an input field.",
+            Demo: @<div class="w-full max-w-sm space-y-4">
                 <div class="space-y-2">
                     <RnLabel>Email</RnLabel>
                     <RnInput Type="email" Placeholder="Enter your email" />
@@ -515,11 +1138,30 @@ else
                     <RnLabel>Disabled</RnLabel>
                     <RnInput Placeholder="Disabled input" Disabled="true" />
                 </div>
-            </div>
+            </div>,
+            Thumbnail: @<div class="w-[160px]">
+                <RnInput Placeholder="Email" />
+            </div>,
+            Code: @"<div class=""space-y-2"">
+    <RnLabel>Email</RnLabel>
+    <RnInput Type=""email"" Placeholder=""Enter your email"" />
+</div>
+<div class=""space-y-2"">
+    <RnLabel>Password</RnLabel>
+    <RnInput Type=""password"" Placeholder=""Enter your password"" />
+</div>
+<div class=""space-y-2"">
+    <RnLabel>Disabled</RnLabel>
+    <RnInput Placeholder=""Disabled"" Disabled=""true"" />
+</div>",
+            UsageCode: @"@using RnUI.Components.UI.Input
+
+<RnInput Type=""email"" Placeholder=""Email"" />"
         ),
 
+        // ==================== Input OTP ====================
         new("Input OTP", "input-otp", "Accessible one-time password component with copy paste functionality.",
-            @<div class="space-y-4">
+            Demo: @<div class="space-y-4">
                 <RnInputOTP @bind-Value="_otpValue" MaxLength="6">
                     <RnInputOTPGroup>
                         <RnInputOTPSlot Index="0" />
@@ -533,138 +1175,282 @@ else
                         <RnInputOTPSlot Index="5" />
                     </RnInputOTPGroup>
                 </RnInputOTP>
-                <p class="text-sm text-muted-foreground">Value: @(_otpValue)</p>
-            </div>
+                <p class="text-sm text-muted-foreground">Value: @_otpValue</p>
+            </div>,
+            Thumbnail: @<div class="text-xs text-muted-foreground">OTP Input</div>,
+            Code: @"<RnInputOTP @bind-Value=""_otp"" MaxLength=""6"">
+    <RnInputOTPGroup>
+        <RnInputOTPSlot Index=""0"" />
+        <RnInputOTPSlot Index=""1"" />
+        <RnInputOTPSlot Index=""2"" />
+    </RnInputOTPGroup>
+    <RnInputOTPSeparator />
+    <RnInputOTPGroup>
+        <RnInputOTPSlot Index=""3"" />
+        <RnInputOTPSlot Index=""4"" />
+        <RnInputOTPSlot Index=""5"" />
+    </RnInputOTPGroup>
+</RnInputOTP>
+
+@code {
+    private string _otp = """";
+}",
+            UsageCode: @"@using RnUI.Components.UI.InputOTP
+
+<RnInputOTP @bind-Value=""_otp"" MaxLength=""6"">
+    <RnInputOTPGroup>
+        <RnInputOTPSlot Index=""0"" />
+        <RnInputOTPSlot Index=""1"" />
+    </RnInputOTPGroup>
+</RnInputOTP>
+
+@code {
+    private string _otp = """";
+}"
         ),
 
-        new("Kbd", "kbd", "Displays keyboard shortcut styling.",
-            @<div class="space-y-4">
+        // ==================== Kbd ====================
+        new("Kbd", "kbd", "Displays a keyboard key or shortcut.",
+            Demo: @<div class="space-y-4">
                 <p class="text-sm text-muted-foreground">
                     Press <RnKbd>Ctrl</RnKbd> + <RnKbd>K</RnKbd> to open the command palette.
                 </p>
                 <p class="text-sm text-muted-foreground">
                     Press <RnKbd>Esc</RnKbd> to close.
                 </p>
-            </div>
+            </div>,
+            Thumbnail: @<div class="flex gap-1">
+                <RnKbd>Ctrl</RnKbd><span class="text-xs text-muted-foreground">+</span><RnKbd>K</RnKbd>
+            </div>,
+            Code: @"<p>
+    Press <RnKbd>Ctrl</RnKbd> + <RnKbd>K</RnKbd>
+    to open the command palette.
+</p>",
+            UsageCode: @"@using RnUI.Components.UI.Kbd
+
+<RnKbd>Ctrl</RnKbd>"
         ),
 
-        new("Label", "label", "Renders an accessible label for form controls.",
-            @<div class="space-y-4 max-w-sm">
-                <div class="space-y-2">
-                    <RnLabel For="name-input">Your Name</RnLabel>
-                    <RnInput id="name-input" Placeholder="Enter your name" />
-                </div>
-            </div>
+        // ==================== Label ====================
+        new("Label", "label", "Renders an accessible label associated with controls.",
+            Demo: @<div class="w-full max-w-sm space-y-2">
+                <RnLabel For="name-input">Your Name</RnLabel>
+                <RnInput id="name-input" Placeholder="Enter your name" />
+            </div>,
+            Thumbnail: @<div class="space-y-1 w-[140px]">
+                <RnLabel>Label</RnLabel>
+                <RnInput Placeholder="Input" />
+            </div>,
+            Code: @"<RnLabel For=""name-input"">Your Name</RnLabel>
+<RnInput id=""name-input"" Placeholder=""Enter your name"" />",
+            UsageCode: @"@using RnUI.Components.UI.Label
+
+<RnLabel For=""field"">Label</RnLabel>"
         ),
 
+        // ==================== Menubar ====================
         new("Menubar", "menubar", "A visually persistent menu common in desktop applications.",
-            @<div>
-                <RnMenubar>
-                    <RnMenubarMenu>
-                        <RnMenubarTrigger>File</RnMenubarTrigger>
-                        <RnMenubarContent>
-                            <RnMenubarItem>New Tab</RnMenubarItem>
-                            <RnMenubarItem>New Window</RnMenubarItem>
-                            <RnMenubarSeparator />
-                            <RnMenubarItem>Share</RnMenubarItem>
-                            <RnMenubarSeparator />
-                            <RnMenubarItem>Print</RnMenubarItem>
-                        </RnMenubarContent>
-                    </RnMenubarMenu>
-                    <RnMenubarMenu>
-                        <RnMenubarTrigger>Edit</RnMenubarTrigger>
-                        <RnMenubarContent>
-                            <RnMenubarItem>Undo</RnMenubarItem>
-                            <RnMenubarItem>Redo</RnMenubarItem>
-                            <RnMenubarSeparator />
-                            <RnMenubarItem>Cut</RnMenubarItem>
-                            <RnMenubarItem>Copy</RnMenubarItem>
-                            <RnMenubarItem>Paste</RnMenubarItem>
-                        </RnMenubarContent>
-                    </RnMenubarMenu>
-                    <RnMenubarMenu>
-                        <RnMenubarTrigger>View</RnMenubarTrigger>
-                        <RnMenubarContent>
-                            <RnMenubarItem>Zoom In</RnMenubarItem>
-                            <RnMenubarItem>Zoom Out</RnMenubarItem>
-                        </RnMenubarContent>
-                    </RnMenubarMenu>
-                </RnMenubar>
-            </div>
+            Demo: @<RnMenubar>
+                <RnMenubarMenu>
+                    <RnMenubarTrigger>File</RnMenubarTrigger>
+                    <RnMenubarContent>
+                        <RnMenubarItem>New Tab</RnMenubarItem>
+                        <RnMenubarItem>New Window</RnMenubarItem>
+                        <RnMenubarSeparator />
+                        <RnMenubarItem>Share</RnMenubarItem>
+                        <RnMenubarSeparator />
+                        <RnMenubarItem>Print</RnMenubarItem>
+                    </RnMenubarContent>
+                </RnMenubarMenu>
+                <RnMenubarMenu>
+                    <RnMenubarTrigger>Edit</RnMenubarTrigger>
+                    <RnMenubarContent>
+                        <RnMenubarItem>Undo</RnMenubarItem>
+                        <RnMenubarItem>Redo</RnMenubarItem>
+                        <RnMenubarSeparator />
+                        <RnMenubarItem>Cut</RnMenubarItem>
+                        <RnMenubarItem>Copy</RnMenubarItem>
+                        <RnMenubarItem>Paste</RnMenubarItem>
+                    </RnMenubarContent>
+                </RnMenubarMenu>
+                <RnMenubarMenu>
+                    <RnMenubarTrigger>View</RnMenubarTrigger>
+                    <RnMenubarContent>
+                        <RnMenubarItem>Zoom In</RnMenubarItem>
+                        <RnMenubarItem>Zoom Out</RnMenubarItem>
+                    </RnMenubarContent>
+                </RnMenubarMenu>
+            </RnMenubar>,
+            Thumbnail: @<div class="text-xs text-muted-foreground">Menubar</div>,
+            Code: @"<RnMenubar>
+    <RnMenubarMenu>
+        <RnMenubarTrigger>File</RnMenubarTrigger>
+        <RnMenubarContent>
+            <RnMenubarItem>New Tab</RnMenubarItem>
+            <RnMenubarItem>New Window</RnMenubarItem>
+            <RnMenubarSeparator />
+            <RnMenubarItem>Print</RnMenubarItem>
+        </RnMenubarContent>
+    </RnMenubarMenu>
+    <RnMenubarMenu>
+        <RnMenubarTrigger>Edit</RnMenubarTrigger>
+        <RnMenubarContent>
+            <RnMenubarItem>Undo</RnMenubarItem>
+            <RnMenubarItem>Redo</RnMenubarItem>
+        </RnMenubarContent>
+    </RnMenubarMenu>
+</RnMenubar>",
+            UsageCode: @"@using RnUI.Components.UI.Menubar
+
+<RnMenubar>
+    <RnMenubarMenu>
+        <RnMenubarTrigger>Menu</RnMenubarTrigger>
+        <RnMenubarContent>
+            <RnMenubarItem>Item</RnMenubarItem>
+        </RnMenubarContent>
+    </RnMenubarMenu>
+</RnMenubar>"
         ),
 
+        // ==================== Navigation Menu ====================
         new("Navigation Menu", "navigation-menu", "A collection of links for navigating websites.",
-            @<div>
-                <RnNavigationMenu>
-                    <RnNavigationMenuList>
-                        <RnNavigationMenuItem>
-                            <RnNavigationMenuTrigger>Getting Started</RnNavigationMenuTrigger>
-                            <RnNavigationMenuContent>
-                                <div class="grid gap-3 p-4 w-[400px]">
-                                    <RnNavigationMenuLink Href="#">Introduction</RnNavigationMenuLink>
-                                    <RnNavigationMenuLink Href="#">Installation</RnNavigationMenuLink>
-                                    <RnNavigationMenuLink Href="#">Typography</RnNavigationMenuLink>
-                                </div>
-                            </RnNavigationMenuContent>
-                        </RnNavigationMenuItem>
-                        <RnNavigationMenuItem>
-                            <RnNavigationMenuTrigger>Components</RnNavigationMenuTrigger>
-                            <RnNavigationMenuContent>
-                                <div class="grid gap-3 p-4 w-[400px]">
-                                    <RnNavigationMenuLink Href="#">Alert Dialog</RnNavigationMenuLink>
-                                    <RnNavigationMenuLink Href="#">Hover Card</RnNavigationMenuLink>
-                                    <RnNavigationMenuLink Href="#">Progress</RnNavigationMenuLink>
-                                </div>
-                            </RnNavigationMenuContent>
-                        </RnNavigationMenuItem>
-                    </RnNavigationMenuList>
-                </RnNavigationMenu>
-            </div>
+            Demo: @<RnNavigationMenu>
+                <RnNavigationMenuList>
+                    <RnNavigationMenuItem>
+                        <RnNavigationMenuTrigger>Getting Started</RnNavigationMenuTrigger>
+                        <RnNavigationMenuContent>
+                            <div class="grid gap-3 p-4 w-[400px]">
+                                <RnNavigationMenuLink Href="#">Introduction</RnNavigationMenuLink>
+                                <RnNavigationMenuLink Href="#">Installation</RnNavigationMenuLink>
+                                <RnNavigationMenuLink Href="#">Typography</RnNavigationMenuLink>
+                            </div>
+                        </RnNavigationMenuContent>
+                    </RnNavigationMenuItem>
+                    <RnNavigationMenuItem>
+                        <RnNavigationMenuTrigger>Components</RnNavigationMenuTrigger>
+                        <RnNavigationMenuContent>
+                            <div class="grid gap-3 p-4 w-[400px]">
+                                <RnNavigationMenuLink Href="#">Alert Dialog</RnNavigationMenuLink>
+                                <RnNavigationMenuLink Href="#">Hover Card</RnNavigationMenuLink>
+                                <RnNavigationMenuLink Href="#">Progress</RnNavigationMenuLink>
+                            </div>
+                        </RnNavigationMenuContent>
+                    </RnNavigationMenuItem>
+                </RnNavigationMenuList>
+            </RnNavigationMenu>,
+            Thumbnail: @<div class="text-xs text-muted-foreground">Navigation Menu</div>,
+            Code: @"<RnNavigationMenu>
+    <RnNavigationMenuList>
+        <RnNavigationMenuItem>
+            <RnNavigationMenuTrigger>Getting Started</RnNavigationMenuTrigger>
+            <RnNavigationMenuContent>
+                <div class=""grid gap-3 p-4 w-[400px]"">
+                    <RnNavigationMenuLink Href=""#"">
+                        Introduction
+                    </RnNavigationMenuLink>
+                </div>
+            </RnNavigationMenuContent>
+        </RnNavigationMenuItem>
+    </RnNavigationMenuList>
+</RnNavigationMenu>",
+            UsageCode: @"@using RnUI.Components.UI.NavigationMenu
+
+<RnNavigationMenu>
+    <RnNavigationMenuList>
+        <RnNavigationMenuItem>
+            <RnNavigationMenuTrigger>Menu</RnNavigationMenuTrigger>
+            <RnNavigationMenuContent>Content</RnNavigationMenuContent>
+        </RnNavigationMenuItem>
+    </RnNavigationMenuList>
+</RnNavigationMenu>"
         ),
 
-        new("Pagination", "pagination", "Navigation for paged content.",
-            @<div class="space-y-4">
+        // ==================== Pagination ====================
+        new("Pagination", "pagination", "Pagination with page navigation, next and previous links.",
+            Demo: @<div class="space-y-4">
                 <RnPagination @bind-CurrentPage="_currentPage" TotalPages="10" />
                 <p class="text-sm text-muted-foreground text-center">Current page: @_currentPage</p>
-            </div>
+            </div>,
+            Thumbnail: @<div class="text-xs text-muted-foreground">1 2 3 ... 10</div>,
+            Code: @"<RnPagination @bind-CurrentPage=""_page"" TotalPages=""10"" />
+
+@code {
+    private int _page = 1;
+}",
+            UsageCode: @"@using RnUI.Components.UI.Pagination
+
+<RnPagination @bind-CurrentPage=""_page"" TotalPages=""10"" />
+
+@code {
+    private int _page = 1;
+}"
         ),
 
-        new("Popover", "popover", "Displays rich content in a portal triggered by a button.",
-            @<div>
-                <RnPopover>
-                    <Trigger>
-                        <RnButton Variant="ButtonVariant.Outline">Open Popover</RnButton>
-                    </Trigger>
-                    <ChildContent>
-                        <div class="space-y-2">
-                            <h4 class="font-medium leading-none">Dimensions</h4>
-                            <p class="text-sm text-muted-foreground">Set the dimensions for the layer.</p>
-                            <div class="grid gap-2 pt-2">
-                                <div class="space-y-1">
-                                    <RnLabel>Width</RnLabel>
-                                    <RnInput Placeholder="100%" />
-                                </div>
-                                <div class="space-y-1">
-                                    <RnLabel>Height</RnLabel>
-                                    <RnInput Placeholder="25px" />
-                                </div>
+        // ==================== Popover ====================
+        new("Popover", "popover", "Displays rich content in a portal, triggered by a button.",
+            Demo: @<RnPopover>
+                <Trigger>
+                    <RnButton Variant="ButtonVariant.Outline">Open Popover</RnButton>
+                </Trigger>
+                <ChildContent>
+                    <div class="space-y-2">
+                        <h4 class="font-medium leading-none">Dimensions</h4>
+                        <p class="text-sm text-muted-foreground">Set the dimensions for the layer.</p>
+                        <div class="grid gap-2 pt-2">
+                            <div class="space-y-1">
+                                <RnLabel>Width</RnLabel>
+                                <RnInput Placeholder="100%" />
+                            </div>
+                            <div class="space-y-1">
+                                <RnLabel>Height</RnLabel>
+                                <RnInput Placeholder="25px" />
                             </div>
                         </div>
-                    </ChildContent>
-                </RnPopover>
-            </div>
+                    </div>
+                </ChildContent>
+            </RnPopover>,
+            Thumbnail: @<RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">Popover</RnButton>,
+            Code: @"<RnPopover>
+    <Trigger>
+        <RnButton Variant=""ButtonVariant.Outline"">
+            Open Popover
+        </RnButton>
+    </Trigger>
+    <ChildContent>
+        <div class=""space-y-2"">
+            <h4 class=""font-medium"">Dimensions</h4>
+            <RnLabel>Width</RnLabel>
+            <RnInput Placeholder=""100%"" />
+        </div>
+    </ChildContent>
+</RnPopover>",
+            UsageCode: @"@using RnUI.Components.UI.Popover
+
+<RnPopover>
+    <Trigger>Trigger element</Trigger>
+    <ChildContent>Popup content</ChildContent>
+</RnPopover>"
         ),
 
-        new("Progress", "progress", "Displays a progress indicator.",
-            @<div class="space-y-4 max-w-md">
+        // ==================== Progress ====================
+        new("Progress", "progress", "Displays an indicator showing the completion progress of a task.",
+            Demo: @<div class="w-full max-w-md space-y-4">
                 <RnProgress Value="20" />
                 <RnProgress Value="60" />
                 <RnProgress Value="100" />
-            </div>
+            </div>,
+            Thumbnail: @<div class="w-[140px]"><RnProgress Value="60" /></div>,
+            Code: @"<RnProgress Value=""20"" />
+<RnProgress Value=""60"" />
+<RnProgress Value=""100"" />",
+            UsageCode: @"@using RnUI.Components.UI.Progress
+
+<RnProgress Value=""60"" />"
         ),
 
-        new("Radio Group", "radio-group", "A set of checkable buttons where only one can be checked.",
-            @<div class="space-y-4">
+        // ==================== Radio Group ====================
+        new("Radio Group", "radio-group", "A set of checkable buttons where no more than one can be checked at a time.",
+            Demo: @<div class="space-y-4">
                 <RnRadioGroup @bind-Value="_radioValue">
                     <div class="flex items-center space-x-2">
                         <RnRadioGroupItem Value="option-1" />
@@ -680,11 +1466,37 @@ else
                     </div>
                 </RnRadioGroup>
                 <p class="text-sm text-muted-foreground">Selected: @_radioValue</p>
-            </div>
+            </div>,
+            Thumbnail: @<div class="text-xs text-muted-foreground">Radio Group</div>,
+            Code: @"<RnRadioGroup @bind-Value=""_value"">
+    <div class=""flex items-center space-x-2"">
+        <RnRadioGroupItem Value=""option-1"" />
+        <RnLabel>Option 1</RnLabel>
+    </div>
+    <div class=""flex items-center space-x-2"">
+        <RnRadioGroupItem Value=""option-2"" />
+        <RnLabel>Option 2</RnLabel>
+    </div>
+</RnRadioGroup>
+
+@code {
+    private string? _value = ""option-1"";
+}",
+            UsageCode: @"@using RnUI.Components.UI.RadioGroup
+
+<RnRadioGroup @bind-Value=""_value"">
+    <RnRadioGroupItem Value=""a"" />
+    <RnRadioGroupItem Value=""b"" />
+</RnRadioGroup>
+
+@code {
+    private string? _value;
+}"
         ),
 
-        new("Resizable", "resizable", "Accessible resizable panel groups and layouts.",
-            @<div class="max-w-md">
+        // ==================== Resizable ====================
+        new("Resizable", "resizable", "Accessible resizable panel groups and layouts with keyboard support.",
+            Demo: @<div class="w-full max-w-md">
                 <RnResizablePanelGroup Direction="horizontal" Class="min-h-[200px] rounded-lg border">
                     <RnResizablePanel DefaultSize="50">
                         <div class="flex h-full items-center justify-center p-6">
@@ -698,24 +1510,60 @@ else
                         </div>
                     </RnResizablePanel>
                 </RnResizablePanelGroup>
-            </div>
+            </div>,
+            Thumbnail: @<div class="text-xs text-muted-foreground">Resizable</div>,
+            Code: @"<RnResizablePanelGroup Direction=""horizontal""
+                        Class=""min-h-[200px] rounded-lg border"">
+    <RnResizablePanel DefaultSize=""50"">
+        <div class=""flex h-full items-center justify-center p-6"">
+            <span class=""font-semibold"">One</span>
+        </div>
+    </RnResizablePanel>
+    <RnResizableHandle />
+    <RnResizablePanel DefaultSize=""50"">
+        <div class=""flex h-full items-center justify-center p-6"">
+            <span class=""font-semibold"">Two</span>
+        </div>
+    </RnResizablePanel>
+</RnResizablePanelGroup>",
+            UsageCode: @"@using RnUI.Components.UI.Resizable
+
+<RnResizablePanelGroup Direction=""horizontal"">
+    <RnResizablePanel DefaultSize=""50"">Panel 1</RnResizablePanel>
+    <RnResizableHandle />
+    <RnResizablePanel DefaultSize=""50"">Panel 2</RnResizablePanel>
+</RnResizablePanelGroup>"
         ),
 
-        new("Scroll Area", "scroll-area", "Augments native scroll functionality for custom styling.",
-            @<div>
-                <RnScrollArea MaxHeight="200px" Class="w-48 rounded-md border">
-                    <div class="p-4">
-                        @for (var i = 1; i <= 20; i++)
-                        {
-                            <div class="text-sm py-1">Item @i</div>
-                        }
-                    </div>
-                </RnScrollArea>
-            </div>
+        // ==================== Scroll Area ====================
+        new("Scroll Area", "scroll-area", "Augments native scroll functionality for custom, cross-browser styling.",
+            Demo: @<RnScrollArea MaxHeight="200px" Class="w-48 rounded-md border">
+                <div class="p-4">
+                    @for (var i = 1; i <= 20; i++)
+                    {
+                        <div class="text-sm py-1">Item @i</div>
+                    }
+                </div>
+            </RnScrollArea>,
+            Thumbnail: @<div class="text-xs text-muted-foreground">Scroll Area</div>,
+            Code: @"<RnScrollArea MaxHeight=""200px"" Class=""w-48 rounded-md border"">
+    <div class=""p-4"">
+        @for (var i = 1; i <= 20; i++)
+        {
+            <div class=""text-sm py-1"">Item @i</div>
+        }
+    </div>
+</RnScrollArea>",
+            UsageCode: @"@using RnUI.Components.UI.ScrollArea
+
+<RnScrollArea MaxHeight=""200px"">
+    Content
+</RnScrollArea>"
         ),
 
-        new("Select", "select", "Displays a list of options for the user to pick from.",
-            @<div class="space-y-4 max-w-xs">
+        // ==================== Select ====================
+        new("Select", "select", "Displays a list of options for the user to pick from, triggered by a button.",
+            Demo: @<div class="w-full max-w-xs space-y-4">
                 <RnSelect @bind-Value="_selectValue" Placeholder="Select a fruit">
                     <RnSelectItem Value="apple">Apple</RnSelectItem>
                     <RnSelectItem Value="banana">Banana</RnSelectItem>
@@ -723,11 +1571,32 @@ else
                     <RnSelectItem Value="grape">Grape</RnSelectItem>
                 </RnSelect>
                 <p class="text-sm text-muted-foreground">Selected: @(_selectValue ?? "None")</p>
-            </div>
+            </div>,
+            Thumbnail: @<div class="text-xs text-muted-foreground">Select</div>,
+            Code: @"<RnSelect @bind-Value=""_value"" Placeholder=""Select a fruit"">
+    <RnSelectItem Value=""apple"">Apple</RnSelectItem>
+    <RnSelectItem Value=""banana"">Banana</RnSelectItem>
+    <RnSelectItem Value=""orange"">Orange</RnSelectItem>
+</RnSelect>
+
+@code {
+    private string? _value;
+}",
+            UsageCode: @"@using RnUI.Components.UI.Select
+
+<RnSelect @bind-Value=""_value"" Placeholder=""Select..."">
+    <RnSelectItem Value=""a"">Option A</RnSelectItem>
+    <RnSelectItem Value=""b"">Option B</RnSelectItem>
+</RnSelect>
+
+@code {
+    private string? _value;
+}"
         ),
 
-        new("Separator", "separator", "Visually separates content.",
-            @<div class="space-y-4 max-w-md">
+        // ==================== Separator ====================
+        new("Separator", "separator", "Visually or semantically separates content.",
+            Demo: @<div class="w-full max-w-md space-y-4">
                 <div>
                     <h4 class="text-sm font-medium leading-none">RnUI</h4>
                     <p class="text-sm text-muted-foreground">A Blazor port of shadcn/ui.</p>
@@ -740,11 +1609,30 @@ else
                     <RnSeparator Orientation="Orientation.Vertical" />
                     <div>Source</div>
                 </div>
-            </div>
+            </div>,
+            Thumbnail: @<div class="w-[120px] space-y-2">
+                <div class="text-xs">Content</div>
+                <RnSeparator />
+                <div class="text-xs">Content</div>
+            </div>,
+            Code: @"<RnSeparator />
+
+<div class=""flex h-5 items-center space-x-4 text-sm"">
+    <div>Blog</div>
+    <RnSeparator Orientation=""Orientation.Vertical"" />
+    <div>Docs</div>
+    <RnSeparator Orientation=""Orientation.Vertical"" />
+    <div>Source</div>
+</div>",
+            UsageCode: @"@using RnUI.Components.UI.Separator
+
+<RnSeparator />
+<RnSeparator Orientation=""Orientation.Vertical"" />"
         ),
 
-        new("Sheet", "sheet", "A panel that slides from the edge of the screen.",
-            @<div class="space-y-4">
+        // ==================== Sheet ====================
+        new("Sheet", "sheet", "Extends the Dialog component to display content that complements the main content of the screen.",
+            Demo: @<div>
                 <RnButton Variant="ButtonVariant.Outline" OnClick="() => _sheetOpen = true">Open Sheet</RnButton>
                 <RnSheet @bind-Open="_sheetOpen" Side="Side.Right">
                     <RnSheetHeader>
@@ -761,112 +1649,270 @@ else
                         <RnButton OnClick="() => _sheetOpen = false">Save changes</RnButton>
                     </RnSheetFooter>
                 </RnSheet>
-            </div>
+            </div>,
+            Thumbnail: @<RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">Open Sheet</RnButton>,
+            Code: @"<RnButton OnClick=""() => _open = true"">Open Sheet</RnButton>
+<RnSheet @bind-Open=""_open"" Side=""Side.Right"">
+    <RnSheetHeader>
+        <RnSheetTitle>Edit Profile</RnSheetTitle>
+        <RnSheetDescription>
+            Make changes to your profile.
+        </RnSheetDescription>
+    </RnSheetHeader>
+    <div class=""grid gap-4 py-4"">
+        <RnLabel>Name</RnLabel>
+        <RnInput Placeholder=""Your name"" />
+    </div>
+    <RnSheetFooter>
+        <RnButton OnClick=""() => _open = false"">
+            Save changes
+        </RnButton>
+    </RnSheetFooter>
+</RnSheet>
+
+@code {
+    private bool _open;
+}",
+            UsageCode: @"@using RnUI.Components.UI.Sheet
+
+<RnSheet @bind-Open=""_open"" Side=""Side.Right"">
+    <RnSheetHeader>
+        <RnSheetTitle>Title</RnSheetTitle>
+    </RnSheetHeader>
+    Content
+</RnSheet>
+
+@code {
+    private bool _open;
+}"
         ),
 
-        new("Sidebar", "sidebar", "A composable sidebar component with menu items.",
-            @<div class="space-y-4">
-                <div class="border rounded-md overflow-hidden max-w-xs">
-                    <RnSidebar Open="true" Width="100%">
-                        <RnSidebarHeader>
-                            <span class="font-semibold px-2">Application</span>
-                        </RnSidebarHeader>
-                        <RnSidebarContent>
-                            <RnSidebarGroup>
-                                <RnSidebarGroupLabel>Platform</RnSidebarGroupLabel>
-                                <RnSidebarMenu>
-                                    <RnSidebarMenuItem>
-                                        <RnSidebarMenuButton Href="#" IsActive="true">Dashboard</RnSidebarMenuButton>
-                                    </RnSidebarMenuItem>
-                                    <RnSidebarMenuItem>
-                                        <RnSidebarMenuButton Href="#">Settings</RnSidebarMenuButton>
-                                    </RnSidebarMenuItem>
-                                    <RnSidebarMenuItem>
-                                        <RnSidebarMenuButton Href="#">Users</RnSidebarMenuButton>
-                                    </RnSidebarMenuItem>
-                                </RnSidebarMenu>
-                            </RnSidebarGroup>
-                        </RnSidebarContent>
-                        <RnSidebarFooter>
-                            <span class="text-sm text-muted-foreground px-2">v1.0.0</span>
-                        </RnSidebarFooter>
-                    </RnSidebar>
-                </div>
-            </div>
+        // ==================== Sidebar ====================
+        new("Sidebar", "sidebar", "A composable, themeable and customizable sidebar component.",
+            Demo: @<div class="border rounded-md overflow-hidden max-w-xs">
+                <RnSidebar Open="true" Width="100%">
+                    <RnSidebarHeader>
+                        <span class="font-semibold px-2">Application</span>
+                    </RnSidebarHeader>
+                    <RnSidebarContent>
+                        <RnSidebarGroup>
+                            <RnSidebarGroupLabel>Platform</RnSidebarGroupLabel>
+                            <RnSidebarMenu>
+                                <RnSidebarMenuItem>
+                                    <RnSidebarMenuButton Href="#" IsActive="true">Dashboard</RnSidebarMenuButton>
+                                </RnSidebarMenuItem>
+                                <RnSidebarMenuItem>
+                                    <RnSidebarMenuButton Href="#">Settings</RnSidebarMenuButton>
+                                </RnSidebarMenuItem>
+                                <RnSidebarMenuItem>
+                                    <RnSidebarMenuButton Href="#">Users</RnSidebarMenuButton>
+                                </RnSidebarMenuItem>
+                            </RnSidebarMenu>
+                        </RnSidebarGroup>
+                    </RnSidebarContent>
+                    <RnSidebarFooter>
+                        <span class="text-sm text-muted-foreground px-2">v1.0.0</span>
+                    </RnSidebarFooter>
+                </RnSidebar>
+            </div>,
+            Thumbnail: @<div class="text-xs text-muted-foreground">Sidebar</div>,
+            Code: @"<RnSidebar Open=""true"" Width=""100%"">
+    <RnSidebarHeader>
+        <span class=""font-semibold px-2"">Application</span>
+    </RnSidebarHeader>
+    <RnSidebarContent>
+        <RnSidebarGroup>
+            <RnSidebarGroupLabel>Platform</RnSidebarGroupLabel>
+            <RnSidebarMenu>
+                <RnSidebarMenuItem>
+                    <RnSidebarMenuButton Href=""#"" IsActive=""true"">
+                        Dashboard
+                    </RnSidebarMenuButton>
+                </RnSidebarMenuItem>
+            </RnSidebarMenu>
+        </RnSidebarGroup>
+    </RnSidebarContent>
+</RnSidebar>",
+            UsageCode: @"@using RnUI.Components.UI.Sidebar
+
+<RnSidebar>
+    <RnSidebarContent>
+        <RnSidebarGroup>
+            <RnSidebarMenu>
+                <RnSidebarMenuItem>
+                    <RnSidebarMenuButton Href=""#"">Item</RnSidebarMenuButton>
+                </RnSidebarMenuItem>
+            </RnSidebarMenu>
+        </RnSidebarGroup>
+    </RnSidebarContent>
+</RnSidebar>"
         ),
 
-        new("Skeleton", "skeleton", "Used to show a placeholder while content is loading.",
-            @<div class="flex items-center space-x-4">
+        // ==================== Skeleton ====================
+        new("Skeleton", "skeleton", "Use to show a placeholder while content is loading.",
+            Demo: @<div class="flex items-center space-x-4">
                 <RnSkeleton Class="h-12 w-12 rounded-full" />
                 <div class="space-y-2">
                     <RnSkeleton Class="h-4 w-[250px]" />
                     <RnSkeleton Class="h-4 w-[200px]" />
                 </div>
-            </div>
+            </div>,
+            Thumbnail: @<div class="flex items-center gap-2">
+                <RnSkeleton Class="h-8 w-8 rounded-full" />
+                <div class="space-y-1">
+                    <RnSkeleton Class="h-3 w-[80px]" />
+                    <RnSkeleton Class="h-3 w-[60px]" />
+                </div>
+            </div>,
+            Code: @"<div class=""flex items-center space-x-4"">
+    <RnSkeleton Class=""h-12 w-12 rounded-full"" />
+    <div class=""space-y-2"">
+        <RnSkeleton Class=""h-4 w-[250px]"" />
+        <RnSkeleton Class=""h-4 w-[200px]"" />
+    </div>
+</div>",
+            UsageCode: @"@using RnUI.Components.UI.Skeleton
+
+<RnSkeleton Class=""h-4 w-[250px]"" />"
         ),
 
-        new("Slider", "slider", "An input where the user selects a value from a range.",
-            @<div class="space-y-4 max-w-md">
+        // ==================== Slider ====================
+        new("Slider", "slider", "An input where the user selects a value from within a given range.",
+            Demo: @<div class="w-full max-w-md space-y-4">
                 <RnSlider @bind-Value="_sliderValue" />
                 <p class="text-sm text-muted-foreground">Value: @_sliderValue</p>
-            </div>
+            </div>,
+            Thumbnail: @<div class="w-[140px]"><RnSlider Value="50" /></div>,
+            Code: @"<RnSlider @bind-Value=""_value"" />
+<p>Value: @_value</p>
+
+@code {
+    private double _value = 50;
+}",
+            UsageCode: @"@using RnUI.Components.UI.Slider
+
+<RnSlider @bind-Value=""_value"" />
+
+@code {
+    private double _value = 50;
+}"
         ),
 
-        new("Spinner", "spinner", "An animated loading indicator.",
-            @<div class="flex gap-4 items-center">
+        // ==================== Spinner ====================
+        new("Spinner", "spinner", "An animated loading spinner indicator.",
+            Demo: @<div class="flex gap-6 items-center">
                 <RnSpinner Size="ComponentSize.Sm" />
                 <RnSpinner />
                 <RnSpinner Size="ComponentSize.Lg" />
-            </div>
+            </div>,
+            Thumbnail: @<RnSpinner Size="ComponentSize.Sm" />,
+            Code: @"<RnSpinner Size=""ComponentSize.Sm"" />
+<RnSpinner />
+<RnSpinner Size=""ComponentSize.Lg"" />",
+            UsageCode: @"@using RnUI.Components.UI.Spinner
+
+<RnSpinner />
+<RnSpinner Size=""ComponentSize.Lg"" />"
         ),
 
-        new("Switch", "switch", "A toggle control for switching between two states.",
-            @<div class="space-y-4">
+        // ==================== Switch ====================
+        new("Switch", "switch", "A control that allows the user to toggle between a checked and not checked state.",
+            Demo: @<div class="space-y-4">
                 <div class="flex items-center space-x-2">
                     <RnSwitch @bind-Checked="_switchValue" />
                     <RnLabel>Enable notifications</RnLabel>
                 </div>
                 <p class="text-sm text-muted-foreground">Enabled: @_switchValue</p>
-            </div>
+            </div>,
+            Thumbnail: @<div class="flex items-center gap-2">
+                <RnSwitch Checked="true" />
+                <span class="text-xs">On</span>
+            </div>,
+            Code: @"<div class=""flex items-center space-x-2"">
+    <RnSwitch @bind-Checked=""_checked"" />
+    <RnLabel>Enable notifications</RnLabel>
+</div>
+
+@code {
+    private bool _checked;
+}",
+            UsageCode: @"@using RnUI.Components.UI.Switch
+
+<RnSwitch @bind-Checked=""_checked"" />
+
+@code {
+    private bool _checked;
+}"
         ),
 
+        // ==================== Table ====================
         new("Table", "table", "A responsive table component.",
-            @<div>
-                <RnTable>
-                    <RnTableHeader>
-                        <RnTableRow>
-                            <RnTableHead>Invoice</RnTableHead>
-                            <RnTableHead>Status</RnTableHead>
-                            <RnTableHead>Method</RnTableHead>
-                            <RnTableHead Class="text-right">Amount</RnTableHead>
-                        </RnTableRow>
-                    </RnTableHeader>
-                    <RnTableBody>
-                        <RnTableRow>
-                            <RnTableCell>INV001</RnTableCell>
-                            <RnTableCell><RnBadge>Paid</RnBadge></RnTableCell>
-                            <RnTableCell>Credit Card</RnTableCell>
-                            <RnTableCell Class="text-right">$250.00</RnTableCell>
-                        </RnTableRow>
-                        <RnTableRow>
-                            <RnTableCell>INV002</RnTableCell>
-                            <RnTableCell><RnBadge Variant="BadgeVariant.Outline">Pending</RnBadge></RnTableCell>
-                            <RnTableCell>PayPal</RnTableCell>
-                            <RnTableCell Class="text-right">$150.00</RnTableCell>
-                        </RnTableRow>
-                        <RnTableRow>
-                            <RnTableCell>INV003</RnTableCell>
-                            <RnTableCell><RnBadge Variant="BadgeVariant.Destructive">Overdue</RnBadge></RnTableCell>
-                            <RnTableCell>Bank Transfer</RnTableCell>
-                            <RnTableCell Class="text-right">$350.00</RnTableCell>
-                        </RnTableRow>
-                    </RnTableBody>
-                </RnTable>
-            </div>
+            Demo: @<RnTable>
+                <RnTableHeader>
+                    <RnTableRow>
+                        <RnTableHead>Invoice</RnTableHead>
+                        <RnTableHead>Status</RnTableHead>
+                        <RnTableHead>Method</RnTableHead>
+                        <RnTableHead Class="text-right">Amount</RnTableHead>
+                    </RnTableRow>
+                </RnTableHeader>
+                <RnTableBody>
+                    <RnTableRow>
+                        <RnTableCell>INV001</RnTableCell>
+                        <RnTableCell><RnBadge>Paid</RnBadge></RnTableCell>
+                        <RnTableCell>Credit Card</RnTableCell>
+                        <RnTableCell Class="text-right">$250.00</RnTableCell>
+                    </RnTableRow>
+                    <RnTableRow>
+                        <RnTableCell>INV002</RnTableCell>
+                        <RnTableCell><RnBadge Variant="BadgeVariant.Outline">Pending</RnBadge></RnTableCell>
+                        <RnTableCell>PayPal</RnTableCell>
+                        <RnTableCell Class="text-right">$150.00</RnTableCell>
+                    </RnTableRow>
+                    <RnTableRow>
+                        <RnTableCell>INV003</RnTableCell>
+                        <RnTableCell><RnBadge Variant="BadgeVariant.Destructive">Overdue</RnBadge></RnTableCell>
+                        <RnTableCell>Bank Transfer</RnTableCell>
+                        <RnTableCell Class="text-right">$350.00</RnTableCell>
+                    </RnTableRow>
+                </RnTableBody>
+            </RnTable>,
+            Thumbnail: @<div class="text-xs text-muted-foreground">Table</div>,
+            Code: @"<RnTable>
+    <RnTableHeader>
+        <RnTableRow>
+            <RnTableHead>Invoice</RnTableHead>
+            <RnTableHead>Status</RnTableHead>
+            <RnTableHead Class=""text-right"">Amount</RnTableHead>
+        </RnTableRow>
+    </RnTableHeader>
+    <RnTableBody>
+        <RnTableRow>
+            <RnTableCell>INV001</RnTableCell>
+            <RnTableCell><RnBadge>Paid</RnBadge></RnTableCell>
+            <RnTableCell Class=""text-right"">$250.00</RnTableCell>
+        </RnTableRow>
+    </RnTableBody>
+</RnTable>",
+            UsageCode: @"@using RnUI.Components.UI.Table
+
+<RnTable>
+    <RnTableHeader>
+        <RnTableRow>
+            <RnTableHead>Column</RnTableHead>
+        </RnTableRow>
+    </RnTableHeader>
+    <RnTableBody>
+        <RnTableRow>
+            <RnTableCell>Data</RnTableCell>
+        </RnTableRow>
+    </RnTableBody>
+</RnTable>"
         ),
 
-        new("Tabs", "tabs", "A set of layered sections of content, shown one at a time.",
-            @<div>
+        // ==================== Tabs ====================
+        new("Tabs", "tabs", "A set of layered sections of content, displayed one at a time.",
+            Demo: @<div class="w-full max-w-md">
                 <RnTabs @bind-ActiveTab="_activeTab">
                     <RnTabsList>
                         <RnTabsTrigger Value="account">Account</RnTabsTrigger>
@@ -901,27 +1947,98 @@ else
                         </RnCard>
                     </RnTabsContent>
                 </RnTabs>
-            </div>
+            </div>,
+            Thumbnail: @<div class="text-xs text-muted-foreground">Tabs</div>,
+            Code: @"<RnTabs @bind-ActiveTab=""_activeTab"">
+    <RnTabsList>
+        <RnTabsTrigger Value=""account"">Account</RnTabsTrigger>
+        <RnTabsTrigger Value=""password"">Password</RnTabsTrigger>
+    </RnTabsList>
+    <RnTabsContent Value=""account"">
+        <p>Account settings content.</p>
+    </RnTabsContent>
+    <RnTabsContent Value=""password"">
+        <p>Password settings content.</p>
+    </RnTabsContent>
+</RnTabs>
+
+@code {
+    private string _activeTab = ""account"";
+}",
+            UsageCode: @"@using RnUI.Components.UI.Tabs
+
+<RnTabs @bind-ActiveTab=""_tab"">
+    <RnTabsList>
+        <RnTabsTrigger Value=""a"">Tab A</RnTabsTrigger>
+        <RnTabsTrigger Value=""b"">Tab B</RnTabsTrigger>
+    </RnTabsList>
+    <RnTabsContent Value=""a"">Content A</RnTabsContent>
+    <RnTabsContent Value=""b"">Content B</RnTabsContent>
+</RnTabs>
+
+@code {
+    private string _tab = ""a"";
+}"
         ),
 
-        new("Textarea", "textarea", "Displays a form textarea field.",
-            @<div class="space-y-4 max-w-sm">
-                <div class="space-y-2">
-                    <RnLabel>Message</RnLabel>
-                    <RnTextarea Placeholder="Type your message here" />
-                </div>
-            </div>
+        // ==================== Textarea ====================
+        new("Textarea", "textarea", "Displays a form textarea or a component that looks like a textarea.",
+            Demo: @<div class="w-full max-w-sm space-y-2">
+                <RnLabel>Message</RnLabel>
+                <RnTextarea Placeholder="Type your message here" />
+            </div>,
+            Thumbnail: @<div class="w-[140px]">
+                <RnTextarea Placeholder="Message..." />
+            </div>,
+            Code: @"<div class=""space-y-2"">
+    <RnLabel>Message</RnLabel>
+    <RnTextarea Placeholder=""Type your message here"" />
+</div>",
+            UsageCode: @"@using RnUI.Components.UI.Textarea
+
+<RnTextarea Placeholder=""Type your message here"" />"
         ),
 
+        // ==================== Toast ====================
         new("Toast", "toast", "A succinct message that is displayed temporarily.",
-            @<div class="space-y-4">
+            Demo: @<div class="flex gap-4">
                 <RnButton OnClick="ShowToast">Show Toast</RnButton>
                 <RnButton Variant="ButtonVariant.Destructive" OnClick="ShowDestructiveToast">Destructive Toast</RnButton>
-            </div>
+            </div>,
+            Thumbnail: @<RnButton Size="ButtonSize.Sm">Show Toast</RnButton>,
+            Code: @"<RnButton OnClick=""ShowToast"">Show Toast</RnButton>
+<RnButton Variant=""ButtonVariant.Destructive""
+          OnClick=""ShowDestructiveToast"">
+    Destructive Toast
+</RnButton>
+
+@inject ToastService ToastService
+
+@code {
+    private void ShowToast()
+        => ToastService.Show(""Event Created"",
+            ""Your event has been created."");
+
+    private void ShowDestructiveToast()
+        => ToastService.Show(""Error"",
+            ""Something went wrong."",
+            ToastVariant.Destructive);
+}",
+            UsageCode: @"@using RnUI.Components.UI.Toast
+@using RnUI.Services
+@inject ToastService ToastService
+
+<RnButton OnClick=""ShowToast"">Toast</RnButton>
+
+@code {
+    private void ShowToast()
+        => ToastService.Show(""Title"", ""Description"");
+}"
         ),
 
-        new("Toggle", "toggle", "A two-state button that can be on or off.",
-            @<div class="space-y-4">
+        // ==================== Toggle ====================
+        new("Toggle", "toggle", "A two-state button that can be either on or off.",
+            Demo: @<div class="space-y-4">
                 <div class="flex gap-4">
                     <RnToggle @bind-Pressed="_togglePressed">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -939,11 +2056,26 @@ else
                     </RnToggle>
                 </div>
                 <p class="text-sm text-muted-foreground">Bold pressed: @_togglePressed</p>
-            </div>
+            </div>,
+            Thumbnail: @<RnToggle Pressed="true">Bold</RnToggle>,
+            Code: @"<RnToggle @bind-Pressed=""_pressed"">Bold</RnToggle>
+<RnToggle Variant=""ToggleVariant.Outline"">Italic</RnToggle>
+
+@code {
+    private bool _pressed;
+}",
+            UsageCode: @"@using RnUI.Components.UI.Toggle
+
+<RnToggle @bind-Pressed=""_pressed"">Toggle</RnToggle>
+
+@code {
+    private bool _pressed;
+}"
         ),
 
+        // ==================== Toggle Group ====================
         new("Toggle Group", "toggle-group", "A set of two-state buttons that can be toggled on or off.",
-            @<div class="space-y-4">
+            Demo: @<div class="space-y-4">
                 <RnToggleGroup @bind-Value="_toggleGroupValue">
                     <RnToggleGroupItem Value="left">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="3" y1="6" y2="6"/><line x1="15" x2="3" y1="12" y2="12"/><line x1="17" x2="3" y1="18" y2="18"/></svg>
@@ -956,20 +2088,56 @@ else
                     </RnToggleGroupItem>
                 </RnToggleGroup>
                 <p class="text-sm text-muted-foreground">Alignment: @(_toggleGroupValue ?? "None")</p>
-            </div>
+            </div>,
+            Thumbnail: @<div class="text-xs text-muted-foreground">Toggle Group</div>,
+            Code: @"<RnToggleGroup @bind-Value=""_value"">
+    <RnToggleGroupItem Value=""left"">Left</RnToggleGroupItem>
+    <RnToggleGroupItem Value=""center"">Center</RnToggleGroupItem>
+    <RnToggleGroupItem Value=""right"">Right</RnToggleGroupItem>
+</RnToggleGroup>
+
+@code {
+    private string? _value = ""center"";
+}",
+            UsageCode: @"@using RnUI.Components.UI.ToggleGroup
+
+<RnToggleGroup @bind-Value=""_value"">
+    <RnToggleGroupItem Value=""a"">A</RnToggleGroupItem>
+    <RnToggleGroupItem Value=""b"">B</RnToggleGroupItem>
+</RnToggleGroup>
+
+@code {
+    private string? _value;
+}"
         ),
 
-        new("Tooltip", "tooltip", "A popup that displays information on hover.",
-            @<div>
-                <RnTooltip>
-                    <Trigger>
-                        <RnButton Variant="ButtonVariant.Outline">Hover me</RnButton>
-                    </Trigger>
-                    <ChildContent>
-                        <p>Add to library</p>
-                    </ChildContent>
-                </RnTooltip>
-            </div>
+        // ==================== Tooltip ====================
+        new("Tooltip", "tooltip", "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+            Demo: @<RnTooltip>
+                <Trigger>
+                    <RnButton Variant="ButtonVariant.Outline">Hover me</RnButton>
+                </Trigger>
+                <ChildContent>
+                    <p>Add to library</p>
+                </ChildContent>
+            </RnTooltip>,
+            Thumbnail: @<RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">Hover me</RnButton>,
+            Code: @"<RnTooltip>
+    <Trigger>
+        <RnButton Variant=""ButtonVariant.Outline"">
+            Hover me
+        </RnButton>
+    </Trigger>
+    <ChildContent>
+        <p>Add to library</p>
+    </ChildContent>
+</RnTooltip>",
+            UsageCode: @"@using RnUI.Components.UI.Tooltip
+
+<RnTooltip>
+    <Trigger>Hover target</Trigger>
+    <ChildContent>Tooltip text</ChildContent>
+</RnTooltip>"
         ),
     ];
 }

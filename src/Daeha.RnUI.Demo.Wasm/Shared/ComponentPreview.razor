@@ -1,0 +1,86 @@
+@inject IJSRuntime JS
+
+<div class="group relative my-4 flex flex-col overflow-hidden rounded-xl border border-border">
+    @if (!string.IsNullOrEmpty(Title))
+    {
+        <div class="px-4 py-3 border-b border-border">
+            <h3 class="text-sm font-medium">@Title</h3>
+        </div>
+    }
+    <div class="preview-area flex min-h-[350px] items-center justify-center p-10">
+        @ChildContent
+    </div>
+    @if (!string.IsNullOrEmpty(Code))
+    {
+        <div class="relative border-t border-border">
+            <button class="absolute right-3 top-3 z-10 inline-flex h-7 w-7 items-center justify-center rounded-md border border-white/10 bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-zinc-200 transition-colors"
+                    @onclick="CopyCode"
+                    title="Copy code">
+                @if (_copied)
+                {
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 6 9 17l-5-5"/>
+                    </svg>
+                }
+                else
+                {
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                        <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                    </svg>
+                }
+            </button>
+            <div class="code-block overflow-x-auto bg-zinc-950 @(_expanded ? "" : "max-h-[120px] overflow-hidden")">
+                <pre class="p-4 text-sm leading-relaxed"><code class="font-mono text-zinc-300">@Code</code></pre>
+            </div>
+            @if (!_expanded && Code.Split('\n').Length > 4)
+            {
+                <div class="absolute bottom-0 left-0 right-0 flex items-end justify-center bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent pb-2 pt-8">
+                    <button class="inline-flex items-center gap-1 rounded-md border border-white/10 bg-zinc-900 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100 transition-colors"
+                            @onclick="() => _expanded = true">
+                        View Code
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m6 9 6 6 6-6"/>
+                        </svg>
+                    </button>
+                </div>
+            }
+            @if (_expanded && Code.Split('\n').Length > 4)
+            {
+                <div class="flex justify-center border-t border-white/5 bg-zinc-950 py-2">
+                    <button class="inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-xs font-medium text-zinc-400 hover:text-zinc-200 transition-colors"
+                            @onclick="() => _expanded = false">
+                        Collapse
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m18 15-6-6-6 6"/>
+                        </svg>
+                    </button>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Code { get; set; }
+    [Parameter] public string? Title { get; set; }
+
+    private bool _expanded;
+    private bool _copied;
+
+    private async Task CopyCode()
+    {
+        if (string.IsNullOrEmpty(Code)) return;
+        await JS.InvokeVoidAsync("navigator.clipboard.writeText", Code);
+        _copied = true;
+        StateHasChanged();
+        await Task.Delay(2000);
+        _copied = false;
+        StateHasChanged();
+    }
+}
