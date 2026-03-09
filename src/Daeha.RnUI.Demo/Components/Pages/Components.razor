@@ -375,16 +375,13 @@ else
         ),
 
         new("Combobox", "combobox", "Autocomplete input and command palette with a list of suggestions.",
-            @<div class="space-y-4">
-                <RnCombobox @bind-Value="_comboboxValue" Placeholder="Select framework...">
-                    <RnComboboxItem Value="next" Label="Next.js">Next.js</RnComboboxItem>
-                    <RnComboboxItem Value="sveltekit" Label="SvelteKit">SvelteKit</RnComboboxItem>
-                    <RnComboboxItem Value="nuxt" Label="Nuxt.js">Nuxt.js</RnComboboxItem>
-                    <RnComboboxItem Value="remix" Label="Remix">Remix</RnComboboxItem>
-                    <RnComboboxItem Value="astro" Label="Astro">Astro</RnComboboxItem>
-                </RnCombobox>
-                <p class="text-sm text-muted-foreground">Selected: @(_comboboxValue ?? "None")</p>
-            </div>
+            @<RnCombobox @bind-Value="_comboboxValue" Placeholder="Select framework..." SearchPlaceholder="Search framework...">
+                <RnComboboxItem Value="next" Label="Next.js">Next.js</RnComboboxItem>
+                <RnComboboxItem Value="sveltekit" Label="SvelteKit">SvelteKit</RnComboboxItem>
+                <RnComboboxItem Value="nuxt" Label="Nuxt.js">Nuxt.js</RnComboboxItem>
+                <RnComboboxItem Value="remix" Label="Remix">Remix</RnComboboxItem>
+                <RnComboboxItem Value="astro" Label="Astro">Astro</RnComboboxItem>
+            </RnCombobox>
         ),
 
         new("Command", "command", "Fast, composable, unstyled command menu.",
@@ -560,7 +557,7 @@ else
         ),
 
         new("Input OTP", "input-otp", "Accessible one-time password component with copy paste functionality.",
-            @<div class="space-y-4">
+            @<div class="space-y-2">
                 <RnInputOTP @bind-Value="_otpValue" MaxLength="6">
                     <RnInputOTPGroup>
                         <RnInputOTPSlot Index="0" />
@@ -574,7 +571,7 @@ else
                         <RnInputOTPSlot Index="5" />
                     </RnInputOTPGroup>
                 </RnInputOTP>
-                <p class="text-sm text-muted-foreground">Value: @(_otpValue)</p>
+                <p class="text-sm text-muted-foreground">Enter your one-time password.</p>
             </div>
         ),
 
@@ -975,20 +972,17 @@ else
         ),
 
         new("Toggle Group", "toggle-group", "A set of two-state buttons that can be toggled on or off.",
-            @<div class="space-y-4">
-                <RnToggleGroup @bind-Value="_toggleGroupValue">
-                    <RnToggleGroupItem Value="left">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="3" y1="6" y2="6"/><line x1="15" x2="3" y1="12" y2="12"/><line x1="17" x2="3" y1="18" y2="18"/></svg>
-                    </RnToggleGroupItem>
-                    <RnToggleGroupItem Value="center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="3" y1="6" y2="6"/><line x1="18" x2="6" y1="12" y2="12"/><line x1="21" x2="3" y1="18" y2="18"/></svg>
-                    </RnToggleGroupItem>
-                    <RnToggleGroupItem Value="right">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="3" y1="6" y2="6"/><line x1="21" x2="9" y1="12" y2="12"/><line x1="21" x2="7" y1="18" y2="18"/></svg>
-                    </RnToggleGroupItem>
-                </RnToggleGroup>
-                <p class="text-sm text-muted-foreground">Alignment: @(_toggleGroupValue ?? "None")</p>
-            </div>
+            @<RnToggleGroup @bind-Value="_toggleGroupValue">
+                <RnToggleGroupItem Value="bold" aria-label="Toggle bold">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/></svg>
+                </RnToggleGroupItem>
+                <RnToggleGroupItem Value="italic" aria-label="Toggle italic">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" x2="10" y1="4" y2="4"/><line x1="14" x2="5" y1="20" y2="20"/><line x1="15" x2="9" y1="4" y2="20"/></svg>
+                </RnToggleGroupItem>
+                <RnToggleGroupItem Value="underline" aria-label="Toggle underline">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v6a6 6 0 0 0 12 0V4"/><line x1="4" x2="20" y1="20" y2="20"/></svg>
+                </RnToggleGroupItem>
+            </RnToggleGroup>
         ),
 
         new("Tooltip", "tooltip", "A popup that displays information on hover.",
