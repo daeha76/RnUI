@@ -98,7 +98,7 @@ else
     private string? _expandedItem = "item-1";
     private bool _collapsibleOpen;
     private string? _selectValue;
-    private string? _radioValue = "option-1";
+    private string? _radioValue = "comfortable";
 
     private int _currentPage = 1;
     private DateTime? _calendarDate;
@@ -1501,43 +1501,46 @@ else
 
         // ==================== Radio Group ====================
         new("Radio Group", "radio-group", "A set of checkable buttons where no more than one can be checked at a time.",
-            Demo: @<div class="space-y-4">
-                <RnRadioGroup @bind-Value="_radioValue">
-                    <div class="flex items-center space-x-2">
-                        <RnRadioGroupItem Value="option-1" />
-                        <RnLabel>Option 1</RnLabel>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <RnRadioGroupItem Value="option-2" />
-                        <RnLabel>Option 2</RnLabel>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <RnRadioGroupItem Value="option-3" />
-                        <RnLabel>Option 3</RnLabel>
-                    </div>
-                </RnRadioGroup>
-                <p class="text-sm text-muted-foreground">Selected: @_radioValue</p>
-            </div>,
+            Demo: @<RnRadioGroup @bind-Value="_radioValue">
+                <div class="flex items-center gap-3">
+                    <RnRadioGroupItem Value="default" id="r1" />
+                    <RnLabel For="r1">Default</RnLabel>
+                </div>
+                <div class="flex items-center gap-3">
+                    <RnRadioGroupItem Value="comfortable" id="r2" />
+                    <RnLabel For="r2">Comfortable</RnLabel>
+                </div>
+                <div class="flex items-center gap-3">
+                    <RnRadioGroupItem Value="compact" id="r3" />
+                    <RnLabel For="r3">Compact</RnLabel>
+                </div>
+            </RnRadioGroup>,
             Thumbnail: @<div class="text-xs text-muted-foreground">Radio Group</div>,
             Code: @"<RnRadioGroup @bind-Value=""_value"">
-    <div class=""flex items-center space-x-2"">
-        <RnRadioGroupItem Value=""option-1"" />
-        <RnLabel>Option 1</RnLabel>
+    <div class=""flex items-center gap-3"">
+        <RnRadioGroupItem Value=""default"" id=""r1"" />
+        <RnLabel For=""r1"">Default</RnLabel>
     </div>
-    <div class=""flex items-center space-x-2"">
-        <RnRadioGroupItem Value=""option-2"" />
-        <RnLabel>Option 2</RnLabel>
+    <div class=""flex items-center gap-3"">
+        <RnRadioGroupItem Value=""comfortable"" id=""r2"" />
+        <RnLabel For=""r2"">Comfortable</RnLabel>
+    </div>
+    <div class=""flex items-center gap-3"">
+        <RnRadioGroupItem Value=""compact"" id=""r3"" />
+        <RnLabel For=""r3"">Compact</RnLabel>
     </div>
 </RnRadioGroup>
 
 @code {
-    private string? _value = ""option-1"";
+    private string? _value = ""comfortable"";
 }",
             UsageCode: @"@using RnUI.Components.UI.RadioGroup
 
 <RnRadioGroup @bind-Value=""_value"">
-    <RnRadioGroupItem Value=""a"" />
-    <RnRadioGroupItem Value=""b"" />
+    <div class=""flex items-center gap-3"">
+        <RnRadioGroupItem Value=""a"" id=""r1"" />
+        <RnLabel For=""r1"">Option A</RnLabel>
+    </div>
 </RnRadioGroup>
 
 @code {
@@ -1614,20 +1617,26 @@ else
 
         // ==================== Select ====================
         new("Select", "select", "Displays a list of options for the user to pick from, triggered by a button.",
-            Demo: @<div class="w-full max-w-xs space-y-4">
-                <RnSelect @bind-Value="_selectValue" Placeholder="Select a fruit">
+            Demo: @<RnSelect @bind-Value="_selectValue" Placeholder="Select a fruit" Class="w-[180px]">
+                <RnSelectGroup>
+                    <RnSelectLabel>Fruits</RnSelectLabel>
                     <RnSelectItem Value="apple">Apple</RnSelectItem>
                     <RnSelectItem Value="banana">Banana</RnSelectItem>
-                    <RnSelectItem Value="orange">Orange</RnSelectItem>
-                    <RnSelectItem Value="grape">Grape</RnSelectItem>
-                </RnSelect>
-                <p class="text-sm text-muted-foreground">Selected: @(_selectValue ?? "None")</p>
-            </div>,
+                    <RnSelectItem Value="blueberry">Blueberry</RnSelectItem>
+                    <RnSelectItem Value="grapes">Grapes</RnSelectItem>
+                    <RnSelectItem Value="pineapple">Pineapple</RnSelectItem>
+                </RnSelectGroup>
+            </RnSelect>,
             Thumbnail: @<div class="text-xs text-muted-foreground">Select</div>,
-            Code: @"<RnSelect @bind-Value=""_value"" Placeholder=""Select a fruit"">
-    <RnSelectItem Value=""apple"">Apple</RnSelectItem>
-    <RnSelectItem Value=""banana"">Banana</RnSelectItem>
-    <RnSelectItem Value=""orange"">Orange</RnSelectItem>
+            Code: @"<RnSelect @bind-Value=""_value"" Placeholder=""Select a fruit"" Class=""w-[180px]"">
+    <RnSelectGroup>
+        <RnSelectLabel>Fruits</RnSelectLabel>
+        <RnSelectItem Value=""apple"">Apple</RnSelectItem>
+        <RnSelectItem Value=""banana"">Banana</RnSelectItem>
+        <RnSelectItem Value=""blueberry"">Blueberry</RnSelectItem>
+        <RnSelectItem Value=""grapes"">Grapes</RnSelectItem>
+        <RnSelectItem Value=""pineapple"">Pineapple</RnSelectItem>
+    </RnSelectGroup>
 </RnSelect>
 
 @code {
@@ -1636,8 +1645,11 @@ else
             UsageCode: @"@using RnUI.Components.UI.Select
 
 <RnSelect @bind-Value=""_value"" Placeholder=""Select..."">
-    <RnSelectItem Value=""a"">Option A</RnSelectItem>
-    <RnSelectItem Value=""b"">Option B</RnSelectItem>
+    <RnSelectGroup>
+        <RnSelectLabel>Group Label</RnSelectLabel>
+        <RnSelectItem Value=""a"">Option A</RnSelectItem>
+        <RnSelectItem Value=""b"">Option B</RnSelectItem>
+    </RnSelectGroup>
 </RnSelect>
 
 @code {
@@ -1830,13 +1842,9 @@ else
 
         // ==================== Slider ====================
         new("Slider", "slider", "An input where the user selects a value from within a given range.",
-            Demo: @<div class="w-full max-w-md space-y-4">
-                <RnSlider @bind-Value="_sliderValue" />
-                <p class="text-sm text-muted-foreground">Value: @_sliderValue</p>
-            </div>,
+            Demo: @<RnSlider @bind-Value="_sliderValue" Max="100" Step="1" Class="w-3/5" />,
             Thumbnail: @<div class="w-[140px]"><RnSlider Value="50" /></div>,
-            Code: @"<RnSlider @bind-Value=""_value"" />
-<p>Value: @_value</p>
+            Code: @"<RnSlider @bind-Value=""_value"" Max=""100"" Step=""1"" Class=""w-3/5"" />
 
 @code {
     private double _value = 50;

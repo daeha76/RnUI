@@ -1,22 +1,22 @@
 @* RnRadioGroupItem component *@
 
-<RnButton type="button" role="radio"
+<button type="button" role="radio"
         data-slot="radio-group-item"
+        data-state="@(IsSelected ? "checked" : "unchecked")"
         aria-checked="@IsSelected.ToString().ToLower()"
-        data-checked="@(IsSelected ? "" : null)"
         class="@CssUtils.Cn("cn-radio-group-item", Class)"
-        Disabled="@Disabled"
+        disabled="@(Disabled ? true : (object?)null)"
         @onclick="HandleClick"
         @attributes="AdditionalAttributes">
     @if (IsSelected)
     {
-        <span class="flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="currentColor">
+        <span data-slot="radio-group-indicator" class="cn-radio-group-indicator">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                 <circle cx="12" cy="12" r="12" />
             </svg>
         </span>
     }
-</RnButton>
+</button>
 
 @code {
     [CascadingParameter] public RnRadioGroup? Parent { get; set; }

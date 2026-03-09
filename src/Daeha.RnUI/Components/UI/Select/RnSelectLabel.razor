@@ -1,0 +1,11 @@
+@* RnSelectLabel component *@
+
+<div data-slot="select-label" class="@CssUtils.Cn("cn-select-label", Class)" @attributes="AdditionalAttributes">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

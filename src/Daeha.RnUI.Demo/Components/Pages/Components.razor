@@ -67,7 +67,7 @@ else
     private string? _expandedItem = "item-1";
     private bool _collapsibleOpen;
     private string? _selectValue;
-    private string? _radioValue = "option-1";
+    private string? _radioValue = "comfortable";
     private int _currentPage = 1;
 
     // State for new component demos
@@ -708,23 +708,20 @@ else
         ),
 
         new("Radio Group", "radio-group", "A set of checkable buttons where only one can be checked.",
-            @<div class="space-y-4">
-                <RnRadioGroup @bind-Value="_radioValue">
-                    <div class="flex items-center space-x-2">
-                        <RnRadioGroupItem Value="option-1" />
-                        <RnLabel>Option 1</RnLabel>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <RnRadioGroupItem Value="option-2" />
-                        <RnLabel>Option 2</RnLabel>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <RnRadioGroupItem Value="option-3" />
-                        <RnLabel>Option 3</RnLabel>
-                    </div>
-                </RnRadioGroup>
-                <p class="text-sm text-muted-foreground">Selected: @_radioValue</p>
-            </div>
+            @<RnRadioGroup @bind-Value="_radioValue">
+                <div class="flex items-center gap-3">
+                    <RnRadioGroupItem Value="default" id="r1" />
+                    <RnLabel For="r1">Default</RnLabel>
+                </div>
+                <div class="flex items-center gap-3">
+                    <RnRadioGroupItem Value="comfortable" id="r2" />
+                    <RnLabel For="r2">Comfortable</RnLabel>
+                </div>
+                <div class="flex items-center gap-3">
+                    <RnRadioGroupItem Value="compact" id="r3" />
+                    <RnLabel For="r3">Compact</RnLabel>
+                </div>
+            </RnRadioGroup>
         ),
 
         new("Resizable", "resizable", "Accessible resizable panel groups and layouts.",
@@ -759,15 +756,16 @@ else
         ),
 
         new("Select", "select", "Displays a list of options for the user to pick from.",
-            @<div class="space-y-4 max-w-xs">
-                <RnSelect @bind-Value="_selectValue" Placeholder="Select a fruit">
+            @<RnSelect @bind-Value="_selectValue" Placeholder="Select a fruit" Class="w-[180px]">
+                <RnSelectGroup>
+                    <RnSelectLabel>Fruits</RnSelectLabel>
                     <RnSelectItem Value="apple">Apple</RnSelectItem>
                     <RnSelectItem Value="banana">Banana</RnSelectItem>
-                    <RnSelectItem Value="orange">Orange</RnSelectItem>
-                    <RnSelectItem Value="grape">Grape</RnSelectItem>
-                </RnSelect>
-                <p class="text-sm text-muted-foreground">Selected: @(_selectValue ?? "None")</p>
-            </div>
+                    <RnSelectItem Value="blueberry">Blueberry</RnSelectItem>
+                    <RnSelectItem Value="grapes">Grapes</RnSelectItem>
+                    <RnSelectItem Value="pineapple">Pineapple</RnSelectItem>
+                </RnSelectGroup>
+            </RnSelect>
         ),
 
         new("Separator", "separator", "Visually or semantically separates content.",
@@ -850,10 +848,7 @@ else
         ),
 
         new("Slider", "slider", "An input where the user selects a value from a range.",
-            @<div class="space-y-4 max-w-md">
-                <RnSlider @bind-Value="_sliderValue" />
-                <p class="text-sm text-muted-foreground">Value: @_sliderValue</p>
-            </div>
+            @<RnSlider @bind-Value="_sliderValue" Max="100" Step="1" Class="w-3/5" />
         ),
 
         new("Spinner", "spinner", "An animated loading indicator.",
