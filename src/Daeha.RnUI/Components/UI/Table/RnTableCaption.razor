@@ -1,6 +1,6 @@
-<thead data-slot="table-header" class="@CssUtils.Cn("cn-table-header", Class)" @attributes="AdditionalAttributes">
+<caption data-slot="table-caption" class="@CssUtils.Cn("cn-table-caption", Class)" @attributes="AdditionalAttributes">
     @ChildContent
-</thead>
+</caption>
 
 @code {
     [Parameter] public RenderFragment? ChildContent { get; set; }

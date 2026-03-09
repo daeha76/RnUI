@@ -979,38 +979,67 @@ else
         ),
 
         new("Table", "table", "A responsive table component.",
-            @<div>
-                <RnTable>
-                    <RnTableHeader>
-                        <RnTableRow>
-                            <RnTableHead>Invoice</RnTableHead>
-                            <RnTableHead>Status</RnTableHead>
-                            <RnTableHead>Method</RnTableHead>
-                            <RnTableHead Class="text-right">Amount</RnTableHead>
-                        </RnTableRow>
-                    </RnTableHeader>
-                    <RnTableBody>
-                        <RnTableRow>
-                            <RnTableCell>INV001</RnTableCell>
-                            <RnTableCell><RnBadge>Paid</RnBadge></RnTableCell>
-                            <RnTableCell>Credit Card</RnTableCell>
-                            <RnTableCell Class="text-right">$250.00</RnTableCell>
-                        </RnTableRow>
-                        <RnTableRow>
-                            <RnTableCell>INV002</RnTableCell>
-                            <RnTableCell><RnBadge Variant="BadgeVariant.Outline">Pending</RnBadge></RnTableCell>
-                            <RnTableCell>PayPal</RnTableCell>
-                            <RnTableCell Class="text-right">$150.00</RnTableCell>
-                        </RnTableRow>
-                        <RnTableRow>
-                            <RnTableCell>INV003</RnTableCell>
-                            <RnTableCell><RnBadge Variant="BadgeVariant.Destructive">Overdue</RnBadge></RnTableCell>
-                            <RnTableCell>Bank Transfer</RnTableCell>
-                            <RnTableCell Class="text-right">$350.00</RnTableCell>
-                        </RnTableRow>
-                    </RnTableBody>
-                </RnTable>
-            </div>
+            @<RnTable>
+                <RnTableCaption>A list of your recent invoices.</RnTableCaption>
+                <RnTableHeader>
+                    <RnTableRow>
+                        <RnTableHead Class="w-[100px]">Invoice</RnTableHead>
+                        <RnTableHead>Status</RnTableHead>
+                        <RnTableHead>Method</RnTableHead>
+                        <RnTableHead Class="text-right">Amount</RnTableHead>
+                    </RnTableRow>
+                </RnTableHeader>
+                <RnTableBody>
+                    <RnTableRow>
+                        <RnTableCell Class="font-medium">INV001</RnTableCell>
+                        <RnTableCell>Paid</RnTableCell>
+                        <RnTableCell>Credit Card</RnTableCell>
+                        <RnTableCell Class="text-right">$250.00</RnTableCell>
+                    </RnTableRow>
+                    <RnTableRow>
+                        <RnTableCell Class="font-medium">INV002</RnTableCell>
+                        <RnTableCell>Pending</RnTableCell>
+                        <RnTableCell>PayPal</RnTableCell>
+                        <RnTableCell Class="text-right">$150.00</RnTableCell>
+                    </RnTableRow>
+                    <RnTableRow>
+                        <RnTableCell Class="font-medium">INV003</RnTableCell>
+                        <RnTableCell>Unpaid</RnTableCell>
+                        <RnTableCell>Bank Transfer</RnTableCell>
+                        <RnTableCell Class="text-right">$350.00</RnTableCell>
+                    </RnTableRow>
+                    <RnTableRow>
+                        <RnTableCell Class="font-medium">INV004</RnTableCell>
+                        <RnTableCell>Paid</RnTableCell>
+                        <RnTableCell>Credit Card</RnTableCell>
+                        <RnTableCell Class="text-right">$450.00</RnTableCell>
+                    </RnTableRow>
+                    <RnTableRow>
+                        <RnTableCell Class="font-medium">INV005</RnTableCell>
+                        <RnTableCell>Paid</RnTableCell>
+                        <RnTableCell>PayPal</RnTableCell>
+                        <RnTableCell Class="text-right">$550.00</RnTableCell>
+                    </RnTableRow>
+                    <RnTableRow>
+                        <RnTableCell Class="font-medium">INV006</RnTableCell>
+                        <RnTableCell>Pending</RnTableCell>
+                        <RnTableCell>Bank Transfer</RnTableCell>
+                        <RnTableCell Class="text-right">$200.00</RnTableCell>
+                    </RnTableRow>
+                    <RnTableRow>
+                        <RnTableCell Class="font-medium">INV007</RnTableCell>
+                        <RnTableCell>Unpaid</RnTableCell>
+                        <RnTableCell>Credit Card</RnTableCell>
+                        <RnTableCell Class="text-right">$300.00</RnTableCell>
+                    </RnTableRow>
+                </RnTableBody>
+                <RnTableFooter>
+                    <RnTableRow>
+                        <RnTableCell colspan="3">Total</RnTableCell>
+                        <RnTableCell Class="text-right">$2,500.00</RnTableCell>
+                    </RnTableRow>
+                </RnTableFooter>
+            </RnTable>
         ),
 
         new("Tabs", "tabs", "A set of layered sections of content, shown one at a time.",
