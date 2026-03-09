@@ -716,7 +716,7 @@
 }
 
 .cn-pagination-link {
-  @apply inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-9 min-w-9;
+  @apply inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-9 min-w-9 cursor-pointer focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 [&_svg]:size-4;
 }
 
 .cn-pagination-link[data-active] {
