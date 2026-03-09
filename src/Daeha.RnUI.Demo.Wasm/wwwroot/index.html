@@ -27,6 +27,8 @@
     <link rel="stylesheet" href="css/tailwindcss.css" />
     <link rel="stylesheet" href="css/app.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
+    <!-- Prism.js syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
     <link href="Daeha.RnUI.Demo.Wasm.styles.css" rel="stylesheet" />
     <script type="importmap"></script>
 </head>
@@ -46,6 +48,15 @@
         <span class="dismiss">🗙</span>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script>
+        window.highlightCode = function(element) {
+            if (element && window.Prism) {
+                Prism.highlightAllUnder(element);
+            }
+        };
+    </script>
 </body>
 
 </html>

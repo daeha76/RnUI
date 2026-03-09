@@ -5,7 +5,7 @@
             disabled="@Item?.Disabled"
             aria-expanded="@(IsExpanded ? "true" : "false")"
             aria-disabled="@(Item?.Disabled == true ? "true" : null)"
-            class="@CssUtils.Cn("cn-accordion-trigger", Class)"
+            class="@CssUtils.Cn("cn-accordion-trigger cursor-pointer", Class)"
             @onclick="HandleClick"
             @attributes="AdditionalAttributes">
         @ChildContent

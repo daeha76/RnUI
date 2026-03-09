@@ -1,6 +1,7 @@
 @inject IJSRuntime JS
+@using Microsoft.AspNetCore.Components
 
-<div class="relative my-4 overflow-hidden rounded-xl border border-border">
+<div class="relative my-4 overflow-hidden rounded-xl border border-[var(--color-border-subtle)]">
     @if (!string.IsNullOrEmpty(FileName))
     {
         <div class="flex items-center border-b border-white/5 bg-zinc-900 px-4 py-2">
@@ -26,8 +27,8 @@
             </svg>
         }
     </button>
-    <div class="overflow-x-auto bg-zinc-950">
-        <pre class="p-4 text-sm leading-relaxed"><code class="font-mono text-zinc-300">@Code</code></pre>
+    <div class="overflow-x-auto bg-zinc-950" @ref="_codeContainer">
+        <pre class="p-4 text-sm leading-relaxed"><code class="language-markup font-mono">@Code</code></pre>
     </div>
 </div>
 
@@ -36,6 +37,13 @@
     [Parameter] public string? FileName { get; set; }
 
     private bool _copied;
+    private ElementReference _codeContainer;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            await JS.InvokeVoidAsync("highlightCode", _codeContainer);
+    }
 
     private async Task CopyCode()
     {

@@ -46,6 +46,9 @@
   --color-sidebar-border: oklch(0.922 0 0);
   --color-sidebar-ring: oklch(0.708 0 0);
 
+  /* Subtle border - 50% transparent version of --color-border */
+  --color-border-subtle: color-mix(in oklch, var(--color-border) 50%, transparent);
+
   /* Animation tokens */
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
@@ -65,7 +68,7 @@
  * Dark mode overrides
  */
 .dark {
-  --color-background: oklch(0.145 0 0);
+  --color-background: oklch(0.11 0 0);
   --color-foreground: oklch(0.985 0 0);
   --color-card: oklch(0.145 0 0);
   --color-card-foreground: oklch(0.985 0 0);
@@ -92,6 +95,7 @@
   --color-sidebar-accent-foreground: oklch(0.985 0 0);
   --color-sidebar-border: oklch(0.269 0 0);
   --color-sidebar-ring: oklch(0.439 0 0);
+  --color-border-subtle: color-mix(in oklch, var(--color-border) 50%, transparent);
 }
 
 /*
@@ -114,7 +118,7 @@
 
 /* Button */
 .cn-button {
-  @apply inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4;
+  @apply cursor-pointer inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4;
 }
 
 .cn-button-variant-default {
@@ -126,7 +130,7 @@
 }
 
 .cn-button-variant-outline {
-  @apply border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50;
+  @apply border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/80;
 }
 
 .cn-button-variant-secondary {
@@ -134,7 +138,7 @@
 }
 
 .cn-button-variant-ghost {
-  @apply hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50;
+  @apply hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/80;
 }
 
 .cn-button-variant-link {
@@ -245,7 +249,8 @@
 
 /* Card */
 .cn-card {
-  @apply rounded-xl border bg-card text-card-foreground shadow-sm;
+  @apply rounded-xl bg-card text-card-foreground shadow-sm;
+  border: 1px solid var(--color-border-subtle);
 }
 
 .cn-card-header {
@@ -303,15 +308,19 @@
 
 /* Alert */
 .cn-alert {
-  @apply relative w-full rounded-lg border px-4 py-3 text-sm grid grid-cols-[calc(var(--spacing)*4)_1fr] items-start gap-x-3 gap-y-0.5 [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current;
+  @apply relative w-full rounded-lg border border-border px-4 py-3 text-sm grid grid-cols-[calc(var(--spacing)*4)_1fr] items-start gap-x-3 gap-y-0.5 [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current;
 }
 
 .cn-alert-variant-default {
-  @apply bg-card text-card-foreground;
+  @apply bg-muted/50 text-card-foreground;
 }
 
 .cn-alert-variant-destructive {
-  @apply text-destructive bg-card *:data-[slot=alert-description]:text-destructive/90;
+  @apply text-destructive bg-muted/50;
+}
+
+.cn-alert-variant-destructive .cn-alert-description {
+  color: color-mix(in oklch, var(--color-destructive) 90%, transparent);
 }
 
 .cn-alert-title {
@@ -445,7 +454,8 @@
 
 /* Accordion */
 .cn-accordion-item {
-  @apply border-b last:border-b-0;
+  @apply last:border-b-0;
+  border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .cn-accordion-trigger {
@@ -664,7 +674,8 @@
 }
 
 .cn-table-header {
-  @apply [&_tr]:border-b;
+  @apply [&_tr:last-child]:border-b-0;
+  border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .cn-table-body {
@@ -672,11 +683,13 @@
 }
 
 .cn-table-footer {
-  @apply border-t bg-muted/50 font-medium [&>tr]:last:border-b-0;
+  @apply bg-muted/50 font-medium [&>tr]:last:border-b-0;
+  border-top: 1px solid var(--color-border-subtle);
 }
 
 .cn-table-row {
-  @apply border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted;
+  @apply transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted;
+  border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .cn-table-head {

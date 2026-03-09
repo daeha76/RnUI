@@ -2,107 +2,41 @@
 @source "../../Daeha.RnUI/**/*.razor";
 @source "../**/*.razor";
 
-/* Accordion keyframe animations */
-@keyframes accordion-down {
-  from {
-    height: 0;
-    overflow: hidden;
-  }
+/*
+ * ============================================================
+ *  RnUI Demo - Tailwind CSS Entry Point
+ * ============================================================
+ *
+ *  역할: Tailwind 유틸리티 클래스 스캔 (+ 필요 시 라이브러리 기본값 오버라이드)
+ *
+ *  [중요] 디자인 토큰의 Source of Truth는 라이브러리다.
+ *    - @theme, .dark 정의는 shadcn.src.css 에서 관리
+ *    - 이 파일에 중복 정의하면 라이브러리 변경이 데모에 반영되지 않음
+ *
+ *  [참고] .agents/knowledge/rnui-css-architecture.md
+ * ============================================================
+ */
 
-  to {
-    height: var(--accordion-content-height, 100%);
-    overflow: hidden;
-  }
+/* Accordion keyframeanimations: 데모 Tailwind 빌드가 라이브러리의 shadcn.css보다
+   먼저 처리될 수 있으므로, 데모 측에도 선언이 필요 */
+@keyframes accordion-down {
+  from { height: 0; overflow: hidden; }
+  to { height: var(--accordion-content-height, 100%); overflow: hidden; }
 }
 
 @keyframes accordion-up {
-  from {
-    height: var(--accordion-content-height, 100%);
-    overflow: hidden;
-  }
-
-  to {
-    height: 0;
-    overflow: hidden;
-  }
+  from { height: var(--accordion-content-height, 100%); overflow: hidden; }
+  to { height: 0; overflow: hidden; }
 }
 
 /*
- * shadcn/ui Blazor - Design Tokens & Theme Variables
- * Tailwind CSS only. No Bootstrap.
+ * 데모 전용 오버라이드 (라이브러리 기본값을 바꾸고 싶을 때만 여기에 추가):
+ *
+ * @theme {
+ *   --color-brand: oklch(0.6 0.2 250);
+ * }
+ *
+ * .dark {
+ *   --color-brand: oklch(0.7 0.2 250);
+ * }
  */
-
-@theme {
-  /* Accordion animations */
-  --animate-accordion-down: accordion-down 0.2s ease-out;
-  --animate-accordion-up: accordion-up 0.2s ease-out;
-
-  /* Border radius tokens */
-  --radius-lg: 0.5rem;
-  --radius-md: calc(var(--radius-lg) - 2px);
-  --radius-sm: calc(var(--radius-lg) - 4px);
-
-  /* Color tokens - Light mode */
-  --color-background: oklch(1 0 0);
-  --color-foreground: oklch(0.145 0 0);
-  --color-card: oklch(1 0 0);
-  --color-card-foreground: oklch(0.145 0 0);
-  --color-popover: oklch(1 0 0);
-  --color-popover-foreground: oklch(0.145 0 0);
-  --color-primary: oklch(0.205 0 0);
-  --color-primary-foreground: oklch(0.985 0 0);
-  --color-secondary: oklch(0.965 0 0);
-  --color-secondary-foreground: oklch(0.205 0 0);
-  --color-muted: oklch(0.965 0 0);
-  --color-muted-foreground: oklch(0.556 0 0);
-  --color-accent: oklch(0.965 0 0);
-  --color-accent-foreground: oklch(0.205 0 0);
-  --color-destructive: oklch(0.577 0.245 27.325);
-  --color-destructive-foreground: oklch(0.985 0 0);
-  --color-border: oklch(0.922 0 0);
-  --color-input: oklch(0.922 0 0);
-  --color-ring: oklch(0.708 0 0);
-
-  /* Sidebar tokens */
-  --color-sidebar: oklch(0.985 0 0);
-  --color-sidebar-foreground: oklch(0.145 0 0);
-  --color-sidebar-primary: oklch(0.205 0 0);
-  --color-sidebar-primary-foreground: oklch(0.985 0 0);
-  --color-sidebar-accent: oklch(0.965 0 0);
-  --color-sidebar-accent-foreground: oklch(0.205 0 0);
-  --color-sidebar-border: oklch(0.922 0 0);
-  --color-sidebar-ring: oklch(0.708 0 0);
-}
-
-/*
- * Dark mode overrides
- */
-.dark {
-  --color-background: oklch(0.145 0 0);
-  --color-foreground: oklch(0.985 0 0);
-  --color-card: oklch(0.145 0 0);
-  --color-card-foreground: oklch(0.985 0 0);
-  --color-popover: oklch(0.145 0 0);
-  --color-popover-foreground: oklch(0.985 0 0);
-  --color-primary: oklch(0.985 0 0);
-  --color-primary-foreground: oklch(0.205 0 0);
-  --color-secondary: oklch(0.269 0 0);
-  --color-secondary-foreground: oklch(0.985 0 0);
-  --color-muted: oklch(0.269 0 0);
-  --color-muted-foreground: oklch(0.708 0 0);
-  --color-accent: oklch(0.269 0 0);
-  --color-accent-foreground: oklch(0.985 0 0);
-  --color-destructive: oklch(0.396 0.141 25.723);
-  --color-destructive-foreground: oklch(0.637 0.237 25.331);
-  --color-border: oklch(0.269 0 0);
-  --color-input: oklch(0.269 0 0);
-  --color-ring: oklch(0.439 0 0);
-  --color-sidebar: oklch(0.175 0 0);
-  --color-sidebar-foreground: oklch(0.985 0 0);
-  --color-sidebar-primary: oklch(0.985 0 0);
-  --color-sidebar-primary-foreground: oklch(0.205 0 0);
-  --color-sidebar-accent: oklch(0.269 0 0);
-  --color-sidebar-accent-foreground: oklch(0.985 0 0);
-  --color-sidebar-border: oklch(0.269 0 0);
-  --color-sidebar-ring: oklch(0.439 0 0);
-}
