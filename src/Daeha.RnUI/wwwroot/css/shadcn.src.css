@@ -384,24 +384,24 @@
 
 /* Popover */
 .cn-popover-content {
-  @apply rounded-md border border-border bg-popover p-4 text-popover-foreground shadow-md outline-none;
+  @apply rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-hidden;
 }
 
 .cn-popover-header {
-  @apply mb-2;
+  @apply flex flex-col gap-1 text-sm;
 }
 
 .cn-popover-title {
-  @apply font-medium leading-none;
+  @apply font-medium;
 }
 
 .cn-popover-description {
-  @apply text-sm text-muted-foreground;
+  @apply text-muted-foreground;
 }
 
 /* Tooltip */
 .cn-tooltip-content {
-  @apply rounded-md px-3 py-1.5 text-xs;
+  @apply rounded-md bg-foreground px-3 py-1.5 text-xs text-balance text-background;
 }
 
 /* Tabs */
@@ -820,7 +820,7 @@
 
 /* Hover Card */
 .cn-hover-card-content {
-  @apply z-50 w-64 rounded-md border border-border bg-popover p-4 text-popover-foreground shadow-md outline-none;
+  @apply w-64 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-hidden;
 }
 
 /* Toast / Sonner */
