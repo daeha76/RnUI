@@ -1,10 +1,10 @@
 ﻿<div data-slot="accordion-content"
      data-state="@(IsExpanded ? "open" : "closed")"
      style="display:grid; grid-template-rows: @(IsExpanded ? "1fr" : "0fr"); transition: grid-template-rows 200ms ease-out;"
-     class="@CssUtils.Cn("text-sm", Class)"
+     class="@CssUtils.Cn("cn-accordion-content", Class)"
      @attributes="AdditionalAttributes">
     <div class="overflow-hidden">
-        <div class="pt-0 pb-4">
+        <div class="cn-accordion-content-inner">
             @ChildContent
         </div>
     </div>

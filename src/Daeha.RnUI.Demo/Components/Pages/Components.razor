@@ -92,19 +92,34 @@ else
 
     private ComponentDemo[] _componentDemos => [
         new("Accordion", "accordion", "A vertically stacked set of expandable items.",
-            @<div class="space-y-4 max-w-md">
+            @<div class="w-full max-w-md">
                 <RnAccordion @bind-Value="_expandedItem">
                     <RnAccordionItem Value="item-1">
-                        <RnAccordionTrigger>Is it accessible?</RnAccordionTrigger>
-                        <RnAccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</RnAccordionContent>
+                        <RnAccordionTrigger>Product Information</RnAccordionTrigger>
+                        <RnAccordionContent>
+                            <div class="flex flex-col gap-4 text-balance">
+                                <p>Our flagship product combines cutting-edge technology with sleek design. Built with premium materials, it offers unparalleled performance and reliability.</p>
+                                <p>Key features include advanced processing capabilities, and an intuitive user interface designed for both beginners and experts.</p>
+                            </div>
+                        </RnAccordionContent>
                     </RnAccordionItem>
                     <RnAccordionItem Value="item-2">
-                        <RnAccordionTrigger>Is it styled?</RnAccordionTrigger>
-                        <RnAccordionContent>Yes. It comes with default styles that match the other components' aesthetic.</RnAccordionContent>
+                        <RnAccordionTrigger>Shipping Details</RnAccordionTrigger>
+                        <RnAccordionContent>
+                            <div class="flex flex-col gap-4 text-balance">
+                                <p>We offer worldwide shipping through trusted courier partners. Standard delivery takes 3-5 business days, while express shipping ensures delivery within 1-2 business days.</p>
+                                <p>All orders are carefully packaged and fully insured. Track your shipment in real-time through our dedicated tracking portal.</p>
+                            </div>
+                        </RnAccordionContent>
                     </RnAccordionItem>
                     <RnAccordionItem Value="item-3">
-                        <RnAccordionTrigger>Is it animated?</RnAccordionTrigger>
-                        <RnAccordionContent>Yes. It's animated by default, but you can disable it if you prefer.</RnAccordionContent>
+                        <RnAccordionTrigger>Return Policy</RnAccordionTrigger>
+                        <RnAccordionContent>
+                            <div class="flex flex-col gap-4 text-balance">
+                                <p>We stand behind our products with a comprehensive 30-day return policy. If you're not completely satisfied, simply return the item in its original condition.</p>
+                                <p>Our hassle-free return process includes free return shipping and full refunds processed within 48 hours of receiving the returned item.</p>
+                            </div>
+                        </RnAccordionContent>
                     </RnAccordionItem>
                 </RnAccordion>
             </div>
@@ -364,22 +379,21 @@ else
         ),
 
         new("Collapsible", "collapsible", "An interactive component that expands/collapses.",
-            @<div class="max-w-md">
-                <RnCollapsible @bind-Open="_collapsibleOpen">
+            @<div class="w-[350px]">
+                <RnCollapsible @bind-Open="_collapsibleOpen" Class="flex flex-col gap-2">
                     <Trigger>
-                        <div class="flex items-center justify-between space-x-4 px-4">
-                            <h4 class="text-sm font-semibold">starred repositories</h4>
-                            <RnButton Variant="ButtonVariant.Ghost" Size="ButtonSize.Sm">
-                                @(_collapsibleOpen ? "Hide" : "Show")
+                        <div class="flex items-center justify-between gap-4 px-4">
+                            <h4 class="text-sm font-semibold">@@peduarte starred 3 repositories</h4>
+                            <RnButton Variant="ButtonVariant.Ghost" Size="ButtonSize.Icon" Class="size-8">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+                                <span class="sr-only">Toggle</span>
                             </RnButton>
                         </div>
                     </Trigger>
                     <ChildContent>
-                        <div class="space-y-2 px-4 pt-2">
-                            <div class="rounded-md border px-4 py-3 text-sm">shadcn/ui</div>
-                            <div class="rounded-md border px-4 py-3 text-sm">tailwindcss/tailwindcss</div>
-                            <div class="rounded-md border px-4 py-3 text-sm">dotnet/aspnetcore</div>
-                        </div>
+                        <div class="rounded-md border px-4 py-2 font-mono text-sm">@@radix-ui/primitives</div>
+                        <div class="rounded-md border px-4 py-2 font-mono text-sm">@@radix-ui/colors</div>
+                        <div class="rounded-md border px-4 py-2 font-mono text-sm">@@stitches/react</div>
                     </ChildContent>
                 </RnCollapsible>
             </div>
@@ -906,7 +920,7 @@ else
         ),
 
         new("Tabs", "tabs", "A set of layered sections of content, shown one at a time.",
-            @<div>
+            @<div class="flex w-full max-w-sm flex-col gap-6">
                 <RnTabs @bind-ActiveTab="_activeTab">
                     <RnTabsList>
                         <RnTabsTrigger Value="account">Account</RnTabsTrigger>
@@ -916,28 +930,46 @@ else
                         <RnCard>
                             <RnCardHeader>
                                 <RnCardTitle>Account</RnCardTitle>
-                                <RnCardDescription>Make changes to your account here.</RnCardDescription>
+                                <RnCardDescription>Make changes to your account here. Click save when you're done.</RnCardDescription>
                             </RnCardHeader>
                             <RnCardContent>
-                                <div class="space-y-2">
-                                    <RnLabel>Name</RnLabel>
-                                    <RnInput Placeholder="Your name" />
+                                <div class="grid gap-6">
+                                    <div class="grid gap-3">
+                                        <RnLabel For="tabs-demo-name">Name</RnLabel>
+                                        <RnInput id="tabs-demo-name" Placeholder="Pedro Duarte" />
+                                    </div>
+                                    <div class="grid gap-3">
+                                        <RnLabel For="tabs-demo-username">Username</RnLabel>
+                                        <RnInput id="tabs-demo-username" Placeholder="@@peduarte" />
+                                    </div>
                                 </div>
                             </RnCardContent>
+                            <RnCardFooter>
+                                <RnButton>Save changes</RnButton>
+                            </RnCardFooter>
                         </RnCard>
                     </RnTabsContent>
                     <RnTabsContent Value="password">
                         <RnCard>
                             <RnCardHeader>
                                 <RnCardTitle>Password</RnCardTitle>
-                                <RnCardDescription>Change your password here.</RnCardDescription>
+                                <RnCardDescription>Change your password here. After saving, you'll be logged out.</RnCardDescription>
                             </RnCardHeader>
                             <RnCardContent>
-                                <div class="space-y-2">
-                                    <RnLabel>New Password</RnLabel>
-                                    <RnInput Type="password" />
+                                <div class="grid gap-6">
+                                    <div class="grid gap-3">
+                                        <RnLabel For="tabs-demo-current">Current password</RnLabel>
+                                        <RnInput id="tabs-demo-current" Type="password" />
+                                    </div>
+                                    <div class="grid gap-3">
+                                        <RnLabel For="tabs-demo-new">New password</RnLabel>
+                                        <RnInput id="tabs-demo-new" Type="password" />
+                                    </div>
                                 </div>
                             </RnCardContent>
+                            <RnCardFooter>
+                                <RnButton>Save password</RnButton>
+                            </RnCardFooter>
                         </RnCard>
                     </RnTabsContent>
                 </RnTabs>
