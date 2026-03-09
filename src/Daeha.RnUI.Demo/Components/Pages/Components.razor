@@ -113,12 +113,22 @@ else
         new("Alert", "alert", "Displays a callout for important information.",
             @<div class="space-y-4 max-w-lg">
                 <RnAlert>
-                    <RnAlertTitle>Heads up!</RnAlertTitle>
-                    <RnAlertDescription>You can add components to your app using the CLI.</RnAlertDescription>
+                    <Icon>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                    </Icon>
+                    <ChildContent>
+                        <RnAlertTitle>Heads up!</RnAlertTitle>
+                        <RnAlertDescription>You can add components to your app using the CLI.</RnAlertDescription>
+                    </ChildContent>
                 </RnAlert>
                 <RnAlert Variant="AlertVariant.Destructive">
-                    <RnAlertTitle>Error</RnAlertTitle>
-                    <RnAlertDescription>Your session has expired. Please log in again.</RnAlertDescription>
+                    <Icon>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+                    </Icon>
+                    <ChildContent>
+                        <RnAlertTitle>Error</RnAlertTitle>
+                        <RnAlertDescription>Your session has expired. Please log in again.</RnAlertDescription>
+                    </ChildContent>
                 </RnAlert>
             </div>
         ),
@@ -311,27 +321,28 @@ else
         ),
 
         new("Card", "card", "Displays a card with header, content, and footer.",
-            @<div class="grid gap-4 md:grid-cols-2">
+            @<div class="w-full max-w-sm">
                 <RnCard>
                     <RnCardHeader>
-                        <RnCardTitle>Card Title</RnCardTitle>
-                        <RnCardDescription>Card description goes here.</RnCardDescription>
+                        <RnCardTitle>Notifications</RnCardTitle>
+                        <RnCardDescription>You have 3 unread messages.</RnCardDescription>
                     </RnCardHeader>
-                    <RnCardContent>
-                        <p>Card content with some example text.</p>
+                    <RnCardContent class="grid gap-4">
+                        <div class="flex items-center gap-4 rounded-md border p-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                            <div class="flex-1 space-y-1">
+                                <p class="text-sm font-medium leading-none">Push Notifications</p>
+                                <p class="text-sm text-muted-foreground">Send notifications to device.</p>
+                            </div>
+                            <RnSwitch />
+                        </div>
                     </RnCardContent>
                     <RnCardFooter>
-                        <RnButton>Action</RnButton>
+                        <RnButton Class="w-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            Mark all as read
+                        </RnButton>
                     </RnCardFooter>
-                </RnCard>
-                <RnCard>
-                    <RnCardHeader>
-                        <RnCardTitle>Another Card</RnCardTitle>
-                        <RnCardDescription>With different content.</RnCardDescription>
-                    </RnCardHeader>
-                    <RnCardContent>
-                        <p>More example content here.</p>
-                    </RnCardContent>
                 </RnCard>
             </div>
         ),
