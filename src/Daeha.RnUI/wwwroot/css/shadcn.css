@@ -597,9 +597,9 @@
   --color-sidebar-accent-foreground: oklch(0.985 0 0);
   --color-sidebar-border: oklch(0.269 0 0);
   --color-sidebar-ring: oklch(0.439 0 0);
-  --color-border-subtle: color-mix(in srgb, oklch(0.922 0 0) 50%, transparent);
+  --color-border-subtle: color-mix(in srgb, oklch(0.922 0 0) 100%, transparent);
   @supports (color: color-mix(in lab, red, red)) {
-    --color-border-subtle: color-mix(in oklch, var(--color-border) 50%, transparent);
+    --color-border-subtle: color-mix(in oklch, var(--color-border) 100%, transparent);
   }
 }
 @layer base {
