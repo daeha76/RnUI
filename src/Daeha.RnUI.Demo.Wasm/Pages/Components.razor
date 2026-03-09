@@ -1238,24 +1238,38 @@ else
 
         // ==================== Kbd ====================
         new("Kbd", "kbd", "Displays a keyboard key or shortcut.",
-            Demo: @<div class="space-y-4">
-                <p class="text-sm text-muted-foreground">
-                    Press <RnKbd>Ctrl</RnKbd> + <RnKbd>K</RnKbd> to open the command palette.
-                </p>
-                <p class="text-sm text-muted-foreground">
-                    Press <RnKbd>Esc</RnKbd> to close.
-                </p>
+            Demo: @<div class="flex flex-col items-center gap-4">
+                <RnKbdGroup>
+                    <RnKbd>⌘</RnKbd>
+                    <RnKbd>⇧</RnKbd>
+                    <RnKbd>⌥</RnKbd>
+                    <RnKbd>⌃</RnKbd>
+                </RnKbdGroup>
+                <RnKbdGroup>
+                    <RnKbd>Ctrl</RnKbd>
+                    <span>+</span>
+                    <RnKbd>B</RnKbd>
+                </RnKbdGroup>
             </div>,
             Thumbnail: @<div class="flex gap-1">
-                <RnKbd>Ctrl</RnKbd><span class="text-xs text-muted-foreground">+</span><RnKbd>K</RnKbd>
+                <RnKbd>⌘</RnKbd><RnKbd>K</RnKbd>
             </div>,
-            Code: @"<p>
-    Press <RnKbd>Ctrl</RnKbd> + <RnKbd>K</RnKbd>
-    to open the command palette.
-</p>",
-            UsageCode: @"@using RnUI.Components.UI.Kbd
-
-<RnKbd>Ctrl</RnKbd>"
+            Code: @"<RnKbdGroup>
+    <RnKbd>⌘</RnKbd>
+    <RnKbd>⇧</RnKbd>
+    <RnKbd>⌥</RnKbd>
+    <RnKbd>⌃</RnKbd>
+</RnKbdGroup>
+<RnKbdGroup>
+    <RnKbd>Ctrl</RnKbd>
+    <span>+</span>
+    <RnKbd>B</RnKbd>
+</RnKbdGroup>",
+            UsageCode: @"<RnKbdGroup>
+    <RnKbd>Ctrl</RnKbd>
+    <span>+</span>
+    <RnKbd>K</RnKbd>
+</RnKbdGroup>"
         ),
 
         // ==================== Label ====================

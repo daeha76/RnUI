@@ -573,14 +573,19 @@ else
             </div>
         ),
 
-        new("Kbd", "kbd", "Displays keyboard shortcut styling.",
-            @<div class="space-y-4">
-                <p class="text-sm text-muted-foreground">
-                    Press <RnKbd>Ctrl</RnKbd> + <RnKbd>K</RnKbd> to open the command palette.
-                </p>
-                <p class="text-sm text-muted-foreground">
-                    Press <RnKbd>Esc</RnKbd> to close.
-                </p>
+        new("Kbd", "kbd", "Displays a keyboard key or shortcut.",
+            @<div class="flex flex-col items-center gap-4">
+                <RnKbdGroup>
+                    <RnKbd>⌘</RnKbd>
+                    <RnKbd>⇧</RnKbd>
+                    <RnKbd>⌥</RnKbd>
+                    <RnKbd>⌃</RnKbd>
+                </RnKbdGroup>
+                <RnKbdGroup>
+                    <RnKbd>Ctrl</RnKbd>
+                    <span>+</span>
+                    <RnKbd>B</RnKbd>
+                </RnKbdGroup>
             </div>
         ),
 
