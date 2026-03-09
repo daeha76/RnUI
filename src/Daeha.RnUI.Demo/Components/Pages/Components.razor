@@ -535,19 +535,21 @@ else
             </div>
         ),
 
-        new("Input", "input", "Displays a form input field.",
-            @<div class="space-y-4 max-w-sm">
-                <div class="space-y-2">
-                    <RnLabel>Email</RnLabel>
-                    <RnInput Type="email" Placeholder="Enter your email" />
+        new("Input", "input", "Displays a form input field or a component that looks like an input field.",
+            @<div class="space-y-6 max-w-sm">
+                <RnInput Type="email" Placeholder="Email" />
+                <div class="grid w-full items-center gap-3">
+                    <RnLabel For="email-with-label">Email</RnLabel>
+                    <RnInput Type="email" id="email-with-label" Placeholder="Email" />
                 </div>
-                <div class="space-y-2">
-                    <RnLabel>Password</RnLabel>
-                    <RnInput Type="password" Placeholder="Enter your password" />
+                <div class="grid w-full items-center gap-3">
+                    <RnLabel For="picture">Picture</RnLabel>
+                    <RnInput id="picture" Type="file" />
                 </div>
-                <div class="space-y-2">
-                    <RnLabel>Disabled</RnLabel>
-                    <RnInput Placeholder="Disabled input" Disabled="true" />
+                <RnInput Disabled="true" Type="email" Placeholder="Email" />
+                <div class="flex w-full items-center gap-2">
+                    <RnInput Type="email" Placeholder="Email" />
+                    <RnButton Type="submit" Variant="ButtonVariant.Outline">Subscribe</RnButton>
                 </div>
             </div>
         ),
@@ -758,13 +760,13 @@ else
             </div>
         ),
 
-        new("Separator", "separator", "Visually separates content.",
-            @<div class="space-y-4 max-w-md">
-                <div>
-                    <h4 class="text-sm font-medium leading-none">RnUI</h4>
-                    <p class="text-sm text-muted-foreground">A Blazor port of shadcn/ui.</p>
+        new("Separator", "separator", "Visually or semantically separates content.",
+            @<div>
+                <div class="space-y-1">
+                    <h4 class="text-sm leading-none font-medium">Radix Primitives</h4>
+                    <p class="text-sm text-muted-foreground">An open-source UI component library.</p>
                 </div>
-                <RnSeparator />
+                <RnSeparator Class="my-4" />
                 <div class="flex h-5 items-center space-x-4 text-sm">
                     <div>Blog</div>
                     <RnSeparator Orientation="Orientation.Vertical" />
@@ -936,13 +938,8 @@ else
             </div>
         ),
 
-        new("Textarea", "textarea", "Displays a form textarea field.",
-            @<div class="space-y-4 max-w-sm">
-                <div class="space-y-2">
-                    <RnLabel>Message</RnLabel>
-                    <RnTextarea Placeholder="Type your message here" />
-                </div>
-            </div>
+        new("Textarea", "textarea", "Displays a form textarea or a component that looks like a textarea.",
+            @<RnTextarea Placeholder="Type your message here." Class="max-w-sm" />
         ),
 
         new("Toast", "toast", "A succinct message that is displayed temporarily.",

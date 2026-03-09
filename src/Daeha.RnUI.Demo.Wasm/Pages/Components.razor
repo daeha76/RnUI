@@ -1145,38 +1145,45 @@ else
 
         // ==================== Input ====================
         new("Input", "input", "Displays a form input field or a component that looks like an input field.",
-            Demo: @<div class="w-full max-w-sm space-y-4">
-                <div class="space-y-2">
-                    <RnLabel>Email</RnLabel>
-                    <RnInput Type="email" Placeholder="Enter your email" />
-                </div>
-                <div class="space-y-2">
-                    <RnLabel>Password</RnLabel>
-                    <RnInput Type="password" Placeholder="Enter your password" />
-                </div>
-                <div class="space-y-2">
-                    <RnLabel>Disabled</RnLabel>
-                    <RnInput Placeholder="Disabled input" Disabled="true" />
-                </div>
-            </div>,
+            Demo: @<RnInput Type="email" Placeholder="Email" Class="max-w-sm" />,
             Thumbnail: @<div class="w-[160px]">
                 <RnInput Placeholder="Email" />
             </div>,
-            Code: @"<div class=""space-y-2"">
-    <RnLabel>Email</RnLabel>
-    <RnInput Type=""email"" Placeholder=""Enter your email"" />
-</div>
-<div class=""space-y-2"">
-    <RnLabel>Password</RnLabel>
-    <RnInput Type=""password"" Placeholder=""Enter your password"" />
-</div>
-<div class=""space-y-2"">
-    <RnLabel>Disabled</RnLabel>
-    <RnInput Placeholder=""Disabled"" Disabled=""true"" />
-</div>",
-            UsageCode: @"@using RnUI.Components.UI.Input
-
-<RnInput Type=""email"" Placeholder=""Email"" />"
+            Code: @"<RnInput Type=""email"" Placeholder=""Email"" />",
+            UsageCode: @"<RnInput Type=""email"" Placeholder=""Email"" />",
+            Examples:
+            [
+                new("Disabled", null,
+                    @<RnInput Disabled="true" Type="email" Placeholder="Email" Class="max-w-sm" />,
+                    @"<RnInput Disabled=""true"" Type=""email"" Placeholder=""Email"" />"),
+                new("With Label", null,
+                    @<div class="grid w-full max-w-sm items-center gap-3">
+                        <RnLabel For="email">Email</RnLabel>
+                        <RnInput Type="email" id="email" Placeholder="Email" />
+                    </div>,
+                    @"<div class=""grid w-full max-w-sm items-center gap-3"">
+    <RnLabel For=""email"">Email</RnLabel>
+    <RnInput Type=""email"" id=""email"" Placeholder=""Email"" />
+</div>"),
+                new("File", null,
+                    @<div class="grid w-full max-w-sm items-center gap-3">
+                        <RnLabel For="picture">Picture</RnLabel>
+                        <RnInput id="picture" Type="file" />
+                    </div>,
+                    @"<div class=""grid w-full max-w-sm items-center gap-3"">
+    <RnLabel For=""picture"">Picture</RnLabel>
+    <RnInput id=""picture"" Type=""file"" />
+</div>"),
+                new("With Button", null,
+                    @<div class="flex w-full max-w-sm items-center gap-2">
+                        <RnInput Type="email" Placeholder="Email" />
+                        <RnButton Type="submit" Variant="ButtonVariant.Outline">Subscribe</RnButton>
+                    </div>,
+                    @"<div class=""flex w-full max-w-sm items-center gap-2"">
+    <RnInput Type=""email"" Placeholder=""Email"" />
+    <RnButton Type=""submit"" Variant=""ButtonVariant.Outline"">Subscribe</RnButton>
+</div>")
+            ]
         ),
 
         // ==================== Input OTP ====================
@@ -1616,12 +1623,12 @@ else
 
         // ==================== Separator ====================
         new("Separator", "separator", "Visually or semantically separates content.",
-            Demo: @<div class="w-full max-w-md space-y-4">
-                <div>
-                    <h4 class="text-sm font-medium leading-none">RnUI</h4>
-                    <p class="text-sm text-muted-foreground">A Blazor port of shadcn/ui.</p>
+            Demo: @<div>
+                <div class="space-y-1">
+                    <h4 class="text-sm leading-none font-medium">Radix Primitives</h4>
+                    <p class="text-sm text-muted-foreground">An open-source UI component library.</p>
                 </div>
-                <RnSeparator />
+                <RnSeparator Class="my-4" />
                 <div class="flex h-5 items-center space-x-4 text-sm">
                     <div>Blog</div>
                     <RnSeparator Orientation="Orientation.Vertical" />
@@ -1635,8 +1642,11 @@ else
                 <RnSeparator />
                 <div class="text-xs">Content</div>
             </div>,
-            Code: @"<RnSeparator />
-
+            Code: @"<div class=""space-y-1"">
+    <h4 class=""text-sm leading-none font-medium"">Radix Primitives</h4>
+    <p class=""text-sm text-muted-foreground"">An open-source UI component library.</p>
+</div>
+<RnSeparator Class=""my-4"" />
 <div class=""flex h-5 items-center space-x-4 text-sm"">
     <div>Blog</div>
     <RnSeparator Orientation=""Orientation.Vertical"" />
@@ -1644,9 +1654,7 @@ else
     <RnSeparator Orientation=""Orientation.Vertical"" />
     <div>Source</div>
 </div>",
-            UsageCode: @"@using RnUI.Components.UI.Separator
-
-<RnSeparator />
+            UsageCode: @"<RnSeparator />
 <RnSeparator Orientation=""Orientation.Vertical"" />"
         ),
 
@@ -2003,20 +2011,12 @@ else
 
         // ==================== Textarea ====================
         new("Textarea", "textarea", "Displays a form textarea or a component that looks like a textarea.",
-            Demo: @<div class="w-full max-w-sm space-y-2">
-                <RnLabel>Message</RnLabel>
-                <RnTextarea Placeholder="Type your message here" />
-            </div>,
+            Demo: @<RnTextarea Placeholder="Type your message here." Class="max-w-sm" />,
             Thumbnail: @<div class="w-[140px]">
                 <RnTextarea Placeholder="Message..." />
             </div>,
-            Code: @"<div class=""space-y-2"">
-    <RnLabel>Message</RnLabel>
-    <RnTextarea Placeholder=""Type your message here"" />
-</div>",
-            UsageCode: @"@using RnUI.Components.UI.Textarea
-
-<RnTextarea Placeholder=""Type your message here"" />"
+            Code: @"<RnTextarea Placeholder=""Type your message here."" />",
+            UsageCode: @"<RnTextarea Placeholder=""Type your message here."" />"
         ),
 
         // ==================== Toast ====================
