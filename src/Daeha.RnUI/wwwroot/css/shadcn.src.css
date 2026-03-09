@@ -456,15 +456,15 @@
 
 /* Avatar */
 .cn-avatar {
-  @apply size-10 overflow-hidden rounded-full;
+  @apply relative flex size-8 shrink-0 overflow-hidden rounded-full;
 }
 
 .cn-avatar[data-size="sm"] {
-  @apply size-8;
+  @apply size-6;
 }
 
 .cn-avatar[data-size="lg"] {
-  @apply size-12;
+  @apply size-10;
 }
 
 .cn-avatar-image {
@@ -472,7 +472,11 @@
 }
 
 .cn-avatar-fallback {
-  @apply bg-muted;
+  @apply flex size-full items-center justify-center rounded-full bg-muted text-sm data-[size=sm]:text-xs;
+}
+
+.cn-avatar-group {
+  @apply flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background;
 }
 
 /* Separator */
@@ -610,24 +614,12 @@
 }
 
 /* Progress */
-.cn-progress-root {
-  @apply items-center;
-}
-
-.cn-progress-track {
-  @apply h-2 overflow-hidden rounded-full bg-primary/20;
+.cn-progress {
+  @apply relative h-2 w-full overflow-hidden rounded-full bg-primary/20;
 }
 
 .cn-progress-indicator {
-  @apply bg-primary rounded-full;
-}
-
-.cn-progress-label {
-  @apply text-sm font-medium;
-}
-
-.cn-progress-value {
-  @apply ml-auto text-sm text-muted-foreground;
+  @apply h-full w-full flex-1 bg-primary transition-all;
 }
 
 /* Skeleton */

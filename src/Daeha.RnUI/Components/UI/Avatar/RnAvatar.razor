@@ -1,17 +1,17 @@
-﻿@* RnAvatar component - Blazor port of shadcn/ui RnAvatar *@
+@* RnAvatar component - Blazor port of shadcn/ui RnAvatar *@
 
 <span data-slot="avatar" data-size="@SizeValue"
-      class="@CssUtils.Cn("cn-avatar group/avatar relative flex shrink-0 select-none overflow-hidden rounded-full", Class)"
+      class="@CssUtils.Cn("cn-avatar", Class)"
       @attributes="AdditionalAttributes">
     @if (!string.IsNullOrEmpty(Src))
     {
         <img data-slot="avatar-image" src="@Src" alt="@Alt"
-             class="cn-avatar-image aspect-square size-full object-cover" />
+             class="cn-avatar-image" />
     }
     else
     {
-        <span data-slot="avatar-fallback"
-              class="cn-avatar-fallback flex size-full items-center justify-center text-sm group-data-[size=sm]/avatar:text-xs">
+        <span data-slot="avatar-fallback" data-size="@SizeValue"
+              class="cn-avatar-fallback">
             @(Fallback ?? ChildContent)
         </span>
     }
@@ -22,6 +22,7 @@
     [Parameter] public string? Alt { get; set; }
     [Parameter] public RenderFragment? Fallback { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
+
     /// <summary>Size of the avatar.</summary>
     [Parameter] public ComponentSize Size { get; set; } = ComponentSize.Default;
 
@@ -30,5 +31,10 @@
 
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
-    private string SizeValue => Size == ComponentSize.Sm ? "sm" : "default";
+    private string SizeValue => Size switch
+    {
+        ComponentSize.Sm => "sm",
+        ComponentSize.Lg => "lg",
+        _ => "default"
+    };
 }

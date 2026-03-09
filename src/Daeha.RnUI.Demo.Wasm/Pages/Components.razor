@@ -1510,15 +1510,9 @@ else
 
         // ==================== Progress ====================
         new("Progress", "progress", "Displays an indicator showing the completion progress of a task.",
-            Demo: @<div class="w-full max-w-md space-y-4">
-                <RnProgress Value="20" />
-                <RnProgress Value="60" />
-                <RnProgress Value="100" />
-            </div>,
+            Demo: @<RnProgress Value="33" Class="w-3/5" />,
             Thumbnail: @<div class="w-[140px]"><RnProgress Value="60" /></div>,
-            Code: @"<RnProgress Value=""20"" />
-<RnProgress Value=""60"" />
-<RnProgress Value=""100"" />",
+            Code: @"<RnProgress Value=""33"" Class=""w-3/5"" />",
             UsageCode: @"@using RnUI.Components.UI.Progress
 
 <RnProgress Value=""60"" />"
@@ -1616,20 +1610,24 @@ else
 
         // ==================== Scroll Area ====================
         new("Scroll Area", "scroll-area", "Augments native scroll functionality for custom, cross-browser styling.",
-            Demo: @<RnScrollArea MaxHeight="200px" Class="w-48 rounded-md border">
+            Demo: @<RnScrollArea MaxHeight="288px" Class="w-48 rounded-md border">
                 <div class="p-4">
-                    @for (var i = 1; i <= 20; i++)
+                    <h4 class="mb-4 text-sm font-medium leading-none">Tags</h4>
+                    @foreach (var tag in new[] { "v1.2.0-beta.42", "v1.2.0-beta.41", "v1.2.0-beta.40", "v1.2.0-beta.39", "v1.2.0-beta.38", "v1.2.0-beta.37", "v1.2.0-beta.36", "v1.2.0-beta.35", "v1.2.0-beta.34", "v1.2.0-beta.33", "v1.2.0-beta.32", "v1.2.0-beta.31", "v1.2.0-beta.30" })
                     {
-                        <div class="text-sm py-1">Item @i</div>
+                        <div class="text-sm">@tag</div>
+                        <RnSeparator Class="my-2" />
                     }
                 </div>
             </RnScrollArea>,
             Thumbnail: @<div class="text-xs text-muted-foreground">Scroll Area</div>,
-            Code: @"<RnScrollArea MaxHeight=""200px"" Class=""w-48 rounded-md border"">
+            Code: @"<RnScrollArea MaxHeight=""288px"" Class=""w-48 rounded-md border"">
     <div class=""p-4"">
-        @for (var i = 1; i <= 20; i++)
+        <h4 class=""mb-4 text-sm font-medium leading-none"">Tags</h4>
+        @foreach (var tag in tags)
         {
-            <div class=""text-sm py-1"">Item @i</div>
+            <div class=""text-sm"">@tag</div>
+            <RnSeparator Class=""my-2"" />
         }
     </div>
 </RnScrollArea>",

@@ -708,11 +708,7 @@ else
         ),
 
         new("Progress", "progress", "Displays a progress indicator.",
-            @<div class="space-y-4 max-w-md">
-                <RnProgress Value="20" />
-                <RnProgress Value="60" />
-                <RnProgress Value="100" />
-            </div>
+            @<RnProgress Value="33" Class="w-3/5" />
         ),
 
         new("Radio Group", "radio-group", "A set of checkable buttons where only one can be checked.",
@@ -751,16 +747,16 @@ else
         ),
 
         new("Scroll Area", "scroll-area", "Augments native scroll functionality for custom styling.",
-            @<div>
-                <RnScrollArea MaxHeight="200px" Class="w-48 rounded-md border">
-                    <div class="p-4">
-                        @for (var i = 1; i <= 20; i++)
-                        {
-                            <div class="text-sm py-1">Item @i</div>
-                        }
-                    </div>
-                </RnScrollArea>
-            </div>
+            @<RnScrollArea MaxHeight="288px" Class="w-48 rounded-md border">
+                <div class="p-4">
+                    <h4 class="mb-4 text-sm font-medium leading-none">Tags</h4>
+                    @foreach (var tag in new[] { "v1.2.0-beta.42", "v1.2.0-beta.41", "v1.2.0-beta.40", "v1.2.0-beta.39", "v1.2.0-beta.38", "v1.2.0-beta.37", "v1.2.0-beta.36", "v1.2.0-beta.35" })
+                    {
+                        <div class="text-sm">@tag</div>
+                        <RnSeparator Class="my-2" />
+                    }
+                </div>
+            </RnScrollArea>
         ),
 
         new("Select", "select", "Displays a list of options for the user to pick from.",

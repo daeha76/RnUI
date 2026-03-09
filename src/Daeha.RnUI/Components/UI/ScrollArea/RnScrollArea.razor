@@ -1,6 +1,6 @@
 ﻿@* RnScrollArea component - Blazor port of shadcn/ui RnScrollArea *@
 
-<div data-slot="scroll-area" class="@CssUtils.Cn("cn-scroll-area relative overflow-hidden", Class)" @attributes="AdditionalAttributes">
+<div data-slot="scroll-area" class="@CssUtils.Cn("cn-scroll-area", Class)" @attributes="AdditionalAttributes">
     <div class="h-full w-full overflow-auto" style="@(MaxHeight is not null ? $"max-height: {MaxHeight};" : "")">
         @ChildContent
     </div>
