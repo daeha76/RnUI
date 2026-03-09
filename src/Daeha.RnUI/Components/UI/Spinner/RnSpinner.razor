@@ -1,6 +1,8 @@
 ﻿@* RnSpinner component - Blazor port of shadcn/ui RnSpinner *@
 
 <svg data-slot="spinner"
+     role="status"
+     aria-label="Loading"
      class="@CssUtils.Cn("animate-spin", SizeClass, Class)"
      xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
      @attributes="AdditionalAttributes">
@@ -20,8 +22,8 @@
 
     private string SizeClass => Size switch
     {
-        ComponentSize.Sm => "size-4",
-        ComponentSize.Lg => "size-8",
-        _ => "size-6"
+        ComponentSize.Sm => "size-3",
+        ComponentSize.Lg => "size-6",
+        _ => "size-4"
     };
 }

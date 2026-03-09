@@ -1,8 +1,8 @@
-﻿@* RnTabs component - Blazor port of shadcn/ui RnTabs *@
+@* RnTabs component - Blazor port of shadcn/ui Tabs *@
 
 <CascadingValue Value="this" IsFixed="false">
-    <div data-slot="tabs" data-orientation="@Orientation"
-         class="@CssUtils.Cn("cn-tabs group/tabs flex", Orientation == Orientation.Horizontal ? "flex-col" : "flex-row", Class)"
+    <div data-slot="tabs" data-orientation="@OrientationValue"
+         class="@CssUtils.Cn("cn-tabs group/tabs", Class)"
          @attributes="AdditionalAttributes">
         @ChildContent
     </div>
@@ -16,6 +16,8 @@
     [Parameter] public Orientation Orientation { get; set; } = Orientation.Horizontal;
     [Parameter] public string? Class { get; set; }
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string OrientationValue => Orientation == Orientation.Horizontal ? "horizontal" : "vertical";
 
     internal async Task SetActiveTab(string tab)
     {

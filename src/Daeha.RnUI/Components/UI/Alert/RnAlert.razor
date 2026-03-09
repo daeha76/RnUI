@@ -1,18 +1,15 @@
-﻿@* RnAlert component - Blazor port of shadcn/ui Alert *@
+@* RnAlert component - Blazor port of shadcn/ui Alert *@
 
 <div data-slot="alert"
      role="alert"
+     data-variant="@Variant.ToString().ToLowerInvariant()"
      class="@ComputedClass"
      @attributes="AdditionalAttributes">
     @if (Icon is not null)
     {
-        <span class="@IconClass">
-            @Icon
-        </span>
+        @Icon
     }
-    <div class="cn-alert-body">
-        @ChildContent
-    </div>
+    @ChildContent
 </div>
 
 @code {
@@ -30,13 +27,4 @@
         },
         Class
     );
-
-    private string IconClass => CssUtils.Cn(
-        "cn-alert-icon",
-        Variant switch {
-            AlertVariant.Destructive => "cn-alert-icon-destructive",
-            _ => ""
-        }
-    );
 }
-

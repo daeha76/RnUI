@@ -1,0 +1,15 @@
+@* RnAvatarFallback component - Blazor port of shadcn/ui Avatar Fallback *@
+
+<span data-slot="avatar-fallback" class="@CssUtils.Cn("cn-avatar-fallback", Class)">
+    @ChildContent
+</span>
+
+@code {
+    /// <summary>Child content to display as fallback.</summary>
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

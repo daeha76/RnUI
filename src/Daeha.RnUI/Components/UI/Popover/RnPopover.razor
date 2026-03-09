@@ -1,4 +1,4 @@
-@* RnPopover component - Blazor port of shadcn/ui RnPopover *@
+@* RnPopover component - Blazor port of shadcn/ui Popover *@
 @implements IAsyncDisposable
 @inject RnUIInteropService Interop
 
@@ -14,7 +14,8 @@
     {
         <div @ref="_contentRef"
              data-slot="popover-content"
-             class="@CssUtils.Cn("cn-popover-content absolute z-50 w-72 outline-none", Class)"
+             data-side="@SideValue"
+             class="@CssUtils.Cn("cn-popover-content absolute z-50 w-72", Class)"
              style="@PositionUtils.GetPositionStyle(Side, Align)">
             @ChildContent
         </div>
@@ -25,7 +26,7 @@
     [Parameter] public RenderFragment? Trigger { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
 
-    /// <summary>Side where the RnPopover appears.</summary>
+    /// <summary>Side where the popover appears.</summary>
     [Parameter] public Side Side { get; set; } = Side.Bottom;
 
     /// <summary>Alignment of the popover.</summary>
@@ -37,6 +38,15 @@
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
     private readonly string _id = Guid.NewGuid().ToString("N")[..8];
+
+    private string SideValue => Side switch
+    {
+        Side.Top => "top",
+        Side.Bottom => "bottom",
+        Side.Left => "left",
+        Side.Right => "right",
+        _ => "bottom"
+    };
     private ElementReference _contentRef;
     private DotNetObjectReference<RnPopover>? _dotNetRef;
     private bool _open;

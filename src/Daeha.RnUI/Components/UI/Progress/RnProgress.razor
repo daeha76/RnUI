@@ -1,20 +1,18 @@
 @* RnProgress component - Blazor port of shadcn/ui RnProgress *@
 
-<div data-slot="progress" class="@CssUtils.Cn("cn-progress-root flex flex-wrap gap-3", Class)" @attributes="AdditionalAttributes">
-    @ChildContent
-    <div data-slot="progress-track"
-         role="progressbar"
-         aria-valuemin="0"
-         aria-valuemax="@Max"
-         aria-valuenow="@Value"
-         class="cn-progress-track relative flex w-full items-center overflow-x-hidden">
-        <div data-slot="progress-indicator" class="cn-progress-indicator h-full transition-all"
-             style="width: @(Percentage)%"></div>
-    </div>
+<div data-slot="progress"
+     role="progressbar"
+     aria-valuemin="0"
+     aria-valuemax="@Max"
+     aria-valuenow="@Value"
+     class="@CssUtils.Cn("cn-progress", Class)"
+     @attributes="AdditionalAttributes">
+    <div data-slot="progress-indicator"
+         class="cn-progress-indicator"
+         style="transform: translateX(-@(100 - Percentage)%)"></div>
 </div>
 
 @code {
-    [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public int Value { get; set; }
     [Parameter] public int Max { get; set; } = 100;
     [Parameter] public string? Class { get; set; }

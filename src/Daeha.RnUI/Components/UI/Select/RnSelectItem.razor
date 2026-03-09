@@ -4,18 +4,19 @@
      role="option"
      aria-selected="@IsSelected.ToString().ToLower()"
      data-selected="@(IsSelected ? "" : null)"
-     class="cn-select-item relative flex w-full cursor-default items-center outline-none select-none"
+     data-disabled="@(Disabled ? "" : null)"
+     class="cn-select-item"
      @onclick="HandleClick">
-    <span class="cn-select-item-text shrink-0 whitespace-nowrap">@ChildContent</span>
-    @if (IsSelected)
-    {
-        <span class="cn-select-item-indicator absolute right-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <span data-slot="select-item-indicator" class="cn-select-item-indicator">
+        @if (IsSelected)
+        {
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="20 6 9 17 4 12" />
             </svg>
-        </span>
-    }
+        }
+    </span>
+    <span>@ChildContent</span>
 </div>
 
 @code {

@@ -2,6 +2,8 @@
 
 <button type="@Type"
         data-slot="button"
+        data-variant="@Variant.ToString().ToLowerInvariant()"
+        data-size="@Size.ToString().ToLowerInvariant()"
         class="@ComputedClass"
         disabled="@(Disabled ? true : (object?)null)"
         @onclick="OnClick"
@@ -20,7 +22,7 @@
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
     private string ComputedClass => CssUtils.Cn(
-        "cn-button group/button inline-flex shrink-0 items-center justify-center whitespace-nowrap transition-all outline-none select-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "cn-button",
         VariantClass,
         SizeClass,
         Class

@@ -1,14 +1,14 @@
-<RnButton type="button" data-slot="tabs-trigger" role="tab"
+<button type="button" data-slot="tabs-trigger" role="tab"
         id="@($"tab-trigger-{Value}")"
-        data-active="@(IsActive ? "" : null)"
+        data-state="@(IsActive ? "active" : "inactive")"
         aria-selected="@IsActive.ToString().ToLower()"
         aria-controls="@($"tab-content-{Value}")"
-        class="@CssUtils.Cn("cn-tabs-trigger", IsActive ? "data-active:bg-background data-active:text-foreground" : "text-foreground/60", Class)"
+        class="@CssUtils.Cn("cn-tabs-trigger", Class)"
         @onclick="HandleClick"
         @onkeydown="HandleKeyDown"
         @attributes="AdditionalAttributes">
     @ChildContent
-</RnButton>
+</button>
 
 @code {
     [CascadingParameter] public RnTabs? Parent { get; set; }

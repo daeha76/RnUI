@@ -1,32 +1,33 @@
 @* RnSelect component - Blazor port of shadcn/ui RnSelect *@
 
 <div data-slot="select" class="@CssUtils.Cn("relative", Class)" @attributes="AdditionalAttributes">
-    <RnButton type="button" data-slot="select-trigger" data-size="@SizeValue"
-            class="cn-select-trigger flex w-fit items-center justify-between whitespace-nowrap outline-none disabled:cursor-not-allowed disabled:opacity-50"
-            Disabled="@Disabled"
+    <button type="button" data-slot="select-trigger" data-size="@SizeValue"
+            data-placeholder="@(string.IsNullOrEmpty(Value) ? "" : null)"
+            class="cn-select-trigger"
+            disabled="@(Disabled ? true : (object?)null)"
             aria-expanded="@(_open.ToString().ToLower())"
             aria-haspopup="listbox"
             @onclick="ToggleOpen">
         <span data-slot="select-value" class="cn-select-value">
             @if (!string.IsNullOrEmpty(Value))
             {
-                @Value
+                @(_displayText ?? Value)
             }
             else
             {
-                <span class="text-muted-foreground">@Placeholder</span>
+                @Placeholder
             }
         </span>
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-             class="cn-select-trigger-icon pointer-events-none ml-2 opacity-50">
+             class="cn-select-trigger-icon">
             <path d="m6 9 6 6 6-6"/>
         </svg>
-    </RnButton>
+    </button>
 
     @if (_open)
     {
-        <div data-slot="select-content" role="listbox" class="cn-select-content absolute z-50 mt-1 min-w-[8rem]">
+        <div data-slot="select-content" role="listbox" class="cn-select-content absolute mt-1">
             <CascadingValue Value="this" IsFixed="false">
                 @ChildContent
             </CascadingValue>
@@ -58,14 +59,16 @@
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
     private bool _open;
+    private string? _displayText;
 
     private string SizeValue => Size == ComponentSize.Sm ? "sm" : "default";
 
     private void ToggleOpen() => _open = !_open;
 
-    internal async Task SelectItem(string value)
+    internal async Task SelectItem(string value, string? displayText = null)
     {
         Value = value;
+        _displayText = displayText;
         _open = false;
         await ValueChanged.InvokeAsync(value);
     }

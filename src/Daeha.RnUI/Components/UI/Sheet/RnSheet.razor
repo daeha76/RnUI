@@ -1,4 +1,4 @@
-@* RnSheet component - Blazor port of shadcn/ui RnSheet *@
+@* RnSheet component - Blazor port of shadcn/ui Sheet *@
 @implements IAsyncDisposable
 @inject RnUIInteropService Interop
 
@@ -22,13 +22,14 @@
 
             @if (ShowCloseButton)
             {
-                <RnButton type="button" data-slot="sheet-close" class="cn-sheet-close" @onclick="Close">
+                <button type="button" data-slot="sheet-close" class="cn-sheet-close" @onclick="Close">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="size-4">
                         <path d="M18 6 6 18" /><path d="m6 6 12 12" />
                     </svg>
                     <span class="sr-only">Close</span>
-                </RnButton>
+                </button>
             }
         </div>
     </div>
@@ -37,13 +38,13 @@
 @code {
     [Parameter] public RenderFragment? ChildContent { get; set; }
 
-    /// <summary>Whether the RnSheet is open.</summary>
+    /// <summary>Whether the sheet is open.</summary>
     [Parameter] public bool Open { get; set; }
 
     /// <summary>Callback when open state changes.</summary>
     [Parameter] public EventCallback<bool> OpenChanged { get; set; }
 
-    /// <summary>Side from which the RnSheet slides in.</summary>
+    /// <summary>Side from which the sheet slides in.</summary>
     [Parameter] public Side Side { get; set; } = Side.Right;
 
     /// <summary>Whether to show the close button.</summary>

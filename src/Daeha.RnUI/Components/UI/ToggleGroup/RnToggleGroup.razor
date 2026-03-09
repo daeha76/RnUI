@@ -2,8 +2,10 @@
 
 <CascadingValue Value="this" IsFixed="false">
     <div data-slot="toggle-group"
+         data-variant="@Variant.ToString().ToLowerInvariant()"
+         data-size="@Size.ToString().ToLowerInvariant()"
          role="group"
-         class="@CssUtils.Cn("cn-toggle-group flex items-center justify-center gap-1", Class)"
+         class="@CssUtils.Cn("cn-toggle-group", Class)"
          @attributes="AdditionalAttributes">
         @ChildContent
     </div>

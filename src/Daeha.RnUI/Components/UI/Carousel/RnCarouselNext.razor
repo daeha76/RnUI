@@ -6,7 +6,7 @@
           Size="ButtonSize.Icon"
           aria-label="Next slide"
           disabled="@(!(Carousel?.CanGoNext ?? false))"
-          class="@CssUtils.Cn("cn-carousel-next absolute h-8 w-8 rounded-full -right-12 top-1/2 -translate-y-1/2", Class)"
+          class="@CssUtils.Cn("cn-carousel-next", Class)"
           @onclick="HandleClick"
           @attributes="AdditionalAttributes">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"

@@ -1,7 +1,7 @@
 <CascadingValue Value="this" IsFixed="false">
     <div data-slot="accordion-item"
          data-state="@(IsExpanded ? "open" : "closed")"
-         class="@CssUtils.Cn("border-b border-border last:border-b-0", Class)"
+         class="@CssUtils.Cn("cn-accordion-item", Class)"
          @attributes="AdditionalAttributes">
         @ChildContent
     </div>

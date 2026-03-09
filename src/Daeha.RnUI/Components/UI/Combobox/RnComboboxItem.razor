@@ -5,10 +5,11 @@
     <div data-slot="combobox-item"
          role="option"
          aria-selected="@IsSelected"
-         class="@CssUtils.Cn("relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none", IsSelected ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground", "cursor-pointer")"
+         data-selected="@(IsSelected ? "" : null)"
+         class="cn-combobox-item"
          @onclick="HandleClick">
-        <span class="@CssUtils.Cn("mr-2 flex h-4 w-4 items-center justify-center", IsSelected ? "opacity-100" : "opacity-0")">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <span class="@CssUtils.Cn("flex size-4 items-center justify-center", IsSelected ? "opacity-100" : "opacity-0")">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20 6 9 17l-5-5"/>
             </svg>
         </span>
@@ -45,10 +46,7 @@
 
     protected override void OnParametersSet()
     {
-        // Register this item's label with the parent for display text lookup
         Parent?.RegisterItem(Value, DisplayLabel);
-
-        // Check visibility based on search term
         _isVisible = Parent?.IsItemVisible(Value, DisplayLabel) ?? true;
     }
 

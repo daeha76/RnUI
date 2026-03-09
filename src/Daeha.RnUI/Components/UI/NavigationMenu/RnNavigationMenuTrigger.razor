@@ -4,11 +4,11 @@
         data-slot="navigation-menu-trigger"
         data-state="@(IsOpen ? "open" : "closed")"
         aria-expanded="@IsOpen.ToString().ToLower()"
-        class="@CssUtils.Cn("cn-navigation-menu-trigger group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50", Class)"
+        class="@CssUtils.Cn("cn-navigation-menu-trigger group", Class)"
         @onclick="HandleClick"
         @attributes="AdditionalAttributes">
     @ChildContent
-    <svg class="cn-navigation-menu-trigger-icon relative top-px ml-1 size-3 transition-transform duration-200 group-data-[state=open]:rotate-180"
+    <svg class="cn-navigation-menu-trigger-icon"
          xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
          aria-hidden="true">

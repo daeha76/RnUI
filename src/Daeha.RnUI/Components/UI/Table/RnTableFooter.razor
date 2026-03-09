@@ -1,6 +1,6 @@
-<div data-slot="card-footer" class="@CssUtils.Cn("cn-card-footer", Class)" @attributes="AdditionalAttributes">
+<tfoot data-slot="table-footer" class="@CssUtils.Cn("cn-table-footer", Class)" @attributes="AdditionalAttributes">
     @ChildContent
-</div>
+</tfoot>
 
 @code {
     [Parameter] public RenderFragment? ChildContent { get; set; }

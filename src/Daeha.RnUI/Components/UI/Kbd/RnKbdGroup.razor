@@ -1,6 +1,8 @@
-<div data-slot="card-footer" class="@CssUtils.Cn("cn-card-footer", Class)" @attributes="AdditionalAttributes">
+@* RnKbdGroup component - Blazor port of shadcn/ui KbdGroup *@
+
+<kbd data-slot="kbd-group" class="@CssUtils.Cn("inline-flex items-center gap-1", Class)" @attributes="AdditionalAttributes">
     @ChildContent
-</div>
+</kbd>
 
 @code {
     [Parameter] public RenderFragment? ChildContent { get; set; }

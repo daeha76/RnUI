@@ -4,7 +4,7 @@
         data-slot="toggle-group-item"
         data-state="@(IsActive ? "on" : "off")"
         aria-pressed="@IsActive.ToString().ToLower()"
-        disabled="@Disabled"
+        disabled="@(Disabled ? true : (object?)null)"
         class="@ComputedClass"
         @onclick="HandleClick"
         @attributes="AdditionalAttributes">
@@ -37,7 +37,7 @@
     private ToggleSize EffectiveSize => Size ?? Group?.Size ?? ToggleSize.Default;
 
     private string ComputedClass => CssUtils.Cn(
-        "cn-toggle-group-item cn-toggle inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium outline-none transition-colors",
+        "cn-toggle-group-item cn-toggle",
         EffectiveVariant == ToggleVariant.Outline ? "cn-toggle-variant-outline" : null,
         EffectiveSize switch
         {

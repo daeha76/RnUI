@@ -1,4 +1,4 @@
-@* RnHoverCard component - Blazor port of shadcn/ui RnHoverCard *@
+@* RnHoverCard component - Blazor port of shadcn/ui HoverCard *@
 @implements IAsyncDisposable
 @inject RnUIInteropService Interop
 
@@ -13,6 +13,7 @@
     {
         <div data-slot="hover-card-content"
              class="@CssUtils.Cn("cn-hover-card-content absolute z-50", Class)"
+             data-side="@SideValue"
              style="@PositionUtils.GetPositionStyle(Side, Align)">
             @ChildContent
         </div>
@@ -23,7 +24,7 @@
     [Parameter] public RenderFragment? Trigger { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
 
-    /// <summary>Side where the hover RnCard appears.</summary>
+    /// <summary>Side where the hover card appears.</summary>
     [Parameter] public Side Side { get; set; } = Side.Bottom;
 
     /// <summary>Alignment of the hover card.</summary>
@@ -38,6 +39,15 @@
     private DotNetObjectReference<RnHoverCard>? _dotNetRef;
     private bool _visible;
     private bool _previousVisible;
+
+    private string SideValue => Side switch
+    {
+        Side.Top => "top",
+        Side.Bottom => "bottom",
+        Side.Left => "left",
+        Side.Right => "right",
+        _ => "bottom"
+    };
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

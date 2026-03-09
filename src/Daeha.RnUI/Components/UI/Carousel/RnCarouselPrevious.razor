@@ -6,7 +6,7 @@
           Size="ButtonSize.Icon"
           aria-label="Previous slide"
           disabled="@(!(Carousel?.CanGoPrevious ?? false))"
-          class="@CssUtils.Cn("cn-carousel-previous absolute h-8 w-8 rounded-full -left-12 top-1/2 -translate-y-1/2", Class)"
+          class="@CssUtils.Cn("cn-carousel-previous", Class)"
           @onclick="HandleClick"
           @attributes="AdditionalAttributes">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"

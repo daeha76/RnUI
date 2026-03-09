@@ -5,10 +5,11 @@
      aria-valuemin="@Min"
      aria-valuemax="@Max"
      aria-valuenow="@Value"
-     class="@CssUtils.Cn("cn-slider relative flex w-full touch-none select-none items-center", Disabled ? "opacity-50" : "", Class)"
+     data-disabled="@(Disabled ? "" : null)"
+     class="@CssUtils.Cn("cn-slider", Class)"
      @attributes="AdditionalAttributes">
-    <div class="cn-slider-track relative h-1.5 w-full grow overflow-hidden rounded-full bg-primary/20">
-        <div class="cn-slider-range absolute h-full bg-primary" style="width: @(Percentage)%"></div>
+    <div data-slot="slider-track" data-orientation="horizontal" class="cn-slider-track">
+        <div data-slot="slider-range" data-orientation="horizontal" class="cn-slider-range" style="width: @(Percentage)%"></div>
     </div>
     <input type="range" min="@Min" max="@Max" step="@Step" value="@Value"
            class="absolute inset-0 cursor-pointer opacity-0"

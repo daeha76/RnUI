@@ -1,4 +1,4 @@
-@* RnTooltip component - Blazor port of shadcn/ui RnTooltip *@
+@* RnTooltip component - Blazor port of shadcn/ui Tooltip *@
 
 <div data-slot="tooltip" class="relative inline-block"
      @onmouseenter="Show" @onmouseleave="Hide"
@@ -11,7 +11,8 @@
     @if (_visible)
     {
         <div data-slot="tooltip-content"
-             class="@CssUtils.Cn("cn-tooltip-content absolute z-50 w-fit max-w-xs bg-foreground text-background", Class)"
+             data-side="@SideValue"
+             class="@CssUtils.Cn("cn-tooltip-content absolute z-50 w-fit max-w-xs", Class)"
              style="@PositionUtils.GetPositionStyle(Side)"
              role="tooltip">
             @ChildContent
@@ -23,7 +24,7 @@
     [Parameter] public RenderFragment? Trigger { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
 
-    /// <summary>Side where the RnTooltip appears.</summary>
+    /// <summary>Side where the tooltip appears.</summary>
     [Parameter] public Side Side { get; set; } = Side.Top;
 
     /// <summary>Additional CSS classes.</summary>
@@ -32,6 +33,15 @@
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
     private bool _visible;
+
+    private string SideValue => Side switch
+    {
+        Side.Top => "top",
+        Side.Bottom => "bottom",
+        Side.Left => "left",
+        Side.Right => "right",
+        _ => "top"
+    };
 
     private void Show() => _visible = true;
     private void Hide() => _visible = false;

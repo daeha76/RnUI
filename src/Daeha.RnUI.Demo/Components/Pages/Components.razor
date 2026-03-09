@@ -67,8 +67,7 @@ else
     private string? _expandedItem = "item-1";
     private bool _collapsibleOpen;
     private string? _selectValue;
-    private string? _radioValue = "option-1";
-    private bool _togglePressed;
+    private string? _radioValue = "comfortable";
     private int _currentPage = 1;
 
     // State for new component demos
@@ -76,6 +75,7 @@ else
     private DateTime? _datePickerValue;
     private string? _comboboxValue;
     private bool _drawerOpen;
+    private int _drawerGoal = 350;
     private string? _toggleGroupValue = "center";
     private string _otpValue = "";
 
@@ -93,19 +93,34 @@ else
 
     private ComponentDemo[] _componentDemos => [
         new("Accordion", "accordion", "A vertically stacked set of expandable items.",
-            @<div class="space-y-4 max-w-md">
+            @<div class="w-full max-w-md">
                 <RnAccordion @bind-Value="_expandedItem">
                     <RnAccordionItem Value="item-1">
-                        <RnAccordionTrigger>Is it accessible?</RnAccordionTrigger>
-                        <RnAccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</RnAccordionContent>
+                        <RnAccordionTrigger>Product Information</RnAccordionTrigger>
+                        <RnAccordionContent>
+                            <div class="flex flex-col gap-4 text-balance">
+                                <p>Our flagship product combines cutting-edge technology with sleek design. Built with premium materials, it offers unparalleled performance and reliability.</p>
+                                <p>Key features include advanced processing capabilities, and an intuitive user interface designed for both beginners and experts.</p>
+                            </div>
+                        </RnAccordionContent>
                     </RnAccordionItem>
                     <RnAccordionItem Value="item-2">
-                        <RnAccordionTrigger>Is it styled?</RnAccordionTrigger>
-                        <RnAccordionContent>Yes. It comes with default styles that match the other components' aesthetic.</RnAccordionContent>
+                        <RnAccordionTrigger>Shipping Details</RnAccordionTrigger>
+                        <RnAccordionContent>
+                            <div class="flex flex-col gap-4 text-balance">
+                                <p>We offer worldwide shipping through trusted courier partners. Standard delivery takes 3-5 business days, while express shipping ensures delivery within 1-2 business days.</p>
+                                <p>All orders are carefully packaged and fully insured. Track your shipment in real-time through our dedicated tracking portal.</p>
+                            </div>
+                        </RnAccordionContent>
                     </RnAccordionItem>
                     <RnAccordionItem Value="item-3">
-                        <RnAccordionTrigger>Is it animated?</RnAccordionTrigger>
-                        <RnAccordionContent>Yes. It's animated by default, but you can disable it if you prefer.</RnAccordionContent>
+                        <RnAccordionTrigger>Return Policy</RnAccordionTrigger>
+                        <RnAccordionContent>
+                            <div class="flex flex-col gap-4 text-balance">
+                                <p>We stand behind our products with a comprehensive 30-day return policy. If you're not completely satisfied, simply return the item in its original condition.</p>
+                                <p>Our hassle-free return process includes free return shipping and full refunds processed within 48 hours of receiving the returned item.</p>
+                            </div>
+                        </RnAccordionContent>
                     </RnAccordionItem>
                 </RnAccordion>
             </div>
@@ -114,12 +129,22 @@ else
         new("Alert", "alert", "Displays a callout for important information.",
             @<div class="space-y-4 max-w-lg">
                 <RnAlert>
-                    <RnAlertTitle>Heads up!</RnAlertTitle>
-                    <RnAlertDescription>You can add components to your app using the CLI.</RnAlertDescription>
+                    <Icon>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                    </Icon>
+                    <ChildContent>
+                        <RnAlertTitle>Heads up!</RnAlertTitle>
+                        <RnAlertDescription>You can add components to your app using the CLI.</RnAlertDescription>
+                    </ChildContent>
                 </RnAlert>
                 <RnAlert Variant="AlertVariant.Destructive">
-                    <RnAlertTitle>Error</RnAlertTitle>
-                    <RnAlertDescription>Your session has expired. Please log in again.</RnAlertDescription>
+                    <Icon>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+                    </Icon>
+                    <ChildContent>
+                        <RnAlertTitle>Error</RnAlertTitle>
+                        <RnAlertDescription>Your session has expired. Please log in again.</RnAlertDescription>
+                    </ChildContent>
                 </RnAlert>
             </div>
         ),
@@ -178,12 +203,19 @@ else
             </div>
         ),
 
-        new("Badge", "badge", "Displays a badge or label.",
-            @<div class="flex flex-wrap gap-4">
-                <RnBadge>Default</RnBadge>
-                <RnBadge Variant="BadgeVariant.Secondary">Secondary</RnBadge>
-                <RnBadge Variant="BadgeVariant.Outline">Outline</RnBadge>
-                <RnBadge Variant="BadgeVariant.Destructive">Destructive</RnBadge>
+        new("Badge", "badge", "Displays a badge or a component that looks like a badge.",
+            @<div class="flex flex-col items-center gap-2">
+                <div class="flex w-full flex-wrap gap-2">
+                    <RnBadge>Badge</RnBadge>
+                    <RnBadge Variant="BadgeVariant.Secondary">Secondary</RnBadge>
+                    <RnBadge Variant="BadgeVariant.Destructive">Destructive</RnBadge>
+                    <RnBadge Variant="BadgeVariant.Outline">Outline</RnBadge>
+                </div>
+                <div class="flex w-full flex-wrap gap-2">
+                    <RnBadge Class="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums">8</RnBadge>
+                    <RnBadge Class="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums" Variant="BadgeVariant.Destructive">99</RnBadge>
+                    <RnBadge Class="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums" Variant="BadgeVariant.Outline">20+</RnBadge>
+                </div>
             </div>
         ),
 
@@ -237,21 +269,31 @@ else
         ),
 
         new("Button", "button", "Displays a button or a component that looks like a button.",
-            @<div class="space-y-4">
-                <h3 class="text-sm font-medium">Variants</h3>
-                <div class="flex flex-wrap gap-4">
+            @<div class="space-y-6">
+                <div class="flex flex-wrap items-center gap-2">
+                    <RnButton Variant="ButtonVariant.Outline">Button</RnButton>
+                    <RnButton Variant="ButtonVariant.Outline" Size="ButtonSize.Icon" aria-label="Submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+                    </RnButton>
+                </div>
+                <div class="flex flex-col items-start gap-8 sm:flex-row">
+                    <div class="flex items-start gap-2">
+                        <RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">Small</RnButton>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <RnButton Variant="ButtonVariant.Outline">Default</RnButton>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <RnButton Variant="ButtonVariant.Outline" Size="ButtonSize.Lg">Large</RnButton>
+                    </div>
+                </div>
+                <div class="flex flex-wrap gap-2">
                     <RnButton>Default</RnButton>
                     <RnButton Variant="ButtonVariant.Secondary">Secondary</RnButton>
+                    <RnButton Variant="ButtonVariant.Destructive">Destructive</RnButton>
                     <RnButton Variant="ButtonVariant.Outline">Outline</RnButton>
                     <RnButton Variant="ButtonVariant.Ghost">Ghost</RnButton>
-                    <RnButton Variant="ButtonVariant.Destructive">Destructive</RnButton>
                     <RnButton Variant="ButtonVariant.Link">Link</RnButton>
-                </div>
-                <h3 class="text-sm font-medium">Sizes</h3>
-                <div class="flex flex-wrap items-center gap-4">
-                    <RnButton Size="ButtonSize.Sm">Small</RnButton>
-                    <RnButton>Default</RnButton>
-                    <RnButton Size="ButtonSize.Lg">Large</RnButton>
                 </div>
             </div>
         ),
@@ -295,92 +337,116 @@ else
         ),
 
         new("Card", "card", "Displays a card with header, content, and footer.",
-            @<div class="grid gap-4 md:grid-cols-2">
+            @<div class="w-full max-w-sm">
                 <RnCard>
                     <RnCardHeader>
-                        <RnCardTitle>Card Title</RnCardTitle>
-                        <RnCardDescription>Card description goes here.</RnCardDescription>
+                        <RnCardTitle>Notifications</RnCardTitle>
+                        <RnCardDescription>You have 3 unread messages.</RnCardDescription>
                     </RnCardHeader>
-                    <RnCardContent>
-                        <p>Card content with some example text.</p>
+                    <RnCardContent class="grid gap-4">
+                        <div class="flex items-center gap-4 rounded-md border p-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                            <div class="flex-1 space-y-1">
+                                <p class="text-sm font-medium leading-none">Push Notifications</p>
+                                <p class="text-sm text-muted-foreground">Send notifications to device.</p>
+                            </div>
+                            <RnSwitch />
+                        </div>
                     </RnCardContent>
                     <RnCardFooter>
-                        <RnButton>Action</RnButton>
+                        <RnButton Class="w-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            Mark all as read
+                        </RnButton>
                     </RnCardFooter>
-                </RnCard>
-                <RnCard>
-                    <RnCardHeader>
-                        <RnCardTitle>Another Card</RnCardTitle>
-                        <RnCardDescription>With different content.</RnCardDescription>
-                    </RnCardHeader>
-                    <RnCardContent>
-                        <p>More example content here.</p>
-                    </RnCardContent>
                 </RnCard>
             </div>
         ),
 
         new("Checkbox", "checkbox", "A control that allows toggling between checked and unchecked.",
-            @<div class="space-y-4">
-                <div class="flex items-center space-x-2">
-                    <RnCheckbox @bind-Checked="_checkboxValue" />
-                    <RnLabel>Accept terms and conditions</RnLabel>
+            @<div class="space-y-6">
+                <div class="items-top flex space-x-2">
+                    <RnCheckbox id="terms1" @bind-Checked="_checkboxValue" />
+                    <div class="grid gap-1.5 leading-none">
+                        <RnLabel For="terms1">Accept terms and conditions</RnLabel>
+                        <p class="text-sm text-muted-foreground">You agree to our Terms of Service and Privacy Policy.</p>
+                    </div>
                 </div>
-                <p class="text-sm text-muted-foreground">Checked: @_checkboxValue</p>
+                <div class="flex items-center space-x-2">
+                    <RnCheckbox id="terms2" Disabled="true" />
+                    <RnLabel For="terms2">Accept terms and conditions</RnLabel>
+                </div>
             </div>
         ),
 
         new("Collapsible", "collapsible", "An interactive component that expands/collapses.",
-            @<div class="max-w-md">
-                <RnCollapsible @bind-Open="_collapsibleOpen">
+            @<div class="w-[350px]">
+                <RnCollapsible @bind-Open="_collapsibleOpen" Class="flex flex-col gap-2">
                     <Trigger>
-                        <div class="flex items-center justify-between space-x-4 px-4">
-                            <h4 class="text-sm font-semibold">starred repositories</h4>
-                            <RnButton Variant="ButtonVariant.Ghost" Size="ButtonSize.Sm">
-                                @(_collapsibleOpen ? "Hide" : "Show")
+                        <div class="flex items-center justify-between gap-4 px-4">
+                            <h4 class="text-sm font-semibold">@@peduarte starred 3 repositories</h4>
+                            <RnButton Variant="ButtonVariant.Ghost" Size="ButtonSize.Icon" Class="size-8">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+                                <span class="sr-only">Toggle</span>
                             </RnButton>
                         </div>
                     </Trigger>
                     <ChildContent>
-                        <div class="space-y-2 px-4 pt-2">
-                            <div class="rounded-md border px-4 py-3 text-sm">shadcn/ui</div>
-                            <div class="rounded-md border px-4 py-3 text-sm">tailwindcss/tailwindcss</div>
-                            <div class="rounded-md border px-4 py-3 text-sm">dotnet/aspnetcore</div>
-                        </div>
+                        <div class="rounded-md border px-4 py-2 font-mono text-sm">@@radix-ui/primitives</div>
+                        <div class="rounded-md border px-4 py-2 font-mono text-sm">@@radix-ui/colors</div>
+                        <div class="rounded-md border px-4 py-2 font-mono text-sm">@@stitches/react</div>
                     </ChildContent>
                 </RnCollapsible>
             </div>
         ),
 
         new("Combobox", "combobox", "Autocomplete input and command palette with a list of suggestions.",
-            @<div class="space-y-4">
-                <RnCombobox @bind-Value="_comboboxValue" Placeholder="Select framework...">
-                    <RnComboboxItem Value="next" Label="Next.js">Next.js</RnComboboxItem>
-                    <RnComboboxItem Value="sveltekit" Label="SvelteKit">SvelteKit</RnComboboxItem>
-                    <RnComboboxItem Value="nuxt" Label="Nuxt.js">Nuxt.js</RnComboboxItem>
-                    <RnComboboxItem Value="remix" Label="Remix">Remix</RnComboboxItem>
-                    <RnComboboxItem Value="astro" Label="Astro">Astro</RnComboboxItem>
-                </RnCombobox>
-                <p class="text-sm text-muted-foreground">Selected: @(_comboboxValue ?? "None")</p>
-            </div>
+            @<RnCombobox @bind-Value="_comboboxValue" Placeholder="Select framework..." SearchPlaceholder="Search framework...">
+                <RnComboboxItem Value="next" Label="Next.js">Next.js</RnComboboxItem>
+                <RnComboboxItem Value="sveltekit" Label="SvelteKit">SvelteKit</RnComboboxItem>
+                <RnComboboxItem Value="nuxt" Label="Nuxt.js">Nuxt.js</RnComboboxItem>
+                <RnComboboxItem Value="remix" Label="Remix">Remix</RnComboboxItem>
+                <RnComboboxItem Value="astro" Label="Astro">Astro</RnComboboxItem>
+            </RnCombobox>
         ),
 
         new("Command", "command", "Fast, composable, unstyled command menu.",
-            @<div class="space-y-4 max-w-md">
-                <RnCommand Class="rounded-lg border shadow-md">
+            @<div class="w-full max-w-md">
+                <RnCommand Class="rounded-lg border shadow-md md:min-w-[450px]">
                     <RnCommandInput Placeholder="Type a command or search..." />
                     <RnCommandList>
                         <RnCommandEmpty>No results found.</RnCommandEmpty>
                         <RnCommandGroup Heading="Suggestions">
-                            <RnCommandItem>Calendar</RnCommandItem>
-                            <RnCommandItem>Search Emoji</RnCommandItem>
-                            <RnCommandItem>Calculator</RnCommandItem>
+                            <RnCommandItem Value="Calendar">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg>
+                                <span>Calendar</span>
+                            </RnCommandItem>
+                            <RnCommandItem Value="Search Emoji">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
+                                <span>Search Emoji</span>
+                            </RnCommandItem>
+                            <RnCommandItem Value="Calculator" Disabled>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                                <span>Calculator</span>
+                            </RnCommandItem>
                         </RnCommandGroup>
                         <RnCommandSeparator />
                         <RnCommandGroup Heading="Settings">
-                            <RnCommandItem>Profile</RnCommandItem>
-                            <RnCommandItem>Billing</RnCommandItem>
-                            <RnCommandItem>Settings</RnCommandItem>
+                            <RnCommandItem Value="Profile">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                <span>Profile</span>
+                                <span class="cn-command-shortcut">⌘P</span>
+                            </RnCommandItem>
+                            <RnCommandItem Value="Billing">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+                                <span>Billing</span>
+                                <span class="cn-command-shortcut">⌘B</span>
+                            </RnCommandItem>
+                            <RnCommandItem Value="Settings">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                                <span>Settings</span>
+                                <span class="cn-command-shortcut">⌘S</span>
+                            </RnCommandItem>
                         </RnCommandGroup>
                     </RnCommandList>
                 </RnCommand>
@@ -396,36 +462,46 @@ else
                         </div>
                     </Trigger>
                     <ChildContent>
-                        <RnDropdownMenuLabel>Actions</RnDropdownMenuLabel>
+                        <RnDropdownMenuItem Inset>
+                            Back
+                            <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘[</span>
+                        </RnDropdownMenuItem>
+                        <RnDropdownMenuItem Inset Disabled>
+                            Forward
+                            <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘]</span>
+                        </RnDropdownMenuItem>
+                        <RnDropdownMenuItem Inset>
+                            Reload
+                            <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘R</span>
+                        </RnDropdownMenuItem>
                         <RnDropdownMenuSeparator />
-                        <RnDropdownMenuItem>Back</RnDropdownMenuItem>
-                        <RnDropdownMenuItem>Forward</RnDropdownMenuItem>
-                        <RnDropdownMenuItem>Reload</RnDropdownMenuItem>
+                        <RnDropdownMenuLabel Inset>People</RnDropdownMenuLabel>
+                        <RnDropdownMenuItem Inset>Pedro Duarte</RnDropdownMenuItem>
+                        <RnDropdownMenuItem Inset>Colm Tuite</RnDropdownMenuItem>
                     </ChildContent>
                 </RnContextMenu>
             </div>
         ),
 
         new("Dialog", "dialog", "A window overlaid on the primary content.",
-            @<div class="space-y-4">
-                <RnButton OnClick="() => _dialogOpen = true">Open Dialog</RnButton>
+            @<div>
+                <RnButton Variant="ButtonVariant.Outline" OnClick="() => _dialogOpen = true">Edit Profile</RnButton>
                 <RnDialog @bind-Open="_dialogOpen">
                     <RnDialogHeader>
-                        <RnDialogTitle>Edit Profile</RnDialogTitle>
+                        <RnDialogTitle>Edit profile</RnDialogTitle>
                         <RnDialogDescription>Make changes to your profile here. Click save when you're done.</RnDialogDescription>
                     </RnDialogHeader>
                     <div class="grid gap-4 py-4">
-                        <div class="space-y-2">
-                            <RnLabel>Name</RnLabel>
-                            <RnInput Placeholder="Your name" />
+                        <div class="grid grid-cols-4 items-center gap-4">
+                            <RnLabel For="dialog-name" Class="text-right">Name</RnLabel>
+                            <RnInput id="dialog-name" Value="Pedro Duarte" Class="col-span-3" />
                         </div>
-                        <div class="space-y-2">
-                            <RnLabel>Username</RnLabel>
-                            <RnInput Placeholder="@("@username")" />
+                        <div class="grid grid-cols-4 items-center gap-4">
+                            <RnLabel For="dialog-username" Class="text-right">Username</RnLabel>
+                            <RnInput id="dialog-username" Value="@@peduarte" Class="col-span-3" />
                         </div>
                     </div>
                     <RnDialogFooter>
-                        <RnButton Variant="ButtonVariant.Outline" OnClick="() => _dialogOpen = false">Cancel</RnButton>
                         <RnButton OnClick="() => _dialogOpen = false">Save changes</RnButton>
                     </RnDialogFooter>
                 </RnDialog>
@@ -440,22 +516,35 @@ else
         ),
 
         new("Drawer", "drawer", "A drawer component that slides from the bottom of the screen.",
-            @<div class="space-y-4">
+            @<div>
                 <RnButton Variant="ButtonVariant.Outline" OnClick="() => _drawerOpen = true">Open Drawer</RnButton>
                 <RnDrawer @bind-Open="_drawerOpen">
-                    <RnDrawerContent>
+                    <div class="mx-auto w-full max-w-sm">
                         <RnDrawerHeader>
                             <RnDrawerTitle>Move Goal</RnDrawerTitle>
                             <RnDrawerDescription>Set your daily activity goal.</RnDrawerDescription>
                         </RnDrawerHeader>
-                        <div class="p-4">
-                            <RnProgress Value="66" Class="w-full" />
+                        <div class="p-4 pb-0">
+                            <div class="flex items-center justify-center space-x-2">
+                                <RnButton Variant="ButtonVariant.Outline" Size="ButtonSize.Icon" Class="h-8 w-8 shrink-0 rounded-full" OnClick="() => _drawerGoal = Math.Max(200, _drawerGoal - 10)" Disabled="@(_drawerGoal <= 200)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
+                                    <span class="sr-only">Decrease</span>
+                                </RnButton>
+                                <div class="flex-1 text-center">
+                                    <div class="text-7xl font-bold tracking-tighter">@_drawerGoal</div>
+                                    <div class="text-[0.70rem] text-muted-foreground uppercase">Calories/day</div>
+                                </div>
+                                <RnButton Variant="ButtonVariant.Outline" Size="ButtonSize.Icon" Class="h-8 w-8 shrink-0 rounded-full" OnClick="() => _drawerGoal = Math.Min(400, _drawerGoal + 10)" Disabled="@(_drawerGoal >= 400)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                    <span class="sr-only">Increase</span>
+                                </RnButton>
+                            </div>
                         </div>
                         <RnDrawerFooter>
                             <RnButton OnClick="() => _drawerOpen = false">Submit</RnButton>
                             <RnButton Variant="ButtonVariant.Outline" OnClick="() => _drawerOpen = false">Cancel</RnButton>
                         </RnDrawerFooter>
-                    </RnDrawerContent>
+                    </div>
                 </RnDrawer>
             </div>
         ),
@@ -464,16 +553,42 @@ else
             @<div>
                 <RnDropdownMenu>
                     <Trigger>
-                        <RnButton Variant="ButtonVariant.Outline">Open Menu</RnButton>
+                        <RnButton Variant="ButtonVariant.Outline">Open</RnButton>
                     </Trigger>
                     <ChildContent>
                         <RnDropdownMenuLabel>My Account</RnDropdownMenuLabel>
                         <RnDropdownMenuSeparator />
-                        <RnDropdownMenuItem>Profile</RnDropdownMenuItem>
-                        <RnDropdownMenuItem>Settings</RnDropdownMenuItem>
-                        <RnDropdownMenuItem>Billing</RnDropdownMenuItem>
+                        <RnDropdownMenuItem>
+                            Profile
+                            <span class="ml-auto text-xs tracking-widest text-muted-foreground">⇧⌘P</span>
+                        </RnDropdownMenuItem>
+                        <RnDropdownMenuItem>
+                            Billing
+                            <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘B</span>
+                        </RnDropdownMenuItem>
+                        <RnDropdownMenuItem>
+                            Settings
+                            <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘S</span>
+                        </RnDropdownMenuItem>
+                        <RnDropdownMenuItem>
+                            Keyboard shortcuts
+                            <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘K</span>
+                        </RnDropdownMenuItem>
                         <RnDropdownMenuSeparator />
-                        <RnDropdownMenuItem>Log out</RnDropdownMenuItem>
+                        <RnDropdownMenuItem>Team</RnDropdownMenuItem>
+                        <RnDropdownMenuItem>
+                            New Team
+                            <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘+T</span>
+                        </RnDropdownMenuItem>
+                        <RnDropdownMenuSeparator />
+                        <RnDropdownMenuItem>GitHub</RnDropdownMenuItem>
+                        <RnDropdownMenuItem>Support</RnDropdownMenuItem>
+                        <RnDropdownMenuItem Disabled>API</RnDropdownMenuItem>
+                        <RnDropdownMenuSeparator />
+                        <RnDropdownMenuItem>
+                            Log out
+                            <span class="ml-auto text-xs tracking-widest text-muted-foreground">⇧⌘Q</span>
+                        </RnDropdownMenuItem>
                     </ChildContent>
                 </RnDropdownMenu>
             </div>
@@ -502,41 +617,52 @@ else
             </div>
         ),
 
-        new("Hover Card", "hover-card", "Allows sighted users to preview content behind a link.",
+        new("Hover Card", "hover-card", "For sighted users to preview content available behind a link.",
             @<div>
                 <RnHoverCard>
                     <Trigger>
-                        <RnButton Variant="ButtonVariant.Link">Hover over me</RnButton>
+                        <RnButton Variant="ButtonVariant.Link">@@nextjs</RnButton>
                     </Trigger>
                     <ChildContent>
-                        <div class="space-y-2">
-                            <h4 class="text-sm font-semibold">RnUI</h4>
-                            <p class="text-sm text-muted-foreground">A Blazor port of shadcn/ui components.</p>
+                        <div class="flex justify-between space-x-4">
+                            <RnAvatar>
+                                <RnAvatarFallback>VC</RnAvatarFallback>
+                            </RnAvatar>
+                            <div class="space-y-1">
+                                <h4 class="text-sm font-semibold">@@nextjs</h4>
+                                <p class="text-sm">The React Framework - created and maintained by @@vercel.</p>
+                                <div class="flex items-center pt-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 opacity-70"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                                    <span class="text-xs text-muted-foreground">Joined December 2021</span>
+                                </div>
+                            </div>
                         </div>
                     </ChildContent>
                 </RnHoverCard>
             </div>
         ),
 
-        new("Input", "input", "Displays a form input field.",
-            @<div class="space-y-4 max-w-sm">
-                <div class="space-y-2">
-                    <RnLabel>Email</RnLabel>
-                    <RnInput Type="email" Placeholder="Enter your email" />
+        new("Input", "input", "Displays a form input field or a component that looks like an input field.",
+            @<div class="space-y-6 max-w-sm">
+                <RnInput Type="email" Placeholder="Email" />
+                <div class="grid w-full items-center gap-3">
+                    <RnLabel For="email-with-label">Email</RnLabel>
+                    <RnInput Type="email" id="email-with-label" Placeholder="Email" />
                 </div>
-                <div class="space-y-2">
-                    <RnLabel>Password</RnLabel>
-                    <RnInput Type="password" Placeholder="Enter your password" />
+                <div class="grid w-full items-center gap-3">
+                    <RnLabel For="picture">Picture</RnLabel>
+                    <RnInput id="picture" Type="file" />
                 </div>
-                <div class="space-y-2">
-                    <RnLabel>Disabled</RnLabel>
-                    <RnInput Placeholder="Disabled input" Disabled="true" />
+                <RnInput Disabled="true" Type="email" Placeholder="Email" />
+                <div class="flex w-full items-center gap-2">
+                    <RnInput Type="email" Placeholder="Email" />
+                    <RnButton Type="submit" Variant="ButtonVariant.Outline">Subscribe</RnButton>
                 </div>
             </div>
         ),
 
         new("Input OTP", "input-otp", "Accessible one-time password component with copy paste functionality.",
-            @<div class="space-y-4">
+            @<div class="space-y-2">
                 <RnInputOTP @bind-Value="_otpValue" MaxLength="6">
                     <RnInputOTPGroup>
                         <RnInputOTPSlot Index="0" />
@@ -550,64 +676,83 @@ else
                         <RnInputOTPSlot Index="5" />
                     </RnInputOTPGroup>
                 </RnInputOTP>
-                <p class="text-sm text-muted-foreground">Value: @(_otpValue)</p>
+                <p class="text-sm text-muted-foreground">Enter your one-time password.</p>
             </div>
         ),
 
-        new("Kbd", "kbd", "Displays keyboard shortcut styling.",
-            @<div class="space-y-4">
-                <p class="text-sm text-muted-foreground">
-                    Press <RnKbd>Ctrl</RnKbd> + <RnKbd>K</RnKbd> to open the command palette.
-                </p>
-                <p class="text-sm text-muted-foreground">
-                    Press <RnKbd>Esc</RnKbd> to close.
-                </p>
+        new("Kbd", "kbd", "Displays a keyboard key or shortcut.",
+            @<div class="flex flex-col items-center gap-4">
+                <RnKbdGroup>
+                    <RnKbd>⌘</RnKbd>
+                    <RnKbd>⇧</RnKbd>
+                    <RnKbd>⌥</RnKbd>
+                    <RnKbd>⌃</RnKbd>
+                </RnKbdGroup>
+                <RnKbdGroup>
+                    <RnKbd>Ctrl</RnKbd>
+                    <span>+</span>
+                    <RnKbd>B</RnKbd>
+                </RnKbdGroup>
             </div>
         ),
 
-        new("Label", "label", "Renders an accessible label for form controls.",
-            @<div class="space-y-4 max-w-sm">
-                <div class="space-y-2">
-                    <RnLabel For="name-input">Your Name</RnLabel>
-                    <RnInput id="name-input" Placeholder="Enter your name" />
-                </div>
+        new("Label", "label", "Renders an accessible label associated with controls.",
+            @<div class="flex items-center space-x-2">
+                <RnCheckbox id="terms" @bind-Checked="_checkboxValue" />
+                <RnLabel For="terms">Accept terms and conditions</RnLabel>
             </div>
         ),
 
         new("Menubar", "menubar", "A visually persistent menu common in desktop applications.",
-            @<div>
-                <RnMenubar>
-                    <RnMenubarMenu>
-                        <RnMenubarTrigger>File</RnMenubarTrigger>
-                        <RnMenubarContent>
-                            <RnMenubarItem>New Tab</RnMenubarItem>
-                            <RnMenubarItem>New Window</RnMenubarItem>
-                            <RnMenubarSeparator />
-                            <RnMenubarItem>Share</RnMenubarItem>
-                            <RnMenubarSeparator />
-                            <RnMenubarItem>Print</RnMenubarItem>
-                        </RnMenubarContent>
-                    </RnMenubarMenu>
-                    <RnMenubarMenu>
-                        <RnMenubarTrigger>Edit</RnMenubarTrigger>
-                        <RnMenubarContent>
-                            <RnMenubarItem>Undo</RnMenubarItem>
-                            <RnMenubarItem>Redo</RnMenubarItem>
-                            <RnMenubarSeparator />
-                            <RnMenubarItem>Cut</RnMenubarItem>
-                            <RnMenubarItem>Copy</RnMenubarItem>
-                            <RnMenubarItem>Paste</RnMenubarItem>
-                        </RnMenubarContent>
-                    </RnMenubarMenu>
-                    <RnMenubarMenu>
-                        <RnMenubarTrigger>View</RnMenubarTrigger>
-                        <RnMenubarContent>
-                            <RnMenubarItem>Zoom In</RnMenubarItem>
-                            <RnMenubarItem>Zoom Out</RnMenubarItem>
-                        </RnMenubarContent>
-                    </RnMenubarMenu>
-                </RnMenubar>
-            </div>
+            @<RnMenubar>
+                <RnMenubarMenu>
+                    <RnMenubarTrigger>File</RnMenubarTrigger>
+                    <RnMenubarContent>
+                        <RnMenubarItem Shortcut="⌘T">New Tab</RnMenubarItem>
+                        <RnMenubarItem Shortcut="⌘N">New Window</RnMenubarItem>
+                        <RnMenubarItem Disabled>New Incognito Window</RnMenubarItem>
+                        <RnMenubarSeparator />
+                        <RnMenubarItem>Share</RnMenubarItem>
+                        <RnMenubarSeparator />
+                        <RnMenubarItem Shortcut="⌘P">Print</RnMenubarItem>
+                    </RnMenubarContent>
+                </RnMenubarMenu>
+                <RnMenubarMenu>
+                    <RnMenubarTrigger>Edit</RnMenubarTrigger>
+                    <RnMenubarContent>
+                        <RnMenubarItem Shortcut="⌘Z">Undo</RnMenubarItem>
+                        <RnMenubarItem Shortcut="⇧⌘Z">Redo</RnMenubarItem>
+                        <RnMenubarSeparator />
+                        <RnMenubarItem Shortcut="⌘X">Cut</RnMenubarItem>
+                        <RnMenubarItem Shortcut="⌘C">Copy</RnMenubarItem>
+                        <RnMenubarItem Shortcut="⌘V">Paste</RnMenubarItem>
+                    </RnMenubarContent>
+                </RnMenubarMenu>
+                <RnMenubarMenu>
+                    <RnMenubarTrigger>View</RnMenubarTrigger>
+                    <RnMenubarContent>
+                        <RnMenubarItem Inset>Always Show Bookmarks Bar</RnMenubarItem>
+                        <RnMenubarItem Inset>Always Show Full URLs</RnMenubarItem>
+                        <RnMenubarSeparator />
+                        <RnMenubarItem Inset Shortcut="⌘R">Reload</RnMenubarItem>
+                        <RnMenubarItem Inset Shortcut="⇧⌘R" Disabled>Force Reload</RnMenubarItem>
+                        <RnMenubarSeparator />
+                        <RnMenubarItem Inset>Toggle Fullscreen</RnMenubarItem>
+                    </RnMenubarContent>
+                </RnMenubarMenu>
+                <RnMenubarMenu>
+                    <RnMenubarTrigger>Profiles</RnMenubarTrigger>
+                    <RnMenubarContent>
+                        <RnMenubarItem Inset>Andy</RnMenubarItem>
+                        <RnMenubarItem Inset>Benoit</RnMenubarItem>
+                        <RnMenubarItem Inset>Luis</RnMenubarItem>
+                        <RnMenubarSeparator />
+                        <RnMenubarItem Inset>Edit...</RnMenubarItem>
+                        <RnMenubarSeparator />
+                        <RnMenubarItem Inset>Add Profile...</RnMenubarItem>
+                    </RnMenubarContent>
+                </RnMenubarMenu>
+            </RnMenubar>
         ),
 
         new("Navigation Menu", "navigation-menu", "A collection of links for navigating websites.",
@@ -646,24 +791,34 @@ else
             </div>
         ),
 
-        new("Popover", "popover", "Displays rich content in a portal triggered by a button.",
+        new("Popover", "popover", "Displays rich content in a portal, triggered by a button.",
             @<div>
                 <RnPopover>
                     <Trigger>
-                        <RnButton Variant="ButtonVariant.Outline">Open Popover</RnButton>
+                        <RnButton Variant="ButtonVariant.Outline">Open popover</RnButton>
                     </Trigger>
                     <ChildContent>
-                        <div class="space-y-2">
-                            <h4 class="font-medium leading-none">Dimensions</h4>
-                            <p class="text-sm text-muted-foreground">Set the dimensions for the layer.</p>
-                            <div class="grid gap-2 pt-2">
-                                <div class="space-y-1">
+                        <div class="grid gap-4">
+                            <div class="space-y-2">
+                                <h4 class="font-medium leading-none">Dimensions</h4>
+                                <p class="text-sm text-muted-foreground">Set the dimensions for the layer.</p>
+                            </div>
+                            <div class="grid gap-2">
+                                <div class="grid grid-cols-3 items-center gap-4">
                                     <RnLabel>Width</RnLabel>
-                                    <RnInput Placeholder="100%" />
+                                    <RnInput Value="100%" Class="col-span-2 h-8" />
                                 </div>
-                                <div class="space-y-1">
+                                <div class="grid grid-cols-3 items-center gap-4">
+                                    <RnLabel>Max. width</RnLabel>
+                                    <RnInput Value="300px" Class="col-span-2 h-8" />
+                                </div>
+                                <div class="grid grid-cols-3 items-center gap-4">
                                     <RnLabel>Height</RnLabel>
-                                    <RnInput Placeholder="25px" />
+                                    <RnInput Value="25px" Class="col-span-2 h-8" />
+                                </div>
+                                <div class="grid grid-cols-3 items-center gap-4">
+                                    <RnLabel>Max. height</RnLabel>
+                                    <RnInput Value="none" Class="col-span-2 h-8" />
                                 </div>
                             </div>
                         </div>
@@ -673,31 +828,24 @@ else
         ),
 
         new("Progress", "progress", "Displays a progress indicator.",
-            @<div class="space-y-4 max-w-md">
-                <RnProgress Value="20" />
-                <RnProgress Value="60" />
-                <RnProgress Value="100" />
-            </div>
+            @<RnProgress Value="33" Class="w-3/5" />
         ),
 
         new("Radio Group", "radio-group", "A set of checkable buttons where only one can be checked.",
-            @<div class="space-y-4">
-                <RnRadioGroup @bind-Value="_radioValue">
-                    <div class="flex items-center space-x-2">
-                        <RnRadioGroupItem Value="option-1" />
-                        <RnLabel>Option 1</RnLabel>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <RnRadioGroupItem Value="option-2" />
-                        <RnLabel>Option 2</RnLabel>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <RnRadioGroupItem Value="option-3" />
-                        <RnLabel>Option 3</RnLabel>
-                    </div>
-                </RnRadioGroup>
-                <p class="text-sm text-muted-foreground">Selected: @_radioValue</p>
-            </div>
+            @<RnRadioGroup @bind-Value="_radioValue">
+                <div class="flex items-center gap-3">
+                    <RnRadioGroupItem Value="default" id="r1" />
+                    <RnLabel For="r1">Default</RnLabel>
+                </div>
+                <div class="flex items-center gap-3">
+                    <RnRadioGroupItem Value="comfortable" id="r2" />
+                    <RnLabel For="r2">Comfortable</RnLabel>
+                </div>
+                <div class="flex items-center gap-3">
+                    <RnRadioGroupItem Value="compact" id="r3" />
+                    <RnLabel For="r3">Compact</RnLabel>
+                </div>
+            </RnRadioGroup>
         ),
 
         new("Resizable", "resizable", "Accessible resizable panel groups and layouts.",
@@ -719,37 +867,38 @@ else
         ),
 
         new("Scroll Area", "scroll-area", "Augments native scroll functionality for custom styling.",
-            @<div>
-                <RnScrollArea MaxHeight="200px" Class="w-48 rounded-md border">
-                    <div class="p-4">
-                        @for (var i = 1; i <= 20; i++)
-                        {
-                            <div class="text-sm py-1">Item @i</div>
-                        }
-                    </div>
-                </RnScrollArea>
-            </div>
+            @<RnScrollArea MaxHeight="288px" Class="w-48 rounded-md border">
+                <div class="p-4">
+                    <h4 class="mb-4 text-sm font-medium leading-none">Tags</h4>
+                    @foreach (var tag in new[] { "v1.2.0-beta.42", "v1.2.0-beta.41", "v1.2.0-beta.40", "v1.2.0-beta.39", "v1.2.0-beta.38", "v1.2.0-beta.37", "v1.2.0-beta.36", "v1.2.0-beta.35" })
+                    {
+                        <div class="text-sm">@tag</div>
+                        <RnSeparator Class="my-2" />
+                    }
+                </div>
+            </RnScrollArea>
         ),
 
         new("Select", "select", "Displays a list of options for the user to pick from.",
-            @<div class="space-y-4 max-w-xs">
-                <RnSelect @bind-Value="_selectValue" Placeholder="Select a fruit">
+            @<RnSelect @bind-Value="_selectValue" Placeholder="Select a fruit" Class="w-[180px]">
+                <RnSelectGroup>
+                    <RnSelectLabel>Fruits</RnSelectLabel>
                     <RnSelectItem Value="apple">Apple</RnSelectItem>
                     <RnSelectItem Value="banana">Banana</RnSelectItem>
-                    <RnSelectItem Value="orange">Orange</RnSelectItem>
-                    <RnSelectItem Value="grape">Grape</RnSelectItem>
-                </RnSelect>
-                <p class="text-sm text-muted-foreground">Selected: @(_selectValue ?? "None")</p>
-            </div>
+                    <RnSelectItem Value="blueberry">Blueberry</RnSelectItem>
+                    <RnSelectItem Value="grapes">Grapes</RnSelectItem>
+                    <RnSelectItem Value="pineapple">Pineapple</RnSelectItem>
+                </RnSelectGroup>
+            </RnSelect>
         ),
 
-        new("Separator", "separator", "Visually separates content.",
-            @<div class="space-y-4 max-w-md">
-                <div>
-                    <h4 class="text-sm font-medium leading-none">RnUI</h4>
-                    <p class="text-sm text-muted-foreground">A Blazor port of shadcn/ui.</p>
+        new("Separator", "separator", "Visually or semantically separates content.",
+            @<div>
+                <div class="space-y-1">
+                    <h4 class="text-sm leading-none font-medium">Radix Primitives</h4>
+                    <p class="text-sm text-muted-foreground">An open-source UI component library.</p>
                 </div>
-                <RnSeparator />
+                <RnSeparator Class="my-4" />
                 <div class="flex h-5 items-center space-x-4 text-sm">
                     <div>Blog</div>
                     <RnSeparator Orientation="Orientation.Vertical" />
@@ -760,18 +909,22 @@ else
             </div>
         ),
 
-        new("Sheet", "sheet", "A panel that slides from the edge of the screen.",
-            @<div class="space-y-4">
+        new("Sheet", "sheet", "Extends the Dialog component to display content that complements the main content of the screen.",
+            @<div>
                 <RnButton Variant="ButtonVariant.Outline" OnClick="() => _sheetOpen = true">Open Sheet</RnButton>
                 <RnSheet @bind-Open="_sheetOpen" Side="Side.Right">
                     <RnSheetHeader>
-                        <RnSheetTitle>Edit Profile</RnSheetTitle>
-                        <RnSheetDescription>Make changes to your profile.</RnSheetDescription>
+                        <RnSheetTitle>Edit profile</RnSheetTitle>
+                        <RnSheetDescription>Make changes to your profile here. Click save when you're done.</RnSheetDescription>
                     </RnSheetHeader>
-                    <div class="grid gap-4 py-4">
-                        <div class="space-y-2">
-                            <RnLabel>Name</RnLabel>
-                            <RnInput Placeholder="Your name" />
+                    <div class="grid gap-4 px-4">
+                        <div class="grid grid-cols-4 items-center gap-4">
+                            <RnLabel For="sheet-name" Class="text-right">Name</RnLabel>
+                            <RnInput id="sheet-name" Value="Pedro Duarte" Class="col-span-3" />
+                        </div>
+                        <div class="grid grid-cols-4 items-center gap-4">
+                            <RnLabel For="sheet-username" Class="text-right">Username</RnLabel>
+                            <RnInput id="sheet-username" Value="@@peduarte" Class="col-span-3" />
                         </div>
                     </div>
                     <RnSheetFooter>
@@ -781,7 +934,7 @@ else
             </div>
         ),
 
-        new("Sidebar", "sidebar", "A composable sidebar component with menu items.",
+        new("Sidebar", "sidebar", "A composable, themeable and customizable sidebar component.",
             @<div class="space-y-4">
                 <div class="border rounded-md overflow-hidden max-w-xs">
                     <RnSidebar Open="true" Width="100%">
@@ -790,16 +943,45 @@ else
                         </RnSidebarHeader>
                         <RnSidebarContent>
                             <RnSidebarGroup>
-                                <RnSidebarGroupLabel>Platform</RnSidebarGroupLabel>
+                                <RnSidebarGroupLabel>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                                    Platform
+                                </RnSidebarGroupLabel>
                                 <RnSidebarMenu>
                                     <RnSidebarMenuItem>
-                                        <RnSidebarMenuButton Href="#" IsActive="true">Dashboard</RnSidebarMenuButton>
+                                        <RnSidebarMenuButton Href="#" IsActive="true">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                                            <span>Dashboard</span>
+                                        </RnSidebarMenuButton>
                                     </RnSidebarMenuItem>
                                     <RnSidebarMenuItem>
-                                        <RnSidebarMenuButton Href="#">Settings</RnSidebarMenuButton>
+                                        <RnSidebarMenuButton Href="#">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
+                                            <span>Projects</span>
+                                        </RnSidebarMenuButton>
                                     </RnSidebarMenuItem>
                                     <RnSidebarMenuItem>
-                                        <RnSidebarMenuButton Href="#">Users</RnSidebarMenuButton>
+                                        <RnSidebarMenuButton Href="#">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                                            <span>Settings</span>
+                                        </RnSidebarMenuButton>
+                                    </RnSidebarMenuItem>
+                                </RnSidebarMenu>
+                            </RnSidebarGroup>
+                            <RnSidebarGroup>
+                                <RnSidebarGroupLabel>Projects</RnSidebarGroupLabel>
+                                <RnSidebarMenu>
+                                    <RnSidebarMenuItem>
+                                        <RnSidebarMenuButton Href="#">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg>
+                                            <span>Design Engineering</span>
+                                        </RnSidebarMenuButton>
+                                    </RnSidebarMenuItem>
+                                    <RnSidebarMenuItem>
+                                        <RnSidebarMenuButton Href="#">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                                            <span>Sales &amp; Marketing</span>
+                                        </RnSidebarMenuButton>
                                     </RnSidebarMenuItem>
                                 </RnSidebarMenu>
                             </RnSidebarGroup>
@@ -823,10 +1005,7 @@ else
         ),
 
         new("Slider", "slider", "An input where the user selects a value from a range.",
-            @<div class="space-y-4 max-w-md">
-                <RnSlider @bind-Value="_sliderValue" />
-                <p class="text-sm text-muted-foreground">Value: @_sliderValue</p>
-            </div>
+            @<RnSlider @bind-Value="_sliderValue" Max="100" Step="1" Class="w-3/5" />
         ),
 
         new("Spinner", "spinner", "An animated loading indicator.",
@@ -838,52 +1017,78 @@ else
         ),
 
         new("Switch", "switch", "A toggle control for switching between two states.",
-            @<div class="space-y-4">
-                <div class="flex items-center space-x-2">
-                    <RnSwitch @bind-Checked="_switchValue" />
-                    <RnLabel>Enable notifications</RnLabel>
-                </div>
-                <p class="text-sm text-muted-foreground">Enabled: @_switchValue</p>
+            @<div class="flex items-center space-x-2">
+                <RnSwitch id="airplane-mode" @bind-Checked="_switchValue" />
+                <RnLabel For="airplane-mode">Airplane Mode</RnLabel>
             </div>
         ),
 
         new("Table", "table", "A responsive table component.",
-            @<div>
-                <RnTable>
-                    <RnTableHeader>
-                        <RnTableRow>
-                            <RnTableHead>Invoice</RnTableHead>
-                            <RnTableHead>Status</RnTableHead>
-                            <RnTableHead>Method</RnTableHead>
-                            <RnTableHead Class="text-right">Amount</RnTableHead>
-                        </RnTableRow>
-                    </RnTableHeader>
-                    <RnTableBody>
-                        <RnTableRow>
-                            <RnTableCell>INV001</RnTableCell>
-                            <RnTableCell><RnBadge>Paid</RnBadge></RnTableCell>
-                            <RnTableCell>Credit Card</RnTableCell>
-                            <RnTableCell Class="text-right">$250.00</RnTableCell>
-                        </RnTableRow>
-                        <RnTableRow>
-                            <RnTableCell>INV002</RnTableCell>
-                            <RnTableCell><RnBadge Variant="BadgeVariant.Outline">Pending</RnBadge></RnTableCell>
-                            <RnTableCell>PayPal</RnTableCell>
-                            <RnTableCell Class="text-right">$150.00</RnTableCell>
-                        </RnTableRow>
-                        <RnTableRow>
-                            <RnTableCell>INV003</RnTableCell>
-                            <RnTableCell><RnBadge Variant="BadgeVariant.Destructive">Overdue</RnBadge></RnTableCell>
-                            <RnTableCell>Bank Transfer</RnTableCell>
-                            <RnTableCell Class="text-right">$350.00</RnTableCell>
-                        </RnTableRow>
-                    </RnTableBody>
-                </RnTable>
-            </div>
+            @<RnTable>
+                <RnTableCaption>A list of your recent invoices.</RnTableCaption>
+                <RnTableHeader>
+                    <RnTableRow>
+                        <RnTableHead Class="w-[100px]">Invoice</RnTableHead>
+                        <RnTableHead>Status</RnTableHead>
+                        <RnTableHead>Method</RnTableHead>
+                        <RnTableHead Class="text-right">Amount</RnTableHead>
+                    </RnTableRow>
+                </RnTableHeader>
+                <RnTableBody>
+                    <RnTableRow>
+                        <RnTableCell Class="font-medium">INV001</RnTableCell>
+                        <RnTableCell>Paid</RnTableCell>
+                        <RnTableCell>Credit Card</RnTableCell>
+                        <RnTableCell Class="text-right">$250.00</RnTableCell>
+                    </RnTableRow>
+                    <RnTableRow>
+                        <RnTableCell Class="font-medium">INV002</RnTableCell>
+                        <RnTableCell>Pending</RnTableCell>
+                        <RnTableCell>PayPal</RnTableCell>
+                        <RnTableCell Class="text-right">$150.00</RnTableCell>
+                    </RnTableRow>
+                    <RnTableRow>
+                        <RnTableCell Class="font-medium">INV003</RnTableCell>
+                        <RnTableCell>Unpaid</RnTableCell>
+                        <RnTableCell>Bank Transfer</RnTableCell>
+                        <RnTableCell Class="text-right">$350.00</RnTableCell>
+                    </RnTableRow>
+                    <RnTableRow>
+                        <RnTableCell Class="font-medium">INV004</RnTableCell>
+                        <RnTableCell>Paid</RnTableCell>
+                        <RnTableCell>Credit Card</RnTableCell>
+                        <RnTableCell Class="text-right">$450.00</RnTableCell>
+                    </RnTableRow>
+                    <RnTableRow>
+                        <RnTableCell Class="font-medium">INV005</RnTableCell>
+                        <RnTableCell>Paid</RnTableCell>
+                        <RnTableCell>PayPal</RnTableCell>
+                        <RnTableCell Class="text-right">$550.00</RnTableCell>
+                    </RnTableRow>
+                    <RnTableRow>
+                        <RnTableCell Class="font-medium">INV006</RnTableCell>
+                        <RnTableCell>Pending</RnTableCell>
+                        <RnTableCell>Bank Transfer</RnTableCell>
+                        <RnTableCell Class="text-right">$200.00</RnTableCell>
+                    </RnTableRow>
+                    <RnTableRow>
+                        <RnTableCell Class="font-medium">INV007</RnTableCell>
+                        <RnTableCell>Unpaid</RnTableCell>
+                        <RnTableCell>Credit Card</RnTableCell>
+                        <RnTableCell Class="text-right">$300.00</RnTableCell>
+                    </RnTableRow>
+                </RnTableBody>
+                <RnTableFooter>
+                    <RnTableRow>
+                        <RnTableCell colspan="3">Total</RnTableCell>
+                        <RnTableCell Class="text-right">$2,500.00</RnTableCell>
+                    </RnTableRow>
+                </RnTableFooter>
+            </RnTable>
         ),
 
         new("Tabs", "tabs", "A set of layered sections of content, shown one at a time.",
-            @<div>
+            @<div class="flex w-full max-w-sm flex-col gap-6">
                 <RnTabs @bind-ActiveTab="_activeTab">
                     <RnTabsList>
                         <RnTabsTrigger Value="account">Account</RnTabsTrigger>
@@ -893,41 +1098,54 @@ else
                         <RnCard>
                             <RnCardHeader>
                                 <RnCardTitle>Account</RnCardTitle>
-                                <RnCardDescription>Make changes to your account here.</RnCardDescription>
+                                <RnCardDescription>Make changes to your account here. Click save when you're done.</RnCardDescription>
                             </RnCardHeader>
                             <RnCardContent>
-                                <div class="space-y-2">
-                                    <RnLabel>Name</RnLabel>
-                                    <RnInput Placeholder="Your name" />
+                                <div class="grid gap-6">
+                                    <div class="grid gap-3">
+                                        <RnLabel For="tabs-demo-name">Name</RnLabel>
+                                        <RnInput id="tabs-demo-name" Placeholder="Pedro Duarte" />
+                                    </div>
+                                    <div class="grid gap-3">
+                                        <RnLabel For="tabs-demo-username">Username</RnLabel>
+                                        <RnInput id="tabs-demo-username" Placeholder="@@peduarte" />
+                                    </div>
                                 </div>
                             </RnCardContent>
+                            <RnCardFooter>
+                                <RnButton>Save changes</RnButton>
+                            </RnCardFooter>
                         </RnCard>
                     </RnTabsContent>
                     <RnTabsContent Value="password">
                         <RnCard>
                             <RnCardHeader>
                                 <RnCardTitle>Password</RnCardTitle>
-                                <RnCardDescription>Change your password here.</RnCardDescription>
+                                <RnCardDescription>Change your password here. After saving, you'll be logged out.</RnCardDescription>
                             </RnCardHeader>
                             <RnCardContent>
-                                <div class="space-y-2">
-                                    <RnLabel>New Password</RnLabel>
-                                    <RnInput Type="password" />
+                                <div class="grid gap-6">
+                                    <div class="grid gap-3">
+                                        <RnLabel For="tabs-demo-current">Current password</RnLabel>
+                                        <RnInput id="tabs-demo-current" Type="password" />
+                                    </div>
+                                    <div class="grid gap-3">
+                                        <RnLabel For="tabs-demo-new">New password</RnLabel>
+                                        <RnInput id="tabs-demo-new" Type="password" />
+                                    </div>
                                 </div>
                             </RnCardContent>
+                            <RnCardFooter>
+                                <RnButton>Save password</RnButton>
+                            </RnCardFooter>
                         </RnCard>
                     </RnTabsContent>
                 </RnTabs>
             </div>
         ),
 
-        new("Textarea", "textarea", "Displays a form textarea field.",
-            @<div class="space-y-4 max-w-sm">
-                <div class="space-y-2">
-                    <RnLabel>Message</RnLabel>
-                    <RnTextarea Placeholder="Type your message here" />
-                </div>
-            </div>
+        new("Textarea", "textarea", "Displays a form textarea or a component that looks like a textarea.",
+            @<RnTextarea Placeholder="Type your message here." Class="max-w-sm" />
         ),
 
         new("Toast", "toast", "A succinct message that is displayed temporarily.",
@@ -938,42 +1156,40 @@ else
         ),
 
         new("Toggle", "toggle", "A two-state button that can be on or off.",
-            @<div class="space-y-4">
-                <div class="flex gap-4">
-                    <RnToggle @bind-Pressed="_togglePressed">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>
-                        </svg>
-                        Bold
-                    </RnToggle>
-                    <RnToggle Variant="ToggleVariant.Outline">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="19" x2="10" y1="4" y2="4"/><line x1="14" x2="5" y1="20" y2="20"/><line x1="15" x2="9" y1="4" y2="20"/>
-                        </svg>
-                        Italic
-                    </RnToggle>
-                </div>
-                <p class="text-sm text-muted-foreground">Bold pressed: @_togglePressed</p>
+            @<div class="flex gap-4">
+                <RnToggle aria-label="Toggle bold">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>
+                    </svg>
+                </RnToggle>
+                <RnToggle Variant="ToggleVariant.Outline" aria-label="Toggle italic">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" x2="10" y1="4" y2="4"/><line x1="14" x2="5" y1="20" y2="20"/><line x1="15" x2="9" y1="4" y2="20"/>
+                    </svg>
+                </RnToggle>
+                <RnToggle aria-label="Toggle underline" Disabled="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 4v6a6 6 0 0 0 12 0V4"/><line x1="4" x2="20" y1="20" y2="20"/>
+                    </svg>
+                </RnToggle>
             </div>
         ),
 
         new("Toggle Group", "toggle-group", "A set of two-state buttons that can be toggled on or off.",
-            @<div class="space-y-4">
-                <RnToggleGroup @bind-Value="_toggleGroupValue">
-                    <RnToggleGroupItem Value="left">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="3" y1="6" y2="6"/><line x1="15" x2="3" y1="12" y2="12"/><line x1="17" x2="3" y1="18" y2="18"/></svg>
-                    </RnToggleGroupItem>
-                    <RnToggleGroupItem Value="center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="3" y1="6" y2="6"/><line x1="18" x2="6" y1="12" y2="12"/><line x1="21" x2="3" y1="18" y2="18"/></svg>
-                    </RnToggleGroupItem>
-                    <RnToggleGroupItem Value="right">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="3" y1="6" y2="6"/><line x1="21" x2="9" y1="12" y2="12"/><line x1="21" x2="7" y1="18" y2="18"/></svg>
-                    </RnToggleGroupItem>
-                </RnToggleGroup>
-                <p class="text-sm text-muted-foreground">Alignment: @(_toggleGroupValue ?? "None")</p>
-            </div>
+            @<RnToggleGroup @bind-Value="_toggleGroupValue">
+                <RnToggleGroupItem Value="bold" aria-label="Toggle bold">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/></svg>
+                </RnToggleGroupItem>
+                <RnToggleGroupItem Value="italic" aria-label="Toggle italic">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" x2="10" y1="4" y2="4"/><line x1="14" x2="5" y1="20" y2="20"/><line x1="15" x2="9" y1="4" y2="20"/></svg>
+                </RnToggleGroupItem>
+                <RnToggleGroupItem Value="underline" aria-label="Toggle underline">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v6a6 6 0 0 0 12 0V4"/><line x1="4" x2="20" y1="20" y2="20"/></svg>
+                </RnToggleGroupItem>
+            </RnToggleGroup>
         ),
 
         new("Tooltip", "tooltip", "A popup that displays information on hover.",
