@@ -355,23 +355,32 @@ else
 
         // ==================== Badge ====================
         new("Badge", "badge", "Displays a badge or a component that looks like a badge.",
-            Demo: @<div class="flex flex-wrap gap-4">
-                <RnBadge>Default</RnBadge>
-                <RnBadge Variant="BadgeVariant.Secondary">Secondary</RnBadge>
-                <RnBadge Variant="BadgeVariant.Outline">Outline</RnBadge>
-                <RnBadge Variant="BadgeVariant.Destructive">Destructive</RnBadge>
+            Demo: @<div class="flex flex-col items-center gap-2">
+                <div class="flex w-full flex-wrap gap-2">
+                    <RnBadge>Badge</RnBadge>
+                    <RnBadge Variant="BadgeVariant.Secondary">Secondary</RnBadge>
+                    <RnBadge Variant="BadgeVariant.Destructive">Destructive</RnBadge>
+                    <RnBadge Variant="BadgeVariant.Outline">Outline</RnBadge>
+                </div>
+                <div class="flex w-full flex-wrap gap-2">
+                    <RnBadge Variant="BadgeVariant.Secondary" Class="bg-blue-500 text-white dark:bg-blue-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg>
+                        Verified
+                    </RnBadge>
+                    <RnBadge Class="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums">8</RnBadge>
+                    <RnBadge Class="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums" Variant="BadgeVariant.Destructive">99</RnBadge>
+                    <RnBadge Class="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums" Variant="BadgeVariant.Outline">20+</RnBadge>
+                </div>
             </div>,
             Thumbnail: @<div class="flex gap-2">
                 <RnBadge>Badge</RnBadge>
                 <RnBadge Variant="BadgeVariant.Secondary">New</RnBadge>
             </div>,
-            Code: @"<RnBadge>Default</RnBadge>
+            Code: @"<RnBadge>Badge</RnBadge>
 <RnBadge Variant=""BadgeVariant.Secondary"">Secondary</RnBadge>
-<RnBadge Variant=""BadgeVariant.Outline"">Outline</RnBadge>
-<RnBadge Variant=""BadgeVariant.Destructive"">Destructive</RnBadge>",
-            UsageCode: @"@using RnUI.Components.UI.Badge
-
-<RnBadge>Badge</RnBadge>
+<RnBadge Variant=""BadgeVariant.Destructive"">Destructive</RnBadge>
+<RnBadge Variant=""BadgeVariant.Outline"">Outline</RnBadge>",
+            UsageCode: @"<RnBadge>Badge</RnBadge>
 <RnBadge Variant=""BadgeVariant.Secondary"">Secondary</RnBadge>",
             Examples:
             [
@@ -435,46 +444,30 @@ else
 
         // ==================== Button ====================
         new("Button", "button", "Displays a button or a component that looks like a button.",
-            Demo: @<div class="space-y-6">
-                <div class="space-y-2">
-                    <p class="text-sm font-medium">Variants</p>
-                    <div class="flex flex-wrap gap-4">
-                        <RnButton>Default</RnButton>
-                        <RnButton Variant="ButtonVariant.Secondary">Secondary</RnButton>
-                        <RnButton Variant="ButtonVariant.Outline">Outline</RnButton>
-                        <RnButton Variant="ButtonVariant.Ghost">Ghost</RnButton>
-                        <RnButton Variant="ButtonVariant.Destructive">Destructive</RnButton>
-                        <RnButton Variant="ButtonVariant.Link">Link</RnButton>
-                    </div>
-                </div>
-                <div class="space-y-2">
-                    <p class="text-sm font-medium">Sizes</p>
-                    <div class="flex flex-wrap items-center gap-4">
-                        <RnButton Size="ButtonSize.Sm">Small</RnButton>
-                        <RnButton>Default</RnButton>
-                        <RnButton Size="ButtonSize.Lg">Large</RnButton>
-                    </div>
-                </div>
+            Demo: @<div class="flex flex-wrap items-center gap-2">
+                <RnButton Variant="ButtonVariant.Outline">Button</RnButton>
+                <RnButton Variant="ButtonVariant.Outline" Size="ButtonSize.Icon" aria-label="Submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+                </RnButton>
             </div>,
             Thumbnail: @<div class="flex gap-2">
                 <RnButton Size="ButtonSize.Sm">Button</RnButton>
                 <RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">Outline</RnButton>
             </div>,
-            Code: @"<RnButton>Default</RnButton>
-<RnButton Variant=""ButtonVariant.Secondary"">Secondary</RnButton>
-<RnButton Variant=""ButtonVariant.Outline"">Outline</RnButton>
-<RnButton Variant=""ButtonVariant.Ghost"">Ghost</RnButton>
-<RnButton Variant=""ButtonVariant.Destructive"">Destructive</RnButton>
-<RnButton Variant=""ButtonVariant.Link"">Link</RnButton>",
-            UsageCode: @"@using RnUI.Components.UI.Button
-
-<RnButton OnClick=""HandleClick"">Click me</RnButton>
+            Code: @"<RnButton Variant=""ButtonVariant.Outline"">Button</RnButton>
+<RnButton Variant=""ButtonVariant.Outline"" Size=""ButtonSize.Icon"">
+    <svg><!-- icon --></svg>
+</RnButton>",
+            UsageCode: @"<RnButton OnClick=""HandleClick"">Click me</RnButton>
 
 @code {
     private void HandleClick() { }
 }",
             Examples:
             [
+                new("Default", null,
+                    @<RnButton>Button</RnButton>,
+                    @"<RnButton>Button</RnButton>"),
                 new("Secondary", null,
                     @<RnButton Variant="ButtonVariant.Secondary">Secondary</RnButton>,
                     @"<RnButton Variant=""ButtonVariant.Secondary"">Secondary</RnButton>"),
@@ -490,12 +483,39 @@ else
                 new("Link", null,
                     @<RnButton Variant="ButtonVariant.Link">Link</RnButton>,
                     @"<RnButton Variant=""ButtonVariant.Link"">Link</RnButton>"),
-                new("Small", null,
-                    @<RnButton Size="ButtonSize.Sm">Small</RnButton>,
-                    @"<RnButton Size=""ButtonSize.Sm"">Small</RnButton>"),
-                new("Large", null,
-                    @<RnButton Size="ButtonSize.Lg">Large</RnButton>,
-                    @"<RnButton Size=""ButtonSize.Lg"">Large</RnButton>")
+                new("Size", "Small, default, and large sizes with icon variants.",
+                    @<div class="flex flex-col items-start gap-8 sm:flex-row">
+                        <div class="flex items-start gap-2">
+                            <RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">Small</RnButton>
+                            <RnButton Size="ButtonSize.IconSm" Variant="ButtonVariant.Outline" aria-label="Submit">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+                            </RnButton>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <RnButton Variant="ButtonVariant.Outline">Default</RnButton>
+                            <RnButton Size="ButtonSize.Icon" Variant="ButtonVariant.Outline" aria-label="Submit">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+                            </RnButton>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <RnButton Variant="ButtonVariant.Outline" Size="ButtonSize.Lg">Large</RnButton>
+                            <RnButton Size="ButtonSize.IconLg" Variant="ButtonVariant.Outline" aria-label="Submit">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+                            </RnButton>
+                        </div>
+                    </div>,
+                    @"<RnButton Size=""ButtonSize.Sm"" Variant=""ButtonVariant.Outline"">Small</RnButton>
+<RnButton Variant=""ButtonVariant.Outline"">Default</RnButton>
+<RnButton Variant=""ButtonVariant.Outline"" Size=""ButtonSize.Lg"">Large</RnButton>"),
+                new("Loading", "A disabled button with a spinner.",
+                    @<RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline" Disabled="true">
+                        <RnSpinner />
+                        Submit
+                    </RnButton>,
+                    @"<RnButton Size=""ButtonSize.Sm"" Variant=""ButtonVariant.Outline"" Disabled=""true"">
+    <RnSpinner />
+    Submit
+</RnButton>")
             ]
         ),
 
@@ -1233,19 +1253,19 @@ else
 
         // ==================== Label ====================
         new("Label", "label", "Renders an accessible label associated with controls.",
-            Demo: @<div class="w-full max-w-sm space-y-2">
-                <RnLabel For="name-input">Your Name</RnLabel>
-                <RnInput id="name-input" Placeholder="Enter your name" />
+            Demo: @<div class="flex items-center space-x-2">
+                <RnCheckbox id="terms" @bind-Checked="_checkboxValue" />
+                <RnLabel For="terms">Accept terms and conditions</RnLabel>
             </div>,
-            Thumbnail: @<div class="space-y-1 w-[140px]">
+            Thumbnail: @<div class="flex items-center gap-2">
+                <RnCheckbox />
                 <RnLabel>Label</RnLabel>
-                <RnInput Placeholder="Input" />
             </div>,
-            Code: @"<RnLabel For=""name-input"">Your Name</RnLabel>
-<RnInput id=""name-input"" Placeholder=""Enter your name"" />",
-            UsageCode: @"@using RnUI.Components.UI.Label
-
-<RnLabel For=""field"">Label</RnLabel>"
+            Code: @"<div class=""flex items-center space-x-2"">
+    <RnCheckbox id=""terms"" @bind-Checked=""_accepted"" />
+    <RnLabel For=""terms"">Accept terms and conditions</RnLabel>
+</div>",
+            UsageCode: @"<RnLabel For=""field"">Label</RnLabel>"
         ),
 
         // ==================== Menubar ====================

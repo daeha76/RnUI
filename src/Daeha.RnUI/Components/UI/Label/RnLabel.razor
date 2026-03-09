@@ -14,7 +14,7 @@
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
     private string ComputedClass => CssUtils.Cn(
-        "cn-label flex items-center select-none group-data-[disabled=true]:pointer-events-none peer-disabled:cursor-not-allowed",
+        "cn-label",
         Class
     );
 }

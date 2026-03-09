@@ -178,12 +178,19 @@ else
             </div>
         ),
 
-        new("Badge", "badge", "Displays a badge or label.",
-            @<div class="flex flex-wrap gap-4">
-                <RnBadge>Default</RnBadge>
-                <RnBadge Variant="BadgeVariant.Secondary">Secondary</RnBadge>
-                <RnBadge Variant="BadgeVariant.Outline">Outline</RnBadge>
-                <RnBadge Variant="BadgeVariant.Destructive">Destructive</RnBadge>
+        new("Badge", "badge", "Displays a badge or a component that looks like a badge.",
+            @<div class="flex flex-col items-center gap-2">
+                <div class="flex w-full flex-wrap gap-2">
+                    <RnBadge>Badge</RnBadge>
+                    <RnBadge Variant="BadgeVariant.Secondary">Secondary</RnBadge>
+                    <RnBadge Variant="BadgeVariant.Destructive">Destructive</RnBadge>
+                    <RnBadge Variant="BadgeVariant.Outline">Outline</RnBadge>
+                </div>
+                <div class="flex w-full flex-wrap gap-2">
+                    <RnBadge Class="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums">8</RnBadge>
+                    <RnBadge Class="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums" Variant="BadgeVariant.Destructive">99</RnBadge>
+                    <RnBadge Class="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums" Variant="BadgeVariant.Outline">20+</RnBadge>
+                </div>
             </div>
         ),
 
@@ -237,21 +244,31 @@ else
         ),
 
         new("Button", "button", "Displays a button or a component that looks like a button.",
-            @<div class="space-y-4">
-                <h3 class="text-sm font-medium">Variants</h3>
-                <div class="flex flex-wrap gap-4">
+            @<div class="space-y-6">
+                <div class="flex flex-wrap items-center gap-2">
+                    <RnButton Variant="ButtonVariant.Outline">Button</RnButton>
+                    <RnButton Variant="ButtonVariant.Outline" Size="ButtonSize.Icon" aria-label="Submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+                    </RnButton>
+                </div>
+                <div class="flex flex-col items-start gap-8 sm:flex-row">
+                    <div class="flex items-start gap-2">
+                        <RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">Small</RnButton>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <RnButton Variant="ButtonVariant.Outline">Default</RnButton>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <RnButton Variant="ButtonVariant.Outline" Size="ButtonSize.Lg">Large</RnButton>
+                    </div>
+                </div>
+                <div class="flex flex-wrap gap-2">
                     <RnButton>Default</RnButton>
                     <RnButton Variant="ButtonVariant.Secondary">Secondary</RnButton>
+                    <RnButton Variant="ButtonVariant.Destructive">Destructive</RnButton>
                     <RnButton Variant="ButtonVariant.Outline">Outline</RnButton>
                     <RnButton Variant="ButtonVariant.Ghost">Ghost</RnButton>
-                    <RnButton Variant="ButtonVariant.Destructive">Destructive</RnButton>
                     <RnButton Variant="ButtonVariant.Link">Link</RnButton>
-                </div>
-                <h3 class="text-sm font-medium">Sizes</h3>
-                <div class="flex flex-wrap items-center gap-4">
-                    <RnButton Size="ButtonSize.Sm">Small</RnButton>
-                    <RnButton>Default</RnButton>
-                    <RnButton Size="ButtonSize.Lg">Large</RnButton>
                 </div>
             </div>
         ),
@@ -565,12 +582,10 @@ else
             </div>
         ),
 
-        new("Label", "label", "Renders an accessible label for form controls.",
-            @<div class="space-y-4 max-w-sm">
-                <div class="space-y-2">
-                    <RnLabel For="name-input">Your Name</RnLabel>
-                    <RnInput id="name-input" Placeholder="Enter your name" />
-                </div>
+        new("Label", "label", "Renders an accessible label associated with controls.",
+            @<div class="flex items-center space-x-2">
+                <RnCheckbox id="terms" @bind-Checked="_checkboxValue" />
+                <RnLabel For="terms">Accept terms and conditions</RnLabel>
             </div>
         ),
 
