@@ -582,11 +582,11 @@
 
 /* Navigation Menu */
 .cn-navigation-menu {
-  @apply z-10;
+  @apply relative flex max-w-max flex-1 items-center justify-center z-10;
 }
 
 .cn-navigation-menu-list {
-  @apply gap-1;
+  @apply flex flex-1 list-none items-center justify-center gap-1;
 }
 
 .cn-navigation-menu-item {
@@ -594,19 +594,19 @@
 }
 
 .cn-navigation-menu-trigger {
-  @apply rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground;
+  @apply group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-[color,box-shadow] outline-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-accent/50 data-[state=open]:text-accent-foreground;
 }
 
 .cn-navigation-menu-trigger-icon {
-  @apply relative top-px ml-1 size-3 transition-transform duration-200 group-data-[state=open]:rotate-180;
+  @apply relative top-[1px] ml-1 size-3 transition duration-300 group-data-[state=open]:rotate-180;
 }
 
 .cn-navigation-menu-content {
-  @apply left-0 top-0 w-full;
+  @apply top-0 left-0 w-full p-2 pr-2.5;
 }
 
 .cn-navigation-menu-link {
-  @apply block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground;
+  @apply flex flex-col gap-1 rounded-sm p-2 text-sm transition-all outline-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground;
 }
 
 /* Progress */
@@ -1085,11 +1085,11 @@
 
 /* Menubar */
 .cn-menubar {
-  @apply flex h-10 items-center space-x-1 rounded-md border bg-background p-1;
+  @apply flex h-9 items-center gap-1 rounded-md border bg-background p-1 shadow-xs;
 }
 
 .cn-menubar-trigger {
-  @apply flex cursor-default select-none items-center rounded-sm px-3 py-1.5 text-sm font-medium outline-none focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground;
+  @apply flex items-center rounded-sm px-2 py-1 text-sm font-medium outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground;
 }
 
 .cn-menubar-content {
@@ -1097,19 +1097,19 @@
 }
 
 .cn-menubar-item {
-  @apply relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+  @apply relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground;
 }
 
 .cn-menubar-separator {
-  @apply -mx-1 my-1 h-px bg-muted;
+  @apply -mx-1 my-1 h-px bg-border;
 }
 
 .cn-menubar-label {
-  @apply px-2 py-1.5 text-sm font-semibold;
+  @apply px-2 py-1.5 text-sm font-medium data-[inset]:pl-8;
 }
 
 .cn-menubar-shortcut {
-  @apply ml-auto text-xs tracking-widest opacity-60;
+  @apply ml-auto text-xs tracking-widest text-muted-foreground;
 }
 
 /* Form */

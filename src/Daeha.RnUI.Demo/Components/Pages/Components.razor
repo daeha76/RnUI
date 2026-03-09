@@ -704,39 +704,55 @@ else
         ),
 
         new("Menubar", "menubar", "A visually persistent menu common in desktop applications.",
-            @<div>
-                <RnMenubar>
-                    <RnMenubarMenu>
-                        <RnMenubarTrigger>File</RnMenubarTrigger>
-                        <RnMenubarContent>
-                            <RnMenubarItem>New Tab</RnMenubarItem>
-                            <RnMenubarItem>New Window</RnMenubarItem>
-                            <RnMenubarSeparator />
-                            <RnMenubarItem>Share</RnMenubarItem>
-                            <RnMenubarSeparator />
-                            <RnMenubarItem>Print</RnMenubarItem>
-                        </RnMenubarContent>
-                    </RnMenubarMenu>
-                    <RnMenubarMenu>
-                        <RnMenubarTrigger>Edit</RnMenubarTrigger>
-                        <RnMenubarContent>
-                            <RnMenubarItem>Undo</RnMenubarItem>
-                            <RnMenubarItem>Redo</RnMenubarItem>
-                            <RnMenubarSeparator />
-                            <RnMenubarItem>Cut</RnMenubarItem>
-                            <RnMenubarItem>Copy</RnMenubarItem>
-                            <RnMenubarItem>Paste</RnMenubarItem>
-                        </RnMenubarContent>
-                    </RnMenubarMenu>
-                    <RnMenubarMenu>
-                        <RnMenubarTrigger>View</RnMenubarTrigger>
-                        <RnMenubarContent>
-                            <RnMenubarItem>Zoom In</RnMenubarItem>
-                            <RnMenubarItem>Zoom Out</RnMenubarItem>
-                        </RnMenubarContent>
-                    </RnMenubarMenu>
-                </RnMenubar>
-            </div>
+            @<RnMenubar>
+                <RnMenubarMenu>
+                    <RnMenubarTrigger>File</RnMenubarTrigger>
+                    <RnMenubarContent>
+                        <RnMenubarItem Shortcut="⌘T">New Tab</RnMenubarItem>
+                        <RnMenubarItem Shortcut="⌘N">New Window</RnMenubarItem>
+                        <RnMenubarItem Disabled>New Incognito Window</RnMenubarItem>
+                        <RnMenubarSeparator />
+                        <RnMenubarItem>Share</RnMenubarItem>
+                        <RnMenubarSeparator />
+                        <RnMenubarItem Shortcut="⌘P">Print</RnMenubarItem>
+                    </RnMenubarContent>
+                </RnMenubarMenu>
+                <RnMenubarMenu>
+                    <RnMenubarTrigger>Edit</RnMenubarTrigger>
+                    <RnMenubarContent>
+                        <RnMenubarItem Shortcut="⌘Z">Undo</RnMenubarItem>
+                        <RnMenubarItem Shortcut="⇧⌘Z">Redo</RnMenubarItem>
+                        <RnMenubarSeparator />
+                        <RnMenubarItem Shortcut="⌘X">Cut</RnMenubarItem>
+                        <RnMenubarItem Shortcut="⌘C">Copy</RnMenubarItem>
+                        <RnMenubarItem Shortcut="⌘V">Paste</RnMenubarItem>
+                    </RnMenubarContent>
+                </RnMenubarMenu>
+                <RnMenubarMenu>
+                    <RnMenubarTrigger>View</RnMenubarTrigger>
+                    <RnMenubarContent>
+                        <RnMenubarItem Inset>Always Show Bookmarks Bar</RnMenubarItem>
+                        <RnMenubarItem Inset>Always Show Full URLs</RnMenubarItem>
+                        <RnMenubarSeparator />
+                        <RnMenubarItem Inset Shortcut="⌘R">Reload</RnMenubarItem>
+                        <RnMenubarItem Inset Shortcut="⇧⌘R" Disabled>Force Reload</RnMenubarItem>
+                        <RnMenubarSeparator />
+                        <RnMenubarItem Inset>Toggle Fullscreen</RnMenubarItem>
+                    </RnMenubarContent>
+                </RnMenubarMenu>
+                <RnMenubarMenu>
+                    <RnMenubarTrigger>Profiles</RnMenubarTrigger>
+                    <RnMenubarContent>
+                        <RnMenubarItem Inset>Andy</RnMenubarItem>
+                        <RnMenubarItem Inset>Benoit</RnMenubarItem>
+                        <RnMenubarItem Inset>Luis</RnMenubarItem>
+                        <RnMenubarSeparator />
+                        <RnMenubarItem Inset>Edit...</RnMenubarItem>
+                        <RnMenubarSeparator />
+                        <RnMenubarItem Inset>Add Profile...</RnMenubarItem>
+                    </RnMenubarContent>
+                </RnMenubarMenu>
+            </RnMenubar>
         ),
 
         new("Navigation Menu", "navigation-menu", "A collection of links for navigating websites.",
