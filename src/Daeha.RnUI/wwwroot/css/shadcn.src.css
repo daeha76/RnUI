@@ -868,6 +868,55 @@
   transition-duration: 150ms;
 }
 
+/* Calendar */
+.cn-calendar {
+  @apply bg-background p-3;
+}
+
+.cn-calendar-nav {
+  @apply relative flex w-full items-center justify-between gap-1 mb-4;
+}
+
+.cn-calendar-nav-button {
+  @apply inline-flex items-center justify-center rounded-md text-sm font-medium size-8 p-0 bg-transparent select-none hover:bg-accent hover:text-accent-foreground disabled:pointer-events-none disabled:opacity-50;
+}
+
+.cn-calendar-caption {
+  @apply text-sm font-medium select-none;
+}
+
+.cn-calendar-weekdays {
+  @apply grid grid-cols-7 mb-1;
+}
+
+.cn-calendar-weekday {
+  @apply flex-1 rounded-md text-[0.8rem] font-normal text-muted-foreground select-none h-8 flex items-center justify-center w-8;
+}
+
+.cn-calendar-grid {
+  @apply grid grid-cols-7;
+}
+
+.cn-calendar-day {
+  @apply size-8 text-center text-sm p-0 font-normal inline-flex items-center justify-center rounded-md select-none hover:bg-accent hover:text-accent-foreground;
+}
+
+.cn-calendar-day-selected {
+  @apply bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground;
+}
+
+.cn-calendar-day-today {
+  @apply bg-accent text-accent-foreground;
+}
+
+.cn-calendar-day-outside {
+  @apply text-muted-foreground opacity-50;
+}
+
+.cn-calendar-day-disabled {
+  @apply text-muted-foreground opacity-50 cursor-not-allowed;
+}
+
 /* Carousel */
 .cn-carousel {
   @apply relative;
@@ -901,11 +950,11 @@
 }
 
 .cn-toast {
-  @apply pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-md border p-4 pr-8 shadow-lg transition-all;
+  @apply pointer-events-auto relative flex w-full items-center justify-between gap-4 overflow-hidden rounded-lg border p-4 pr-8 shadow-lg transition-all;
 }
 
 .cn-toast-variant-default {
-  @apply border bg-background text-foreground;
+  @apply border bg-popover text-popover-foreground;
 }
 
 .cn-toast-variant-destructive {
@@ -921,11 +970,11 @@
 }
 
 .cn-toast-action {
-  @apply inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium transition-colors hover:bg-secondary;
+  @apply inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium transition-colors hover:bg-secondary focus:outline-hidden focus:ring-[3px] focus:ring-ring/50;
 }
 
 .cn-toast-close {
-  @apply absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground hover:opacity-100 focus:opacity-100 focus:outline-none;
+  @apply absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground hover:opacity-100 focus:opacity-100 focus:outline-hidden [&_svg]:size-4;
 }
 
 /* Toggle Group */
