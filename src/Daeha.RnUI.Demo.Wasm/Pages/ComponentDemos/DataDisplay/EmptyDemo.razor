@@ -1,0 +1,21 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Empty", "empty", "Empty state placeholder for when there is no data.",
+        Demo: @<div class="w-full max-w-md">
+            <RnEmpty Class="border rounded-md py-12">
+                <p class="text-muted-foreground">No items to display.</p>
+            </RnEmpty>
+        </div>,
+        Thumbnail: @<div class="w-[140px] text-center text-xs text-muted-foreground border rounded-md py-4">No items</div>,
+        Code: @"<RnEmpty Class=""border rounded-md py-12"">
+    <p class=""text-muted-foreground"">No items to display.</p>
+</RnEmpty>",
+        UsageCode: @"@using RnUI.Components.UI.Empty
+
+<RnEmpty>
+    <p>No data available.</p>
+</RnEmpty>"
+    );
+}

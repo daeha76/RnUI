@@ -1,0 +1,42 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Select", "select", "Displays a list of options for the user to pick from.",
+        Demo: @<RnSelect Placeholder="Select a fruit...">
+                <RnSelectGroup>
+                    <RnSelectLabel>Fruits</RnSelectLabel>
+                    <RnSelectItem Value="apple">Apple</RnSelectItem>
+                    <RnSelectItem Value="banana">Banana</RnSelectItem>
+                    <RnSelectItem Value="blueberry">Blueberry</RnSelectItem>
+                    <RnSelectItem Value="grapes">Grapes</RnSelectItem>
+                    <RnSelectItem Value="pineapple">Pineapple</RnSelectItem>
+                </RnSelectGroup>
+            </RnSelect>,
+        Thumbnail: @<div class="text-xs text-muted-foreground">Select</div>,
+        Code: @"<RnSelect @bind-Value=""_value"" Placeholder=""Select a fruit..."">
+    <RnSelectGroup>
+        <RnSelectLabel>Fruits</RnSelectLabel>
+        <RnSelectItem Value=""apple"">Apple</RnSelectItem>
+        <RnSelectItem Value=""banana"">Banana</RnSelectItem>
+        <RnSelectItem Value=""blueberry"">Blueberry</RnSelectItem>
+        <RnSelectItem Value=""grapes"">Grapes</RnSelectItem>
+        <RnSelectItem Value=""pineapple"">Pineapple</RnSelectItem>
+    </RnSelectGroup>
+</RnSelect>
+
+@code {
+    private string? _value;
+}",
+        UsageCode: @"@using RnUI.Components.UI.Select
+
+<RnSelect @bind-Value=""_value"" Placeholder=""Select..."">
+    <RnSelectItem Value=""a"">Option A</RnSelectItem>
+    <RnSelectItem Value=""b"">Option B</RnSelectItem>
+</RnSelect>
+
+@code {
+    private string? _value;
+}"
+    );
+}

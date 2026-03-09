@@ -1,0 +1,13 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Progress", "progress", "Displays an indicator showing the completion progress of a task.",
+        Demo: @<RnProgress Value="33" Class="w-3/5" />,
+        Thumbnail: @<div class="w-[140px]"><RnProgress Value="60" /></div>,
+        Code: @"<RnProgress Value=""33"" Class=""w-3/5"" />",
+        UsageCode: @"@using RnUI.Components.UI.Progress
+
+<RnProgress Value=""60"" />"
+    );
+}

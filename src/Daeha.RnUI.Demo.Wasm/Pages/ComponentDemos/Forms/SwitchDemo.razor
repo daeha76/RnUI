@@ -1,0 +1,29 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Switch", "switch", "A control that allows the user to toggle between two states.",
+        Demo: @<div class="flex items-center gap-3">
+                <RnSwitch id="airplane-mode" Checked="false" />
+                <RnLabel For="airplane-mode">Airplane Mode</RnLabel>
+            </div>,
+        Thumbnail: @<div class="flex items-center gap-2">
+                <RnSwitch Checked="true" />
+            </div>,
+        Code: @"<div class=""flex items-center gap-3"">
+    <RnSwitch id=""airplane-mode"" @bind-Checked=""_checked"" />
+    <RnLabel For=""airplane-mode"">Airplane Mode</RnLabel>
+</div>
+
+@code {
+    private bool _checked;
+}",
+        UsageCode: @"@using RnUI.Components.UI.Switch
+
+<RnSwitch @bind-Checked=""_checked"" />
+
+@code {
+    private bool _checked;
+}"
+    );
+}

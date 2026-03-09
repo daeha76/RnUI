@@ -1,0 +1,20 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Spinner", "spinner", "An animated loading spinner indicator.",
+        Demo: @<div class="flex gap-6 items-center">
+            <RnSpinner Size="ComponentSize.Sm" />
+            <RnSpinner />
+            <RnSpinner Size="ComponentSize.Lg" />
+        </div>,
+        Thumbnail: @<RnSpinner Size="ComponentSize.Sm" />,
+        Code: @"<RnSpinner Size=""ComponentSize.Sm"" />
+<RnSpinner />
+<RnSpinner Size=""ComponentSize.Lg"" />",
+        UsageCode: @"@using RnUI.Components.UI.Spinner
+
+<RnSpinner />
+<RnSpinner Size=""ComponentSize.Lg"" />"
+    );
+}

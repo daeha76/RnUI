@@ -1,0 +1,99 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Tabs", "tabs", "A set of layered sections of content, displayed one at a time.",
+        Demo: @<div class="flex w-full max-w-sm flex-col gap-6">
+                <RnTabs ActiveTab="account">
+                    <RnTabsList>
+                        <RnTabsTrigger Value="account">Account</RnTabsTrigger>
+                        <RnTabsTrigger Value="password">Password</RnTabsTrigger>
+                    </RnTabsList>
+                    <RnTabsContent Value="account">
+                        <RnCard>
+                            <RnCardHeader>
+                                <RnCardTitle>Account</RnCardTitle>
+                                <RnCardDescription>Make changes to your account here. Click save when you're done.</RnCardDescription>
+                            </RnCardHeader>
+                            <RnCardContent>
+                                <div class="grid gap-6">
+                                    <div class="grid gap-3">
+                                        <RnLabel For="tabs-demo-name">Name</RnLabel>
+                                        <RnInput id="tabs-demo-name" Placeholder="Pedro Duarte" />
+                                    </div>
+                                </div>
+                            </RnCardContent>
+                            <RnCardFooter>
+                                <RnButton>Save changes</RnButton>
+                            </RnCardFooter>
+                        </RnCard>
+                    </RnTabsContent>
+                    <RnTabsContent Value="password">
+                        <RnCard>
+                            <RnCardHeader>
+                                <RnCardTitle>Password</RnCardTitle>
+                                <RnCardDescription>Change your password here.</RnCardDescription>
+                            </RnCardHeader>
+                            <RnCardContent>
+                                <div class="grid gap-6">
+                                    <div class="grid gap-3">
+                                        <RnLabel For="tabs-demo-current">Current password</RnLabel>
+                                        <RnInput id="tabs-demo-current" Type="password" />
+                                    </div>
+                                    <div class="grid gap-3">
+                                        <RnLabel For="tabs-demo-new">New password</RnLabel>
+                                        <RnInput id="tabs-demo-new" Type="password" />
+                                    </div>
+                                </div>
+                            </RnCardContent>
+                            <RnCardFooter>
+                                <RnButton>Save password</RnButton>
+                            </RnCardFooter>
+                        </RnCard>
+                    </RnTabsContent>
+                </RnTabs>
+            </div>,
+        Thumbnail: @<div class="text-xs text-muted-foreground">Tabs</div>,
+        Code: @"<RnTabs @bind-ActiveTab=""_activeTab"">
+    <RnTabsList>
+        <RnTabsTrigger Value=""account"">Account</RnTabsTrigger>
+        <RnTabsTrigger Value=""password"">Password</RnTabsTrigger>
+    </RnTabsList>
+    <RnTabsContent Value=""account"">
+        <RnCard>
+            <RnCardHeader>
+                <RnCardTitle>Account</RnCardTitle>
+                <RnCardDescription>Make changes to your account here.</RnCardDescription>
+            </RnCardHeader>
+            <RnCardContent>
+                <div class=""grid gap-3"">
+                    <RnLabel>Name</RnLabel>
+                    <RnInput Placeholder=""Pedro Duarte"" />
+                </div>
+            </RnCardContent>
+            <RnCardFooter>
+                <RnButton>Save changes</RnButton>
+            </RnCardFooter>
+        </RnCard>
+    </RnTabsContent>
+</RnTabs>
+
+@code {
+    private string _activeTab = ""account"";
+}",
+        UsageCode: @"@using RnUI.Components.UI.Tabs
+
+<RnTabs @bind-ActiveTab=""_tab"">
+    <RnTabsList>
+        <RnTabsTrigger Value=""a"">Tab A</RnTabsTrigger>
+        <RnTabsTrigger Value=""b"">Tab B</RnTabsTrigger>
+    </RnTabsList>
+    <RnTabsContent Value=""a"">Content A</RnTabsContent>
+    <RnTabsContent Value=""b"">Content B</RnTabsContent>
+</RnTabs>
+
+@code {
+    private string _tab = ""a"";
+}"
+    );
+}

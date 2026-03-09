@@ -1,0 +1,53 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Radio Group", "radio-group", "A set of checkable buttons, where only one can be checked at a time.",
+        Demo: @<RnRadioGroup Value="comfortable">
+                <div class="flex items-center space-x-2">
+                    <RnRadioGroupItem Value="default" id="r1" />
+                    <RnLabel For="r1">Default</RnLabel>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <RnRadioGroupItem Value="comfortable" id="r2" />
+                    <RnLabel For="r2">Comfortable</RnLabel>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <RnRadioGroupItem Value="compact" id="r3" />
+                    <RnLabel For="r3">Compact</RnLabel>
+                </div>
+            </RnRadioGroup>,
+        Thumbnail: @<div class="flex flex-col gap-1 text-xs">
+                <div class="flex items-center gap-1"><RnRadioGroupItem Value="a" /><span>Option A</span></div>
+                <div class="flex items-center gap-1"><RnRadioGroupItem Value="b" /><span>Option B</span></div>
+            </div>,
+        Code: @"<RnRadioGroup @bind-Value=""_value"">
+    <div class=""flex items-center space-x-2"">
+        <RnRadioGroupItem Value=""default"" id=""r1"" />
+        <RnLabel For=""r1"">Default</RnLabel>
+    </div>
+    <div class=""flex items-center space-x-2"">
+        <RnRadioGroupItem Value=""comfortable"" id=""r2"" />
+        <RnLabel For=""r2"">Comfortable</RnLabel>
+    </div>
+    <div class=""flex items-center space-x-2"">
+        <RnRadioGroupItem Value=""compact"" id=""r3"" />
+        <RnLabel For=""r3"">Compact</RnLabel>
+    </div>
+</RnRadioGroup>
+
+@code {
+    private string? _value = ""comfortable"";
+}",
+        UsageCode: @"@using RnUI.Components.UI.RadioGroup
+
+<RnRadioGroup @bind-Value=""_value"">
+    <RnRadioGroupItem Value=""a"" id=""r1"" />
+    <RnLabel For=""r1"">Option A</RnLabel>
+</RnRadioGroup>
+
+@code {
+    private string? _value;
+}"
+    );
+}

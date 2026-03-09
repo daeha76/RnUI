@@ -1,0 +1,63 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Drawer", "drawer", "A drawer component for mobile interfaces.",
+        Demo: @<div>
+                <RnButton Variant="ButtonVariant.Outline">Open Drawer</RnButton>
+            </div>,
+        Thumbnail: @<RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">Open Drawer</RnButton>,
+        Code: @"<RnButton Variant=""ButtonVariant.Outline"" OnClick=""() => _open = true"">Open Drawer</RnButton>
+<RnDrawer @bind-Open=""_open"">
+    <div class=""mx-auto w-full max-w-sm"">
+        <RnDrawerHeader>
+            <RnDrawerTitle>Move Goal</RnDrawerTitle>
+            <RnDrawerDescription>Set your daily activity goal.</RnDrawerDescription>
+        </RnDrawerHeader>
+        <div class=""p-4 pb-0"">
+            <div class=""flex items-center justify-center space-x-2"">
+                <RnButton Variant=""ButtonVariant.Outline"" Size=""ButtonSize.Icon""
+                    Class=""h-8 w-8 shrink-0 rounded-full""
+                    OnClick=""() => _goal = Math.Max(200, _goal - 10)"">
+                    −
+                </RnButton>
+                <div class=""flex-1 text-center"">
+                    <div class=""text-7xl font-bold tracking-tighter"">@_goal</div>
+                    <div class=""text-[0.70rem] text-muted-foreground uppercase"">Calories/day</div>
+                </div>
+                <RnButton Variant=""ButtonVariant.Outline"" Size=""ButtonSize.Icon""
+                    Class=""h-8 w-8 shrink-0 rounded-full""
+                    OnClick=""() => _goal = Math.Min(400, _goal + 10)"">
+                    +
+                </RnButton>
+            </div>
+        </div>
+        <RnDrawerFooter>
+            <RnButton OnClick=""() => _open = false"">Submit</RnButton>
+            <RnButton Variant=""ButtonVariant.Outline"" OnClick=""() => _open = false"">Cancel</RnButton>
+        </RnDrawerFooter>
+    </div>
+</RnDrawer>
+
+@code {
+    private bool _open;
+    private int _goal = 350;
+}",
+        UsageCode: @"@using RnUI.Components.UI.Drawer
+
+<RnDrawer @bind-Open=""_open"">
+    <RnDrawerHeader>
+        <RnDrawerTitle>Title</RnDrawerTitle>
+        <RnDrawerDescription>Description</RnDrawerDescription>
+    </RnDrawerHeader>
+    Content
+    <RnDrawerFooter>
+        <RnButton>Submit</RnButton>
+    </RnDrawerFooter>
+</RnDrawer>
+
+@code {
+    private bool _open;
+}"
+    );
+}

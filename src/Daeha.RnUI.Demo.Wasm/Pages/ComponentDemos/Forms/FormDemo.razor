@@ -1,0 +1,43 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Form", "form", "Building forms with validation and accessible error messages.",
+        Demo: @<div class="w-full max-w-sm space-y-4">
+                <RnFormItem>
+                    <RnFormLabel For="username">Username</RnFormLabel>
+                    <RnInput id="username" Placeholder="shadcn" />
+                    <RnFormDescription>This is your public display name.</RnFormDescription>
+                </RnFormItem>
+                <RnFormItem>
+                    <RnFormLabel For="email">Email</RnFormLabel>
+                    <RnInput id="email" Type="email" Placeholder=@("m@example.com") />
+                    <RnFormMessage Message="Please enter a valid email address." />
+                </RnFormItem>
+            </div>,
+        Thumbnail: @<div class="w-[160px] space-y-2">
+                <div class="text-xs font-medium">Username</div>
+                <div class="h-6 rounded-md border bg-background"></div>
+            </div>,
+        Code: @"<RnFormItem>
+    <RnFormLabel For=""username"">Username</RnFormLabel>
+    <RnInput id=""username"" Placeholder=""shadcn"" />
+    <RnFormDescription>
+        This is your public display name.
+    </RnFormDescription>
+</RnFormItem>
+<RnFormItem>
+    <RnFormLabel For=""email"">Email</RnFormLabel>
+    <RnInput id=""email"" Type=""email"" Placeholder=""m@@example.com"" />
+    <RnFormMessage Message=""Please enter a valid email."" />
+</RnFormItem>",
+        UsageCode: @"@using RnUI.Components.UI.Form
+
+<RnFormItem>
+    <RnFormLabel For=""field"">Label</RnFormLabel>
+    <RnInput id=""field"" />
+    <RnFormDescription>Help text</RnFormDescription>
+    <RnFormMessage Message=""Error message"" />
+</RnFormItem>"
+    );
+}

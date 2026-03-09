@@ -1,0 +1,63 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Menubar", "menubar", "A visually persistent menu common in desktop applications.",
+        Demo: @<RnMenubar>
+                <RnMenubarMenu>
+                    <RnMenubarTrigger>File</RnMenubarTrigger>
+                    <RnMenubarContent>
+                        <RnMenubarItem Shortcut="⌘T">New Tab</RnMenubarItem>
+                        <RnMenubarItem Shortcut="⌘N">New Window</RnMenubarItem>
+                        <RnMenubarItem Disabled>New Incognito Window</RnMenubarItem>
+                        <RnMenubarSeparator />
+                        <RnMenubarItem>Share</RnMenubarItem>
+                        <RnMenubarSeparator />
+                        <RnMenubarItem Shortcut="⌘P">Print</RnMenubarItem>
+                    </RnMenubarContent>
+                </RnMenubarMenu>
+                <RnMenubarMenu>
+                    <RnMenubarTrigger>Edit</RnMenubarTrigger>
+                    <RnMenubarContent>
+                        <RnMenubarItem Shortcut="⌘Z">Undo</RnMenubarItem>
+                        <RnMenubarItem Shortcut="⇧⌘Z">Redo</RnMenubarItem>
+                        <RnMenubarSeparator />
+                        <RnMenubarItem Shortcut="⌘X">Cut</RnMenubarItem>
+                        <RnMenubarItem Shortcut="⌘C">Copy</RnMenubarItem>
+                        <RnMenubarItem Shortcut="⌘V">Paste</RnMenubarItem>
+                    </RnMenubarContent>
+                </RnMenubarMenu>
+            </RnMenubar>,
+        Thumbnail: @<div class="text-xs text-muted-foreground">Menubar</div>,
+        Code: @"<RnMenubar>
+    <RnMenubarMenu>
+        <RnMenubarTrigger>File</RnMenubarTrigger>
+        <RnMenubarContent>
+            <RnMenubarItem Shortcut=""⌘T"">New Tab</RnMenubarItem>
+            <RnMenubarItem Shortcut=""⌘N"">New Window</RnMenubarItem>
+            <RnMenubarItem Disabled>New Incognito Window</RnMenubarItem>
+            <RnMenubarSeparator />
+            <RnMenubarItem Shortcut=""⌘P"">Print</RnMenubarItem>
+        </RnMenubarContent>
+    </RnMenubarMenu>
+    <RnMenubarMenu>
+        <RnMenubarTrigger>Edit</RnMenubarTrigger>
+        <RnMenubarContent>
+            <RnMenubarItem Shortcut=""⌘Z"">Undo</RnMenubarItem>
+            <RnMenubarItem Shortcut=""⇧⌘Z"">Redo</RnMenubarItem>
+        </RnMenubarContent>
+    </RnMenubarMenu>
+</RnMenubar>",
+        UsageCode: @"@using RnUI.Components.UI.Menubar
+
+<RnMenubar>
+    <RnMenubarMenu>
+        <RnMenubarTrigger>File</RnMenubarTrigger>
+        <RnMenubarContent>
+            <RnMenubarItem Shortcut=""⌘T"">New Tab</RnMenubarItem>
+            <RnMenubarItem Disabled>Disabled</RnMenubarItem>
+        </RnMenubarContent>
+    </RnMenubarMenu>
+</RnMenubar>"
+    );
+}

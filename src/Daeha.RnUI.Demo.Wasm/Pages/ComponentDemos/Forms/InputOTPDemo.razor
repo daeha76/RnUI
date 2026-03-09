@@ -1,0 +1,53 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Input OTP", "input-otp", "Accessible one-time password component with copy paste functionality.",
+        Demo: @<div class="space-y-2">
+                <RnInputOTP MaxLength="6">
+                    <RnInputOTPGroup>
+                        <RnInputOTPSlot Index="0" />
+                        <RnInputOTPSlot Index="1" />
+                        <RnInputOTPSlot Index="2" />
+                    </RnInputOTPGroup>
+                    <RnInputOTPSeparator />
+                    <RnInputOTPGroup>
+                        <RnInputOTPSlot Index="3" />
+                        <RnInputOTPSlot Index="4" />
+                        <RnInputOTPSlot Index="5" />
+                    </RnInputOTPGroup>
+                </RnInputOTP>
+                <p class="text-sm text-muted-foreground">Enter your one-time password.</p>
+            </div>,
+        Thumbnail: @<div class="text-xs text-muted-foreground">OTP Input</div>,
+        Code: @"<RnInputOTP @bind-Value=""_otp"" MaxLength=""6"">
+    <RnInputOTPGroup>
+        <RnInputOTPSlot Index=""0"" />
+        <RnInputOTPSlot Index=""1"" />
+        <RnInputOTPSlot Index=""2"" />
+    </RnInputOTPGroup>
+    <RnInputOTPSeparator />
+    <RnInputOTPGroup>
+        <RnInputOTPSlot Index=""3"" />
+        <RnInputOTPSlot Index=""4"" />
+        <RnInputOTPSlot Index=""5"" />
+    </RnInputOTPGroup>
+</RnInputOTP>
+
+@code {
+    private string _otp = """";
+}",
+        UsageCode: @"@using RnUI.Components.UI.InputOTP
+
+<RnInputOTP @bind-Value=""_otp"" MaxLength=""6"">
+    <RnInputOTPGroup>
+        <RnInputOTPSlot Index=""0"" />
+        <RnInputOTPSlot Index=""1"" />
+    </RnInputOTPGroup>
+</RnInputOTP>
+
+@code {
+    private string _otp = """";
+}"
+    );
+}

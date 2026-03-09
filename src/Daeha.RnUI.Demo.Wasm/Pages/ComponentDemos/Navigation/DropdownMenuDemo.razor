@@ -1,0 +1,75 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Dropdown Menu", "dropdown-menu", "Displays a menu to the user triggered by a button.",
+        Demo: @<RnDropdownMenu>
+                <Trigger>
+                    <RnButton Variant="ButtonVariant.Outline">Open</RnButton>
+                </Trigger>
+                <ChildContent>
+                    <RnDropdownMenuLabel>My Account</RnDropdownMenuLabel>
+                    <RnDropdownMenuSeparator />
+                    <RnDropdownMenuItem>
+                        Profile
+                        <span class="ml-auto text-xs tracking-widest text-muted-foreground">⇧⌘P</span>
+                    </RnDropdownMenuItem>
+                    <RnDropdownMenuItem>
+                        Billing
+                        <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘B</span>
+                    </RnDropdownMenuItem>
+                    <RnDropdownMenuItem>
+                        Settings
+                        <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘S</span>
+                    </RnDropdownMenuItem>
+                    <RnDropdownMenuSeparator />
+                    <RnDropdownMenuItem>Team</RnDropdownMenuItem>
+                    <RnDropdownMenuItem Disabled>API</RnDropdownMenuItem>
+                    <RnDropdownMenuSeparator />
+                    <RnDropdownMenuItem>
+                        Log out
+                        <span class="ml-auto text-xs tracking-widest text-muted-foreground">⇧⌘Q</span>
+                    </RnDropdownMenuItem>
+                </ChildContent>
+            </RnDropdownMenu>,
+        Thumbnail: @<RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">Menu</RnButton>,
+        Code: @"<RnDropdownMenu>
+    <Trigger>
+        <RnButton Variant=""ButtonVariant.Outline"">Open</RnButton>
+    </Trigger>
+    <ChildContent>
+        <RnDropdownMenuLabel>My Account</RnDropdownMenuLabel>
+        <RnDropdownMenuSeparator />
+        <RnDropdownMenuItem>
+            Profile
+            <span class=""ml-auto text-xs tracking-widest text-muted-foreground"">⇧⌘P</span>
+        </RnDropdownMenuItem>
+        <RnDropdownMenuItem>
+            Billing
+            <span class=""ml-auto text-xs tracking-widest text-muted-foreground"">⌘B</span>
+        </RnDropdownMenuItem>
+        <RnDropdownMenuSeparator />
+        <RnDropdownMenuItem>Team</RnDropdownMenuItem>
+        <RnDropdownMenuItem Disabled>API</RnDropdownMenuItem>
+        <RnDropdownMenuSeparator />
+        <RnDropdownMenuItem>
+            Log out
+            <span class=""ml-auto text-xs tracking-widest text-muted-foreground"">⇧⌘Q</span>
+        </RnDropdownMenuItem>
+    </ChildContent>
+</RnDropdownMenu>",
+        UsageCode: @"@using RnUI.Components.UI.DropdownMenu
+
+<RnDropdownMenu>
+    <Trigger>
+        <RnButton>Menu</RnButton>
+    </Trigger>
+    <ChildContent>
+        <RnDropdownMenuLabel>My Account</RnDropdownMenuLabel>
+        <RnDropdownMenuSeparator />
+        <RnDropdownMenuItem>Profile</RnDropdownMenuItem>
+        <RnDropdownMenuItem Disabled>API</RnDropdownMenuItem>
+    </ChildContent>
+</RnDropdownMenu>"
+    );
+}

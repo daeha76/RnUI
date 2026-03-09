@@ -1,0 +1,44 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Toggle Group", "toggle-group", "A set of two-state buttons that can be toggled on or off.",
+        Demo: @<RnToggleGroup Type="ToggleGroupType.Single" Value="center">
+                <RnToggleGroupItem Value="left" aria-label="Align left">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="3" y1="6" y2="6"/><line x1="15" x2="3" y1="12" y2="12"/><line x1="17" x2="3" y1="18" y2="18"/></svg>
+                </RnToggleGroupItem>
+                <RnToggleGroupItem Value="center" aria-label="Align center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="3" y1="6" y2="6"/><line x1="17" x2="7" y1="12" y2="12"/><line x1="19" x2="5" y1="18" y2="18"/></svg>
+                </RnToggleGroupItem>
+                <RnToggleGroupItem Value="right" aria-label="Align right">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="3" y1="6" y2="6"/><line x1="21" x2="9" y1="12" y2="12"/><line x1="21" x2="7" y1="18" y2="18"/></svg>
+                </RnToggleGroupItem>
+            </RnToggleGroup>,
+        Thumbnail: @<div class="text-xs text-muted-foreground">Toggle Group</div>,
+        Code: @"<RnToggleGroup Type=""ToggleGroupType.Single"" @bind-Value=""_value"">
+    <RnToggleGroupItem Value=""left"" aria-label=""Align left"">
+        <svg><!-- left icon --></svg>
+    </RnToggleGroupItem>
+    <RnToggleGroupItem Value=""center"" aria-label=""Align center"">
+        <svg><!-- center icon --></svg>
+    </RnToggleGroupItem>
+    <RnToggleGroupItem Value=""right"" aria-label=""Align right"">
+        <svg><!-- right icon --></svg>
+    </RnToggleGroupItem>
+</RnToggleGroup>
+
+@code {
+    private string? _value = ""center"";
+}",
+        UsageCode: @"@using RnUI.Components.UI.ToggleGroup
+
+<RnToggleGroup Type=""ToggleGroupType.Single"" @bind-Value=""_value"">
+    <RnToggleGroupItem Value=""a"">A</RnToggleGroupItem>
+    <RnToggleGroupItem Value=""b"">B</RnToggleGroupItem>
+</RnToggleGroup>
+
+@code {
+    private string? _value;
+}"
+    );
+}

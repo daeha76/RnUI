@@ -1,0 +1,32 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Tooltip", "tooltip", "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+        Demo: @<RnTooltip>
+            <Trigger>
+                <RnButton Variant="ButtonVariant.Outline">Hover me</RnButton>
+            </Trigger>
+            <ChildContent>
+                <p>Add to library</p>
+            </ChildContent>
+        </RnTooltip>,
+        Thumbnail: @<RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">Hover me</RnButton>,
+        Code: @"<RnTooltip>
+    <Trigger>
+        <RnButton Variant=""ButtonVariant.Outline"">
+            Hover me
+        </RnButton>
+    </Trigger>
+    <ChildContent>
+        <p>Add to library</p>
+    </ChildContent>
+</RnTooltip>",
+        UsageCode: @"@using RnUI.Components.UI.Tooltip
+
+<RnTooltip>
+    <Trigger>Hover target</Trigger>
+    <ChildContent>Tooltip text</ChildContent>
+</RnTooltip>"
+    );
+}

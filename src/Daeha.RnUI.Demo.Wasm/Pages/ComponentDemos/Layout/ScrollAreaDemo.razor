@@ -1,0 +1,33 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Scroll Area", "scroll-area", "Augments native scroll functionality for custom, cross-browser styling.",
+        Demo: @<RnScrollArea MaxHeight="288px" Class="w-48 rounded-md border">
+                <div class="p-4">
+                    <h4 class="mb-4 text-sm font-medium leading-none">Tags</h4>
+                    @foreach (var tag in new[] { "v1.2.0-beta.42", "v1.2.0-beta.41", "v1.2.0-beta.40", "v1.2.0-beta.39", "v1.2.0-beta.38", "v1.2.0-beta.37", "v1.2.0-beta.36", "v1.2.0-beta.35", "v1.2.0-beta.34", "v1.2.0-beta.33", "v1.2.0-beta.32", "v1.2.0-beta.31", "v1.2.0-beta.30" })
+                    {
+                        <div class="text-sm">@tag</div>
+                        <RnSeparator Class="my-2" />
+                    }
+                </div>
+            </RnScrollArea>,
+        Thumbnail: @<div class="text-xs text-muted-foreground">Scroll Area</div>,
+        Code: @"<RnScrollArea MaxHeight=""288px"" Class=""w-48 rounded-md border"">
+    <div class=""p-4"">
+        <h4 class=""mb-4 text-sm font-medium leading-none"">Tags</h4>
+        @foreach (var tag in tags)
+        {
+            <div class=""text-sm"">@tag</div>
+            <RnSeparator Class=""my-2"" />
+        }
+    </div>
+</RnScrollArea>",
+        UsageCode: @"@using RnUI.Components.UI.ScrollArea
+
+<RnScrollArea MaxHeight=""200px"">
+    Content
+</RnScrollArea>"
+    );
+}

@@ -1,0 +1,75 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Sidebar", "sidebar", "A composable, themeable and customizable sidebar component.",
+        Demo: @<div class="border rounded-md overflow-hidden max-w-xs">
+                <RnSidebar Open="true" Width="100%">
+                    <RnSidebarHeader>
+                        <span class="font-semibold px-2">Application</span>
+                    </RnSidebarHeader>
+                    <RnSidebarContent>
+                        <RnSidebarGroup>
+                            <RnSidebarGroupLabel>Platform</RnSidebarGroupLabel>
+                            <RnSidebarMenu>
+                                <RnSidebarMenuItem>
+                                    <RnSidebarMenuButton Href="#" IsActive="true">
+                                        <span>Dashboard</span>
+                                    </RnSidebarMenuButton>
+                                </RnSidebarMenuItem>
+                                <RnSidebarMenuItem>
+                                    <RnSidebarMenuButton Href="#">
+                                        <span>Projects</span>
+                                    </RnSidebarMenuButton>
+                                </RnSidebarMenuItem>
+                                <RnSidebarMenuItem>
+                                    <RnSidebarMenuButton Href="#">
+                                        <span>Settings</span>
+                                    </RnSidebarMenuButton>
+                                </RnSidebarMenuItem>
+                            </RnSidebarMenu>
+                        </RnSidebarGroup>
+                    </RnSidebarContent>
+                    <RnSidebarFooter>
+                        <span class="text-sm text-muted-foreground px-2">v1.0.0</span>
+                    </RnSidebarFooter>
+                </RnSidebar>
+            </div>,
+        Thumbnail: @<div class="text-xs text-muted-foreground">Sidebar</div>,
+        Code: @"<RnSidebar Open=""true"" Width=""100%"">
+    <RnSidebarHeader>
+        <span class=""font-semibold px-2"">Application</span>
+    </RnSidebarHeader>
+    <RnSidebarContent>
+        <RnSidebarGroup>
+            <RnSidebarGroupLabel>Platform</RnSidebarGroupLabel>
+            <RnSidebarMenu>
+                <RnSidebarMenuItem>
+                    <RnSidebarMenuButton Href=""#"" IsActive=""true"">
+                        <svg>...</svg>
+                        <span>Dashboard</span>
+                    </RnSidebarMenuButton>
+                </RnSidebarMenuItem>
+            </RnSidebarMenu>
+        </RnSidebarGroup>
+    </RnSidebarContent>
+</RnSidebar>",
+        UsageCode: @"@using RnUI.Components.UI.Sidebar
+
+<RnSidebar>
+    <RnSidebarContent>
+        <RnSidebarGroup>
+            <RnSidebarGroupLabel>Platform</RnSidebarGroupLabel>
+            <RnSidebarMenu>
+                <RnSidebarMenuItem>
+                    <RnSidebarMenuButton Href=""#"" IsActive=""true"">
+                        <svg>...</svg>
+                        <span>Dashboard</span>
+                    </RnSidebarMenuButton>
+                </RnSidebarMenuItem>
+            </RnSidebarMenu>
+        </RnSidebarGroup>
+    </RnSidebarContent>
+</RnSidebar>"
+    );
+}

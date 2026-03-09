@@ -1,0 +1,19 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Label", "label", "Renders an accessible label associated with controls.",
+        Demo: @<div class="flex items-center gap-3">
+                <RnCheckbox id="label-terms" />
+                <RnLabel For="label-terms">Accept terms and conditions</RnLabel>
+            </div>,
+        Thumbnail: @<RnLabel>Label</RnLabel>,
+        Code: @"<div class=""flex items-center gap-3"">
+    <RnCheckbox id=""terms"" />
+    <RnLabel For=""terms"">Accept terms and conditions</RnLabel>
+</div>",
+        UsageCode: @"@using RnUI.Components.UI.Label
+
+<RnLabel For=""email"">Email</RnLabel>"
+    );
+}

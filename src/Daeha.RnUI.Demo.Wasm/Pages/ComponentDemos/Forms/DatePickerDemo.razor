@@ -1,0 +1,23 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Date Picker", "date-picker", "A date picker component with calendar popup.",
+        Demo: @<div class="space-y-4">
+                <RnDatePicker Placeholder="Pick a date" />
+            </div>,
+        Thumbnail: @<div class="text-xs text-muted-foreground">Date Picker</div>,
+        Code: @"<RnDatePicker @bind-Value=""_date"" Placeholder=""Pick a date"" />
+
+@code {
+    private DateTime? _date;
+}",
+        UsageCode: @"@using RnUI.Components.UI.DatePicker
+
+<RnDatePicker @bind-Value=""_date"" Placeholder=""Pick a date"" />
+
+@code {
+    private DateTime? _date;
+}"
+    );
+}

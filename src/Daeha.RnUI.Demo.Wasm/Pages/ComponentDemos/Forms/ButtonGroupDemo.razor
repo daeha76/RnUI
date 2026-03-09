@@ -1,0 +1,41 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Button Group", "button-group", "Groups related buttons together.",
+        Demo: @<div class="space-y-6">
+                <div class="space-y-2">
+                    <p class="text-sm font-medium">Horizontal</p>
+                    <RnButtonGroup>
+                        <RnButton Variant="ButtonVariant.Outline">Button 1</RnButton>
+                        <RnButton Variant="ButtonVariant.Outline">Button 2</RnButton>
+                        <RnButton Variant="ButtonVariant.Outline">Button 3</RnButton>
+                    </RnButtonGroup>
+                </div>
+                <div class="space-y-2">
+                    <p class="text-sm font-medium">Vertical</p>
+                    <RnButtonGroup Orientation="ButtonGroupOrientation.Vertical">
+                        <RnButton Variant="ButtonVariant.Outline">Button 1</RnButton>
+                        <RnButton Variant="ButtonVariant.Outline">Button 2</RnButton>
+                        <RnButton Variant="ButtonVariant.Outline">Button 3</RnButton>
+                    </RnButtonGroup>
+                </div>
+            </div>,
+        Thumbnail: @<RnButtonGroup>
+                <RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">A</RnButton>
+                <RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">B</RnButton>
+                <RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">C</RnButton>
+            </RnButtonGroup>,
+        Code: @"<RnButtonGroup>
+    <RnButton Variant=""ButtonVariant.Outline"">Button 1</RnButton>
+    <RnButton Variant=""ButtonVariant.Outline"">Button 2</RnButton>
+    <RnButton Variant=""ButtonVariant.Outline"">Button 3</RnButton>
+</RnButtonGroup>",
+        UsageCode: @"@using RnUI.Components.UI.ButtonGroup
+
+<RnButtonGroup>
+    <RnButton>A</RnButton>
+    <RnButton>B</RnButton>
+</RnButtonGroup>"
+    );
+}

@@ -1,0 +1,44 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Resizable", "resizable", "Accessible resizable panel groups and layouts with keyboard support.",
+        Demo: @<div class="w-full max-w-md">
+                <RnResizablePanelGroup Direction="horizontal" Class="min-h-[200px] rounded-lg border">
+                    <RnResizablePanel DefaultSize="50">
+                        <div class="flex h-full items-center justify-center p-6">
+                            <span class="font-semibold">One</span>
+                        </div>
+                    </RnResizablePanel>
+                    <RnResizableHandle />
+                    <RnResizablePanel DefaultSize="50">
+                        <div class="flex h-full items-center justify-center p-6">
+                            <span class="font-semibold">Two</span>
+                        </div>
+                    </RnResizablePanel>
+                </RnResizablePanelGroup>
+            </div>,
+        Thumbnail: @<div class="text-xs text-muted-foreground">Resizable</div>,
+        Code: @"<RnResizablePanelGroup Direction=""horizontal""
+                    Class=""min-h-[200px] rounded-lg border"">
+    <RnResizablePanel DefaultSize=""50"">
+        <div class=""flex h-full items-center justify-center p-6"">
+            <span class=""font-semibold"">One</span>
+        </div>
+    </RnResizablePanel>
+    <RnResizableHandle />
+    <RnResizablePanel DefaultSize=""50"">
+        <div class=""flex h-full items-center justify-center p-6"">
+            <span class=""font-semibold"">Two</span>
+        </div>
+    </RnResizablePanel>
+</RnResizablePanelGroup>",
+        UsageCode: @"@using RnUI.Components.UI.Resizable
+
+<RnResizablePanelGroup Direction=""horizontal"">
+    <RnResizablePanel DefaultSize=""50"">Panel 1</RnResizablePanel>
+    <RnResizableHandle />
+    <RnResizablePanel DefaultSize=""50"">Panel 2</RnResizablePanel>
+</RnResizablePanelGroup>"
+    );
+}

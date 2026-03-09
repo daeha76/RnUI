@@ -1,0 +1,41 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Checkbox", "checkbox", "A control that allows the user to toggle between checked and not checked.",
+        Demo: @<div class="flex flex-col gap-6">
+                <div class="flex items-center gap-3">
+                    <RnCheckbox id="terms" Checked="false" />
+                    <RnLabel For="terms">Accept terms and conditions</RnLabel>
+                </div>
+                <div class="flex items-start gap-3">
+                    <RnCheckbox id="terms-2" Checked="true" />
+                    <div class="grid gap-2">
+                        <RnLabel For="terms-2">Accept terms and conditions</RnLabel>
+                        <p class="text-sm text-muted-foreground">By clicking this checkbox, you agree to the terms and conditions.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <RnCheckbox id="toggle-disabled" Disabled="true" />
+                    <RnLabel For="toggle-disabled">Enable notifications</RnLabel>
+                </div>
+            </div>,
+        Thumbnail: @<div class="flex items-center gap-2">
+                <RnCheckbox Checked="true" />
+                <span class="text-xs">Checked</span>
+            </div>,
+        Code: @"<div class=""flex items-center gap-3"">
+    <RnCheckbox id=""terms"" @bind-Checked=""_checked"" />
+    <RnLabel For=""terms"">Accept terms and conditions</RnLabel>
+</div>
+
+@code {
+    private bool _checked;
+}",
+        UsageCode: @"<RnCheckbox @bind-Checked=""_checked"" />
+
+@code {
+    private bool _checked;
+}"
+    );
+}

@@ -1,0 +1,31 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Skeleton", "skeleton", "Use to show a placeholder while content is loading.",
+        Demo: @<div class="flex items-center space-x-4">
+            <RnSkeleton Class="h-12 w-12 rounded-full" />
+            <div class="space-y-2">
+                <RnSkeleton Class="h-4 w-[250px]" />
+                <RnSkeleton Class="h-4 w-[200px]" />
+            </div>
+        </div>,
+        Thumbnail: @<div class="flex items-center gap-2">
+            <RnSkeleton Class="h-8 w-8 rounded-full" />
+            <div class="space-y-1">
+                <RnSkeleton Class="h-3 w-[80px]" />
+                <RnSkeleton Class="h-3 w-[60px]" />
+            </div>
+        </div>,
+        Code: @"<div class=""flex items-center space-x-4"">
+    <RnSkeleton Class=""h-12 w-12 rounded-full"" />
+    <div class=""space-y-2"">
+        <RnSkeleton Class=""h-4 w-[250px]"" />
+        <RnSkeleton Class=""h-4 w-[200px]"" />
+    </div>
+</div>",
+        UsageCode: @"@using RnUI.Components.UI.Skeleton
+
+<RnSkeleton Class=""h-4 w-[250px]"" />"
+    );
+}

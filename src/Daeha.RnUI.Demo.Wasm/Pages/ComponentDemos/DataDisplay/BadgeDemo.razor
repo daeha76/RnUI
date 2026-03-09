@@ -1,0 +1,46 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Badge", "badge", "Displays a badge or a component that looks like a badge.",
+        Demo: @<div class="flex flex-col items-center gap-2">
+            <div class="flex w-full flex-wrap gap-2">
+                <RnBadge>Badge</RnBadge>
+                <RnBadge Variant="BadgeVariant.Secondary">Secondary</RnBadge>
+                <RnBadge Variant="BadgeVariant.Destructive">Destructive</RnBadge>
+                <RnBadge Variant="BadgeVariant.Outline">Outline</RnBadge>
+            </div>
+            <div class="flex w-full flex-wrap gap-2">
+                <RnBadge Variant="BadgeVariant.Secondary" Class="bg-blue-500 text-white dark:bg-blue-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg>
+                    Verified
+                </RnBadge>
+                <RnBadge Class="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums">8</RnBadge>
+                <RnBadge Class="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums" Variant="BadgeVariant.Destructive">99</RnBadge>
+                <RnBadge Class="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums" Variant="BadgeVariant.Outline">20+</RnBadge>
+            </div>
+        </div>,
+        Thumbnail: @<div class="flex gap-2">
+            <RnBadge>Badge</RnBadge>
+            <RnBadge Variant="BadgeVariant.Secondary">New</RnBadge>
+        </div>,
+        Code: @"<RnBadge>Badge</RnBadge>
+<RnBadge Variant=""BadgeVariant.Secondary"">Secondary</RnBadge>
+<RnBadge Variant=""BadgeVariant.Destructive"">Destructive</RnBadge>
+<RnBadge Variant=""BadgeVariant.Outline"">Outline</RnBadge>",
+        UsageCode: @"<RnBadge>Badge</RnBadge>
+<RnBadge Variant=""BadgeVariant.Secondary"">Secondary</RnBadge>",
+        Examples:
+        [
+            new("Secondary", null,
+                @<RnBadge Variant="BadgeVariant.Secondary">Secondary</RnBadge>,
+                @"<RnBadge Variant=""BadgeVariant.Secondary"">Secondary</RnBadge>"),
+            new("Outline", null,
+                @<RnBadge Variant="BadgeVariant.Outline">Outline</RnBadge>,
+                @"<RnBadge Variant=""BadgeVariant.Outline"">Outline</RnBadge>"),
+            new("Destructive", null,
+                @<RnBadge Variant="BadgeVariant.Destructive">Destructive</RnBadge>,
+                @"<RnBadge Variant=""BadgeVariant.Destructive"">Destructive</RnBadge>")
+        ]
+    );
+}

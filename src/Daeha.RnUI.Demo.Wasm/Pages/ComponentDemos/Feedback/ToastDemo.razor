@@ -1,0 +1,40 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Toast", "toast", "A succinct message that is displayed temporarily.",
+        Demo: @<div class="flex gap-4">
+            <RnButton>Show Toast</RnButton>
+            <RnButton Variant="ButtonVariant.Destructive">Destructive Toast</RnButton>
+        </div>,
+        Thumbnail: @<RnButton Size="ButtonSize.Sm">Show Toast</RnButton>,
+        Code: @"<RnButton OnClick=""ShowToast"">Show Toast</RnButton>
+<RnButton Variant=""ButtonVariant.Destructive""
+          OnClick=""ShowDestructiveToast"">
+    Destructive Toast
+</RnButton>
+
+@inject ToastService ToastService
+
+@code {
+    private void ShowToast()
+        => ToastService.Show(""Event Created"",
+            ""Your event has been created."");
+
+    private void ShowDestructiveToast()
+        => ToastService.Show(""Error"",
+            ""Something went wrong."",
+            ToastVariant.Destructive);
+}",
+        UsageCode: @"@using RnUI.Components.UI.Toast
+@using RnUI.Services
+@inject ToastService ToastService
+
+<RnButton OnClick=""ShowToast"">Toast</RnButton>
+
+@code {
+    private void ShowToast()
+        => ToastService.Show(""Title"", ""Description"");
+}"
+    );
+}

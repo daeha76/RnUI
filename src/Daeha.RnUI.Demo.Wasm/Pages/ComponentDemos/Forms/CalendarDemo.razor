@@ -1,0 +1,23 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Calendar", "calendar", "A date field component that allows users to enter and edit date.",
+        Demo: @<div>
+                <RnCalendar />
+            </div>,
+        Thumbnail: @<div class="text-xs text-muted-foreground">Calendar</div>,
+        Code: @"<RnCalendar @bind-Selected=""_date"" />
+
+@code {
+    private DateTime? _date;
+}",
+        UsageCode: @"@using RnUI.Components.UI.Calendar
+
+<RnCalendar @bind-Selected=""_date"" />
+
+@code {
+    private DateTime? _date;
+}"
+    );
+}

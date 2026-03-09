@@ -1,0 +1,13 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Textarea", "textarea", "Displays a form textarea or a component that looks like a textarea.",
+        Demo: @<RnTextarea Placeholder="Type your message here." Class="max-w-sm" />,
+        Thumbnail: @<div class="w-[160px]"><RnTextarea Placeholder="Message" /></div>,
+        Code: @"<RnTextarea Placeholder=""Type your message here."" />",
+        UsageCode: @"@using RnUI.Components.UI.Textarea
+
+<RnTextarea Placeholder=""Type your message here."" />"
+    );
+}

@@ -1,0 +1,36 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Combobox", "combobox", "Autocomplete input and command palette with a list of suggestions.",
+        Demo: @<RnCombobox Placeholder="Select framework..." SearchPlaceholder="Search framework...">
+                <RnComboboxItem Value="next" Label="Next.js">Next.js</RnComboboxItem>
+                <RnComboboxItem Value="sveltekit" Label="SvelteKit">SvelteKit</RnComboboxItem>
+                <RnComboboxItem Value="nuxt" Label="Nuxt.js">Nuxt.js</RnComboboxItem>
+                <RnComboboxItem Value="remix" Label="Remix">Remix</RnComboboxItem>
+                <RnComboboxItem Value="astro" Label="Astro">Astro</RnComboboxItem>
+            </RnCombobox>,
+        Thumbnail: @<div class="text-xs text-muted-foreground">Combobox</div>,
+        Code: @"<RnCombobox @bind-Value=""_value"" Placeholder=""Select framework..."" SearchPlaceholder=""Search framework..."">
+    <RnComboboxItem Value=""next"" Label=""Next.js"">Next.js</RnComboboxItem>
+    <RnComboboxItem Value=""sveltekit"" Label=""SvelteKit"">SvelteKit</RnComboboxItem>
+    <RnComboboxItem Value=""nuxt"" Label=""Nuxt.js"">Nuxt.js</RnComboboxItem>
+    <RnComboboxItem Value=""remix"" Label=""Remix"">Remix</RnComboboxItem>
+    <RnComboboxItem Value=""astro"" Label=""Astro"">Astro</RnComboboxItem>
+</RnCombobox>
+
+@code {
+    private string? _value;
+}",
+        UsageCode: @"@using RnUI.Components.UI.Combobox
+
+<RnCombobox @bind-Value=""_value"" Placeholder=""Select..."">
+    <RnComboboxItem Value=""a"" Label=""Option A"">Option A</RnComboboxItem>
+    <RnComboboxItem Value=""b"" Label=""Option B"">Option B</RnComboboxItem>
+</RnCombobox>
+
+@code {
+    private string? _value;
+}"
+    );
+}

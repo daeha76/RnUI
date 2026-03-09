@@ -1,0 +1,37 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Aspect Ratio", "aspect-ratio", "Displays content within a desired ratio.",
+        Demo: @<div class="w-full max-w-md space-y-6">
+                <div class="space-y-2">
+                    <p class="text-sm font-medium">16:9</p>
+                    <RnAspectRatio Ratio="16.0 / 9.0" Class="bg-muted rounded-md overflow-hidden">
+                        <div class="flex items-center justify-center h-full text-muted-foreground">16:9 Content</div>
+                    </RnAspectRatio>
+                </div>
+                <div class="space-y-2">
+                    <p class="text-sm font-medium">4:3</p>
+                    <RnAspectRatio Ratio="4.0 / 3.0" Class="bg-muted rounded-md overflow-hidden">
+                        <div class="flex items-center justify-center h-full text-muted-foreground">4:3 Content</div>
+                    </RnAspectRatio>
+                </div>
+            </div>,
+        Thumbnail: @<div class="w-[160px]">
+                <RnAspectRatio Ratio="16.0 / 9.0" Class="bg-muted rounded-md">
+                    <div class="flex items-center justify-center h-full text-xs text-muted-foreground">16:9</div>
+                </RnAspectRatio>
+            </div>,
+        Code: @"<RnAspectRatio Ratio=""16.0 / 9.0""
+               Class=""bg-muted rounded-md overflow-hidden"">
+    <div class=""flex items-center justify-center h-full"">
+        16:9 Content
+    </div>
+</RnAspectRatio>",
+        UsageCode: @"@using RnUI.Components.UI.AspectRatio
+
+<RnAspectRatio Ratio=""16.0 / 9.0"">
+    <img src=""photo.jpg"" alt=""Photo"" />
+</RnAspectRatio>"
+    );
+}

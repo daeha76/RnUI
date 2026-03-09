@@ -1,0 +1,60 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Popover", "popover", "Displays rich content in a portal, triggered by a button.",
+        Demo: @<RnPopover>
+                <Trigger>
+                    <RnButton Variant="ButtonVariant.Outline">Open popover</RnButton>
+                </Trigger>
+                <ChildContent>
+                    <div class="grid gap-4">
+                        <div class="space-y-2">
+                            <h4 class="font-medium leading-none">Dimensions</h4>
+                            <p class="text-sm text-muted-foreground">Set the dimensions for the layer.</p>
+                        </div>
+                        <div class="grid gap-2">
+                            <div class="grid grid-cols-3 items-center gap-4">
+                                <RnLabel For="popover-width">Width</RnLabel>
+                                <RnInput id="popover-width" Value="100%" Class="col-span-2 h-8" />
+                            </div>
+                            <div class="grid grid-cols-3 items-center gap-4">
+                                <RnLabel For="popover-maxwidth">Max. width</RnLabel>
+                                <RnInput id="popover-maxwidth" Value="300px" Class="col-span-2 h-8" />
+                            </div>
+                            <div class="grid grid-cols-3 items-center gap-4">
+                                <RnLabel For="popover-height">Height</RnLabel>
+                                <RnInput id="popover-height" Value="25px" Class="col-span-2 h-8" />
+                            </div>
+                        </div>
+                    </div>
+                </ChildContent>
+            </RnPopover>,
+        Thumbnail: @<RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">Popover</RnButton>,
+        Code: @"<RnPopover>
+    <Trigger>
+        <RnButton Variant=""ButtonVariant.Outline"">Open popover</RnButton>
+    </Trigger>
+    <ChildContent>
+        <div class=""grid gap-4"">
+            <div class=""space-y-2"">
+                <h4 class=""font-medium leading-none"">Dimensions</h4>
+                <p class=""text-sm text-muted-foreground"">Set the dimensions for the layer.</p>
+            </div>
+            <div class=""grid gap-2"">
+                <div class=""grid grid-cols-3 items-center gap-4"">
+                    <RnLabel>Width</RnLabel>
+                    <RnInput Value=""100%"" Class=""col-span-2 h-8"" />
+                </div>
+            </div>
+        </div>
+    </ChildContent>
+</RnPopover>",
+        UsageCode: @"@using RnUI.Components.UI.Popover
+
+<RnPopover>
+    <Trigger>Trigger element</Trigger>
+    <ChildContent>Popup content</ChildContent>
+</RnPopover>"
+    );
+}

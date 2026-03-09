@@ -1,0 +1,49 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Breadcrumb", "breadcrumb", "Displays the path to the current resource using a hierarchy of links.",
+        Demo: @<RnBreadcrumb>
+                <RnBreadcrumbItem>
+                    <RnBreadcrumbLink Href="./">Home</RnBreadcrumbLink>
+                </RnBreadcrumbItem>
+                <RnBreadcrumbSeparator />
+                <RnBreadcrumbItem>
+                    <RnBreadcrumbLink Href="components">Components</RnBreadcrumbLink>
+                </RnBreadcrumbItem>
+                <RnBreadcrumbSeparator />
+                <RnBreadcrumbItem>
+                    <RnBreadcrumbPage>Breadcrumb</RnBreadcrumbPage>
+                </RnBreadcrumbItem>
+            </RnBreadcrumb>,
+        Thumbnail: @<RnBreadcrumb>
+                <RnBreadcrumbItem><RnBreadcrumbLink Href="#">Home</RnBreadcrumbLink></RnBreadcrumbItem>
+                <RnBreadcrumbSeparator />
+                <RnBreadcrumbItem><RnBreadcrumbPage>Page</RnBreadcrumbPage></RnBreadcrumbItem>
+            </RnBreadcrumb>,
+        Code: @"<RnBreadcrumb>
+    <RnBreadcrumbItem>
+        <RnBreadcrumbLink Href=""/"">Home</RnBreadcrumbLink>
+    </RnBreadcrumbItem>
+    <RnBreadcrumbSeparator />
+    <RnBreadcrumbItem>
+        <RnBreadcrumbLink Href=""/components"">Components</RnBreadcrumbLink>
+    </RnBreadcrumbItem>
+    <RnBreadcrumbSeparator />
+    <RnBreadcrumbItem>
+        <RnBreadcrumbPage>Breadcrumb</RnBreadcrumbPage>
+    </RnBreadcrumbItem>
+</RnBreadcrumb>",
+        UsageCode: @"@using RnUI.Components.UI.Breadcrumb
+
+<RnBreadcrumb>
+    <RnBreadcrumbItem>
+        <RnBreadcrumbLink Href=""/"">Home</RnBreadcrumbLink>
+    </RnBreadcrumbItem>
+    <RnBreadcrumbSeparator />
+    <RnBreadcrumbItem>
+        <RnBreadcrumbPage>Current</RnBreadcrumbPage>
+    </RnBreadcrumbItem>
+</RnBreadcrumb>"
+    );
+}

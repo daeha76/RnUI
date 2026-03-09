@@ -1,0 +1,52 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Carousel", "carousel", "A carousel with motion and swipe built using Embla.",
+        Demo: @<div class="w-full max-w-xs mx-auto">
+            <RnCarousel>
+                <RnCarouselContent>
+                    @for (var i = 1; i <= 5; i++)
+                    {
+                        var index = i;
+                        <RnCarouselItem>
+                            <div class="p-1">
+                                <RnCard>
+                                    <RnCardContent Class="flex aspect-square items-center justify-center p-6">
+                                        <span class="text-4xl font-semibold">@index</span>
+                                    </RnCardContent>
+                                </RnCard>
+                            </div>
+                        </RnCarouselItem>
+                    }
+                </RnCarouselContent>
+                <RnCarouselPrevious />
+                <RnCarouselNext />
+            </RnCarousel>
+        </div>,
+        Thumbnail: @<div class="text-xs text-muted-foreground">Carousel</div>,
+        Code: @"<RnCarousel>
+    <RnCarouselContent>
+        <RnCarouselItem>
+            <RnCard>
+                <RnCardContent Class=""flex aspect-square items-center justify-center p-6"">
+                    <span class=""text-4xl font-semibold"">1</span>
+                </RnCardContent>
+            </RnCard>
+        </RnCarouselItem>
+    </RnCarouselContent>
+    <RnCarouselPrevious />
+    <RnCarouselNext />
+</RnCarousel>",
+        UsageCode: @"@using RnUI.Components.UI.Carousel
+
+<RnCarousel>
+    <RnCarouselContent>
+        <RnCarouselItem>Slide 1</RnCarouselItem>
+        <RnCarouselItem>Slide 2</RnCarouselItem>
+    </RnCarouselContent>
+    <RnCarouselPrevious />
+    <RnCarouselNext />
+</RnCarousel>"
+    );
+}

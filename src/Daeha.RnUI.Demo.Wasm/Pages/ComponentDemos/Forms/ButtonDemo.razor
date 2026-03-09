@@ -1,0 +1,56 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Button", "button", "Displays a button or a component that looks like a button.",
+        Demo: @<div class="flex flex-wrap items-center gap-2">
+                <RnButton Variant="ButtonVariant.Outline">Button</RnButton>
+                <RnButton Variant="ButtonVariant.Outline" Size="ButtonSize.Icon" aria-label="Submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+                </RnButton>
+            </div>,
+        Thumbnail: @<div class="flex gap-2">
+                <RnButton Size="ButtonSize.Sm">Button</RnButton>
+                <RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">Outline</RnButton>
+            </div>,
+        Code: @"<RnButton Variant=""ButtonVariant.Outline"">Button</RnButton>
+<RnButton Variant=""ButtonVariant.Outline"" Size=""ButtonSize.Icon"">
+    <svg><!-- icon --></svg>
+</RnButton>",
+        UsageCode: @"<RnButton OnClick=""HandleClick"">Click me</RnButton>
+
+@code {
+    private void HandleClick() { }
+}",
+        Examples:
+        [
+            new("Default", null,
+                @<RnButton>Button</RnButton>,
+                @"<RnButton>Button</RnButton>"),
+            new("Secondary", null,
+                @<RnButton Variant="ButtonVariant.Secondary">Secondary</RnButton>,
+                @"<RnButton Variant=""ButtonVariant.Secondary"">Secondary</RnButton>"),
+            new("Outline", null,
+                @<RnButton Variant="ButtonVariant.Outline">Outline</RnButton>,
+                @"<RnButton Variant=""ButtonVariant.Outline"">Outline</RnButton>"),
+            new("Ghost", null,
+                @<RnButton Variant="ButtonVariant.Ghost">Ghost</RnButton>,
+                @"<RnButton Variant=""ButtonVariant.Ghost"">Ghost</RnButton>"),
+            new("Destructive", null,
+                @<RnButton Variant="ButtonVariant.Destructive">Destructive</RnButton>,
+                @"<RnButton Variant=""ButtonVariant.Destructive"">Destructive</RnButton>"),
+            new("Link", null,
+                @<RnButton Variant="ButtonVariant.Link">Link</RnButton>,
+                @"<RnButton Variant=""ButtonVariant.Link"">Link</RnButton>"),
+            new("Loading", "A disabled button with a spinner.",
+                @<RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline" Disabled="true">
+                    <RnSpinner />
+                    Submit
+                </RnButton>,
+                @"<RnButton Size=""ButtonSize.Sm"" Variant=""ButtonVariant.Outline"" Disabled=""true"">
+    <RnSpinner />
+    Submit
+</RnButton>")
+        ]
+    );
+}

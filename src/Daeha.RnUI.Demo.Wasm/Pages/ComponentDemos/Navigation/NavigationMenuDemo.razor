@@ -1,0 +1,56 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Navigation Menu", "navigation-menu", "A collection of links for navigating websites.",
+        Demo: @<RnNavigationMenu>
+                <RnNavigationMenuList>
+                    <RnNavigationMenuItem>
+                        <RnNavigationMenuTrigger>Getting Started</RnNavigationMenuTrigger>
+                        <RnNavigationMenuContent>
+                            <div class="grid gap-3 p-4 w-[400px]">
+                                <RnNavigationMenuLink Href="#">Introduction</RnNavigationMenuLink>
+                                <RnNavigationMenuLink Href="#">Installation</RnNavigationMenuLink>
+                                <RnNavigationMenuLink Href="#">Typography</RnNavigationMenuLink>
+                            </div>
+                        </RnNavigationMenuContent>
+                    </RnNavigationMenuItem>
+                    <RnNavigationMenuItem>
+                        <RnNavigationMenuTrigger>Components</RnNavigationMenuTrigger>
+                        <RnNavigationMenuContent>
+                            <div class="grid gap-3 p-4 w-[400px]">
+                                <RnNavigationMenuLink Href="#">Alert Dialog</RnNavigationMenuLink>
+                                <RnNavigationMenuLink Href="#">Hover Card</RnNavigationMenuLink>
+                                <RnNavigationMenuLink Href="#">Progress</RnNavigationMenuLink>
+                            </div>
+                        </RnNavigationMenuContent>
+                    </RnNavigationMenuItem>
+                </RnNavigationMenuList>
+            </RnNavigationMenu>,
+        Thumbnail: @<div class="text-xs text-muted-foreground">Navigation Menu</div>,
+        Code: @"<RnNavigationMenu>
+    <RnNavigationMenuList>
+        <RnNavigationMenuItem>
+            <RnNavigationMenuTrigger>Getting Started</RnNavigationMenuTrigger>
+            <RnNavigationMenuContent>
+                <div class=""grid gap-3 p-4 w-[400px]"">
+                    <RnNavigationMenuLink Href=""#"">
+                        Introduction
+                    </RnNavigationMenuLink>
+                </div>
+            </RnNavigationMenuContent>
+        </RnNavigationMenuItem>
+    </RnNavigationMenuList>
+</RnNavigationMenu>",
+        UsageCode: @"@using RnUI.Components.UI.NavigationMenu
+
+<RnNavigationMenu>
+    <RnNavigationMenuList>
+        <RnNavigationMenuItem>
+            <RnNavigationMenuTrigger>Menu</RnNavigationMenuTrigger>
+            <RnNavigationMenuContent>Content</RnNavigationMenuContent>
+        </RnNavigationMenuItem>
+    </RnNavigationMenuList>
+</RnNavigationMenu>"
+    );
+}

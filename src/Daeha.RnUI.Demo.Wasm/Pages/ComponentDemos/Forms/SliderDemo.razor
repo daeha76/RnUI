@@ -1,0 +1,21 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Slider", "slider", "An input where the user selects a value from within a given range.",
+        Demo: @<RnSlider Value="33" Max="100" Step="1" Class="w-3/5" />,
+        Thumbnail: @<div class="w-[120px]"><RnSlider Value="60" Max="100" /></div>,
+        Code: @"<RnSlider @bind-Value=""_value"" Max=""100"" Step=""1"" />
+
+@code {
+    private double _value = 33;
+}",
+        UsageCode: @"@using RnUI.Components.UI.Slider
+
+<RnSlider @bind-Value=""_value"" Max=""100"" Step=""1"" />
+
+@code {
+    private double _value = 50;
+}"
+    );
+}

@@ -1,0 +1,80 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Accordion", "accordion", "A vertically stacked set of interactive headings that each reveal a section of content.",
+        Demo: @<div class="w-full max-w-md">
+            <RnAccordion Value="item-1">
+                <RnAccordionItem Value="item-1">
+                    <RnAccordionTrigger>Product Information</RnAccordionTrigger>
+                    <RnAccordionContent>
+                        <div class="flex flex-col gap-4 text-balance">
+                            <p>Our flagship product combines cutting-edge technology with sleek design. Built with premium materials, it offers unparalleled performance and reliability.</p>
+                            <p>Key features include advanced processing capabilities, and an intuitive user interface designed for both beginners and experts.</p>
+                        </div>
+                    </RnAccordionContent>
+                </RnAccordionItem>
+                <RnAccordionItem Value="item-2">
+                    <RnAccordionTrigger>Shipping Details</RnAccordionTrigger>
+                    <RnAccordionContent>
+                        <div class="flex flex-col gap-4 text-balance">
+                            <p>We offer worldwide shipping through trusted courier partners. Standard delivery takes 3-5 business days, while express shipping ensures delivery within 1-2 business days.</p>
+                            <p>All orders are carefully packaged and fully insured. Track your shipment in real-time through our dedicated tracking portal.</p>
+                        </div>
+                    </RnAccordionContent>
+                </RnAccordionItem>
+                <RnAccordionItem Value="item-3">
+                    <RnAccordionTrigger>Return Policy</RnAccordionTrigger>
+                    <RnAccordionContent>
+                        <div class="flex flex-col gap-4 text-balance">
+                            <p>We stand behind our products with a comprehensive 30-day return policy. If you're not completely satisfied, simply return the item in its original condition.</p>
+                            <p>Our hassle-free return process includes free return shipping and full refunds processed within 48 hours of receiving the returned item.</p>
+                        </div>
+                    </RnAccordionContent>
+                </RnAccordionItem>
+            </RnAccordion>
+        </div>,
+        Thumbnail: @<div class="w-full max-w-[200px]">
+            <RnAccordion Value="item-1">
+                <RnAccordionItem Value="item-1">
+                    <RnAccordionTrigger>Product Information</RnAccordionTrigger>
+                    <RnAccordionContent>Our flagship product.</RnAccordionContent>
+                </RnAccordionItem>
+            </RnAccordion>
+        </div>,
+        Code: @"<RnAccordion @bind-Value=""_expandedItem"">
+    <RnAccordionItem Value=""item-1"">
+        <RnAccordionTrigger>Product Information</RnAccordionTrigger>
+        <RnAccordionContent>
+            <div class=""flex flex-col gap-4 text-balance"">
+                <p>Our flagship product combines cutting-edge technology with sleek design.</p>
+            </div>
+        </RnAccordionContent>
+    </RnAccordionItem>
+    <RnAccordionItem Value=""item-2"">
+        <RnAccordionTrigger>Shipping Details</RnAccordionTrigger>
+        <RnAccordionContent>
+            <div class=""flex flex-col gap-4 text-balance"">
+                <p>We offer worldwide shipping through trusted courier partners.</p>
+            </div>
+        </RnAccordionContent>
+    </RnAccordionItem>
+</RnAccordion>
+
+@code {
+    private string? _expandedItem = ""item-1"";
+}",
+        UsageCode: @"@using RnUI.Components.UI.Accordion
+
+<RnAccordion @bind-Value=""_value"">
+    <RnAccordionItem Value=""item-1"">
+        <RnAccordionTrigger>Title</RnAccordionTrigger>
+        <RnAccordionContent>Content</RnAccordionContent>
+    </RnAccordionItem>
+</RnAccordion>
+
+@code {
+    private string? _value = ""item-1"";
+}"
+    );
+}

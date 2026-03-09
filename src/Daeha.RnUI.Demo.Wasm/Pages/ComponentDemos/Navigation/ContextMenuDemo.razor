@@ -1,0 +1,67 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Context Menu", "context-menu", "Displays a menu to the user on right click.",
+        Demo: @<RnContextMenu>
+                <Trigger>
+                    <div class="flex h-[150px] w-[300px] items-center justify-center rounded-md border border-dashed text-sm">
+                        Right click here
+                    </div>
+                </Trigger>
+                <ChildContent>
+                    <RnDropdownMenuItem Inset>
+                        Back
+                        <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘[</span>
+                    </RnDropdownMenuItem>
+                    <RnDropdownMenuItem Inset Disabled>
+                        Forward
+                        <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘]</span>
+                    </RnDropdownMenuItem>
+                    <RnDropdownMenuItem Inset>
+                        Reload
+                        <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘R</span>
+                    </RnDropdownMenuItem>
+                    <RnDropdownMenuSeparator />
+                    <RnDropdownMenuLabel Inset>People</RnDropdownMenuLabel>
+                    <RnDropdownMenuItem Inset>Pedro Duarte</RnDropdownMenuItem>
+                    <RnDropdownMenuItem Inset>Colm Tuite</RnDropdownMenuItem>
+                </ChildContent>
+            </RnContextMenu>,
+        Thumbnail: @<div class="flex h-[60px] w-[120px] items-center justify-center rounded-md border border-dashed text-xs text-muted-foreground">Right click</div>,
+        Code: @"<RnContextMenu>
+    <Trigger>
+        <div class=""flex h-[150px] w-[300px] items-center justify-center rounded-md border border-dashed text-sm"">
+            Right click here
+        </div>
+    </Trigger>
+    <ChildContent>
+        <RnDropdownMenuItem Inset>
+            Back
+            <span class=""ml-auto text-xs tracking-widest text-muted-foreground"">⌘[</span>
+        </RnDropdownMenuItem>
+        <RnDropdownMenuItem Inset Disabled>
+            Forward
+            <span class=""ml-auto text-xs tracking-widest text-muted-foreground"">⌘]</span>
+        </RnDropdownMenuItem>
+        <RnDropdownMenuItem Inset>
+            Reload
+            <span class=""ml-auto text-xs tracking-widest text-muted-foreground"">⌘R</span>
+        </RnDropdownMenuItem>
+        <RnDropdownMenuSeparator />
+        <RnDropdownMenuLabel Inset>People</RnDropdownMenuLabel>
+        <RnDropdownMenuItem Inset>Pedro Duarte</RnDropdownMenuItem>
+        <RnDropdownMenuItem Inset>Colm Tuite</RnDropdownMenuItem>
+    </ChildContent>
+</RnContextMenu>",
+        UsageCode: @"@using RnUI.Components.UI.ContextMenu
+
+<RnContextMenu>
+    <Trigger>Right click target</Trigger>
+    <ChildContent>
+        <RnDropdownMenuItem Inset>Back</RnDropdownMenuItem>
+        <RnDropdownMenuItem Inset>Reload</RnDropdownMenuItem>
+    </ChildContent>
+</RnContextMenu>"
+    );
+}
