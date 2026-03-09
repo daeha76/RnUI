@@ -1,8 +1,8 @@
-﻿@* RnTabs component - Blazor port of shadcn/ui Tabs *@
+@* RnTabs component - Blazor port of shadcn/ui Tabs *@
 
 <CascadingValue Value="this" IsFixed="false">
     <div data-slot="tabs" data-orientation="@OrientationValue"
-         class="@CssUtils.Cn("cn-tabs", Class)"
+         class="@CssUtils.Cn("cn-tabs group/tabs", Class)"
          @attributes="AdditionalAttributes">
         @ChildContent
     </div>

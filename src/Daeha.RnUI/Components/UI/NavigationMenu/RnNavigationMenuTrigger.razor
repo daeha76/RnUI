@@ -4,7 +4,7 @@
         data-slot="navigation-menu-trigger"
         data-state="@(IsOpen ? "open" : "closed")"
         aria-expanded="@IsOpen.ToString().ToLower()"
-        class="@CssUtils.Cn("cn-navigation-menu-trigger", Class)"
+        class="@CssUtils.Cn("cn-navigation-menu-trigger group", Class)"
         @onclick="HandleClick"
         @attributes="AdditionalAttributes">
     @ChildContent
