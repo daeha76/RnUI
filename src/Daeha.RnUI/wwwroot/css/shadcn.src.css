@@ -310,27 +310,27 @@
 
 /* Dialog */
 .cn-dialog-overlay {
-  @apply bg-black/80;
+  @apply bg-black/50;
 }
 
 .cn-dialog-content {
-  @apply grid w-full max-w-lg gap-4 rounded-lg border border-border bg-background p-6 shadow-lg sm:rounded-lg;
+  @apply grid w-full max-w-[calc(100%-2rem)] gap-4 rounded-lg border bg-background p-6 shadow-lg outline-none sm:max-w-lg;
 }
 
 .cn-dialog-close {
-  @apply absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none;
+  @apply absolute top-4 right-4 rounded-xs opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4;
 }
 
 .cn-dialog-header {
-  @apply gap-1.5 text-center sm:text-left;
+  @apply flex flex-col gap-2 text-center sm:text-left;
 }
 
 .cn-dialog-footer {
-  @apply gap-2 sm:flex-row sm:justify-end;
+  @apply flex flex-col-reverse gap-2 sm:flex-row sm:justify-end;
 }
 
 .cn-dialog-title {
-  @apply text-lg font-semibold leading-none tracking-tight;
+  @apply text-lg leading-none font-semibold;
 }
 
 .cn-dialog-description {
@@ -339,19 +339,19 @@
 
 /* Sheet */
 .cn-sheet-overlay {
-  @apply bg-black/80;
+  @apply bg-black/50;
 }
 
 .cn-sheet-content {
-  @apply fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out;
+  @apply fixed z-50 flex flex-col gap-4 bg-background shadow-lg transition ease-in-out;
 }
 
 .cn-sheet-content[data-side="top"] {
-  @apply inset-x-0 top-0 border-b;
+  @apply inset-x-0 top-0 h-auto border-b;
 }
 
 .cn-sheet-content[data-side="bottom"] {
-  @apply inset-x-0 bottom-0 border-t;
+  @apply inset-x-0 bottom-0 h-auto border-t;
 }
 
 .cn-sheet-content[data-side="left"] {
@@ -363,19 +363,19 @@
 }
 
 .cn-sheet-close {
-  @apply absolute right-4 top-4;
+  @apply absolute top-4 right-4 rounded-xs opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none;
 }
 
 .cn-sheet-header {
-  @apply gap-1.5 text-center sm:text-left;
+  @apply flex flex-col gap-1.5 p-4;
 }
 
 .cn-sheet-footer {
-  @apply gap-2 sm:flex-row sm:justify-end;
+  @apply mt-auto flex flex-col gap-2 p-4;
 }
 
 .cn-sheet-title {
-  @apply text-lg font-semibold text-foreground;
+  @apply font-semibold text-foreground;
 }
 
 .cn-sheet-description {
@@ -786,19 +786,19 @@
 
 /* Alert Dialog */
 .cn-alert-dialog-overlay {
-  @apply fixed inset-0 z-50 bg-black/80;
+  @apply fixed inset-0 z-50 bg-black/50;
 }
 
 .cn-alert-dialog-content {
-  @apply fixed left-1/2 top-1/2 z-50 grid w-full max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 border border-border bg-background p-6 shadow-lg sm:rounded-lg;
+  @apply fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border bg-background p-6 shadow-lg duration-200 sm:max-w-lg;
 }
 
 .cn-alert-dialog-header {
-  @apply flex flex-col space-y-2 text-center sm:text-left;
+  @apply flex flex-col gap-2 text-center sm:text-left;
 }
 
 .cn-alert-dialog-footer {
-  @apply flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2;
+  @apply flex flex-col-reverse gap-2 sm:flex-row sm:justify-end;
 }
 
 .cn-alert-dialog-title {

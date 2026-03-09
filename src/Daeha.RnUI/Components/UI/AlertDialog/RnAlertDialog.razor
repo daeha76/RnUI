@@ -1,22 +1,22 @@
-@* RnAlertDialog component - Blazor port of shadcn/ui RnAlertDialog *@
+@* RnAlertDialog component - Blazor port of shadcn/ui AlertDialog *@
 @implements IAsyncDisposable
 @inject RnUIInteropService Interop
 
 @if (Open)
 {
     <div data-slot="alert-dialog">
-        @* Overlay - fixed backdrop *@
+        @* Overlay *@
         <div data-slot="alert-dialog-overlay"
-             class="fixed inset-0 z-50 bg-black/80" style="backdrop-filter: blur(4px);"></div>
+             class="cn-alert-dialog-overlay"></div>
 
-        @* Content - centered dialog panel *@
+        @* Content *@
         <div @ref="_contentRef"
              data-slot="alert-dialog-content"
              role="alertdialog"
              aria-modal="true"
              aria-labelledby="@(_id + "-title")"
              id="@_id"
-             class="@CssUtils.Cn("fixed left-1/2 top-1/2 z-50 grid w-full max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 border border-border bg-background p-6 shadow-lg sm:rounded-lg duration-200", Class)"
+             class="@CssUtils.Cn("cn-alert-dialog-content", Class)"
              @attributes="AdditionalAttributes">
             @ChildContent
         </div>

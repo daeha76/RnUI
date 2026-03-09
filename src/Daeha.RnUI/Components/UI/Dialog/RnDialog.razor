@@ -1,4 +1,4 @@
-@* RnDialog component - Blazor port of shadcn/ui RnDialog *@
+@* RnDialog component - Blazor port of shadcn/ui Dialog *@
 @implements IAsyncDisposable
 @inject RnUIInteropService Interop
 
@@ -7,8 +7,7 @@
     <div data-slot="dialog">
         @* Overlay *@
         <div data-slot="dialog-overlay"
-             class="cn-dialog-overlay fixed inset-0 isolate z-50 backdrop-blur-sm"
-             style="backdrop-filter: blur(4px);"
+             class="cn-dialog-overlay fixed inset-0 z-50"
              @onclick="HandleOverlayClick"></div>
 
         @* Content *@
@@ -18,21 +17,22 @@
              aria-modal="true"
              aria-labelledby="@(_id + "-title")"
              id="@_id"
-             class="@CssUtils.Cn("cn-dialog-content fixed top-1/2 left-1/2 z-50 w-full -translate-x-1/2 -translate-y-1/2 outline-none", Class)"
+             class="@CssUtils.Cn("cn-dialog-content fixed top-[50%] left-[50%] z-50 w-full translate-x-[-50%] translate-y-[-50%] duration-200", Class)"
              @attributes="AdditionalAttributes">
             @ChildContent
 
             @if (ShowCloseButton)
             {
-                <RnButton type="button" data-slot="dialog-close"
-                        class="cn-dialog-close absolute right-4 top-4"
+                <button type="button" data-slot="dialog-close"
+                        class="cn-dialog-close"
                         @onclick="Close">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="size-4">
                         <path d="M18 6 6 18" /><path d="m6 6 12 12" />
                     </svg>
                     <span class="sr-only">Close</span>
-                </RnButton>
+                </button>
             }
         </div>
     </div>
