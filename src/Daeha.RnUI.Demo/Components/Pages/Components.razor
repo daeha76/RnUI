@@ -68,7 +68,6 @@ else
     private bool _collapsibleOpen;
     private string? _selectValue;
     private string? _radioValue = "option-1";
-    private bool _togglePressed;
     private int _currentPage = 1;
 
     // State for new component demos
@@ -338,12 +337,18 @@ else
         ),
 
         new("Checkbox", "checkbox", "A control that allows toggling between checked and unchecked.",
-            @<div class="space-y-4">
-                <div class="flex items-center space-x-2">
-                    <RnCheckbox @bind-Checked="_checkboxValue" />
-                    <RnLabel>Accept terms and conditions</RnLabel>
+            @<div class="space-y-6">
+                <div class="items-top flex space-x-2">
+                    <RnCheckbox id="terms1" @bind-Checked="_checkboxValue" />
+                    <div class="grid gap-1.5 leading-none">
+                        <RnLabel For="terms1">Accept terms and conditions</RnLabel>
+                        <p class="text-sm text-muted-foreground">You agree to our Terms of Service and Privacy Policy.</p>
+                    </div>
                 </div>
-                <p class="text-sm text-muted-foreground">Checked: @_checkboxValue</p>
+                <div class="flex items-center space-x-2">
+                    <RnCheckbox id="terms2" Disabled="true" />
+                    <RnLabel For="terms2">Accept terms and conditions</RnLabel>
+                </div>
             </div>
         ),
 
@@ -860,12 +865,9 @@ else
         ),
 
         new("Switch", "switch", "A toggle control for switching between two states.",
-            @<div class="space-y-4">
-                <div class="flex items-center space-x-2">
-                    <RnSwitch @bind-Checked="_switchValue" />
-                    <RnLabel>Enable notifications</RnLabel>
-                </div>
-                <p class="text-sm text-muted-foreground">Enabled: @_switchValue</p>
+            @<div class="flex items-center space-x-2">
+                <RnSwitch id="airplane-mode" @bind-Checked="_switchValue" />
+                <RnLabel For="airplane-mode">Airplane Mode</RnLabel>
             </div>
         ),
 
@@ -955,24 +957,25 @@ else
         ),
 
         new("Toggle", "toggle", "A two-state button that can be on or off.",
-            @<div class="space-y-4">
-                <div class="flex gap-4">
-                    <RnToggle @bind-Pressed="_togglePressed">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>
-                        </svg>
-                        Bold
-                    </RnToggle>
-                    <RnToggle Variant="ToggleVariant.Outline">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="19" x2="10" y1="4" y2="4"/><line x1="14" x2="5" y1="20" y2="20"/><line x1="15" x2="9" y1="4" y2="20"/>
-                        </svg>
-                        Italic
-                    </RnToggle>
-                </div>
-                <p class="text-sm text-muted-foreground">Bold pressed: @_togglePressed</p>
+            @<div class="flex gap-4">
+                <RnToggle aria-label="Toggle bold">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>
+                    </svg>
+                </RnToggle>
+                <RnToggle Variant="ToggleVariant.Outline" aria-label="Toggle italic">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" x2="10" y1="4" y2="4"/><line x1="14" x2="5" y1="20" y2="20"/><line x1="15" x2="9" y1="4" y2="20"/>
+                    </svg>
+                </RnToggle>
+                <RnToggle aria-label="Toggle underline" Disabled="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 4v6a6 6 0 0 0 12 0V4"/><line x1="4" x2="20" y1="20" y2="20"/>
+                    </svg>
+                </RnToggle>
             </div>
         ),
 

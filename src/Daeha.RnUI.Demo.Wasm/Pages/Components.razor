@@ -99,7 +99,7 @@ else
     private bool _collapsibleOpen;
     private string? _selectValue;
     private string? _radioValue = "option-1";
-    private bool _togglePressed;
+
     private int _currentPage = 1;
     private DateTime? _calendarDate;
     private DateTime? _datePickerValue;
@@ -677,28 +677,38 @@ else
 
         // ==================== Checkbox ====================
         new("Checkbox", "checkbox", "A control that allows the user to toggle between checked and not checked.",
-            Demo: @<div class="space-y-4">
-                <div class="flex items-center space-x-2">
-                    <RnCheckbox @bind-Checked="_checkboxValue" />
-                    <RnLabel>Accept terms and conditions</RnLabel>
+            Demo: @<div class="flex flex-col gap-6">
+                <div class="flex items-center gap-3">
+                    <RnCheckbox id="terms" @bind-Checked="_checkboxValue" />
+                    <RnLabel For="terms">Accept terms and conditions</RnLabel>
                 </div>
-                <p class="text-sm text-muted-foreground">Checked: @_checkboxValue</p>
+                <div class="flex items-start gap-3">
+                    <RnCheckbox id="terms-2" Checked="true" />
+                    <div class="grid gap-2">
+                        <RnLabel For="terms-2">Accept terms and conditions</RnLabel>
+                        <p class="text-sm text-muted-foreground">
+                            By clicking this checkbox, you agree to the terms and conditions.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <RnCheckbox id="toggle-disabled" Disabled="true" />
+                    <RnLabel For="toggle-disabled">Enable notifications</RnLabel>
+                </div>
             </div>,
             Thumbnail: @<div class="flex items-center gap-2">
                 <RnCheckbox Checked="true" />
                 <span class="text-xs">Checked</span>
             </div>,
-            Code: @"<div class=""flex items-center space-x-2"">
-    <RnCheckbox @bind-Checked=""_checked"" />
-    <RnLabel>Accept terms and conditions</RnLabel>
+            Code: @"<div class=""flex items-center gap-3"">
+    <RnCheckbox id=""terms"" @bind-Checked=""_checked"" />
+    <RnLabel For=""terms"">Accept terms and conditions</RnLabel>
 </div>
 
 @code {
     private bool _checked;
 }",
-            UsageCode: @"@using RnUI.Components.UI.Checkbox
-
-<RnCheckbox @bind-Checked=""_checked"" />
+            UsageCode: @"<RnCheckbox @bind-Checked=""_checked"" />
 
 @code {
     private bool _checked;
@@ -1859,28 +1869,23 @@ else
 
         // ==================== Switch ====================
         new("Switch", "switch", "A control that allows the user to toggle between a checked and not checked state.",
-            Demo: @<div class="space-y-4">
-                <div class="flex items-center space-x-2">
-                    <RnSwitch @bind-Checked="_switchValue" />
-                    <RnLabel>Enable notifications</RnLabel>
-                </div>
-                <p class="text-sm text-muted-foreground">Enabled: @_switchValue</p>
+            Demo: @<div class="flex items-center space-x-2">
+                <RnSwitch id="airplane-mode" @bind-Checked="_switchValue" />
+                <RnLabel For="airplane-mode">Airplane Mode</RnLabel>
             </div>,
             Thumbnail: @<div class="flex items-center gap-2">
                 <RnSwitch Checked="true" />
                 <span class="text-xs">On</span>
             </div>,
             Code: @"<div class=""flex items-center space-x-2"">
-    <RnSwitch @bind-Checked=""_checked"" />
-    <RnLabel>Enable notifications</RnLabel>
+    <RnSwitch id=""airplane-mode"" @bind-Checked=""_checked"" />
+    <RnLabel For=""airplane-mode"">Airplane Mode</RnLabel>
 </div>
 
 @code {
     private bool _checked;
 }",
-            UsageCode: @"@using RnUI.Components.UI.Switch
-
-<RnSwitch @bind-Checked=""_checked"" />
+            UsageCode: @"<RnSwitch @bind-Checked=""_checked"" />
 
 @code {
     private bool _checked;
@@ -2072,16 +2077,28 @@ else
 
         // ==================== Toggle ====================
         new("Toggle", "toggle", "A two-state button that can be either on or off.",
-            Demo: @<div class="space-y-4">
-                <div class="flex gap-4">
-                    <RnToggle @bind-Pressed="_togglePressed">
+            Demo: @<div class="space-y-6">
+                <div class="flex flex-col items-start gap-4">
+                    <p class="text-sm font-medium">Default</p>
+                    <RnToggle aria-label="Toggle bold">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>
                         </svg>
-                        Bold
                     </RnToggle>
-                    <RnToggle Variant="ToggleVariant.Outline">
+                </div>
+                <div class="flex flex-col items-start gap-4">
+                    <p class="text-sm font-medium">Outline</p>
+                    <RnToggle Variant="ToggleVariant.Outline" aria-label="Toggle italic">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" x2="10" y1="4" y2="4"/><line x1="14" x2="5" y1="20" y2="20"/><line x1="15" x2="9" y1="4" y2="20"/>
+                        </svg>
+                    </RnToggle>
+                </div>
+                <div class="flex flex-col items-start gap-4">
+                    <p class="text-sm font-medium">With Text</p>
+                    <RnToggle aria-label="Toggle italic">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="19" x2="10" y1="4" y2="4"/><line x1="14" x2="5" y1="20" y2="20"/><line x1="15" x2="9" y1="4" y2="20"/>
@@ -2089,18 +2106,43 @@ else
                         Italic
                     </RnToggle>
                 </div>
-                <p class="text-sm text-muted-foreground">Bold pressed: @_togglePressed</p>
+                <div class="flex flex-col items-start gap-4">
+                    <p class="text-sm font-medium">Disabled</p>
+                    <RnToggle aria-label="Toggle underline" Disabled="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 4v6a6 6 0 0 0 12 0V4"/><line x1="4" x2="20" y1="20" y2="20"/>
+                        </svg>
+                    </RnToggle>
+                </div>
             </div>,
-            Thumbnail: @<RnToggle Pressed="true">Bold</RnToggle>,
-            Code: @"<RnToggle @bind-Pressed=""_pressed"">Bold</RnToggle>
-<RnToggle Variant=""ToggleVariant.Outline"">Italic</RnToggle>
+            Thumbnail: @<RnToggle Pressed="true" aria-label="Toggle bold">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>
+                </svg>
+            </RnToggle>,
+            Code: @"<RnToggle aria-label=""Toggle bold"">
+    <BoldIcon />
+</RnToggle>
 
-@code {
-    private bool _pressed;
-}",
+<RnToggle Variant=""ToggleVariant.Outline"" aria-label=""Toggle italic"">
+    <ItalicIcon />
+</RnToggle>
+
+<RnToggle aria-label=""Toggle italic"">
+    <ItalicIcon />
+    Italic
+</RnToggle>
+
+<RnToggle aria-label=""Toggle underline"" Disabled=""true"">
+    <UnderlineIcon />
+</RnToggle>",
             UsageCode: @"@using RnUI.Components.UI.Toggle
 
-<RnToggle @bind-Pressed=""_pressed"">Toggle</RnToggle>
+<RnToggle @bind-Pressed=""_pressed"" aria-label=""Toggle bold"">
+    <BoldIcon />
+</RnToggle>
 
 @code {
     private bool _pressed;

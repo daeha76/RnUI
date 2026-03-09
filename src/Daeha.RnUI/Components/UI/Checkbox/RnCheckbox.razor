@@ -1,23 +1,23 @@
-﻿@* RnCheckbox component - Blazor port of shadcn/ui RnCheckbox *@
+@* RnCheckbox component - Blazor port of shadcn/ui Checkbox *@
 
-<RnButton type="button" role="checkbox"
+<button type="button" role="checkbox"
         data-slot="checkbox"
+        data-state="@(Checked ? "checked" : "unchecked")"
         aria-checked="@Checked.ToString().ToLower()"
-        data-checked="@(Checked ? "" : null)"
         class="@ComputedClass"
-        disabled="@Disabled"
+        disabled="@(Disabled ? true : (object?)null)"
         @onclick="Toggle"
         @attributes="AdditionalAttributes">
     @if (Checked)
     {
-        <span data-slot="checkbox-indicator" class="cn-checkbox-indicator grid place-content-center text-current">
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <span data-slot="checkbox-indicator" class="cn-checkbox-indicator">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="size-3.5">
                 <polyline points="20 6 9 17 4 12" />
             </svg>
         </span>
     }
-</RnButton>
+</button>
 
 @code {
     [Parameter] public bool Checked { get; set; }
@@ -27,7 +27,7 @@
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
     private string ComputedClass => CssUtils.Cn(
-        "cn-checkbox peer relative shrink-0 outline-none disabled:cursor-not-allowed disabled:opacity-50",
+        "cn-checkbox",
         Class
     );
 
