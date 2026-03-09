@@ -1,9 +1,12 @@
 @* RnDropdownMenuItem component *@
 
-<div data-slot="dropdown-menu-item" data-variant="@Variant"
+<div data-slot="dropdown-menu-item"
+     data-variant="@(Variant != "default" ? Variant : null)"
+     data-disabled="@(Disabled ? "" : null)"
+     data-inset="@(Inset ? "" : null)"
      role="menuitem"
      tabindex="-1"
-     class="@CssUtils.Cn("cn-dropdown-menu-item group/dropdown-menu-item relative flex cursor-default items-center outline-none select-none", Disabled ? "pointer-events-none opacity-50" : "", Class)"
+     class="@CssUtils.Cn("cn-dropdown-menu-item", Class)"
      @onclick="HandleClick"
      @attributes="AdditionalAttributes">
     @ChildContent

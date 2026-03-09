@@ -13,6 +13,7 @@
         @* Content *@
         <div @ref="_contentRef"
              data-slot="drawer-content"
+             data-direction="@DirectionValue"
              role="dialog"
              aria-modal="true"
              aria-labelledby="@(_id + "-title")"
@@ -34,6 +35,9 @@
     /// <summary>Callback when open state changes.</summary>
     [Parameter] public EventCallback<bool> OpenChanged { get; set; }
 
+    /// <summary>Direction from which the drawer slides in.</summary>
+    [Parameter] public Side Direction { get; set; } = Side.Bottom;
+
     /// <summary>Whether clicking the overlay closes the drawer.</summary>
     [Parameter] public bool CloseOnOverlayClick { get; set; } = true;
 
@@ -44,6 +48,15 @@
     [Parameter] public string? OverlayClass { get; set; }
 
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string DirectionValue => Direction switch
+    {
+        Side.Top => "top",
+        Side.Bottom => "bottom",
+        Side.Left => "left",
+        Side.Right => "right",
+        _ => "bottom"
+    };
 
     private readonly string _id = Guid.NewGuid().ToString("N")[..8];
     private ElementReference _contentRef;

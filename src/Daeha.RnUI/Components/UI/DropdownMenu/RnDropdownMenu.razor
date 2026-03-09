@@ -1,4 +1,4 @@
-@* RnDropdownMenu component - Blazor port of shadcn/ui RnDropdownMenu *@
+@* RnDropdownMenu component - Blazor port of shadcn/ui DropdownMenu *@
 @implements IAsyncDisposable
 @inject RnUIInteropService Interop
 
@@ -15,7 +15,7 @@
         <div @ref="_contentRef"
              data-slot="dropdown-menu-content"
              role="menu"
-             class="@CssUtils.Cn("cn-dropdown-menu-content absolute z-50 min-w-[8rem] origin-top-right", Class)"
+             class="@CssUtils.Cn("cn-dropdown-menu-content absolute", Class)"
              style="@PositionUtils.GetPositionStyle(Side, Align)">
             @ChildContent
         </div>

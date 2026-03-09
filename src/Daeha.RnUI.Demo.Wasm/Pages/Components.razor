@@ -105,6 +105,7 @@ else
     private DateTime? _datePickerValue;
     private string? _comboboxValue;
     private bool _drawerOpen;
+    private int _drawerGoal = 350;
     private string? _toggleGroupValue = "center";
     private string _otpValue = "";
 
@@ -889,11 +890,22 @@ else
                     </div>
                 </Trigger>
                 <ChildContent>
-                    <RnDropdownMenuLabel>Actions</RnDropdownMenuLabel>
+                    <RnDropdownMenuItem Inset>
+                        Back
+                        <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘[</span>
+                    </RnDropdownMenuItem>
+                    <RnDropdownMenuItem Inset Disabled>
+                        Forward
+                        <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘]</span>
+                    </RnDropdownMenuItem>
+                    <RnDropdownMenuItem Inset>
+                        Reload
+                        <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘R</span>
+                    </RnDropdownMenuItem>
                     <RnDropdownMenuSeparator />
-                    <RnDropdownMenuItem>Back</RnDropdownMenuItem>
-                    <RnDropdownMenuItem>Forward</RnDropdownMenuItem>
-                    <RnDropdownMenuItem>Reload</RnDropdownMenuItem>
+                    <RnDropdownMenuLabel Inset>People</RnDropdownMenuLabel>
+                    <RnDropdownMenuItem Inset>Pedro Duarte</RnDropdownMenuItem>
+                    <RnDropdownMenuItem Inset>Colm Tuite</RnDropdownMenuItem>
                 </ChildContent>
             </RnContextMenu>,
             Thumbnail: @<div class="flex h-[60px] w-[120px] items-center justify-center rounded-md border border-dashed text-xs text-muted-foreground">Right click</div>,
@@ -904,10 +916,22 @@ else
         </div>
     </Trigger>
     <ChildContent>
-        <RnDropdownMenuLabel>Actions</RnDropdownMenuLabel>
+        <RnDropdownMenuItem Inset>
+            Back
+            <span class=""ml-auto text-xs tracking-widest text-muted-foreground"">⌘[</span>
+        </RnDropdownMenuItem>
+        <RnDropdownMenuItem Inset Disabled>
+            Forward
+            <span class=""ml-auto text-xs tracking-widest text-muted-foreground"">⌘]</span>
+        </RnDropdownMenuItem>
+        <RnDropdownMenuItem Inset>
+            Reload
+            <span class=""ml-auto text-xs tracking-widest text-muted-foreground"">⌘R</span>
+        </RnDropdownMenuItem>
         <RnDropdownMenuSeparator />
-        <RnDropdownMenuItem>Back</RnDropdownMenuItem>
-        <RnDropdownMenuItem>Forward</RnDropdownMenuItem>
+        <RnDropdownMenuLabel Inset>People</RnDropdownMenuLabel>
+        <RnDropdownMenuItem Inset>Pedro Duarte</RnDropdownMenuItem>
+        <RnDropdownMenuItem Inset>Colm Tuite</RnDropdownMenuItem>
     </ChildContent>
 </RnContextMenu>",
             UsageCode: @"@using RnUI.Components.UI.ContextMenu
@@ -915,7 +939,8 @@ else
 <RnContextMenu>
     <Trigger>Right click target</Trigger>
     <ChildContent>
-        <RnDropdownMenuItem>Action</RnDropdownMenuItem>
+        <RnDropdownMenuItem Inset>Back</RnDropdownMenuItem>
+        <RnDropdownMenuItem Inset>Reload</RnDropdownMenuItem>
     </ChildContent>
 </RnContextMenu>"
         ),
@@ -1012,48 +1037,82 @@ else
             Demo: @<div>
                 <RnButton Variant="ButtonVariant.Outline" OnClick="() => _drawerOpen = true">Open Drawer</RnButton>
                 <RnDrawer @bind-Open="_drawerOpen">
-                    <RnDrawerContent>
+                    <div class="mx-auto w-full max-w-sm">
                         <RnDrawerHeader>
                             <RnDrawerTitle>Move Goal</RnDrawerTitle>
                             <RnDrawerDescription>Set your daily activity goal.</RnDrawerDescription>
                         </RnDrawerHeader>
-                        <div class="p-4">
-                            <RnProgress Value="66" Class="w-full" />
+                        <div class="p-4 pb-0">
+                            <div class="flex items-center justify-center space-x-2">
+                                <RnButton Variant="ButtonVariant.Outline" Size="ButtonSize.Icon" Class="h-8 w-8 shrink-0 rounded-full" OnClick="() => _drawerGoal = Math.Max(200, _drawerGoal - 10)" Disabled="@(_drawerGoal <= 200)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
+                                    <span class="sr-only">Decrease</span>
+                                </RnButton>
+                                <div class="flex-1 text-center">
+                                    <div class="text-7xl font-bold tracking-tighter">@_drawerGoal</div>
+                                    <div class="text-[0.70rem] text-muted-foreground uppercase">Calories/day</div>
+                                </div>
+                                <RnButton Variant="ButtonVariant.Outline" Size="ButtonSize.Icon" Class="h-8 w-8 shrink-0 rounded-full" OnClick="() => _drawerGoal = Math.Min(400, _drawerGoal + 10)" Disabled="@(_drawerGoal >= 400)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                    <span class="sr-only">Increase</span>
+                                </RnButton>
+                            </div>
                         </div>
                         <RnDrawerFooter>
                             <RnButton OnClick="() => _drawerOpen = false">Submit</RnButton>
                             <RnButton Variant="ButtonVariant.Outline" OnClick="() => _drawerOpen = false">Cancel</RnButton>
                         </RnDrawerFooter>
-                    </RnDrawerContent>
+                    </div>
                 </RnDrawer>
             </div>,
             Thumbnail: @<RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">Open Drawer</RnButton>,
-            Code: @"<RnButton OnClick=""() => _open = true"">Open Drawer</RnButton>
+            Code: @"<RnButton Variant=""ButtonVariant.Outline"" OnClick=""() => _open = true"">Open Drawer</RnButton>
 <RnDrawer @bind-Open=""_open"">
-    <RnDrawerContent>
+    <div class=""mx-auto w-full max-w-sm"">
         <RnDrawerHeader>
-            <RnDrawerTitle>Title</RnDrawerTitle>
-            <RnDrawerDescription>Description</RnDrawerDescription>
+            <RnDrawerTitle>Move Goal</RnDrawerTitle>
+            <RnDrawerDescription>Set your daily activity goal.</RnDrawerDescription>
         </RnDrawerHeader>
-        <div class=""p-4"">Content</div>
+        <div class=""p-4 pb-0"">
+            <div class=""flex items-center justify-center space-x-2"">
+                <RnButton Variant=""ButtonVariant.Outline"" Size=""ButtonSize.Icon""
+                    Class=""h-8 w-8 shrink-0 rounded-full""
+                    OnClick=""() => _goal = Math.Max(200, _goal - 10)"">
+                    −
+                </RnButton>
+                <div class=""flex-1 text-center"">
+                    <div class=""text-7xl font-bold tracking-tighter"">@_goal</div>
+                    <div class=""text-[0.70rem] text-muted-foreground uppercase"">Calories/day</div>
+                </div>
+                <RnButton Variant=""ButtonVariant.Outline"" Size=""ButtonSize.Icon""
+                    Class=""h-8 w-8 shrink-0 rounded-full""
+                    OnClick=""() => _goal = Math.Min(400, _goal + 10)"">
+                    +
+                </RnButton>
+            </div>
+        </div>
         <RnDrawerFooter>
             <RnButton OnClick=""() => _open = false"">Submit</RnButton>
+            <RnButton Variant=""ButtonVariant.Outline"" OnClick=""() => _open = false"">Cancel</RnButton>
         </RnDrawerFooter>
-    </RnDrawerContent>
+    </div>
 </RnDrawer>
 
 @code {
     private bool _open;
+    private int _goal = 350;
 }",
             UsageCode: @"@using RnUI.Components.UI.Drawer
 
 <RnDrawer @bind-Open=""_open"">
-    <RnDrawerContent>
-        <RnDrawerHeader>
-            <RnDrawerTitle>Title</RnDrawerTitle>
-        </RnDrawerHeader>
-        Content
-    </RnDrawerContent>
+    <RnDrawerHeader>
+        <RnDrawerTitle>Title</RnDrawerTitle>
+        <RnDrawerDescription>Description</RnDrawerDescription>
+    </RnDrawerHeader>
+    Content
+    <RnDrawerFooter>
+        <RnButton>Submit</RnButton>
+    </RnDrawerFooter>
 </RnDrawer>
 
 @code {
@@ -1065,30 +1124,72 @@ else
         new("Dropdown Menu", "dropdown-menu", "Displays a menu to the user triggered by a button.",
             Demo: @<RnDropdownMenu>
                 <Trigger>
-                    <RnButton Variant="ButtonVariant.Outline">Open Menu</RnButton>
+                    <RnButton Variant="ButtonVariant.Outline">Open</RnButton>
                 </Trigger>
                 <ChildContent>
                     <RnDropdownMenuLabel>My Account</RnDropdownMenuLabel>
                     <RnDropdownMenuSeparator />
-                    <RnDropdownMenuItem>Profile</RnDropdownMenuItem>
-                    <RnDropdownMenuItem>Settings</RnDropdownMenuItem>
-                    <RnDropdownMenuItem>Billing</RnDropdownMenuItem>
+                    <RnDropdownMenuItem>
+                        Profile
+                        <span class="ml-auto text-xs tracking-widest text-muted-foreground">⇧⌘P</span>
+                    </RnDropdownMenuItem>
+                    <RnDropdownMenuItem>
+                        Billing
+                        <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘B</span>
+                    </RnDropdownMenuItem>
+                    <RnDropdownMenuItem>
+                        Settings
+                        <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘S</span>
+                    </RnDropdownMenuItem>
+                    <RnDropdownMenuItem>
+                        Keyboard shortcuts
+                        <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘K</span>
+                    </RnDropdownMenuItem>
                     <RnDropdownMenuSeparator />
-                    <RnDropdownMenuItem>Log out</RnDropdownMenuItem>
+                    <RnDropdownMenuItem>Team</RnDropdownMenuItem>
+                    <RnDropdownMenuItem>
+                        New Team
+                        <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘+T</span>
+                    </RnDropdownMenuItem>
+                    <RnDropdownMenuSeparator />
+                    <RnDropdownMenuItem>GitHub</RnDropdownMenuItem>
+                    <RnDropdownMenuItem>Support</RnDropdownMenuItem>
+                    <RnDropdownMenuItem Disabled>API</RnDropdownMenuItem>
+                    <RnDropdownMenuSeparator />
+                    <RnDropdownMenuItem>
+                        Log out
+                        <span class="ml-auto text-xs tracking-widest text-muted-foreground">⇧⌘Q</span>
+                    </RnDropdownMenuItem>
                 </ChildContent>
             </RnDropdownMenu>,
             Thumbnail: @<RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">Menu</RnButton>,
             Code: @"<RnDropdownMenu>
     <Trigger>
-        <RnButton Variant=""ButtonVariant.Outline"">Open Menu</RnButton>
+        <RnButton Variant=""ButtonVariant.Outline"">Open</RnButton>
     </Trigger>
     <ChildContent>
         <RnDropdownMenuLabel>My Account</RnDropdownMenuLabel>
         <RnDropdownMenuSeparator />
-        <RnDropdownMenuItem>Profile</RnDropdownMenuItem>
-        <RnDropdownMenuItem>Settings</RnDropdownMenuItem>
+        <RnDropdownMenuItem>
+            Profile
+            <span class=""ml-auto text-xs tracking-widest text-muted-foreground"">⇧⌘P</span>
+        </RnDropdownMenuItem>
+        <RnDropdownMenuItem>
+            Billing
+            <span class=""ml-auto text-xs tracking-widest text-muted-foreground"">⌘B</span>
+        </RnDropdownMenuItem>
+        <RnDropdownMenuItem>
+            Settings
+            <span class=""ml-auto text-xs tracking-widest text-muted-foreground"">⌘S</span>
+        </RnDropdownMenuItem>
         <RnDropdownMenuSeparator />
-        <RnDropdownMenuItem>Log out</RnDropdownMenuItem>
+        <RnDropdownMenuItem>Team</RnDropdownMenuItem>
+        <RnDropdownMenuItem Disabled>API</RnDropdownMenuItem>
+        <RnDropdownMenuSeparator />
+        <RnDropdownMenuItem>
+            Log out
+            <span class=""ml-auto text-xs tracking-widest text-muted-foreground"">⇧⌘Q</span>
+        </RnDropdownMenuItem>
     </ChildContent>
 </RnDropdownMenu>",
             UsageCode: @"@using RnUI.Components.UI.DropdownMenu
@@ -1098,7 +1199,10 @@ else
         <RnButton>Menu</RnButton>
     </Trigger>
     <ChildContent>
-        <RnDropdownMenuItem>Item</RnDropdownMenuItem>
+        <RnDropdownMenuLabel>My Account</RnDropdownMenuLabel>
+        <RnDropdownMenuSeparator />
+        <RnDropdownMenuItem>Profile</RnDropdownMenuItem>
+        <RnDropdownMenuItem Disabled>API</RnDropdownMenuItem>
     </ChildContent>
 </RnDropdownMenu>"
         ),

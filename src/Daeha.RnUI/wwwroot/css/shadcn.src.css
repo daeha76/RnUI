@@ -537,23 +537,23 @@
 
 /* Dropdown Menu */
 .cn-dropdown-menu-content {
-  @apply min-w-[8rem] rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md;
+  @apply z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md;
 }
 
 .cn-dropdown-menu-item {
-  @apply rounded-sm px-2 py-1.5 text-sm cursor-default hover:bg-accent hover:text-accent-foreground;
+  @apply relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground;
 }
 
 .cn-dropdown-menu-item[data-variant="destructive"] {
-  @apply text-destructive hover:bg-destructive/10;
+  @apply text-destructive focus:bg-destructive/10 focus:text-destructive dark:focus:bg-destructive/20;
 }
 
 .cn-dropdown-menu-label {
-  @apply px-2 py-1.5 text-sm font-semibold;
+  @apply px-2 py-1.5 text-sm font-medium data-[inset]:pl-8;
 }
 
 .cn-dropdown-menu-separator {
-  @apply -mx-1 my-1 h-px bg-muted;
+  @apply -mx-1 my-1 h-px bg-border;
 }
 
 .cn-dropdown-menu-shortcut {
@@ -561,11 +561,11 @@
 }
 
 .cn-dropdown-menu-checkbox-item {
-  @apply rounded-sm py-1.5 pl-8 pr-2 text-sm cursor-default hover:bg-accent hover:text-accent-foreground;
+  @apply relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4;
 }
 
 .cn-dropdown-menu-radio-item {
-  @apply rounded-sm py-1.5 pl-8 pr-2 text-sm cursor-default hover:bg-accent hover:text-accent-foreground;
+  @apply relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4;
 }
 
 .cn-dropdown-menu-item-indicator {
@@ -573,11 +573,11 @@
 }
 
 .cn-dropdown-menu-sub-trigger {
-  @apply rounded-sm px-2 py-1.5 text-sm cursor-default hover:bg-accent hover:text-accent-foreground;
+  @apply flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground;
 }
 
 .cn-dropdown-menu-sub-content {
-  @apply min-w-[8rem];
+  @apply z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-lg;
 }
 
 /* Navigation Menu */
@@ -811,11 +811,11 @@
 
 /* Context Menu */
 .cn-context-menu-content {
-  @apply z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md;
+  @apply z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md;
 }
 
 .cn-context-menu-item {
-  @apply relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground;
+  @apply relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground;
 }
 
 /* Hover Card */
@@ -974,19 +974,39 @@
 
 /* Drawer */
 .cn-drawer-overlay {
-  @apply fixed inset-0 z-50 bg-black/80;
+  @apply fixed inset-0 z-50 bg-black/50;
 }
 
 .cn-drawer-content {
-  @apply fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border bg-background;
+  @apply fixed z-50 flex h-auto flex-col bg-background;
+}
+
+.cn-drawer-content[data-direction="bottom"] {
+  @apply inset-x-0 bottom-0 mt-24 max-h-[80vh] rounded-t-lg border-t;
+}
+
+.cn-drawer-content[data-direction="top"] {
+  @apply inset-x-0 top-0 mb-24 max-h-[80vh] rounded-b-lg border-b;
+}
+
+.cn-drawer-content[data-direction="left"] {
+  @apply inset-y-0 left-0 w-3/4 border-r sm:max-w-sm;
+}
+
+.cn-drawer-content[data-direction="right"] {
+  @apply inset-y-0 right-0 w-3/4 border-l sm:max-w-sm;
 }
 
 .cn-drawer-handle {
-  @apply mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted;
+  @apply mx-auto mt-4 hidden h-2 w-[100px] shrink-0 rounded-full bg-muted;
+}
+
+.cn-drawer-content[data-direction="bottom"] .cn-drawer-handle {
+  @apply block;
 }
 
 .cn-drawer-header {
-  @apply grid gap-1.5 p-4 text-center sm:text-left;
+  @apply flex flex-col gap-1.5 p-4 text-center;
 }
 
 .cn-drawer-footer {
@@ -994,7 +1014,7 @@
 }
 
 .cn-drawer-title {
-  @apply text-lg font-semibold leading-none tracking-tight;
+  @apply font-semibold text-foreground;
 }
 
 .cn-drawer-description {
