@@ -1114,11 +1114,11 @@
 
 /* Form */
 .cn-form-item {
-  @apply space-y-2;
+  @apply grid gap-2;
 }
 
 .cn-form-label {
-  @apply text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70;
+  @apply text-sm font-medium leading-none data-[error=true]:text-destructive peer-disabled:cursor-not-allowed peer-disabled:opacity-70;
 }
 
 .cn-form-description {
@@ -1126,7 +1126,7 @@
 }
 
 .cn-form-message {
-  @apply text-sm font-medium text-destructive;
+  @apply text-sm text-destructive;
 }
 
 /* sr-only utility */

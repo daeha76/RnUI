@@ -1,4 +1,5 @@
 <label data-slot="form-label"
+       data-error="@(HasError ? "true" : null)"
        for="@For"
        class="@CssUtils.Cn("cn-form-label", Class)"
        @attributes="AdditionalAttributes">
@@ -10,6 +11,9 @@
 
     /// <summary>The 'for' attribute linking the label to an input by id.</summary>
     [Parameter] public string? For { get; set; }
+
+    /// <summary>Whether the associated field has a validation error.</summary>
+    [Parameter] public bool HasError { get; set; }
 
     /// <summary>Additional CSS classes.</summary>
     [Parameter] public string? Class { get; set; }
