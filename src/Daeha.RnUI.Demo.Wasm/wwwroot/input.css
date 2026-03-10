@@ -29,14 +29,12 @@
   to { height: 0; overflow: hidden; }
 }
 
-/*
- * 데모 전용 오버라이드 (라이브러리 기본값을 바꾸고 싶을 때만 여기에 추가):
- *
- * @theme {
- *   --color-brand: oklch(0.6 0.2 250);
- * }
- *
- * .dark {
- *   --color-brand: oklch(0.7 0.2 250);
- * }
- */
+/* container 기본 수평 패딩 (Tailwind v4는 자동 패딩 없음) */
+.container {
+  padding-inline: 1rem;
+}
+@media (width >= 1024px) {
+  .container {
+    padding-inline: 2rem;
+  }
+}

@@ -131,6 +131,35 @@ public sealed class RnUIInteropService : IAsyncDisposable
         catch (JSDisconnectedException) { }
     }
 
+    // ─── Keyboard Shortcut Listener ────────────────────────────────────────────
+
+    /// <summary>
+    /// Listens for Ctrl+B / Cmd+B and invokes <paramref name="methodName"/> on
+    /// <paramref name="dotNetRef"/> when pressed.
+    /// </summary>
+    public async ValueTask AddKeyboardShortcutListenerAsync<T>(
+        string id, DotNetObjectReference<T> dotNetRef, string methodName)
+        where T : class
+    {
+        try
+        {
+            var module = await _moduleTask.Value;
+            await module.InvokeVoidAsync("addKeyboardShortcutListener", id, dotNetRef, methodName);
+        }
+        catch (JSDisconnectedException) { }
+    }
+
+    /// <summary>Removes the keyboard shortcut listener registered for <paramref name="id"/>.</summary>
+    public async ValueTask RemoveKeyboardShortcutListenerAsync(string id)
+    {
+        try
+        {
+            var module = await _moduleTask.Value;
+            await module.InvokeVoidAsync("removeKeyboardShortcutListener", id);
+        }
+        catch (JSDisconnectedException) { }
+    }
+
     // ─── Dispose All ─────────────────────────────────────────────────────────
 
     /// <summary>Removes all JS listeners registered under <paramref name="id"/>.</summary>

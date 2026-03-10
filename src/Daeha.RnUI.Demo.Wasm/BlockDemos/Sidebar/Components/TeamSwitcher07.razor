@@ -1,0 +1,89 @@
+@* TeamSwitcher component for sidebar-07 block *@
+
+<RnSidebarMenu>
+    <RnSidebarMenuItem>
+        <RnDropdownMenu Side="Side.Bottom" Align="Alignment.Start">
+            <Trigger>
+                <RnSidebarMenuButton Size="SidebarMenuButtonSize.Lg"
+                                     Class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
+                    <div class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                        @_activeTeam.LogoFragment
+                    </div>
+                    <div class="grid flex-1 text-left text-sm leading-tight">
+                        <span class="truncate font-medium">@_activeTeam.Name</span>
+                        <span class="truncate text-xs">@_activeTeam.Plan</span>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="ml-auto">
+                        <path d="m7 15 5 5 5-5"/>
+                        <path d="m7 9 5-5 5 5"/>
+                    </svg>
+                </RnSidebarMenuButton>
+            </Trigger>
+            <ChildContent>
+                <RnDropdownMenuLabel Class="text-xs text-muted-foreground">
+                    Teams
+                </RnDropdownMenuLabel>
+                @for (var i = 0; i < _teams.Length; i++)
+                {
+                    var team = _teams[i];
+                    var index = i + 1;
+                    <RnDropdownMenuItem OnClick="() => _activeTeam = team" Class="gap-2 p-2">
+                        <div class="flex size-6 items-center justify-center rounded-md border">
+                            @team.LogoFragment
+                        </div>
+                        @team.Name
+                        <RnDropdownMenuShortcut>⌘@index</RnDropdownMenuShortcut>
+                    </RnDropdownMenuItem>
+                }
+                <RnDropdownMenuSeparator />
+                <RnDropdownMenuItem Class="gap-2 p-2">
+                    <div class="flex size-6 items-center justify-center rounded-md border bg-transparent">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14"/>
+                            <path d="M12 5v14"/>
+                        </svg>
+                    </div>
+                    <div class="font-medium text-muted-foreground">Add team</div>
+                </RnDropdownMenuItem>
+            </ChildContent>
+        </RnDropdownMenu>
+    </RnSidebarMenuItem>
+</RnSidebarMenu>
+
+@code {
+    private record TeamData(string Name, string Plan, RenderFragment LogoFragment);
+
+    private TeamData[] _teams = null!;
+    private TeamData _activeTeam = null!;
+
+    protected override void OnInitialized()
+    {
+        _teams =
+        [
+            new("Acme Inc", "Enterprise",
+                @<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="size-4 shrink-0">
+                    <path d="M3 3v18"/>
+                    <rect width="12" height="18" x="8" y="3" rx="2"/>
+                    <path d="M13 8h2"/><path d="M13 12h2"/><path d="M13 16h2"/>
+                </svg>),
+            new("Acme Corp.", "Startup",
+                @<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="size-4 shrink-0">
+                    <path d="M2 13a2 2 0 0 0 2-2V7a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0V4a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0V7a2 2 0 0 1 2-2"/>
+                </svg>),
+            new("Evil Corp.", "Free",
+                @<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="size-4 shrink-0">
+                    <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"/>
+                </svg>)
+        ];
+        _activeTeam = _teams[0];
+    }
+}

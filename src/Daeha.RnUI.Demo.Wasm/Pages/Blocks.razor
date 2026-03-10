@@ -1,7 +1,9 @@
 @page "/blocks"
 @page "/blocks/{Slug}"
+@layout Daeha.RnUI.Demo.Wasm.Layout.BlocksLayout
 @using Daeha.RnUI.Demo.Wasm.Models
 @using Daeha.RnUI.Demo.Wasm.BlockDemos.Login
+@using Daeha.RnUI.Demo.Wasm.BlockDemos.Sidebar
 
 <PageTitle>@(_currentBlock?.Name ?? "Blocks") - RnUI</PageTitle>
 
@@ -100,5 +102,6 @@ else
     private BlockDemo[] _blockDemos =>
     [
         Login01Demo.GetDemo(),
+        Sidebar07Demo.GetDemo(),
     ];
 }

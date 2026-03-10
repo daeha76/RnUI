@@ -1,40 +1,125 @@
-@* RnSidebar component - Blazor port of shadcn/ui RnSidebar *@
+@using RnUI.Components.UI.Sheet
 
-<aside data-slot="sidebar"
-       data-state="@(Open ? "open" : "closed")"
-       data-variant="@VariantValue"
-       class="@CssUtils.Cn("cn-sidebar", VariantClass, Class)"
-       style="--sidebar-width: @Width;"
-       @attributes="AdditionalAttributes">
-    @ChildContent
-</aside>
+@if (Collapsible == SidebarCollapsibleMode.None)
+{
+    @* Non-collapsible sidebar *@
+    <div data-slot="sidebar"
+         class="@CssUtils.Cn("cn-sidebar cn-sidebar-fixed", Class)"
+         @attributes="AdditionalAttributes">
+        @ChildContent
+    </div>
+}
+else if (Provider is not null && Provider.IsMobile)
+{
+    @* Mobile: Sheet overlay *@
+    <RnSheet Open="@Provider.OpenMobile" OpenChanged="OnMobileOpenChanged" Side="@SheetSide" ShowCloseButton="false">
+        <RnSheetHeader Class="sr-only">
+            <RnSheetTitle>Sidebar</RnSheetTitle>
+        </RnSheetHeader>
+        <div data-slot="sidebar"
+             data-mobile="true"
+             class="cn-sidebar cn-sidebar-mobile">
+            @ChildContent
+        </div>
+    </RnSheet>
+}
+else
+{
+    @* Desktop: gap div + fixed container *@
+    <div class="group peer hidden text-sidebar-foreground md:block"
+         data-state="@StateValue"
+         data-collapsible="@CollapsibleValue"
+         data-variant="@VariantValue"
+         data-side="@SideValue"
+         data-slot="sidebar">
+
+        @* Gap div for layout spacing *@
+        <div data-slot="sidebar-gap"
+             class="@GapClass" />
+
+        @* Fixed sidebar container *@
+        <div data-slot="sidebar-container"
+             class="@ContainerClass"
+             @attributes="AdditionalAttributes">
+            <div data-sidebar="sidebar"
+                 data-slot="sidebar-inner"
+                 class="@InnerClass">
+                @ChildContent
+            </div>
+        </div>
+    </div>
+}
 
 @code {
+    [CascadingParameter] public RnSidebarProvider? Provider { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
-    [Parameter] public bool Open { get; set; } = true;
-    [Parameter] public EventCallback<bool> OpenChanged { get; set; }
+    [Parameter] public SidebarCollapsibleMode Collapsible { get; set; } = SidebarCollapsibleMode.Offcanvas;
+    [Parameter] public SidebarSide Side { get; set; } = SidebarSide.Left;
     [Parameter] public SidebarVariant Variant { get; set; } = SidebarVariant.Default;
-    [Parameter] public string Width { get; set; } = "16rem";
     [Parameter] public string? Class { get; set; }
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    // Backward compat: standalone Open param when no Provider
+    [Parameter] public bool Open { get; set; } = true;
+    [Parameter] public EventCallback<bool> OpenChanged { get; set; }
+
+    private bool IsOpen => Provider is not null ? Provider.Open : Open;
+    private string StateValue => IsOpen ? "expanded" : "collapsed";
+
+    private string CollapsibleValue => IsOpen
+        ? ""
+        : Collapsible switch
+        {
+            SidebarCollapsibleMode.Icon => "icon",
+            SidebarCollapsibleMode.Offcanvas => "offcanvas",
+            _ => ""
+        };
 
     private string VariantValue => Variant switch
     {
         SidebarVariant.Floating => "floating",
         SidebarVariant.Inset => "inset",
-        _ => "default"
+        _ => "sidebar"
     };
 
-    private string VariantClass => Variant switch
+    private string SideValue => Side switch
     {
-        SidebarVariant.Floating => "cn-sidebar-variant-floating",
-        SidebarVariant.Inset => "cn-sidebar-variant-inset",
-        _ => ""
+        SidebarSide.Right => "right",
+        _ => "left"
     };
 
-    public async Task Toggle()
+    private Side SheetSide => Side switch
     {
-        Open = !Open;
-        await OpenChanged.InvokeAsync(Open);
+        SidebarSide.Right => RnUI.Components.UI.Side.Right,
+        _ => RnUI.Components.UI.Side.Left
+    };
+
+    private string GapClass => CssUtils.Cn(
+        "cn-sidebar-gap",
+        Variant is SidebarVariant.Floating or SidebarVariant.Inset
+            ? "cn-sidebar-gap-inset"
+            : null
+    );
+
+    private string ContainerClass => CssUtils.Cn(
+        "cn-sidebar-container",
+        Side == SidebarSide.Left ? "cn-sidebar-container-left" : "cn-sidebar-container-right",
+        Variant is SidebarVariant.Floating or SidebarVariant.Inset
+            ? "cn-sidebar-container-floating"
+            : "cn-sidebar-container-bordered",
+        Class
+    );
+
+    private string InnerClass => CssUtils.Cn(
+        "cn-sidebar-inner",
+        Variant == SidebarVariant.Floating
+            ? "cn-sidebar-inner-floating"
+            : null
+    );
+
+    private async Task OnMobileOpenChanged(bool value)
+    {
+        Provider?.SetOpenMobile(value);
+        await Task.CompletedTask;
     }
 }

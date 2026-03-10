@@ -1,0 +1,22 @@
+<button data-slot="sidebar-rail"
+        aria-label="Toggle Sidebar"
+        tabindex="-1"
+        title="Toggle Sidebar"
+        class="@CssUtils.Cn("cn-sidebar-rail", Class)"
+        @onclick="HandleClick"
+        @attributes="AdditionalAttributes">
+</button>
+
+@code {
+    [CascadingParameter] public RnSidebarProvider? Provider { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private async Task HandleClick()
+    {
+        if (Provider is not null)
+        {
+            await Provider.ToggleSidebar();
+        }
+    }
+}

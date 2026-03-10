@@ -1,17 +1,23 @@
 @inject NavigationManager Navigation
 
-<a data-slot="sidebar-menu-button"
-   data-active="@(IsActive ? "true" : null)"
-   data-size="@SizeValue"
-   href="@Href"
-   title="@Tooltip"
-   @onclick="HandleClick" @onclick:preventDefault="@(!string.IsNullOrEmpty(Href))"
-   class="@CssUtils.Cn("cn-sidebar-menu-button peer/menu-button", SizeClass, Class)"
-   @attributes="AdditionalAttributes">
-    @ChildContent
-</a>
+@if (!string.IsNullOrEmpty(Tooltip) && Provider is not null && Provider.State == "collapsed")
+{
+    <RnUI.Components.UI.Tooltip.RnTooltip Side="RnUI.Components.UI.Side.Right">
+        <Trigger>
+            @ButtonContent
+        </Trigger>
+        <ChildContent>
+            @Tooltip
+        </ChildContent>
+    </RnUI.Components.UI.Tooltip.RnTooltip>
+}
+else
+{
+    @ButtonContent
+}
 
 @code {
+    [CascadingParameter] public RnSidebarProvider? Provider { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public string? Href { get; set; }
     [Parameter] public bool IsActive { get; set; }
@@ -31,7 +37,48 @@
     {
         SidebarMenuButtonSize.Sm => "cn-sidebar-menu-button-size-sm",
         SidebarMenuButtonSize.Lg => "cn-sidebar-menu-button-size-lg",
-        _ => ""
+        _ => "cn-sidebar-menu-button-size-default"
+    };
+
+    private string ComputedClass => CssUtils.Cn(
+        "cn-sidebar-menu-button peer/menu-button",
+        SizeClass,
+        Class
+    );
+
+    private RenderFragment ButtonContent => builder =>
+    {
+        if (!string.IsNullOrEmpty(Href))
+        {
+            builder.OpenElement(0, "a");
+            builder.AddAttribute(1, "data-slot", "sidebar-menu-button");
+            builder.AddAttribute(2, "data-active", IsActive ? "true" : null);
+            builder.AddAttribute(3, "data-size", SizeValue);
+            builder.AddAttribute(4, "href", Href);
+            builder.AddAttribute(5, "class", ComputedClass);
+            builder.AddAttribute(6, "onclick", EventCallback.Factory.Create(this, HandleClick));
+            builder.AddEventPreventDefaultAttribute(7, "onclick", true);
+            if (AdditionalAttributes is not null)
+            {
+                builder.AddMultipleAttributes(8, AdditionalAttributes);
+            }
+            builder.AddContent(9, ChildContent);
+            builder.CloseElement();
+        }
+        else
+        {
+            builder.OpenElement(0, "button");
+            builder.AddAttribute(1, "data-slot", "sidebar-menu-button");
+            builder.AddAttribute(2, "data-active", IsActive ? "true" : null);
+            builder.AddAttribute(3, "data-size", SizeValue);
+            builder.AddAttribute(4, "class", ComputedClass);
+            if (AdditionalAttributes is not null)
+            {
+                builder.AddMultipleAttributes(5, AdditionalAttributes);
+            }
+            builder.AddContent(6, ChildContent);
+            builder.CloseElement();
+        }
     };
 
     private void HandleClick()

@@ -2,7 +2,7 @@
 @inject IJSRuntime JS
 
 <div class="group relative my-4 flex flex-col overflow-hidden rounded-xl border border-[var(--color-border-subtle)]">
-    <div class="preview-area flex min-h-[500px] items-center justify-center">
+    <div class="preview-area flex items-center justify-center p-4">
         @ChildContent
     </div>
     @if (Files is { Length: > 0 })
@@ -10,7 +10,7 @@
         <div class="relative border-t border-[var(--color-border-subtle)]">
             @* File tabs *@
             <div class="flex items-center border-b border-white/5 bg-zinc-900">
-                <div class="flex overflow-x-auto">
+                <div class="flex overflow-x-auto [scrollbar-width:thin] [scrollbar-color:theme(color.zinc.700)_transparent]">
                     @for (var i = 0; i < Files.Length; i++)
                     {
                         var index = i;
@@ -37,7 +37,7 @@
                 </div>
             </div>
             @* Code area *@
-            <div class="code-block overflow-x-auto bg-zinc-950 @(_expanded ? "" : "max-h-[120px] overflow-hidden")">
+            <div class="code-block overflow-x-auto bg-zinc-950 [scrollbar-width:thin] [scrollbar-color:theme(color.zinc.700)_transparent] @(_expanded ? "" : "max-h-[120px] overflow-y-hidden")">
                 <pre class="p-4 text-sm leading-relaxed text-zinc-300"><code class="font-mono">@SyntaxHighlighter.HighlightXml(SelectedCode)</code></pre>
             </div>
             @if (!_expanded && SelectedCode.Split('\n').Length > 4)

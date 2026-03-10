@@ -695,6 +695,10 @@
   @apply [&>svg]:size-3.5;
 }
 
+.cn-breadcrumb-ellipsis {
+  @apply flex size-5 items-center justify-center [&>svg]:size-4;
+}
+
 /* Table */
 .cn-table {
   @apply w-full caption-bottom text-sm;
@@ -897,16 +901,68 @@
 }
 
 /* Sidebar */
-.cn-sidebar {
-  @apply flex h-full flex-col overflow-hidden bg-sidebar text-sidebar-foreground transition-[width] duration-300 ease-in-out;
+
+/* Provider wrapper */
+.cn-sidebar-wrapper {
+  @apply flex min-h-svh w-full;
 }
 
-.cn-sidebar[data-state="open"] {
+/* Non-collapsible sidebar */
+.cn-sidebar-fixed {
+  @apply flex h-full flex-col bg-sidebar text-sidebar-foreground;
   width: var(--sidebar-width);
 }
 
-.cn-sidebar[data-state="closed"] {
-  width: 0;
+/* Mobile sidebar within Sheet */
+.cn-sidebar-mobile {
+  @apply flex h-full w-full flex-col bg-sidebar p-0 text-sidebar-foreground;
+}
+
+/* Desktop gap div (reserves space in flex layout) */
+.cn-sidebar-gap {
+  @apply relative bg-transparent transition-[width] duration-200 ease-linear;
+  width: var(--sidebar-width);
+}
+
+.cn-sidebar-gap-inset {
+  width: calc(var(--sidebar-width) + theme(spacing.4));
+}
+
+/* Desktop fixed sidebar container */
+.cn-sidebar-container {
+  @apply fixed inset-y-0 z-10 hidden transition-[left,right,width] duration-200 ease-linear md:flex;
+  width: var(--sidebar-width);
+}
+
+.cn-sidebar-container-left {
+  @apply left-0;
+}
+
+.cn-sidebar-container-right {
+  @apply right-0;
+}
+
+.cn-sidebar-container-floating {
+  @apply p-2;
+}
+
+.cn-sidebar-container-bordered {
+  @apply border-r border-sidebar-border;
+}
+
+[data-side="right"] > .cn-sidebar-container-bordered {
+  @apply border-r-0 border-l border-sidebar-border;
+}
+
+/* Sidebar inner wrapper */
+.cn-sidebar-inner {
+  @apply flex h-full w-full flex-col bg-sidebar;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-sidebar-accent) transparent;
+}
+
+.cn-sidebar-inner-floating {
+  @apply rounded-lg border border-sidebar-border shadow-sm;
 }
 
 .cn-sidebar-header {
@@ -914,7 +970,9 @@
 }
 
 .cn-sidebar-content {
-  @apply flex min-h-0 flex-1 flex-col gap-2 overflow-auto p-2;
+  @apply flex min-h-0 flex-1 flex-col gap-2 overflow-auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-sidebar-accent) transparent;
 }
 
 .cn-sidebar-footer {
@@ -945,6 +1003,10 @@
   @apply flex w-full cursor-pointer items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[active=true]:font-medium data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0;
 }
 
+.cn-sidebar-menu-button-size-default {
+  @apply h-8 text-sm;
+}
+
 .cn-sidebar-menu-button-size-sm {
   @apply h-7 text-xs;
 }
@@ -953,18 +1015,63 @@
   @apply h-12 text-sm;
 }
 
-/* Sidebar Variants */
-.cn-sidebar-variant-floating {
-  @apply rounded-lg border border-sidebar-border shadow-sm m-2;
+/* Sidebar Trigger (toggle button) */
+.cn-sidebar-trigger {
+  @apply inline-flex items-center justify-center rounded-md text-sm font-medium size-7 bg-transparent hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
 }
 
-.cn-sidebar-variant-inset {
-  @apply border-r-0;
+/* Sidebar Rail */
+.cn-sidebar-rail {
+  @apply absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear sm:flex;
+  cursor: col-resize;
+}
+
+.cn-sidebar-rail::after {
+  @apply absolute inset-y-0 left-1/2 w-[2px] content-[''];
+}
+
+.cn-sidebar-rail:hover::after {
+  @apply bg-sidebar-border;
+}
+
+[data-side="left"] > .cn-sidebar-container > .cn-sidebar-inner > .cn-sidebar-rail {
+  @apply -right-4;
+}
+
+[data-side="right"] > .cn-sidebar-container > .cn-sidebar-inner > .cn-sidebar-rail {
+  @apply left-0;
+}
+
+/* Sidebar Menu Action */
+.cn-sidebar-menu-action {
+  @apply absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground ring-sidebar-ring outline-hidden transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0;
+}
+
+/* DropdownMenu wrapper inside sidebar-menu-item should not take layout space */
+.cn-sidebar-menu-item > [data-slot="dropdown-menu"] {
+  position: static;
+  display: contents;
+}
+
+.cn-sidebar-menu-action::after {
+  @apply absolute -inset-2 content-[''] md:hidden;
+}
+
+.cn-sidebar-menu-action-hover {
+  @apply md:opacity-0;
+}
+
+.group\/menu-item:hover > .cn-sidebar-menu-action-hover,
+.group\/menu-item:focus-within > .cn-sidebar-menu-action-hover,
+.cn-sidebar-menu-action-hover[data-state="open"] {
+  @apply opacity-100;
 }
 
 /* Sidebar Inset (main content wrapper) */
 .cn-sidebar-inset {
-  @apply relative flex min-h-svh flex-1 flex-col bg-background;
+  @apply relative flex w-full flex-1 flex-col overflow-auto bg-background;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklch, var(--color-border) 50%, transparent) transparent;
 }
 
 /* Sidebar Submenu */
@@ -973,7 +1080,77 @@
 }
 
 .cn-sidebar-menu-sub-button {
-  @apply flex min-w-0 items-center gap-2 overflow-hidden rounded-md px-2 py-1.5 text-sidebar-foreground outline-hidden ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 text-sm data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground;
+  @apply flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground outline-hidden ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground text-sm data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground;
+}
+
+/* ── Icon Collapsible Mode ─────────────────────────────────────────────────── */
+/* When sidebar is collapsed in icon mode, shrink to icon-only width */
+
+[data-collapsible="icon"][data-state="collapsed"] > .cn-sidebar-gap {
+  width: var(--sidebar-width-icon);
+}
+
+[data-collapsible="icon"][data-state="collapsed"] > .cn-sidebar-gap.cn-sidebar-gap-inset {
+  width: calc(var(--sidebar-width-icon) + theme(spacing.4));
+}
+
+[data-collapsible="icon"][data-state="collapsed"] > .cn-sidebar-container {
+  width: var(--sidebar-width-icon);
+}
+
+[data-collapsible="icon"][data-state="collapsed"] > .cn-sidebar-container.cn-sidebar-container-floating {
+  width: calc(var(--sidebar-width-icon) + theme(spacing.4) + 2px);
+}
+
+[data-collapsible="icon"][data-state="collapsed"] .cn-sidebar-content {
+  @apply overflow-hidden;
+}
+
+[data-collapsible="icon"][data-state="collapsed"] .cn-sidebar-group-label {
+  @apply -mt-8 opacity-0;
+}
+
+[data-collapsible="icon"][data-state="collapsed"] .cn-sidebar-menu-button {
+  @apply !size-8 !p-2;
+}
+
+[data-collapsible="icon"][data-state="collapsed"] .cn-sidebar-menu-button-size-lg {
+  @apply !p-0;
+}
+
+[data-collapsible="icon"][data-state="collapsed"] .cn-sidebar-menu-sub {
+  @apply hidden;
+}
+
+[data-collapsible="icon"][data-state="collapsed"] .cn-sidebar-menu-sub-button {
+  @apply hidden;
+}
+
+[data-collapsible="icon"][data-state="collapsed"] .cn-sidebar-menu-action {
+  @apply hidden;
+}
+
+[data-collapsible="icon"][data-state="collapsed"] .cn-sidebar-group.cn-sidebar-group-collapsible-icon-hidden {
+  @apply hidden;
+}
+
+/* ── Offcanvas Collapsible Mode ────────────────────────────────────────────── */
+
+[data-collapsible="offcanvas"][data-state="collapsed"] > .cn-sidebar-gap {
+  @apply w-0;
+}
+
+[data-collapsible="offcanvas"][data-state="collapsed"] > .cn-sidebar-container-left {
+  left: calc(var(--sidebar-width) * -1);
+}
+
+[data-collapsible="offcanvas"][data-state="collapsed"] > .cn-sidebar-container-right {
+  right: calc(var(--sidebar-width) * -1);
+}
+
+/* Dropdown menu shortcut */
+.cn-dropdown-menu-shortcut {
+  @apply ml-auto text-xs tracking-widest text-muted-foreground;
 }
 
 /* Calendar */

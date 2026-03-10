@@ -1,0 +1,90 @@
+@implements IAsyncDisposable
+@inject RnUIInteropService Interop
+
+<div data-slot="sidebar-wrapper"
+     style="--sidebar-width: @Width; --sidebar-width-icon: @WidthIcon;"
+     class="@CssUtils.Cn("cn-sidebar-wrapper group/sidebar-wrapper", _hasInset ? "has-data-[variant=inset]:bg-sidebar" : null, Class)"
+     @attributes="AdditionalAttributes">
+    <CascadingValue Value="this" IsFixed="false">
+        @ChildContent
+    </CascadingValue>
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public bool DefaultOpen { get; set; } = true;
+    [Parameter] public bool Open { get; set; } = true;
+    [Parameter] public EventCallback<bool> OpenChanged { get; set; }
+    [Parameter] public string Width { get; set; } = "16rem";
+    [Parameter] public string WidthIcon { get; set; } = "3rem";
+    [Parameter] public bool IsMobile { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private readonly string _id = $"sidebar-provider-{Guid.NewGuid():N}";
+    private DotNetObjectReference<RnSidebarProvider>? _dotNetRef;
+    private bool _initialized;
+    private bool _hasInset = true;
+
+    public bool OpenMobile { get; private set; }
+    public string State => Open ? "expanded" : "collapsed";
+
+    protected override void OnInitialized()
+    {
+        if (!OpenChanged.HasDelegate)
+        {
+            Open = DefaultOpen;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+            await Interop.AddKeyboardShortcutListenerAsync(_id, _dotNetRef, nameof(OnToggleShortcut));
+            _initialized = true;
+        }
+    }
+
+    [JSInvokable]
+    public async Task OnToggleShortcut()
+    {
+        await ToggleSidebar();
+        StateHasChanged();
+    }
+
+    public async Task ToggleSidebar()
+    {
+        if (IsMobile)
+        {
+            OpenMobile = !OpenMobile;
+        }
+        else
+        {
+            Open = !Open;
+            await OpenChanged.InvokeAsync(Open);
+        }
+    }
+
+    public async Task SetOpen(bool value)
+    {
+        Open = value;
+        await OpenChanged.InvokeAsync(Open);
+    }
+
+    public void SetOpenMobile(bool value)
+    {
+        OpenMobile = value;
+        StateHasChanged();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_initialized)
+        {
+            await Interop.RemoveKeyboardShortcutListenerAsync(_id);
+        }
+        _dotNetRef?.Dispose();
+    }
+}

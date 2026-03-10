@@ -116,6 +116,23 @@ export function removeClickOutsideListener(id) {
     _removeListener(id, 'clickoutside');
 }
 
+// ─── Keyboard Shortcut Listener ─────────────────────────────────────────────
+
+export function addKeyboardShortcutListener(id, dotNetRef, methodName) {
+    const handler = (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+            e.preventDefault();
+            dotNetRef.invokeMethodAsync(methodName);
+        }
+    };
+    document.addEventListener('keydown', handler);
+    _storeListener(id, 'keyboardshortcut', handler, document);
+}
+
+export function removeKeyboardShortcutListener(id) {
+    _removeListener(id, 'keyboardshortcut');
+}
+
 // ─── Dispose All ─────────────────────────────────────────────────────────────
 
 export function disposeAll(id) {
@@ -146,10 +163,7 @@ function _removeListener(id, type) {
 function _removeListenerByKey(key) {
     const entry = _listeners.get(key);
     if (!entry) return;
-    entry.target.removeEventListener(
-        key.includes('clickoutside') ? 'click' : 'keydown',
-        entry.handler,
-        entry.useCapture
-    );
+    const eventType = key.includes('clickoutside') ? 'click' : 'keydown';
+    entry.target.removeEventListener(eventType, entry.handler, entry.useCapture);
     _listeners.delete(key);
 }

@@ -1,0 +1,15 @@
+@inherits LayoutComponentBase
+
+<div class="relative flex min-h-screen flex-col bg-background text-foreground">
+    <header class="w-full border-b border-[var(--color-border-subtle)] bg-background">
+        <div class="container flex h-14 max-w-screen-2xl items-center">
+            <NavBar />
+        </div>
+    </header>
+    <main class="flex-1">
+        <div class="container max-w-screen-2xl py-6">
+            @Body
+        </div>
+    </main>
+    <RnToastProvider />
+</div>
