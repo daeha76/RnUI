@@ -7,3 +7,11 @@ public enum SidebarMenuButtonSize
     Sm,
     Lg
 }
+
+/// <summary>Visual variant for the sidebar.</summary>
+public enum SidebarVariant
+{
+    Default,
+    Floating,
+    Inset
+}

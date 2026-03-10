@@ -1,18 +1,21 @@
 @* RnCollapsible component - Blazor port of shadcn/ui RnCollapsible *@
 
-<div data-slot="collapsible" class="@CssUtils.Cn(Class)" @attributes="AdditionalAttributes">
+<div data-slot="collapsible"
+     data-state="@(Open ? "open" : "closed")"
+     class="@CssUtils.Cn(Class)"
+     @attributes="AdditionalAttributes">
     <div data-slot="collapsible-trigger"
+         class="cn-collapsible-trigger"
          aria-expanded="@(Open.ToString().ToLower())"
          @onclick="Toggle">
         @Trigger
     </div>
 
-    @if (Open)
-    {
-        <div data-slot="collapsible-content" class="cn-collapsible-content">
-            @ChildContent
-        </div>
-    }
+    <div data-slot="collapsible-content"
+         data-state="@(Open ? "open" : "closed")"
+         class="cn-collapsible-content">
+        <div>@ChildContent</div>
+    </div>
 </div>
 
 @code {
@@ -20,8 +23,23 @@
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public bool Open { get; set; }
     [Parameter] public EventCallback<bool> OpenChanged { get; set; }
+    [Parameter] public bool DefaultOpen { get; set; }
     [Parameter] public string? Class { get; set; }
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private bool _initialized;
+
+    protected override void OnParametersSet()
+    {
+        if (!_initialized)
+        {
+            _initialized = true;
+            if (DefaultOpen && !Open)
+            {
+                Open = DefaultOpen;
+            }
+        }
+    }
 
     private async Task Toggle()
     {

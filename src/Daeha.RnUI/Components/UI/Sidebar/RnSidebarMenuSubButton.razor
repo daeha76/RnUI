@@ -1,12 +1,10 @@
 @inject NavigationManager Navigation
 
-<a data-slot="sidebar-menu-button"
+<a data-slot="sidebar-menu-sub-button"
    data-active="@(IsActive ? "true" : null)"
-   data-size="@SizeValue"
    href="@Href"
-   title="@Tooltip"
    @onclick="HandleClick" @onclick:preventDefault="@(!string.IsNullOrEmpty(Href))"
-   class="@CssUtils.Cn("cn-sidebar-menu-button peer/menu-button", SizeClass, Class)"
+   class="@CssUtils.Cn("cn-sidebar-menu-sub-button", Class)"
    @attributes="AdditionalAttributes">
     @ChildContent
 </a>
@@ -15,24 +13,8 @@
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public string? Href { get; set; }
     [Parameter] public bool IsActive { get; set; }
-    [Parameter] public SidebarMenuButtonSize Size { get; set; } = SidebarMenuButtonSize.Default;
-    [Parameter] public string? Tooltip { get; set; }
     [Parameter] public string? Class { get; set; }
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
-
-    private string SizeValue => Size switch
-    {
-        SidebarMenuButtonSize.Sm => "sm",
-        SidebarMenuButtonSize.Lg => "lg",
-        _ => "default"
-    };
-
-    private string SizeClass => Size switch
-    {
-        SidebarMenuButtonSize.Sm => "cn-sidebar-menu-button-size-sm",
-        SidebarMenuButtonSize.Lg => "cn-sidebar-menu-button-size-lg",
-        _ => ""
-    };
 
     private void HandleClick()
     {

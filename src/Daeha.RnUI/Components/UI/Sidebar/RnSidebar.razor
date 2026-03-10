@@ -1,6 +1,9 @@
-﻿@* RnSidebar component - Blazor port of shadcn/ui RnSidebar *@
+@* RnSidebar component - Blazor port of shadcn/ui RnSidebar *@
 
-<aside data-slot="sidebar" class="@CssUtils.Cn("cn-sidebar", Open ? "w-[--sidebar-width]" : "w-0 overflow-hidden", Class)"
+<aside data-slot="sidebar"
+       data-state="@(Open ? "open" : "closed")"
+       data-variant="@VariantValue"
+       class="@CssUtils.Cn("cn-sidebar", VariantClass, Class)"
        style="--sidebar-width: @Width;"
        @attributes="AdditionalAttributes">
     @ChildContent
@@ -10,9 +13,24 @@
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public bool Open { get; set; } = true;
     [Parameter] public EventCallback<bool> OpenChanged { get; set; }
+    [Parameter] public SidebarVariant Variant { get; set; } = SidebarVariant.Default;
     [Parameter] public string Width { get; set; } = "16rem";
     [Parameter] public string? Class { get; set; }
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string VariantValue => Variant switch
+    {
+        SidebarVariant.Floating => "floating",
+        SidebarVariant.Inset => "inset",
+        _ => "default"
+    };
+
+    private string VariantClass => Variant switch
+    {
+        SidebarVariant.Floating => "cn-sidebar-variant-floating",
+        SidebarVariant.Inset => "cn-sidebar-variant-inset",
+        _ => ""
+    };
 
     public async Task Toggle()
     {

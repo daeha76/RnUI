@@ -2,28 +2,78 @@
 
 @code {
     public static ComponentDemo GetDemo() => new(
-        "Sidebar", "sidebar", "A composable, themeable and customizable sidebar component.",
+        "Sidebar", "sidebar", "A composable, themeable and customizable sidebar component with variants, collapsible submenus, and tooltips.",
         Demo: @<div class="border rounded-md overflow-hidden max-w-xs">
-                <RnSidebar Open="true" Width="100%">
+                <RnSidebar Open="true" Variant="SidebarVariant.Default" Width="100%">
                     <RnSidebarHeader>
-                        <span class="font-semibold px-2">Application</span>
+                        <RnSidebarMenu>
+                            <RnSidebarMenuItem>
+                                <RnSidebarMenuButton Size="SidebarMenuButtonSize.Lg" Href="#">
+                                    <div class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                                        <span class="text-xs font-bold">A</span>
+                                    </div>
+                                    <div class="grid flex-1 text-left text-sm leading-tight">
+                                        <span class="truncate font-semibold">Application</span>
+                                        <span class="truncate text-xs">Demo Workspace</span>
+                                    </div>
+                                </RnSidebarMenuButton>
+                            </RnSidebarMenuItem>
+                        </RnSidebarMenu>
                     </RnSidebarHeader>
                     <RnSidebarContent>
                         <RnSidebarGroup>
                             <RnSidebarGroupLabel>Platform</RnSidebarGroupLabel>
                             <RnSidebarMenu>
+                                <RnCollapsible DefaultOpen="true" Class="group/collapsible">
+                                    <Trigger>
+                                        <RnSidebarMenuItem>
+                                            <RnSidebarMenuButton Tooltip="Dashboard" IsActive="true">
+                                                <span>Dashboard</span>
+                                                <span class="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90">&#x203A;</span>
+                                            </RnSidebarMenuButton>
+                                        </RnSidebarMenuItem>
+                                    </Trigger>
+                                    <ChildContent>
+                                        <RnSidebarMenuSub>
+                                            <RnSidebarMenuSubItem>
+                                                <RnSidebarMenuSubButton Href="#" IsActive="true">
+                                                    <span>Overview</span>
+                                                </RnSidebarMenuSubButton>
+                                            </RnSidebarMenuSubItem>
+                                            <RnSidebarMenuSubItem>
+                                                <RnSidebarMenuSubButton Href="#">
+                                                    <span>Analytics</span>
+                                                </RnSidebarMenuSubButton>
+                                            </RnSidebarMenuSubItem>
+                                        </RnSidebarMenuSub>
+                                    </ChildContent>
+                                </RnCollapsible>
+                                <RnCollapsible Class="group/collapsible">
+                                    <Trigger>
+                                        <RnSidebarMenuItem>
+                                            <RnSidebarMenuButton Tooltip="Projects">
+                                                <span>Projects</span>
+                                                <span class="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90">&#x203A;</span>
+                                            </RnSidebarMenuButton>
+                                        </RnSidebarMenuItem>
+                                    </Trigger>
+                                    <ChildContent>
+                                        <RnSidebarMenuSub>
+                                            <RnSidebarMenuSubItem>
+                                                <RnSidebarMenuSubButton Href="#">
+                                                    <span>All Projects</span>
+                                                </RnSidebarMenuSubButton>
+                                            </RnSidebarMenuSubItem>
+                                            <RnSidebarMenuSubItem>
+                                                <RnSidebarMenuSubButton Href="#">
+                                                    <span>Active</span>
+                                                </RnSidebarMenuSubButton>
+                                            </RnSidebarMenuSubItem>
+                                        </RnSidebarMenuSub>
+                                    </ChildContent>
+                                </RnCollapsible>
                                 <RnSidebarMenuItem>
-                                    <RnSidebarMenuButton Href="#" IsActive="true">
-                                        <span>Dashboard</span>
-                                    </RnSidebarMenuButton>
-                                </RnSidebarMenuItem>
-                                <RnSidebarMenuItem>
-                                    <RnSidebarMenuButton Href="#">
-                                        <span>Projects</span>
-                                    </RnSidebarMenuButton>
-                                </RnSidebarMenuItem>
-                                <RnSidebarMenuItem>
-                                    <RnSidebarMenuButton Href="#">
+                                    <RnSidebarMenuButton Href="#" Tooltip="Settings">
                                         <span>Settings</span>
                                     </RnSidebarMenuButton>
                                 </RnSidebarMenuItem>
@@ -36,7 +86,7 @@
                 </RnSidebar>
             </div>,
         Thumbnail: @<div class="text-xs text-muted-foreground">Sidebar</div>,
-        Code: @"<RnSidebar Open=""true"" Width=""100%"">
+        Code: @"<RnSidebar Open=""true"" Variant=""SidebarVariant.Inset"" Width=""16rem"">
     <RnSidebarHeader>
         <span class=""font-semibold px-2"">Application</span>
     </RnSidebarHeader>
@@ -44,32 +94,65 @@
         <RnSidebarGroup>
             <RnSidebarGroupLabel>Platform</RnSidebarGroupLabel>
             <RnSidebarMenu>
-                <RnSidebarMenuItem>
-                    <RnSidebarMenuButton Href=""#"" IsActive=""true"">
-                        <svg>...</svg>
-                        <span>Dashboard</span>
-                    </RnSidebarMenuButton>
-                </RnSidebarMenuItem>
+                <RnCollapsible DefaultOpen=""true"" Class=""group/collapsible"">
+                    <Trigger>
+                        <RnSidebarMenuItem>
+                            <RnSidebarMenuButton Tooltip=""Dashboard"" IsActive=""true"">
+                                <span>Dashboard</span>
+                            </RnSidebarMenuButton>
+                        </RnSidebarMenuItem>
+                    </Trigger>
+                    <ChildContent>
+                        <RnSidebarMenuSub>
+                            <RnSidebarMenuSubItem>
+                                <RnSidebarMenuSubButton Href=""#"">
+                                    <span>Overview</span>
+                                </RnSidebarMenuSubButton>
+                            </RnSidebarMenuSubItem>
+                        </RnSidebarMenuSub>
+                    </ChildContent>
+                </RnCollapsible>
             </RnSidebarMenu>
         </RnSidebarGroup>
     </RnSidebarContent>
 </RnSidebar>",
-        UsageCode: @"@using RnUI.Components.UI.Sidebar
-
-<RnSidebar>
+        UsageCode: @"@* Sidebar with Variant, Collapsible Submenu, Tooltip *@
+<RnSidebar Variant=""SidebarVariant.Inset"">
     <RnSidebarContent>
         <RnSidebarGroup>
             <RnSidebarGroupLabel>Platform</RnSidebarGroupLabel>
             <RnSidebarMenu>
-                <RnSidebarMenuItem>
-                    <RnSidebarMenuButton Href=""#"" IsActive=""true"">
-                        <svg>...</svg>
-                        <span>Dashboard</span>
-                    </RnSidebarMenuButton>
-                </RnSidebarMenuItem>
+                <RnCollapsible DefaultOpen=""true"" Class=""group/collapsible"">
+                    <Trigger>
+                        <RnSidebarMenuItem>
+                            <RnSidebarMenuButton Tooltip=""Dashboard"">
+                                <span>Dashboard</span>
+                            </RnSidebarMenuButton>
+                        </RnSidebarMenuItem>
+                    </Trigger>
+                    <ChildContent>
+                        <RnSidebarMenuSub>
+                            <RnSidebarMenuSubItem>
+                                <RnSidebarMenuSubButton Href=""/dashboard/overview"">
+                                    <span>Overview</span>
+                                </RnSidebarMenuSubButton>
+                            </RnSidebarMenuSubItem>
+                            <RnSidebarMenuSubItem>
+                                <RnSidebarMenuSubButton Href=""/dashboard/analytics"">
+                                    <span>Analytics</span>
+                                </RnSidebarMenuSubButton>
+                            </RnSidebarMenuSubItem>
+                        </RnSidebarMenuSub>
+                    </ChildContent>
+                </RnCollapsible>
             </RnSidebarMenu>
         </RnSidebarGroup>
     </RnSidebarContent>
-</RnSidebar>"
+</RnSidebar>
+
+@* Inset layout wrapper *@
+<RnSidebarInset>
+    <main>Page content here</main>
+</RnSidebarInset>"
     );
 }

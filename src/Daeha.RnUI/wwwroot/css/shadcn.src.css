@@ -65,9 +65,11 @@
 }
 
 /*
- * Dark mode overrides
+ * Dark mode overrides (dark class + dark data-theme variants)
  */
-.dark {
+.dark,
+[data-theme="dark"],
+[data-theme="dark-sky"] {
   --color-background: oklch(0.11 0 0);
   --color-foreground: oklch(0.985 0 0);
   --color-card: oklch(0.145 0 0);
@@ -96,6 +98,31 @@
   --color-sidebar-border: oklch(0.269 0 0);
   --color-sidebar-ring: oklch(0.439 0 0);
   --color-border-subtle: color-mix(in oklch, var(--color-border) 100%, transparent);
+}
+
+/*
+ * Light + Sky Blue theme
+ * Primary/ring/sidebar-primary overrides on top of light base
+ */
+[data-theme="light-sky"] {
+  --color-primary: oklch(0.588 0.158 241.966);           /* sky-600 */
+  --color-primary-foreground: oklch(1 0 0);
+  --color-ring: oklch(0.685 0.169 237.323);              /* sky-500 */
+  --color-sidebar-primary: oklch(0.588 0.158 241.966);   /* sky-600 */
+  --color-sidebar-primary-foreground: oklch(1 0 0);
+}
+
+/*
+ * Dark + Sky Blue theme
+ * Primary/ring/sidebar-primary overrides on top of dark base
+ * Same specificity as the dark block above, but placed later → wins
+ */
+[data-theme="dark-sky"] {
+  --color-primary: oklch(0.755 0.152 232.661);           /* sky-400 */
+  --color-primary-foreground: oklch(0.145 0 0);
+  --color-ring: oklch(0.685 0.169 237.323);              /* sky-500 */
+  --color-sidebar-primary: oklch(0.685 0.169 237.323);   /* sky-500 */
+  --color-sidebar-primary-foreground: oklch(0.145 0 0);
 }
 
 /*
@@ -785,8 +812,22 @@
 }
 
 /* Collapsible */
+.cn-collapsible-trigger {
+  @apply cursor-pointer;
+}
+
 .cn-collapsible-content {
-  @apply overflow-hidden transition-all;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 200ms ease;
+}
+
+.cn-collapsible-content[data-state="open"] {
+  grid-template-rows: 1fr;
+}
+
+.cn-collapsible-content > div {
+  overflow: hidden;
 }
 
 /* KBD */
@@ -857,7 +898,15 @@
 
 /* Sidebar */
 .cn-sidebar {
-  @apply flex h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground;
+  @apply flex h-full flex-col overflow-hidden bg-sidebar text-sidebar-foreground transition-[width] duration-300 ease-in-out;
+}
+
+.cn-sidebar[data-state="open"] {
+  width: var(--sidebar-width);
+}
+
+.cn-sidebar[data-state="closed"] {
+  width: 0;
 }
 
 .cn-sidebar-header {
@@ -893,7 +942,7 @@
 }
 
 .cn-sidebar-menu-button {
-  @apply flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[active=true]:font-medium data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0;
+  @apply flex w-full cursor-pointer items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[active=true]:font-medium data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0;
 }
 
 .cn-sidebar-menu-button-size-sm {
@@ -902,6 +951,29 @@
 
 .cn-sidebar-menu-button-size-lg {
   @apply h-12 text-sm;
+}
+
+/* Sidebar Variants */
+.cn-sidebar-variant-floating {
+  @apply rounded-lg border border-sidebar-border shadow-sm m-2;
+}
+
+.cn-sidebar-variant-inset {
+  @apply border-r-0;
+}
+
+/* Sidebar Inset (main content wrapper) */
+.cn-sidebar-inset {
+  @apply relative flex min-h-svh flex-1 flex-col bg-background;
+}
+
+/* Sidebar Submenu */
+.cn-sidebar-menu-sub {
+  @apply mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l border-sidebar-border px-2.5 py-0.5;
+}
+
+.cn-sidebar-menu-sub-button {
+  @apply flex min-w-0 items-center gap-2 overflow-hidden rounded-md px-2 py-1.5 text-sidebar-foreground outline-hidden ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 text-sm data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground;
 }
 
 /* Calendar */

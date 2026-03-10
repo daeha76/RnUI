@@ -1,0 +1,11 @@
+<main data-slot="sidebar-inset"
+      class="@CssUtils.Cn("cn-sidebar-inset", Class)"
+      @attributes="AdditionalAttributes">
+    @ChildContent
+</main>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}
