@@ -1,5 +1,11 @@
 # Daeha.RnUI
 
+> **⚠️ 베타 버전 안내 (BETA WARNING)**
+> 현재 이 라이브러리는 초기 오픈소스 작업 중인 베타 버전이며 여러 버그와 오류가 포함되어 있을 수 있습니다. 운영 환경(Production)에서의 사용을 권장하지 않습니다. 피드백 및 기여는 언제나 환영합니다!
+>
+> **⚠️ BETA WARNING**
+> This library is currently in early beta and may contain many bugs and errors. We do not recommend using it in a production environment. Feedback and contributions are always welcome!
+
 A Blazor port of [shadcn/ui](https://ui.shadcn.com). Beautifully designed, accessible UI components built with Tailwind CSS v4 for .NET Blazor applications.
 
 [![NuGet](https://img.shields.io/nuget/v/Daeha.RnUI)](https://www.nuget.org/packages/Daeha.RnUI)
