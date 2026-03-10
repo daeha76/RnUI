@@ -116,8 +116,48 @@ NuGet 설치 사용자가 `_content/Daeha.RnUI/css/shadcn.css`를 로드하면:
 
 ---
 
+## ⚠️ 듀얼 빌드 필수 (CRITICAL)
+
+> **CSS 또는 Razor 파일을 변경하면, 라이브러리 CSS와 데모 CSS를 반드시 둘 다 빌드해야 한다.**
+
+비유: 음식(컴포넌트)을 만들고 식탁(데모)에 올렸는데 그릇(유틸리티 CSS)이 없으면 아무도 먹을 수 없다.
+라이브러리 CSS만 빌드하면 `.cn-*` 클래스는 갱신되지만, 데모에서 사용하는 Tailwind utility 클래스(`gap-7`, `flex`, `text-sm` 등)는 갱신되지 않는다.
+
+### 왜 두 번 빌드해야 하는가?
+
+두 파이프라인은 **완전히 독립적**이다:
+
+| 파이프라인 | 빌드 대상 | 출력 내용 |
+|-----------|-----------|-----------|
+| 라이브러리 (`shadcn.src.css` → `shadcn.css`) | `.cn-*` 컴포넌트 클래스, `@theme`, `.dark` | 컴포넌트 스타일 |
+| 데모 (`input.css` → `tailwindcss.css`) | `.razor` 파일에서 스캔한 Tailwind utility 클래스 | `gap-7`, `flex`, `text-center` 등 |
+
+Razor 파일에 `gap-7` 같은 새 유틸리티 클래스를 추가하면, **데모 Tailwind가 이를 스캔해서 `tailwindcss.css`에 포함시켜야** 브라우저에서 적용된다. 라이브러리 CSS 빌드만으로는 유틸리티 클래스가 생성되지 않는다.
+
+### 올바른 빌드 순서
+
+```bash
+# 1단계: 라이브러리 CSS 빌드 (항상)
+cd src/Daeha.RnUI && npm run build:css
+
+# 2단계: 데모 CSS 빌드 (데모 확인 시 반드시)
+cd src/Daeha.RnUI.Demo.Wasm && npm run build:css
+
+# 3단계: dotnet build 확인
+dotnet build
+```
+
+### 빌드를 잊으면 생기는 증상
+
+- Razor에 `gap-7`을 썼는데 **간격이 전혀 적용 안 됨** (데모 CSS 미빌드)
+- `.cn-card`를 수정했는데 **이전 스타일 그대로** (라이브러리 CSS 미빌드)
+- 개발자 도구에서 클래스가 보이지만 **스타일 정의 없음** → CSS 빌드 누락
+
+---
+
 ## 자주 하는 실수
 
 1. **`input.css`에서 색상 수정** → `shadcn.src.css`의 변경이 데모에 반영 안 됨
 2. **`shadcn.css`를 직접 수정** → 빌드 시 덮어써짐. `.src.css`만 수정할 것
 3. **`border-b` Tailwind 클래스 사용** → `--color-border` 100% 적용. `--color-border-subtle`이 필요하면 명시적 `border: 1px solid var(--color-border-subtle)` 사용
+4. **라이브러리 CSS만 빌드하고 데모 CSS를 빌드하지 않음** → Razor에 새로 추가한 Tailwind utility 클래스가 브라우저에 적용되지 않음 (CRITICAL)

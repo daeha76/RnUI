@@ -157,7 +157,7 @@
 }
 
 .cn-button-variant-outline {
-  @apply border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/80;
+  @apply border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50;
 }
 
 .cn-button-variant-secondary {
@@ -271,17 +271,17 @@
 
 /* Label */
 .cn-label {
-  @apply flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50;
+  @apply flex items-center gap-2 text-sm leading-snug font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50;
 }
 
 /* Card */
 .cn-card {
-  @apply rounded-xl bg-card text-card-foreground shadow-sm;
+  @apply flex flex-col gap-6 rounded-xl py-6 bg-card text-card-foreground shadow-sm;
   border: 1px solid var(--color-border-subtle);
 }
 
 .cn-card-header {
-  @apply grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 pt-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6;
+  @apply @container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6;
 }
 
 .cn-card-title {
@@ -301,7 +301,7 @@
 }
 
 .cn-card-footer {
-  @apply flex items-center px-6 pb-6 [.border-t]:pt-6;
+  @apply flex items-center px-6 [.border-t]:pt-6;
 }
 
 /* Badge */

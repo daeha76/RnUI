@@ -3,18 +3,18 @@
 <div class="flex flex-col gap-6">
     <RnCard>
         <RnCardHeader>
-            <RnCardTitle Class="text-2xl">Login to your account</RnCardTitle>
+            <RnCardTitle>Login to your account</RnCardTitle>
             <RnCardDescription>Enter your email below to login to your account</RnCardDescription>
         </RnCardHeader>
         <RnCardContent>
             <EditForm Model="_model" FormName="login-01-form" OnValidSubmit="HandleSubmit">
-                <div class="grid gap-6">
-                    <div class="grid gap-2">
+                <div class="flex w-full flex-col gap-7">
+                    <div class="flex w-full flex-col gap-3">
                         <RnLabel For="login01-email">Email</RnLabel>
                         <RnInput Id="login01-email" Type="email" Placeholder="m@example.com"
                                  @bind-Value="_model.Email" required />
                     </div>
-                    <div class="grid gap-2">
+                    <div class="flex w-full flex-col gap-3">
                         <div class="flex items-center">
                             <RnLabel For="login01-password">Password</RnLabel>
                             <a href="#" class="ml-auto inline-block text-sm underline-offset-4 hover:underline">
@@ -24,7 +24,7 @@
                         <RnInput Id="login01-password" Type="password"
                                  @bind-Value="_model.Password" required />
                     </div>
-                    <div class="flex flex-col gap-3">
+                    <div class="flex w-full flex-col gap-3">
                         <RnButton Type="submit" Class="w-full" Disabled="_isLoading">
                             @if (_isLoading)
                             {
@@ -39,10 +39,9 @@
                         <RnButton Variant="ButtonVariant.Outline" Class="w-full" Type="button">
                             Login with Google
                         </RnButton>
-                    </div>
-                    <div class="text-center text-sm">
-                        Don&apos;t have an account?
-                        <a href="#" class="underline underline-offset-4">Sign up</a>
+                        <p class="text-center text-sm leading-normal text-muted-foreground [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary">
+                            Don&apos;t have an account? <a href="#">Sign up</a>
+                        </p>
                     </div>
                 </div>
             </EditForm>
