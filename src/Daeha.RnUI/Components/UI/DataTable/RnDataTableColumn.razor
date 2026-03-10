@@ -1,0 +1,55 @@
+@* RnDataTableColumn - Column definition component (metadata only, no rendering) *@
+@typeparam TItem
+
+@code {
+    [CascadingParameter] internal RnDataTable<TItem>? Parent { get; set; }
+    [CascadingParameter] internal RnDataTableColumnGroup<TItem>? ParentGroup { get; set; }
+
+    [Parameter] public string? Id { get; set; }
+    [Parameter] public string? Title { get; set; }
+    [Parameter] public System.Linq.Expressions.Expression<Func<TItem, object?>>? Property { get; set; }
+    [Parameter] public bool Sortable { get; set; }
+    [Parameter] public bool Filterable { get; set; }
+    [Parameter] public bool Visible { get; set; } = true;
+    [Parameter] public string? Width { get; set; }
+    [Parameter] public bool MergeRows { get; set; }
+    [Parameter] public RenderFragment<TItem>? CellTemplate { get; set; }
+    [Parameter] public RenderFragment<TItem>? HeaderTemplate { get; set; }
+    [Parameter] public Func<TItem, string?>? CellClass { get; set; }
+    [Parameter] public Func<TItem, string>? StringValue { get; set; }
+
+    protected override void OnInitialized()
+    {
+        var columnDef = new DataTableColumnDef<TItem>
+        {
+            Title = Title ?? "",
+            Sortable = Sortable,
+            Filterable = Filterable,
+            Visible = Visible,
+            Width = Width,
+            MergeRows = MergeRows,
+            CellTemplate = CellTemplate,
+            HeaderTemplate = HeaderTemplate,
+            CellClass = CellClass,
+            StringAccessor = StringValue,
+        };
+
+        if (Property != null)
+        {
+            columnDef.PropertyExpression = Property;
+            columnDef.PropertyAccessor = DataTableColumnDef<TItem>.CompileAccessor(Property);
+            columnDef.Id = Id ?? DataTableColumnDef<TItem>.ExtractMemberName(Property);
+        }
+        else
+        {
+            columnDef.Id = Id ?? $"col-{Guid.NewGuid().ToString("N")[..8]}";
+        }
+
+        Parent?.RegisterColumn(columnDef);
+        ParentGroup?.RegisterChildColumn(columnDef.Id);
+        if (ParentGroup != null)
+        {
+            columnDef.GroupId = ParentGroup.GroupId;
+        }
+    }
+}

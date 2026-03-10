@@ -735,6 +735,93 @@
   @apply mt-4 text-sm text-muted-foreground;
 }
 
+/* DataTable */
+.cn-data-table {
+  @apply w-full;
+}
+
+.cn-data-table-toolbar {
+  @apply flex items-center justify-between py-4;
+}
+
+.cn-data-table-search {
+  @apply max-w-sm;
+}
+
+.cn-data-table-column-header {
+  @apply flex items-center space-x-2;
+}
+
+.cn-data-table-column-header-sortable {
+  @apply cursor-pointer select-none bg-transparent border-none p-0
+         hover:text-foreground;
+  color: inherit;
+  font: inherit;
+}
+
+.cn-data-table-sort-icon {
+  @apply ml-2 h-4 w-4 shrink-0;
+}
+
+.cn-data-table-sort-badge {
+  @apply ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-muted text-[10px] font-medium;
+}
+
+.cn-data-table-group-header {
+  @apply font-semibold text-center;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.cn-data-table-pagination {
+  @apply flex items-center justify-between px-2 py-4;
+}
+
+.cn-data-table-pagination-info {
+  @apply flex-1 text-sm text-muted-foreground;
+}
+
+.cn-data-table-pagination-controls {
+  @apply flex items-center space-x-6 lg:space-x-8;
+}
+
+.cn-data-table-pagination-page-size {
+  @apply flex items-center space-x-2;
+}
+
+.cn-data-table-pagination-page-size label {
+  @apply text-sm font-medium;
+}
+
+.cn-data-table-page-size-select {
+  @apply h-8 w-[70px] rounded-md border border-input bg-background px-2 text-sm;
+}
+
+.cn-data-table-pagination-page-info {
+  @apply flex w-[100px] items-center justify-center text-sm font-medium;
+}
+
+.cn-data-table-pagination-buttons {
+  @apply flex items-center space-x-2;
+}
+
+.cn-data-table-expand-button {
+  @apply inline-flex items-center justify-center rounded-md p-1 bg-transparent border-none
+         cursor-pointer hover:bg-muted transition-colors;
+}
+
+.cn-data-table-row-expanded {
+  @apply bg-muted/30;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.cn-data-table-empty {
+  @apply h-24 text-center text-sm text-muted-foreground;
+}
+
+.cn-data-table-loading-overlay {
+  @apply absolute inset-0 flex items-center justify-center bg-background/50;
+}
+
 /* Toggle */
 .cn-toggle {
   @apply inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 bg-transparent;

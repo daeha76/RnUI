@@ -1,0 +1,111 @@
+<div class="space-y-8">
+    <div>
+        <h3 class="text-lg font-semibold mb-4">Basic DataTable with Sorting, Filtering, Selection, Pagination</h3>
+        <RnDataTable TItem="Payment" Items="_payments" SelectionMode="SelectionMode.Multiple" PageSize="5">
+            <Toolbar>
+                <div class="flex items-center justify-between w-full">
+                    <RnDataTableSearch TItem="Payment" Placeholder="Filter payments..." />
+                    <RnDataTableColumnToggle TItem="Payment" />
+                </div>
+            </Toolbar>
+            <Columns>
+                <RnDataTableColumn TItem="Payment" Property="x => x.Id" Title="ID" Sortable />
+                <RnDataTableColumn TItem="Payment" Property="x => x.Status" Title="Status" Sortable Filterable>
+                    <CellTemplate Context="item">
+                        <RnBadge Variant="@GetStatusVariant(item.Status)">@item.Status</RnBadge>
+                    </CellTemplate>
+                </RnDataTableColumn>
+                <RnDataTableColumn TItem="Payment" Property="x => x.Email" Title="Email" Sortable Filterable />
+                <RnDataTableColumn TItem="Payment" Property="x => x.Amount" Title="Amount" Sortable>
+                    <CellTemplate Context="item">
+                        <span class="text-right font-medium">@item.Amount.ToString("C")</span>
+                    </CellTemplate>
+                </RnDataTableColumn>
+                <RnDataTableColumn TItem="Payment" Title="Actions" Id="actions">
+                    <CellTemplate Context="item">
+                        <RnDataTableRowActions>
+                            <RnDropdownMenuItem>Copy ID: @item.Id</RnDropdownMenuItem>
+                            <RnDropdownMenuItem>View Details</RnDropdownMenuItem>
+                        </RnDataTableRowActions>
+                    </CellTemplate>
+                </RnDataTableColumn>
+            </Columns>
+        </RnDataTable>
+    </div>
+
+    <div>
+        <h3 class="text-lg font-semibold mb-4">Row Expansion</h3>
+        <RnDataTable TItem="Payment" Items="_payments" PageSize="5">
+            <Columns>
+                <RnDataTableColumn TItem="Payment" Property="x => x.Id" Title="ID" Sortable />
+                <RnDataTableColumn TItem="Payment" Property="x => x.Email" Title="Email" />
+                <RnDataTableColumn TItem="Payment" Property="x => x.Amount" Title="Amount">
+                    <CellTemplate Context="item">
+                        <span class="font-medium">@item.Amount.ToString("C")</span>
+                    </CellTemplate>
+                </RnDataTableColumn>
+            </Columns>
+            <DetailTemplate Context="item">
+                <div class="p-4">
+                    <p class="text-sm text-muted-foreground">Payment details for @item.Email</p>
+                    <p class="text-sm mt-2">Status: <RnBadge Variant="@GetStatusVariant(item.Status)">@item.Status</RnBadge></p>
+                    <p class="text-sm mt-1">Amount: @item.Amount.ToString("C")</p>
+                </div>
+            </DetailTemplate>
+        </RnDataTable>
+    </div>
+
+    <div>
+        <h3 class="text-lg font-semibold mb-4">Conditional Row Styling</h3>
+        <RnDataTable TItem="Payment" Items="_payments" PageSize="5"
+                     RowClass="@(item => item.Status == "Failed" ? "bg-destructive/10" : null)">
+            <Columns>
+                <RnDataTableColumn TItem="Payment" Property="x => x.Id" Title="ID" />
+                <RnDataTableColumn TItem="Payment" Property="x => x.Status" Title="Status">
+                    <CellTemplate Context="item">
+                        <RnBadge Variant="@GetStatusVariant(item.Status)">@item.Status</RnBadge>
+                    </CellTemplate>
+                </RnDataTableColumn>
+                <RnDataTableColumn TItem="Payment" Property="x => x.Amount" Title="Amount"
+                                   CellClass="@(item => item.Amount > 400 ? "text-green-600 font-bold" : null)">
+                    <CellTemplate Context="item">
+                        @item.Amount.ToString("C")
+                    </CellTemplate>
+                </RnDataTableColumn>
+            </Columns>
+        </RnDataTable>
+    </div>
+
+    <div>
+        <h3 class="text-lg font-semibold mb-4">Loading State</h3>
+        <RnDataTable TItem="Payment" Items="_payments" Loading="true" SkeletonRows="3" SkeletonColumns="4" />
+    </div>
+</div>
+
+@code {
+    public record Payment(string Id, string Email, string Status, decimal Amount);
+
+    private readonly List<Payment> _payments =
+    [
+        new("PAY-001", "alice@example.com", "Success", 250.00m),
+        new("PAY-002", "bob@example.com", "Pending", 150.00m),
+        new("PAY-003", "charlie@example.com", "Failed", 350.00m),
+        new("PAY-004", "diana@example.com", "Success", 450.00m),
+        new("PAY-005", "eve@example.com", "Pending", 550.00m),
+        new("PAY-006", "frank@example.com", "Success", 200.00m),
+        new("PAY-007", "grace@example.com", "Failed", 320.00m),
+        new("PAY-008", "henry@example.com", "Success", 180.00m),
+        new("PAY-009", "iris@example.com", "Pending", 420.00m),
+        new("PAY-010", "jack@example.com", "Success", 600.00m),
+        new("PAY-011", "kate@example.com", "Pending", 275.00m),
+        new("PAY-012", "leo@example.com", "Failed", 125.00m),
+    ];
+
+    private static BadgeVariant GetStatusVariant(string status) => status switch
+    {
+        "Success" => BadgeVariant.Default,
+        "Pending" => BadgeVariant.Secondary,
+        "Failed" => BadgeVariant.Destructive,
+        _ => BadgeVariant.Outline
+    };
+}

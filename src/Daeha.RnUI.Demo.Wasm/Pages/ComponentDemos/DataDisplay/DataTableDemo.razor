@@ -1,0 +1,27 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "DataTable", "data-table", "A powerful data table with sorting, filtering, pagination, selection, and more.",
+        Demo: @<DataTableDemoContent />,
+        Thumbnail: @<div class="text-xs text-muted-foreground">DataTable</div>,
+        Code: @"<RnDataTable TItem=""Payment"" Items=""payments"" SelectionMode=""SelectionMode.Multiple"">
+    <Toolbar>
+        <RnDataTableSearch TItem=""Payment"" Placeholder=""Search..."" />
+        <RnDataTableColumnToggle TItem=""Payment"" />
+    </Toolbar>
+    <Columns>
+        <RnDataTableColumn TItem=""Payment"" Property=""x => x.Id"" Title=""ID"" Sortable />
+        <RnDataTableColumn TItem=""Payment"" Property=""x => x.Status"" Title=""Status"" Filterable />
+        <RnDataTableColumn TItem=""Payment"" Property=""x => x.Amount"" Title=""Amount"" Sortable />
+    </Columns>
+</RnDataTable>",
+        UsageCode: @"@using RnUI.Components.UI.DataTable
+
+<RnDataTable TItem=""YourModel"" Items=""items"">
+    <Columns>
+        <RnDataTableColumn TItem=""YourModel"" Property=""x => x.Name"" Title=""Name"" Sortable />
+    </Columns>
+</RnDataTable>"
+    );
+}

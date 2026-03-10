@@ -1,0 +1,44 @@
+@* RnDataTableColumnToggle - Column visibility toggle dropdown *@
+@typeparam TItem
+
+<RnDropdownMenu>
+    <Trigger>
+        <RnButton Variant="ButtonVariant.Outline" Size="ButtonSize.Sm" Class="@Class" @attributes="AdditionalAttributes">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4">
+                <path d="M12 3v18"/><path d="M3 12h18"/>
+                <path d="M6 6h12v12H6z" opacity="0.3"/>
+            </svg>
+            Columns
+        </RnButton>
+    </Trigger>
+    <ChildContent>
+        @if (State != null)
+        {
+            @foreach (var col in State.Columns.Where(c => !string.IsNullOrEmpty(c.Title)))
+            {
+                var columnId = col.Id;
+                var isVisible = State.IsColumnVisible(columnId);
+                <RnDropdownMenuItem @onclick="() => ToggleColumn(columnId, isVisible)">
+                    <span class="@CssUtils.Cn("mr-2 inline-block w-4 text-center", isVisible ? "" : "opacity-30")">
+                        @if (isVisible) { <text>&#10003;</text> }
+                    </span>
+                    @col.Title
+                </RnDropdownMenuItem>
+            }
+        }
+    </ChildContent>
+</RnDropdownMenu>
+
+@code {
+    [CascadingParameter] public DataTableState<TItem>? State { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private void ToggleColumn(string columnId, bool currentlyVisible)
+    {
+        State?.SetColumnVisibility(columnId, !currentlyVisible);
+        StateHasChanged();
+    }
+}

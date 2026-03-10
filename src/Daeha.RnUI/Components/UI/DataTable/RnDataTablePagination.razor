@@ -1,0 +1,110 @@
+@* RnDataTablePagination - Pagination controls with page size selector *@
+@typeparam TItem
+
+<div data-slot="data-table-pagination" class="cn-data-table-pagination">
+    <div class="cn-data-table-pagination-info">
+        @if (State.SelectionMode != SelectionMode.None && State.SelectedItems.Count > 0)
+        {
+            <span>@State.SelectedItems.Count of @State.TotalItems row(s) selected.</span>
+        }
+        else
+        {
+            var start = State.TotalItems > 0 ? State.PageIndex * State.PageSize + 1 : 0;
+            var end = Math.Min((State.PageIndex + 1) * State.PageSize, State.TotalItems);
+            <span>Showing @start to @end of @State.TotalItems row(s).</span>
+        }
+    </div>
+
+    <div class="cn-data-table-pagination-controls">
+        <div class="cn-data-table-pagination-page-size">
+            <label>Rows per page</label>
+            <select value="@State.PageSize" @onchange="HandlePageSizeChange" class="cn-data-table-page-size-select">
+                @foreach (var size in State.PageSizeOptions)
+                {
+                    <option value="@size">@size</option>
+                }
+            </select>
+        </div>
+
+        <div class="cn-data-table-pagination-page-info">
+            <span>Page @(State.PageIndex + 1) of @(Math.Max(1, State.TotalPages))</span>
+        </div>
+
+        <div class="cn-data-table-pagination-buttons">
+            <RnButton Variant="ButtonVariant.Outline" Size="ButtonSize.Icon"
+                      Disabled="@(State.PageIndex <= 0)"
+                      @onclick="HandleFirst"
+                      aria-label="Go to first page">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                    <path d="m11 17-5-5 5-5"/><path d="m18 17-5-5 5-5"/>
+                </svg>
+            </RnButton>
+            <RnButton Variant="ButtonVariant.Outline" Size="ButtonSize.Icon"
+                      Disabled="@(State.PageIndex <= 0)"
+                      @onclick="HandlePrev"
+                      aria-label="Go to previous page">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                    <path d="m15 18-6-6 6-6"/>
+                </svg>
+            </RnButton>
+            <RnButton Variant="ButtonVariant.Outline" Size="ButtonSize.Icon"
+                      Disabled="@(State.PageIndex >= State.TotalPages - 1)"
+                      @onclick="HandleNext"
+                      aria-label="Go to next page">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                    <path d="m9 18 6-6-6-6"/>
+                </svg>
+            </RnButton>
+            <RnButton Variant="ButtonVariant.Outline" Size="ButtonSize.Icon"
+                      Disabled="@(State.PageIndex >= State.TotalPages - 1)"
+                      @onclick="HandleLast"
+                      aria-label="Go to last page">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                    <path d="m13 17 5-5-5-5"/><path d="m6 17 5-5-5-5"/>
+                </svg>
+            </RnButton>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public DataTableState<TItem> State { get; set; } = default!;
+    [Parameter] public EventCallback OnStateChanged { get; set; }
+
+    private async Task HandlePageSizeChange(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var size))
+        {
+            State.SetPageSize(size);
+            await OnStateChanged.InvokeAsync();
+        }
+    }
+
+    private async Task HandleFirst()
+    {
+        State.GoToFirstPage();
+        await OnStateChanged.InvokeAsync();
+    }
+
+    private async Task HandlePrev()
+    {
+        State.GoToPreviousPage();
+        await OnStateChanged.InvokeAsync();
+    }
+
+    private async Task HandleNext()
+    {
+        State.GoToNextPage();
+        await OnStateChanged.InvokeAsync();
+    }
+
+    private async Task HandleLast()
+    {
+        State.GoToLastPage();
+        await OnStateChanged.InvokeAsync();
+    }
+}
