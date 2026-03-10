@@ -1,0 +1,356 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+@using Daeha.RnUI.Demo.Wasm.Pages.ComponentDemos.DataDisplay.DataTableExamples
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "DataTable", "data-table", "A powerful data table with sorting, filtering, pagination, selection, and more.",
+        Demo: @<DataTableDemoContent />,
+        Thumbnail: @<div class="text-xs text-muted-foreground">DataTable</div>,
+        Code: @"<RnDataTable TItem=""Payment"" Items=""payments"" SelectionMode=""SelectionMode.Multiple""
+             PageSize=""10"" PageSizeOptions=""@(new[] { 5, 10, 20, 50 })""
+             FilterMode=""FilterMode.Contains""
+             RowClass=""@(item => item.Status == ""Overdue"" ? ""bg-destructive/10"" : null)""
+             @bind-SelectedItems=""_selected"">
+    <Toolbar>
+        <RnDataTableSearch TItem=""Payment"" Placeholder=""Search..."" DebounceMs=""300"" />
+        <RnDataTableColumnToggle TItem=""Payment"" />
+    </Toolbar>
+    <Columns>
+        <RnDataTableColumn TItem=""Payment"" Property=""x => x.Id"" Title=""ID"" Sortable />
+        <RnDataTableColumn TItem=""Payment"" Property=""x => x.Status"" Title=""Status"" Sortable Filterable>
+            <CellTemplate Context=""item"">
+                <RnBadge>@item.Status</RnBadge>
+            </CellTemplate>
+        </RnDataTableColumn>
+        <RnDataTableColumn TItem=""Payment"" Property=""x => x.Amount"" Title=""Amount"" Sortable
+                           CellClass=""@(item => item.Amount > 500 ? ""text-green-600 font-semibold"" : null)"">
+            <CellTemplate Context=""item"">
+                @item.Amount.ToString(""C"")
+            </CellTemplate>
+        </RnDataTableColumn>
+        <RnDataTableColumn TItem=""Payment"" Title=""Actions"" Id=""actions"">
+            <CellTemplate Context=""item"">
+                <RnDataTableRowActions>
+                    <RnDropdownMenuItem>View</RnDropdownMenuItem>
+                    <RnDropdownMenuItem>Edit</RnDropdownMenuItem>
+                </RnDataTableRowActions>
+            </CellTemplate>
+        </RnDataTableColumn>
+    </Columns>
+    <DetailTemplate Context=""item"">
+        <div class=""p-4"">Payment details for @item.Id</div>
+    </DetailTemplate>
+    <EmptyContent>
+        <div class=""py-8 text-center"">No payments found.</div>
+    </EmptyContent>
+</RnDataTable>",
+        UsageCode: @"@using RnUI.Components.UI.DataTable
+
+@* ══════════════════════════════════════════════════ *@
+@* RnDataTable<TItem> — Main Component               *@
+@* ══════════════════════════════════════════════════ *@
+@*                                                    *@
+@* Parameters:                                        *@
+@*   Items            : IReadOnlyList<TItem>          *@
+@*   SelectionMode    : SelectionMode                 *@
+@*                      (None | Single | Multiple)    *@
+@*   SelectedItems    : HashSet<TItem>                *@
+@*                      (two-way bindable)            *@
+@*   PageSize         : int (default: 10)             *@
+@*   PageSizeOptions  : int[]                         *@
+@*                      (default: 10, 20, 50, 100)   *@
+@*   FilterMode       : FilterMode                    *@
+@*                      (Contains | Fuzzy)            *@
+@*   Loading          : bool                          *@
+@*   SkeletonRows     : int (default: 5)              *@
+@*   SkeletonColumns  : int (default: 4)              *@
+@*   ShowPagination   : bool (default: true)          *@
+@*   RowClass         : Func<TItem, string?>          *@
+@*   OnDataRequest    : EventCallback<DataTableRequest> *@
+@*   ServerTotalItems : int                           *@
+@*                                                    *@
+@* RenderFragments:                                   *@
+@*   Columns       — Column definitions               *@
+@*   Toolbar       — Search, toggle, custom buttons   *@
+@*   EmptyContent  — Shown when no data               *@
+@*   DetailTemplate — Expandable row detail            *@
+@*                                                    *@
+@* ══════════════════════════════════════════════════ *@
+@* RnDataTableColumn<TItem> — Column Definition       *@
+@* ══════════════════════════════════════════════════ *@
+@*                                                    *@
+@*   Property    : Expression<Func<TItem, object?>>   *@
+@*   Title       : string                             *@
+@*   Id          : string? (auto from Property)       *@
+@*   Sortable    : bool                               *@
+@*   Filterable  : bool                               *@
+@*   Visible     : bool (default: true)               *@
+@*   Width       : string? (""200px"", ""30%"")       *@
+@*   MergeRows   : bool (auto rowspan merge)          *@
+@*   CellClass   : Func<TItem, string?>               *@
+@*   StringValue : Func<TItem, string>                *@
+@*   CellTemplate  : RenderFragment<TItem>            *@
+@*   HeaderTemplate : RenderFragment<TItem>           *@
+@*                                                    *@
+@* ══════════════════════════════════════════════════ *@
+@* Sub-components                                     *@
+@* ══════════════════════════════════════════════════ *@
+@*                                                    *@
+@* RnDataTableColumnGroup<TItem>                      *@
+@*   Title : string — Group header text               *@
+@*   Wraps child RnDataTableColumn components         *@
+@*                                                    *@
+@* RnDataTableSearch<TItem>                           *@
+@*   Placeholder : string (""Search..."")             *@
+@*   DebounceMs  : int (300)                          *@
+@*                                                    *@
+@* RnDataTableColumnToggle<TItem>                     *@
+@*   Dropdown button to show/hide columns             *@
+@*                                                    *@
+@* RnDataTableRowActions                              *@
+@*   Dropdown menu with vertical dots trigger         *@
+@*   Wrap RnDropdownMenuItem components inside        *@
+@*                                                    *@
+@* ══════════════════════════════════════════════════ *@
+@* Enums                                              *@
+@* ══════════════════════════════════════════════════ *@
+@*   SelectionMode : None, Single, Multiple           *@
+@*   FilterMode    : Contains, Fuzzy                  *@
+@*   SortDirection : None, Ascending, Descending      *@
+
+<RnDataTable TItem=""YourModel"" Items=""items"">
+    <Columns>
+        <RnDataTableColumn TItem=""YourModel""
+            Property=""x => x.Name"" Title=""Name"" Sortable />
+    </Columns>
+</RnDataTable>
+
+@code {
+    private List<YourModel> items = [];
+}",
+        Examples:
+        [
+            new("Sorting",
+                "Click a column header to cycle through None → Ascending → Descending. Hold Shift and click another column for multi-column sort.",
+                @<SortingExample />,
+                @"<RnDataTable TItem=""Product"" Items=""products"">
+    <Columns>
+        <RnDataTableColumn TItem=""Product""
+            Property=""x => x.Name"" Title=""Name"" Sortable />
+        <RnDataTableColumn TItem=""Product""
+            Property=""x => x.Category"" Title=""Category"" Sortable />
+        <RnDataTableColumn TItem=""Product""
+            Property=""x => x.Price"" Title=""Price"" Sortable>
+            <CellTemplate Context=""item"">
+                @item.Price.ToString(""C"")
+            </CellTemplate>
+        </RnDataTableColumn>
+    </Columns>
+</RnDataTable>
+
+@* Shift+Click on a second column for multi-sort *@"),
+
+            new("Filtering & Search",
+                "Global search filters across all columns. Mark individual columns as Filterable for per-column filter options. Use FilterMode.Fuzzy for subsequence matching.",
+                @<FilteringExample />,
+                @"<RnDataTable TItem=""Employee"" Items=""employees"">
+    <Toolbar>
+        <RnDataTableSearch TItem=""Employee""
+            Placeholder=""Search..."" DebounceMs=""300"" />
+    </Toolbar>
+    <Columns>
+        <RnDataTableColumn TItem=""Employee""
+            Property=""x => x.Name"" Title=""Name"" />
+        <RnDataTableColumn TItem=""Employee""
+            Property=""x => x.Department""
+            Title=""Department"" Filterable />
+    </Columns>
+</RnDataTable>
+
+@* Fuzzy search mode *@
+<RnDataTable TItem=""Employee"" Items=""employees""
+             FilterMode=""FilterMode.Fuzzy"">
+    ...
+</RnDataTable>"),
+
+            new("Row Selection",
+                "Use SelectionMode.Multiple for checkbox selection with Shift+click range select. Bind selected items with @bind-SelectedItems.",
+                @<SelectionExample />,
+                @"<RnDataTable TItem=""Task"" Items=""tasks""
+             SelectionMode=""SelectionMode.Multiple""
+             @bind-SelectedItems=""_selected"">
+    <Columns>
+        <RnDataTableColumn TItem=""Task""
+            Property=""x => x.Title"" Title=""Task"" />
+        <RnDataTableColumn TItem=""Task""
+            Property=""x => x.Priority"" Title=""Priority"" />
+    </Columns>
+</RnDataTable>
+
+@code {
+    private HashSet<Task> _selected = [];
+}
+
+@* SelectionMode: None (default), Single, Multiple *@
+@* Shift+click selects range between last and current *@"),
+
+            new("Pagination",
+                "Control page size and provide custom page size options. Pagination shows row counts and First/Prev/Next/Last navigation.",
+                @<PaginationExample />,
+                @"<RnDataTable TItem=""LogEntry"" Items=""logs""
+             PageSize=""5""
+             PageSizeOptions=""@(new[] { 5, 10, 20, 50 })"">
+    <Columns>
+        <RnDataTableColumn TItem=""LogEntry""
+            Property=""x => x.Message"" Title=""Message"" />
+    </Columns>
+</RnDataTable>
+
+@* Hide pagination: ShowPagination=""false"" *@"),
+
+            new("Row Expansion",
+                "Add a DetailTemplate to enable expandable rows. A chevron toggle button is automatically added to each row.",
+                @<RowExpansionExample />,
+                @"<RnDataTable TItem=""Order"" Items=""orders"">
+    <Columns>
+        <RnDataTableColumn TItem=""Order""
+            Property=""x => x.Id"" Title=""Order ID"" />
+        <RnDataTableColumn TItem=""Order""
+            Property=""x => x.Customer"" Title=""Customer"" />
+    </Columns>
+    <DetailTemplate Context=""item"">
+        <div class=""p-4"">
+            <p>Shipping: @item.Address</p>
+            <p>Items: @item.ItemCount</p>
+        </div>
+    </DetailTemplate>
+</RnDataTable>"),
+
+            new("Conditional Styling",
+                "Use RowClass for row-level styling and CellClass on individual columns for cell-level styling. Both accept Func<TItem, string?>.",
+                @<ConditionalStylingExample />,
+                @"<RnDataTable TItem=""Invoice"" Items=""invoices""
+    RowClass=""@(item => item.Status == ""Overdue""
+        ? ""bg-destructive/10"" : null)"">
+    <Columns>
+        <RnDataTableColumn TItem=""Invoice""
+            Property=""x => x.Amount"" Title=""Amount""
+            CellClass=""@(item => item.Amount > 1000
+                ? ""text-green-600 font-bold"" : null)"">
+            <CellTemplate Context=""item"">
+                @item.Amount.ToString(""C"")
+            </CellTemplate>
+        </RnDataTableColumn>
+    </Columns>
+</RnDataTable>"),
+
+            new("Column Visibility Toggle",
+                "Add RnDataTableColumnToggle to the toolbar to let users show/hide columns dynamically via a dropdown.",
+                @<ColumnToggleExample />,
+                @"<RnDataTable TItem=""Product"" Items=""products"">
+    <Toolbar>
+        <div class=""flex items-center justify-between w-full"">
+            <RnDataTableSearch TItem=""Product""
+                Placeholder=""Search..."" />
+            <RnDataTableColumnToggle TItem=""Product"" />
+        </div>
+    </Toolbar>
+    <Columns>
+        <RnDataTableColumn TItem=""Product""
+            Property=""x => x.Name"" Title=""Name"" />
+        <RnDataTableColumn TItem=""Product""
+            Property=""x => x.Sku"" Title=""SKU"" />
+        <RnDataTableColumn TItem=""Product""
+            Property=""x => x.Price"" Title=""Price"" />
+    </Columns>
+</RnDataTable>"),
+
+            new("Row Actions",
+                "Use RnDataTableRowActions as a convenience wrapper that renders a dropdown menu with a vertical dots trigger button.",
+                @<RowActionsExample />,
+                @"<RnDataTableColumn TItem=""User"" Title="""" Id=""actions"">
+    <CellTemplate Context=""item"">
+        <RnDataTableRowActions>
+            <RnDropdownMenuLabel>Actions</RnDropdownMenuLabel>
+            <RnDropdownMenuSeparator />
+            <RnDropdownMenuItem>View Profile</RnDropdownMenuItem>
+            <RnDropdownMenuItem>Edit User</RnDropdownMenuItem>
+            <RnDropdownMenuSeparator />
+            <RnDropdownMenuItem Class=""text-destructive"">
+                Delete User
+            </RnDropdownMenuItem>
+        </RnDataTableRowActions>
+    </CellTemplate>
+</RnDataTableColumn>"),
+
+            new("Multi-level Headers",
+                "Wrap columns in RnDataTableColumnGroup to create a grouped header row with automatic colspan calculation.",
+                @<ColumnGroupExample />,
+                @"<RnDataTable TItem=""Student"" Items=""students"">
+    <Columns>
+        <RnDataTableColumn TItem=""Student""
+            Property=""x => x.Name"" Title=""Name"" />
+
+        <RnDataTableColumnGroup TItem=""Student"" Title=""Scores"">
+            <RnDataTableColumn TItem=""Student""
+                Property=""x => x.Math"" Title=""Math"" />
+            <RnDataTableColumn TItem=""Student""
+                Property=""x => x.Science"" Title=""Science"" />
+            <RnDataTableColumn TItem=""Student""
+                Property=""x => x.English"" Title=""English"" />
+        </RnDataTableColumnGroup>
+
+        <RnDataTableColumn TItem=""Student""
+            Property=""x => x.Grade"" Title=""Grade"" />
+    </Columns>
+</RnDataTable>
+
+@* Renders two-row header:                        *@
+@* Row 1: Name |    Scores (colspan=3)    | Grade *@
+@* Row 2: Name | Math | Science | English | Grade *@"),
+
+            new("Cell Merging (MergeRows)",
+                "Set MergeRows on a column to automatically merge consecutive cells with the same value using rowspan. Sort by that column first for best results.",
+                @<RowMergeExample />,
+                @"<RnDataTable TItem=""SalesRecord"" Items=""sales"">
+    <Columns>
+        <RnDataTableColumn TItem=""SalesRecord""
+            Property=""x => x.Region"" Title=""Region""
+            Sortable MergeRows />
+        <RnDataTableColumn TItem=""SalesRecord""
+            Property=""x => x.Product"" Title=""Product"" />
+        <RnDataTableColumn TItem=""SalesRecord""
+            Property=""x => x.Revenue"" Title=""Revenue"" />
+    </Columns>
+</RnDataTable>
+
+@* When sorted by Region, consecutive same values *@
+@* merge into a single cell with rowspan=N        *@"),
+
+            new("Loading & Empty States",
+                "Set Loading=true to show skeleton rows. Provide EmptyContent for a custom empty state message when no data is available.",
+                @<LoadingExample />,
+                @"@* Loading skeleton *@
+<RnDataTable TItem=""Payment"" Items=""payments""
+             Loading=""true""
+             SkeletonRows=""5""
+             SkeletonColumns=""4"" />
+
+@* Custom empty state *@
+<RnDataTable TItem=""Payment"" Items=""@(new List<Payment>())"">
+    <Columns>
+        <RnDataTableColumn TItem=""Payment""
+            Property=""x => x.Id"" Title=""ID"" />
+    </Columns>
+    <EmptyContent>
+        <div class=""py-8 text-center"">
+            <p class=""font-medium"">No payments found</p>
+            <p class=""text-xs text-muted-foreground"">
+                Try adjusting your search or filter.
+            </p>
+        </div>
+    </EmptyContent>
+</RnDataTable>"),
+        ]
+    );
+}

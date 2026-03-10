@@ -1,0 +1,54 @@
+@* Row Expansion Example - Expandable detail rows *@
+
+<RnDataTable TItem="Order" Items="_orders" PageSize="5" ShowPagination="false">
+    <Columns>
+        <RnDataTableColumn TItem="Order" Property="x => x.Id" Title="Order ID" Sortable>
+            <CellTemplate Context="item">
+                <span class="font-mono text-xs">@item.Id</span>
+            </CellTemplate>
+        </RnDataTableColumn>
+        <RnDataTableColumn TItem="Order" Property="x => x.Customer" Title="Customer" Sortable />
+        <RnDataTableColumn TItem="Order" Property="x => x.Total" Title="Total" Sortable>
+            <CellTemplate Context="item">
+                <span class="font-medium">@item.Total.ToString("C")</span>
+            </CellTemplate>
+        </RnDataTableColumn>
+        <RnDataTableColumn TItem="Order" Property="x => x.Status" Title="Status">
+            <CellTemplate Context="item">
+                <RnBadge>@item.Status</RnBadge>
+            </CellTemplate>
+        </RnDataTableColumn>
+    </Columns>
+    <DetailTemplate Context="item">
+        <div class="p-4 space-y-2">
+            <p class="text-sm font-medium">Order Details</p>
+            <div class="grid grid-cols-3 gap-4 text-sm">
+                <div>
+                    <p class="text-muted-foreground text-xs">Shipping Address</p>
+                    <p>@item.Address</p>
+                </div>
+                <div>
+                    <p class="text-muted-foreground text-xs">Items</p>
+                    <p>@item.ItemCount item(s)</p>
+                </div>
+                <div>
+                    <p class="text-muted-foreground text-xs">Notes</p>
+                    <p>@item.Notes</p>
+                </div>
+            </div>
+        </div>
+    </DetailTemplate>
+</RnDataTable>
+<p class="text-xs text-muted-foreground mt-2">Click the chevron icon on each row to expand/collapse the detail view.</p>
+
+@code {
+    private record Order(string Id, string Customer, decimal Total, string Status, string Address, int ItemCount, string Notes);
+
+    private readonly List<Order> _orders =
+    [
+        new("ORD-001", "Alice Johnson", 250.00m, "Shipped", "123 Main St, NY", 3, "Express delivery"),
+        new("ORD-002", "Bob Smith", 89.99m, "Processing", "456 Oak Ave, CA", 1, "Gift wrap"),
+        new("ORD-003", "Charlie Brown", 175.50m, "Delivered", "789 Pine Rd, TX", 2, "Leave at door"),
+        new("ORD-004", "Diana Prince", 420.00m, "Pending", "321 Elm St, WA", 5, "Fragile items"),
+    ];
+}

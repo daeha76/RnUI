@@ -1,0 +1,398 @@
+@* RnDataTable component - Data table with sorting, filtering, pagination, selection *@
+@typeparam TItem
+
+<div data-slot="data-table" class="@CssUtils.Cn("cn-data-table", Class)" @attributes="AdditionalAttributes">
+    @* Toolbar *@
+    @if (Toolbar != null)
+    {
+        <div data-slot="data-table-toolbar" class="cn-data-table-toolbar">
+            <CascadingValue Value="State" IsFixed="false">
+                <CascadingValue Value="this" IsFixed="false">
+                    @Toolbar
+                </CascadingValue>
+            </CascadingValue>
+        </div>
+    }
+
+    @* Column definitions (hidden, metadata only) *@
+    <div style="display:none">
+        <CascadingValue Value="this" IsFixed="false">
+            @Columns
+        </CascadingValue>
+    </div>
+
+    @* Table *@
+    @if (Loading)
+    {
+        <RnTable>
+            <RnTableHeader>
+                <RnTableRow>
+                    @for (var c = 0; c < _skeletonColCount; c++)
+                    {
+                        <RnTableHead>
+                            <RnSkeleton Class="h-4 w-20" />
+                        </RnTableHead>
+                    }
+                </RnTableRow>
+            </RnTableHeader>
+            <RnTableBody>
+                @for (var row = 0; row < _skeletonRows; row++)
+                {
+                    <RnTableRow>
+                        @for (var c = 0; c < _skeletonColCount; c++)
+                        {
+                            <RnTableCell>
+                                <RnSkeleton Class="h-4 w-full" />
+                            </RnTableCell>
+                        }
+                    </RnTableRow>
+                }
+            </RnTableBody>
+        </RnTable>
+    }
+    else
+    {
+        <RnTable>
+            @* Group header row (multi-level headers) *@
+            @if (State.ColumnGroups.Count > 0)
+            {
+                <RnTableHeader>
+                    <RnTableRow>
+                        @if (State.SelectionMode != SelectionMode.None)
+                        {
+                            <RnTableHead Class="w-[40px]" />
+                        }
+                        @foreach (var group in GetGroupHeaderCells())
+                        {
+                            <RnTableHead Class="cn-data-table-group-header text-center" @attributes="@(new Dictionary<string, object> { ["colspan"] = group.ColSpan.ToString() })">
+                                @group.Title
+                            </RnTableHead>
+                        }
+                    </RnTableRow>
+                    <RnTableRow>
+                        @if (State.SelectionMode != SelectionMode.None)
+                        {
+                            <RnTableHead Class="w-[40px]">
+                                @if (State.SelectionMode == SelectionMode.Multiple)
+                                {
+                                    <RnCheckbox Checked="@State.IsAllOnPageSelected"
+                                                CheckedChanged="@HandleSelectAll"
+                                                aria-label="Select all" />
+                                }
+                            </RnTableHead>
+                        }
+                        @foreach (var col in State.GetVisibleColumns())
+                        {
+                            <RnTableHead style="@GetColumnWidthStyle(col)">
+                                @if (col.HeaderTemplate != null)
+                                {
+                                    @col.HeaderTemplate(default(TItem)!)
+                                }
+                                else
+                                {
+                                    <RnDataTableColumnHeader TItem="TItem"
+                                                             State="State"
+                                                             ColumnId="@col.Id"
+                                                             Title="@col.Title"
+                                                             IsSortable="@col.Sortable"
+                                                             OnSortChanged="StateHasChanged" />
+                                }
+                            </RnTableHead>
+                        }
+                        @if (DetailTemplate != null)
+                        {
+                            <RnTableHead Class="w-[40px]" />
+                        }
+                    </RnTableRow>
+                </RnTableHeader>
+            }
+            else
+            {
+                <RnTableHeader>
+                    <RnTableRow>
+                        @if (State.SelectionMode != SelectionMode.None)
+                        {
+                            <RnTableHead Class="w-[40px]">
+                                @if (State.SelectionMode == SelectionMode.Multiple)
+                                {
+                                    <RnCheckbox Checked="@State.IsAllOnPageSelected"
+                                                CheckedChanged="@HandleSelectAll"
+                                                aria-label="Select all" />
+                                }
+                            </RnTableHead>
+                        }
+                        @foreach (var col in State.GetVisibleColumns())
+                        {
+                            <RnTableHead style="@GetColumnWidthStyle(col)">
+                                @if (col.HeaderTemplate != null)
+                                {
+                                    @col.HeaderTemplate(default(TItem)!)
+                                }
+                                else
+                                {
+                                    <RnDataTableColumnHeader TItem="TItem"
+                                                             State="State"
+                                                             ColumnId="@col.Id"
+                                                             Title="@col.Title"
+                                                             IsSortable="@col.Sortable"
+                                                             OnSortChanged="StateHasChanged" />
+                                }
+                            </RnTableHead>
+                        }
+                        @if (DetailTemplate != null)
+                        {
+                            <RnTableHead Class="w-[40px]" />
+                        }
+                    </RnTableRow>
+                </RnTableHeader>
+            }
+
+            <RnTableBody>
+                @if (State.PagedItems.Count == 0)
+                {
+                    <RnTableRow>
+                        <RnTableCell Class="cn-data-table-empty" @attributes="@(new Dictionary<string, object> { ["colspan"] = _totalVisibleColumnCount.ToString() })">
+                            @if (EmptyContent != null)
+                            {
+                                @EmptyContent
+                            }
+                            else
+                            {
+                                <span>No results.</span>
+                            }
+                        </RnTableCell>
+                    </RnTableRow>
+                }
+                else
+                {
+                    @for (var i = 0; i < State.PagedItems.Count; i++)
+                    {
+                        var rowIndex = i;
+                        var item = State.PagedItems[rowIndex];
+                        var isSelected = State.IsSelected(item);
+                        var rowClass = RowClass?.Invoke(item);
+
+                        <RnTableRow Class="@rowClass"
+                                    @attributes="@(new Dictionary<string, object> { ["data-state"] = isSelected ? "selected" : "" })">
+                            @if (State.SelectionMode != SelectionMode.None)
+                            {
+                                <RnTableCell Class="w-[40px]">
+                                    <RnCheckbox Checked="@isSelected"
+                                                CheckedChanged="@(async _ => await HandleRowSelect(item, rowIndex))"
+                                                aria-label="Select row" />
+                                </RnTableCell>
+                            }
+                            @foreach (var col in State.GetVisibleColumns())
+                            {
+                                var span = State.GetRowSpan(col.Id, rowIndex);
+                                @if (span == 0)
+                                {
+                                    continue;
+                                }
+
+                                var cellClass = col.CellClass?.Invoke(item);
+                                var cellAttrs = new Dictionary<string, object>();
+                                if (span > 1)
+                                {
+                                    cellAttrs["rowspan"] = span.ToString();
+                                }
+
+                                <RnTableCell Class="@cellClass" @attributes="cellAttrs">
+                                    @if (col.CellTemplate != null)
+                                    {
+                                        @col.CellTemplate(item)
+                                    }
+                                    else if (col.PropertyAccessor != null)
+                                    {
+                                        @(col.PropertyAccessor(item)?.ToString())
+                                    }
+                                </RnTableCell>
+                            }
+                            @if (DetailTemplate != null)
+                            {
+                                <RnTableCell Class="w-[40px]">
+                                    <button type="button"
+                                            class="cn-data-table-expand-button"
+                                            aria-expanded="@State.IsRowExpanded(rowIndex).ToString().ToLower()"
+                                            @onclick="() => HandleToggleExpand(rowIndex)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                             stroke-linejoin="round"
+                                             class="@CssUtils.Cn("h-4 w-4 transition-transform", State.IsRowExpanded(rowIndex) ? "rotate-180" : "")">
+                                            <path d="m6 9 6 6 6-6"/>
+                                        </svg>
+                                    </button>
+                                </RnTableCell>
+                            }
+                        </RnTableRow>
+
+                        @if (DetailTemplate != null && State.IsRowExpanded(rowIndex))
+                        {
+                            <RnTableRow Class="cn-data-table-row-expanded">
+                                <RnTableCell @attributes="@(new Dictionary<string, object> { ["colspan"] = _totalVisibleColumnCount.ToString() })">
+                                    @DetailTemplate(item)
+                                </RnTableCell>
+                            </RnTableRow>
+                        }
+                    }
+                }
+            </RnTableBody>
+        </RnTable>
+    }
+
+    @* Pagination *@
+    @if (!Loading && _showPagination)
+    {
+        <RnDataTablePagination TItem="TItem" State="State" OnStateChanged="StateHasChanged" />
+    }
+</div>
+
+@code {
+    [Parameter] public IReadOnlyList<TItem>? Items { get; set; }
+    [Parameter] public RenderFragment? Columns { get; set; }
+    [Parameter] public RenderFragment? Toolbar { get; set; }
+    [Parameter] public RenderFragment? EmptyContent { get; set; }
+    [Parameter] public RenderFragment<TItem>? DetailTemplate { get; set; }
+    [Parameter] public Func<TItem, string?>? RowClass { get; set; }
+    [Parameter] public SelectionMode SelectionMode { get; set; } = SelectionMode.None;
+    [Parameter] public HashSet<TItem>? SelectedItems { get; set; }
+    [Parameter] public EventCallback<HashSet<TItem>> SelectedItemsChanged { get; set; }
+    [Parameter] public int PageSize { get; set; } = 10;
+    [Parameter] public int[]? PageSizeOptions { get; set; }
+    [Parameter] public FilterMode FilterMode { get; set; } = FilterMode.Contains;
+    [Parameter] public bool Loading { get; set; }
+    [Parameter] public int SkeletonRows { get; set; } = 5;
+    [Parameter] public int SkeletonColumns { get; set; } = 4;
+    [Parameter] public bool ShowPagination { get; set; } = true;
+    [Parameter] public string? Class { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    // Server-side mode
+    [Parameter] public EventCallback<DataTableRequest> OnDataRequest { get; set; }
+    [Parameter] public int ServerTotalItems { get; set; }
+
+    public DataTableState<TItem> State { get; } = new();
+
+    private int _skeletonRows => SkeletonRows;
+    private int _skeletonColCount => Math.Max(State.GetVisibleColumns().Count, SkeletonColumns);
+    private bool _showPagination => ShowPagination;
+    private int _totalVisibleColumnCount
+    {
+        get
+        {
+            var count = State.GetVisibleColumns().Count;
+            if (State.SelectionMode != SelectionMode.None) count++;
+            if (DetailTemplate != null) count++;
+            return count;
+        }
+    }
+
+    private bool _initialized;
+
+    protected override void OnParametersSet()
+    {
+        State.SelectionMode = SelectionMode;
+        State.PageSize = PageSize;
+        State.GlobalFilterMode = FilterMode;
+        if (PageSizeOptions != null) State.PageSizeOptions = PageSizeOptions;
+        if (SelectedItems != null) State.SelectedItems = SelectedItems;
+
+        if (Items != null)
+        {
+            State.SetItems(Items);
+        }
+    }
+
+    internal void RegisterColumn(DataTableColumnDef<TItem> columnDef)
+    {
+        State.RegisterColumn(columnDef);
+        if (_initialized) StateHasChanged();
+    }
+
+    internal void RegisterColumnGroup(DataTableColumnGroupDef groupDef)
+    {
+        State.RegisterColumnGroup(groupDef);
+        if (_initialized) StateHasChanged();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _initialized = true;
+            StateHasChanged();
+        }
+    }
+
+    private async Task HandleSelectAll(bool _)
+    {
+        State.ToggleAllOnPage();
+        await NotifySelectionChanged();
+        StateHasChanged();
+    }
+
+    private async Task HandleRowSelect(TItem item, int rowIndex)
+    {
+        State.ToggleRow(item, rowIndex);
+        await NotifySelectionChanged();
+        StateHasChanged();
+    }
+
+    private void HandleToggleExpand(int rowIndex)
+    {
+        State.ToggleRowExpansion(rowIndex);
+        StateHasChanged();
+    }
+
+    private async Task NotifySelectionChanged()
+    {
+        if (SelectedItemsChanged.HasDelegate)
+        {
+            await SelectedItemsChanged.InvokeAsync(State.SelectedItems);
+        }
+    }
+
+    private string? GetColumnWidthStyle(DataTableColumnDef<TItem> col)
+    {
+        return col.Width != null ? $"width: {col.Width}" : null;
+    }
+
+    private record GroupHeaderCell(string Title, int ColSpan);
+
+    private IReadOnlyList<GroupHeaderCell> GetGroupHeaderCells()
+    {
+        var visibleCols = State.GetVisibleColumns();
+        var cells = new List<GroupHeaderCell>();
+
+        var i = 0;
+        while (i < visibleCols.Count)
+        {
+            var col = visibleCols[i];
+            if (!string.IsNullOrEmpty(col.GroupId))
+            {
+                var group = State.ColumnGroups.FirstOrDefault(g => g.Id == col.GroupId);
+                if (group != null)
+                {
+                    var span = 0;
+                    while (i + span < visibleCols.Count && visibleCols[i + span].GroupId == col.GroupId)
+                    {
+                        span++;
+                    }
+                    cells.Add(new GroupHeaderCell(group.Title, span));
+                    i += span;
+                    continue;
+                }
+            }
+            cells.Add(new GroupHeaderCell("", 1));
+            i++;
+        }
+
+        if (DetailTemplate != null)
+        {
+            cells.Add(new GroupHeaderCell("", 1));
+        }
+
+        return cells;
+    }
+}

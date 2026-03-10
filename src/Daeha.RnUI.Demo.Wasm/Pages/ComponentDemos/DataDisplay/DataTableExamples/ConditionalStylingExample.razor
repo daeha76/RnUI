@@ -1,0 +1,46 @@
+@* Conditional Styling Example - RowClass + CellClass *@
+
+<RnDataTable TItem="Invoice" Items="_invoices" PageSize="5" ShowPagination="false"
+             RowClass="@(item => item.Status == "Overdue" ? "bg-destructive/10" : item.Status == "Paid" ? "bg-green-50 dark:bg-green-950/20" : null)">
+    <Columns>
+        <RnDataTableColumn TItem="Invoice" Property="x => x.Id" Title="Invoice" Sortable>
+            <CellTemplate Context="item">
+                <span class="font-mono text-xs">@item.Id</span>
+            </CellTemplate>
+        </RnDataTableColumn>
+        <RnDataTableColumn TItem="Invoice" Property="x => x.Client" Title="Client" />
+        <RnDataTableColumn TItem="Invoice" Property="x => x.Status" Title="Status">
+            <CellTemplate Context="item">
+                <RnBadge Variant="@GetStatusVariant(item.Status)">@item.Status</RnBadge>
+            </CellTemplate>
+        </RnDataTableColumn>
+        <RnDataTableColumn TItem="Invoice" Property="x => x.Amount" Title="Amount" Sortable
+                           CellClass="@(item => item.Amount > 1000 ? "text-green-600 font-bold" : null)">
+            <CellTemplate Context="item">
+                <span class="text-right">@item.Amount.ToString("C")</span>
+            </CellTemplate>
+        </RnDataTableColumn>
+    </Columns>
+</RnDataTable>
+<p class="text-xs text-muted-foreground mt-2"><code>RowClass</code> highlights overdue rows in red, paid rows in green. <code>CellClass</code> makes amounts over $1,000 bold green.</p>
+
+@code {
+    private record Invoice(string Id, string Client, string Status, decimal Amount);
+
+    private readonly List<Invoice> _invoices =
+    [
+        new("INV-001", "Acme Corp", "Paid", 2500.00m),
+        new("INV-002", "Globex Inc", "Overdue", 750.00m),
+        new("INV-003", "Initech", "Pending", 1200.00m),
+        new("INV-004", "Umbrella Co", "Paid", 450.00m),
+        new("INV-005", "Stark Industries", "Overdue", 3200.00m),
+    ];
+
+    private static BadgeVariant GetStatusVariant(string status) => status switch
+    {
+        "Paid" => BadgeVariant.Default,
+        "Pending" => BadgeVariant.Secondary,
+        "Overdue" => BadgeVariant.Destructive,
+        _ => BadgeVariant.Outline
+    };
+}

@@ -1,0 +1,43 @@
+@* RnDataTableSearch - Global search input with debounce *@
+@typeparam TItem
+@implements IDisposable
+
+<div data-slot="data-table-search" class="cn-data-table-search">
+    <RnInput Type="text"
+             Value="@_searchValue"
+             Placeholder="@Placeholder"
+             Class="@Class"
+             @oninput="HandleInput"
+             @attributes="AdditionalAttributes" />
+</div>
+
+@code {
+    [CascadingParameter] public DataTableState<TItem>? State { get; set; }
+
+    [Parameter] public string Placeholder { get; set; } = "Search...";
+    [Parameter] public int DebounceMs { get; set; } = 300;
+    [Parameter] public string? Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string _searchValue = "";
+    private Timer? _debounceTimer;
+
+    private void HandleInput(ChangeEventArgs e)
+    {
+        _searchValue = e.Value?.ToString() ?? "";
+        _debounceTimer?.Dispose();
+        _debounceTimer = new Timer(_ =>
+        {
+            InvokeAsync(() =>
+            {
+                State?.SetGlobalFilter(_searchValue);
+                StateHasChanged();
+            });
+        }, null, DebounceMs, Timeout.Infinite);
+    }
+
+    public void Dispose()
+    {
+        _debounceTimer?.Dispose();
+    }
+}

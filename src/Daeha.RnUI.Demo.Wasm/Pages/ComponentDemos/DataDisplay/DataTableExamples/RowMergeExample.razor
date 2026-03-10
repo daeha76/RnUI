@@ -1,0 +1,31 @@
+@* Row Merge Example - MergeRows for consecutive same values *@
+
+<RnDataTable TItem="SalesRecord" Items="_sales" PageSize="10" ShowPagination="false">
+    <Columns>
+        <RnDataTableColumn TItem="SalesRecord" Property="x => x.Region" Title="Region" Sortable MergeRows />
+        <RnDataTableColumn TItem="SalesRecord" Property="x => x.Product" Title="Product" Sortable />
+        <RnDataTableColumn TItem="SalesRecord" Property="x => x.Revenue" Title="Revenue" Sortable>
+            <CellTemplate Context="item">
+                @item.Revenue.ToString("C")
+            </CellTemplate>
+        </RnDataTableColumn>
+        <RnDataTableColumn TItem="SalesRecord" Property="x => x.Quarter" Title="Quarter" />
+    </Columns>
+</RnDataTable>
+<p class="text-xs text-muted-foreground mt-2">Sort by "Region" to see consecutive identical values merged into a single cell with <code>rowspan</code>. The <code>MergeRows</code> parameter enables this.</p>
+
+@code {
+    private record SalesRecord(string Region, string Product, decimal Revenue, string Quarter);
+
+    private readonly List<SalesRecord> _sales =
+    [
+        new("North", "Widget A", 12000m, "Q1"),
+        new("North", "Widget B", 8500m, "Q1"),
+        new("North", "Widget C", 9200m, "Q2"),
+        new("South", "Widget A", 15000m, "Q1"),
+        new("South", "Widget B", 11000m, "Q2"),
+        new("East", "Widget A", 7500m, "Q1"),
+        new("East", "Widget C", 6800m, "Q2"),
+        new("East", "Widget B", 9100m, "Q1"),
+    ];
+}

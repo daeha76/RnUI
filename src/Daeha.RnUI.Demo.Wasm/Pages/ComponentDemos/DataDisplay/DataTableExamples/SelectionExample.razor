@@ -1,0 +1,42 @@
+@* Selection Example - Multiple selection with Shift+click range select *@
+
+<RnDataTable TItem="Task" Items="_tasks" SelectionMode="SelectionMode.Multiple"
+             @bind-SelectedItems="_selected" PageSize="5" ShowPagination="false">
+    <Columns>
+        <RnDataTableColumn TItem="Task" Property="x => x.Title" Title="Task" Sortable />
+        <RnDataTableColumn TItem="Task" Property="x => x.Priority" Title="Priority" Sortable Filterable>
+            <CellTemplate Context="item">
+                <RnBadge Variant="@GetPriorityVariant(item.Priority)">@item.Priority</RnBadge>
+            </CellTemplate>
+        </RnDataTableColumn>
+        <RnDataTableColumn TItem="Task" Property="x => x.Assignee" Title="Assignee" />
+    </Columns>
+</RnDataTable>
+
+@if (_selected.Count > 0)
+{
+    <p class="text-sm mt-2">Selected: <strong>@_selected.Count</strong> task(s) — @string.Join(", ", _selected.Select(t => t.Title))</p>
+}
+
+@code {
+    private record Task(string Title, string Priority, string Assignee);
+
+    private HashSet<Task> _selected = [];
+
+    private readonly List<Task> _tasks =
+    [
+        new("Fix login bug", "High", "Alice"),
+        new("Update docs", "Low", "Bob"),
+        new("Add dark mode", "Medium", "Charlie"),
+        new("Optimize queries", "High", "Diana"),
+        new("Write tests", "Medium", "Eve"),
+    ];
+
+    private static BadgeVariant GetPriorityVariant(string priority) => priority switch
+    {
+        "High" => BadgeVariant.Destructive,
+        "Medium" => BadgeVariant.Default,
+        "Low" => BadgeVariant.Secondary,
+        _ => BadgeVariant.Outline
+    };
+}

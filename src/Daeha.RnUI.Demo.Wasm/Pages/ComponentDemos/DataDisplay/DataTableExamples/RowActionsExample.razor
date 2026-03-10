@@ -1,0 +1,37 @@
+@* Row Actions Example - Dropdown menu per row *@
+
+<RnDataTable TItem="User" Items="_users" PageSize="5" ShowPagination="false">
+    <Columns>
+        <RnDataTableColumn TItem="User" Property="x => x.Name" Title="Name" Sortable />
+        <RnDataTableColumn TItem="User" Property="x => x.Email" Title="Email" />
+        <RnDataTableColumn TItem="User" Property="x => x.Role" Title="Role">
+            <CellTemplate Context="item">
+                <RnBadge Variant="BadgeVariant.Outline">@item.Role</RnBadge>
+            </CellTemplate>
+        </RnDataTableColumn>
+        <RnDataTableColumn TItem="User" Title="" Id="actions">
+            <CellTemplate Context="item">
+                <RnDataTableRowActions>
+                    <RnDropdownMenuLabel>Actions</RnDropdownMenuLabel>
+                    <RnDropdownMenuSeparator />
+                    <RnDropdownMenuItem>View Profile</RnDropdownMenuItem>
+                    <RnDropdownMenuItem>Edit User</RnDropdownMenuItem>
+                    <RnDropdownMenuSeparator />
+                    <RnDropdownMenuItem Class="text-destructive">Delete User</RnDropdownMenuItem>
+                </RnDataTableRowActions>
+            </CellTemplate>
+        </RnDataTableColumn>
+    </Columns>
+</RnDataTable>
+
+@code {
+    private record User(string Name, string Email, string Role);
+
+    private readonly List<User> _users =
+    [
+        new("Alice Johnson", "alice@example.com", "Admin"),
+        new("Bob Smith", "bob@example.com", "Editor"),
+        new("Charlie Brown", "charlie@example.com", "Viewer"),
+        new("Diana Prince", "diana@example.com", "Admin"),
+    ];
+}

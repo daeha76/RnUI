@@ -1,0 +1,73 @@
+@* RnDataTableColumnHeader - Sortable column header content *@
+@typeparam TItem
+
+@{
+    var sortDir = State.GetSortDirection(ColumnId);
+    var sortIndex = State.GetSortIndex(ColumnId);
+    var ariaSortValue = sortDir switch
+    {
+        SortDirection.Ascending => "ascending",
+        SortDirection.Descending => "descending",
+        _ => "none"
+    };
+}
+
+@if (IsSortable)
+{
+    <button type="button"
+            data-slot="data-table-column-header"
+            class="@CssUtils.Cn("cn-data-table-column-header", "cn-data-table-column-header-sortable")"
+            aria-sort="@ariaSortValue"
+            @onclick="HandleClick"
+            @onclick:shiftKey>
+        <span>@Title</span>
+        @if (sortDir == SortDirection.Ascending)
+        {
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 class="cn-data-table-sort-icon">
+                <path d="m18 15-6-6-6 6"/>
+            </svg>
+        }
+        else if (sortDir == SortDirection.Descending)
+        {
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 class="cn-data-table-sort-icon">
+                <path d="m6 9 6 6 6-6"/>
+            </svg>
+        }
+        else
+        {
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 class="cn-data-table-sort-icon opacity-30">
+                <path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/>
+            </svg>
+        }
+        @if (sortIndex > 0)
+        {
+            <span class="cn-data-table-sort-badge">@sortIndex</span>
+        }
+    </button>
+}
+else
+{
+    <span data-slot="data-table-column-header" class="cn-data-table-column-header">
+        @Title
+    </span>
+}
+
+@code {
+    [Parameter] public DataTableState<TItem> State { get; set; } = default!;
+    [Parameter] public string ColumnId { get; set; } = "";
+    [Parameter] public string Title { get; set; } = "";
+    [Parameter] public bool IsSortable { get; set; }
+    [Parameter] public EventCallback OnSortChanged { get; set; }
+
+    private async Task HandleClick(MouseEventArgs e)
+    {
+        State.ToggleSort(ColumnId, e.ShiftKey);
+        await OnSortChanged.InvokeAsync();
+    }
+}

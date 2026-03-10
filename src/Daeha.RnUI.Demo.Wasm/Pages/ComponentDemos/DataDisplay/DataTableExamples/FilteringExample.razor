@@ -1,0 +1,31 @@
+@* Filtering Example - Global search + per-column filtering *@
+
+<RnDataTable TItem="Employee" Items="_employees" PageSize="5" ShowPagination="false">
+    <Toolbar>
+        <div class="flex items-center gap-2 w-full">
+            <RnDataTableSearch TItem="Employee" Placeholder="Search employees..." />
+        </div>
+    </Toolbar>
+    <Columns>
+        <RnDataTableColumn TItem="Employee" Property="x => x.Name" Title="Name" Sortable />
+        <RnDataTableColumn TItem="Employee" Property="x => x.Department" Title="Department" Sortable Filterable />
+        <RnDataTableColumn TItem="Employee" Property="x => x.Role" Title="Role" Sortable Filterable />
+        <RnDataTableColumn TItem="Employee" Property="x => x.Email" Title="Email" />
+    </Columns>
+</RnDataTable>
+<p class="text-xs text-muted-foreground mt-2">Type in the search box to filter across all columns. Columns marked <code>Filterable</code> also get per-column filter options in the header.</p>
+
+@code {
+    private record Employee(string Name, string Department, string Role, string Email);
+
+    private readonly List<Employee> _employees =
+    [
+        new("Alice Johnson", "Engineering", "Senior Dev", "alice@example.com"),
+        new("Bob Smith", "Engineering", "Lead Dev", "bob@example.com"),
+        new("Charlie Brown", "Design", "UI Designer", "charlie@example.com"),
+        new("Diana Prince", "Marketing", "Manager", "diana@example.com"),
+        new("Eve Davis", "Engineering", "Junior Dev", "eve@example.com"),
+        new("Frank Wilson", "Design", "UX Researcher", "frank@example.com"),
+        new("Grace Lee", "Marketing", "Analyst", "grace@example.com"),
+    ];
+}

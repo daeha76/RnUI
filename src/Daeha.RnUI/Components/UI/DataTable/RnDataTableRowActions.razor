@@ -1,0 +1,22 @@
+@* RnDataTableRowActions - Convenience wrapper for action column dropdown *@
+
+<RnDropdownMenu>
+    <Trigger>
+        <RnButton Variant="ButtonVariant.Ghost" Size="ButtonSize.Icon" Class="@Class" @attributes="AdditionalAttributes">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                <circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/>
+            </svg>
+            <span class="sr-only">Open menu</span>
+        </RnButton>
+    </Trigger>
+    <ChildContent>
+        @ChildContent
+    </ChildContent>
+</RnDropdownMenu>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

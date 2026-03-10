@@ -1,0 +1,43 @@
+@* RnDataTableColumnGroup - Column group definition for multi-level headers *@
+@typeparam TItem
+
+<CascadingValue Value="this" IsFixed="true">
+    @ChildContent
+</CascadingValue>
+
+@code {
+    [CascadingParameter] internal RnDataTable<TItem>? Parent { get; set; }
+
+    [Parameter] public string? Id { get; set; }
+    [Parameter] public string Title { get; set; } = "";
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    private readonly List<string> _columnIds = [];
+    internal string GroupId => _groupId;
+    private string _groupId = "";
+
+    protected override void OnInitialized()
+    {
+        _groupId = Id ?? $"group-{Guid.NewGuid().ToString("N")[..8]}";
+    }
+
+    internal void RegisterChildColumn(string columnId)
+    {
+        if (!_columnIds.Contains(columnId))
+        {
+            _columnIds.Add(columnId);
+            UpdateGroup();
+        }
+    }
+
+    private void UpdateGroup()
+    {
+        var groupDef = new DataTableColumnGroupDef
+        {
+            Id = _groupId,
+            Title = Title,
+            ColumnIds = [.. _columnIds]
+        };
+        Parent?.RegisterColumnGroup(groupDef);
+    }
+}
