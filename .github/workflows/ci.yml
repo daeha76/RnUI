@@ -2,9 +2,14 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    tags:
+      - 'v*'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+  workflow_dispatch:
 
 jobs:
   build-and-test:
@@ -34,3 +39,6 @@ jobs:
 
       - name: Build WASM Demo
         run: dotnet build src/Daeha.RnUI.Demo.Wasm/Daeha.RnUI.Demo.Wasm.csproj -c Release
+
+      - name: Run Tests
+        run: dotnet test tests/Daeha.RnUI.Tests/Daeha.RnUI.Tests.csproj -c Release
