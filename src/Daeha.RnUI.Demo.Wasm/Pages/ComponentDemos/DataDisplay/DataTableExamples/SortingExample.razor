@@ -1,0 +1,30 @@
+@* Sorting Example - Single column sort, multi-column sort with Shift+click *@
+
+<RnDataTable TItem="Product" Items="_products" PageSize="5" ShowPagination="false">
+    <Columns>
+        <RnDataTableColumn TItem="Product" Property="x => x.Name" Title="Name" Sortable />
+        <RnDataTableColumn TItem="Product" Property="x => x.Category" Title="Category" Sortable />
+        <RnDataTableColumn TItem="Product" Property="x => x.Price" Title="Price" Sortable>
+            <CellTemplate Context="item">
+                @item.Price.ToString("C")
+            </CellTemplate>
+        </RnDataTableColumn>
+        <RnDataTableColumn TItem="Product" Property="x => x.Stock" Title="Stock" Sortable />
+    </Columns>
+</RnDataTable>
+<p class="text-xs text-muted-foreground mt-2">Click a column header to sort. Hold <kbd class="px-1 py-0.5 rounded border text-[10px]">Shift</kbd> and click another column for multi-column sort.</p>
+
+@code {
+    private record Product(string Name, string Category, decimal Price, int Stock);
+
+    private readonly List<Product> _products =
+    [
+        new("Laptop Pro", "Electronics", 1299.99m, 45),
+        new("Wireless Mouse", "Electronics", 29.99m, 200),
+        new("Standing Desk", "Furniture", 499.99m, 30),
+        new("Monitor 27\"", "Electronics", 349.99m, 85),
+        new("Ergonomic Chair", "Furniture", 799.99m, 20),
+        new("Keyboard", "Electronics", 79.99m, 150),
+        new("Desk Lamp", "Furniture", 45.99m, 100),
+    ];
+}

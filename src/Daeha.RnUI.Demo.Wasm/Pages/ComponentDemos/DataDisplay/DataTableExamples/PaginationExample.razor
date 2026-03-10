@@ -1,0 +1,52 @@
+@* Pagination Example - Page size options and navigation *@
+
+<RnDataTable TItem="LogEntry" Items="_logs" PageSize="5"
+             PageSizeOptions="@(new[] { 3, 5, 10, 20 })">
+    <Columns>
+        <RnDataTableColumn TItem="LogEntry" Property="x => x.Timestamp" Title="Time" Sortable>
+            <CellTemplate Context="item">
+                <span class="font-mono text-xs">@item.Timestamp.ToString("HH:mm:ss")</span>
+            </CellTemplate>
+        </RnDataTableColumn>
+        <RnDataTableColumn TItem="LogEntry" Property="x => x.Level" Title="Level" Filterable>
+            <CellTemplate Context="item">
+                <RnBadge Variant="@GetLevelVariant(item.Level)">@item.Level</RnBadge>
+            </CellTemplate>
+        </RnDataTableColumn>
+        <RnDataTableColumn TItem="LogEntry" Property="x => x.Message" Title="Message" />
+        <RnDataTableColumn TItem="LogEntry" Property="x => x.Source" Title="Source" Filterable />
+    </Columns>
+</RnDataTable>
+
+@code {
+    private record LogEntry(DateTime Timestamp, string Level, string Message, string Source);
+
+    private readonly List<LogEntry> _logs;
+
+    public PaginationExample()
+    {
+        _logs =
+        [
+            new(DateTime.Today.AddHours(8).AddMinutes(0), "Info", "Application started", "System"),
+            new(DateTime.Today.AddHours(8).AddMinutes(5), "Info", "User logged in", "Auth"),
+            new(DateTime.Today.AddHours(8).AddMinutes(12), "Warning", "Slow query detected", "Database"),
+            new(DateTime.Today.AddHours(8).AddMinutes(15), "Error", "Connection timeout", "API"),
+            new(DateTime.Today.AddHours(8).AddMinutes(20), "Info", "Cache refreshed", "System"),
+            new(DateTime.Today.AddHours(8).AddMinutes(25), "Info", "Report generated", "Reports"),
+            new(DateTime.Today.AddHours(8).AddMinutes(30), "Warning", "High memory usage", "System"),
+            new(DateTime.Today.AddHours(8).AddMinutes(35), "Error", "File not found", "Storage"),
+            new(DateTime.Today.AddHours(8).AddMinutes(40), "Info", "Backup completed", "System"),
+            new(DateTime.Today.AddHours(8).AddMinutes(45), "Info", "Email sent", "Notifications"),
+            new(DateTime.Today.AddHours(8).AddMinutes(50), "Warning", "Rate limit approaching", "API"),
+            new(DateTime.Today.AddHours(8).AddMinutes(55), "Info", "User logged out", "Auth"),
+        ];
+    }
+
+    private static BadgeVariant GetLevelVariant(string level) => level switch
+    {
+        "Error" => BadgeVariant.Destructive,
+        "Warning" => BadgeVariant.Secondary,
+        "Info" => BadgeVariant.Outline,
+        _ => BadgeVariant.Outline
+    };
+}

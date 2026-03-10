@@ -1,0 +1,31 @@
+@* Column Group Example - Multi-level headers *@
+
+<RnDataTable TItem="Student" Items="_students" PageSize="5" ShowPagination="false">
+    <Columns>
+        <RnDataTableColumn TItem="Student" Property="x => x.Name" Title="Name" Sortable />
+        <RnDataTableColumnGroup TItem="Student" Title="Scores">
+            <RnDataTableColumn TItem="Student" Property="x => x.Math" Title="Math" Sortable />
+            <RnDataTableColumn TItem="Student" Property="x => x.Science" Title="Science" Sortable />
+            <RnDataTableColumn TItem="Student" Property="x => x.English" Title="English" Sortable />
+        </RnDataTableColumnGroup>
+        <RnDataTableColumn TItem="Student" Property="x => x.Grade" Title="Grade">
+            <CellTemplate Context="item">
+                <RnBadge Variant="@(item.Grade == "A" ? BadgeVariant.Default : item.Grade == "B" ? BadgeVariant.Secondary : BadgeVariant.Outline)">@item.Grade</RnBadge>
+            </CellTemplate>
+        </RnDataTableColumn>
+    </Columns>
+</RnDataTable>
+<p class="text-xs text-muted-foreground mt-2">Math, Science, and English are grouped under a "Scores" header using <code>RnDataTableColumnGroup</code>.</p>
+
+@code {
+    private record Student(string Name, int Math, int Science, int English, string Grade);
+
+    private readonly List<Student> _students =
+    [
+        new("Alice", 95, 88, 92, "A"),
+        new("Bob", 78, 85, 70, "B"),
+        new("Charlie", 92, 95, 88, "A"),
+        new("Diana", 65, 72, 80, "C"),
+        new("Eve", 88, 90, 95, "A"),
+    ];
+}

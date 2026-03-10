@@ -1,0 +1,40 @@
+@* Loading & Empty State Example *@
+
+<div class="space-y-6">
+    <div>
+        <p class="text-sm font-medium mb-2">Loading State</p>
+        <RnDataTable TItem="string" Items="@(new List<string>())" Loading="true" SkeletonRows="3" SkeletonColumns="4" />
+    </div>
+
+    <div>
+        <p class="text-sm font-medium mb-2">Empty State (default)</p>
+        <RnDataTable TItem="string" Items="@(new List<string>())" ShowPagination="false">
+            <Columns>
+                <RnDataTableColumn TItem="string" Title="Name" Id="name" />
+                <RnDataTableColumn TItem="string" Title="Email" Id="email" />
+            </Columns>
+        </RnDataTable>
+    </div>
+
+    <div>
+        <p class="text-sm font-medium mb-2">Custom Empty State</p>
+        <RnDataTable TItem="string" Items="@(new List<string>())" ShowPagination="false">
+            <Columns>
+                <RnDataTableColumn TItem="string" Title="Name" Id="name2" />
+                <RnDataTableColumn TItem="string" Title="Email" Id="email2" />
+            </Columns>
+            <EmptyContent>
+                <div class="py-8 text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="1.5" class="mx-auto text-muted-foreground/50 mb-3">
+                        <path d="M20 13V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7"/>
+                        <path d="M2 17h20"/>
+                        <path d="m12 10 4 7H8l4-7z" opacity=".3"/>
+                    </svg>
+                    <p class="font-medium">No data available</p>
+                    <p class="text-xs text-muted-foreground mt-1">Add some records to get started.</p>
+                </div>
+            </EmptyContent>
+        </RnDataTable>
+    </div>
+</div>

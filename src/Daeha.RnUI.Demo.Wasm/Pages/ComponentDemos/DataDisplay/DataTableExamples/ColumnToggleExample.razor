@@ -1,0 +1,35 @@
+@* Column Toggle Example - Show/hide columns dynamically *@
+
+<RnDataTable TItem="Product" Items="_products" PageSize="5" ShowPagination="false">
+    <Toolbar>
+        <div class="flex items-center justify-between w-full">
+            <RnDataTableSearch TItem="Product" Placeholder="Search products..." />
+            <RnDataTableColumnToggle TItem="Product" />
+        </div>
+    </Toolbar>
+    <Columns>
+        <RnDataTableColumn TItem="Product" Property="x => x.Name" Title="Name" Sortable />
+        <RnDataTableColumn TItem="Product" Property="x => x.Sku" Title="SKU" />
+        <RnDataTableColumn TItem="Product" Property="x => x.Category" Title="Category" Filterable />
+        <RnDataTableColumn TItem="Product" Property="x => x.Price" Title="Price" Sortable>
+            <CellTemplate Context="item">
+                @item.Price.ToString("C")
+            </CellTemplate>
+        </RnDataTableColumn>
+        <RnDataTableColumn TItem="Product" Property="x => x.Stock" Title="In Stock" Sortable />
+    </Columns>
+</RnDataTable>
+<p class="text-xs text-muted-foreground mt-2">Click the "Columns" button to toggle column visibility.</p>
+
+@code {
+    private record Product(string Name, string Sku, string Category, decimal Price, int Stock);
+
+    private readonly List<Product> _products =
+    [
+        new("Laptop Pro", "LP-001", "Electronics", 1299.99m, 45),
+        new("Wireless Mouse", "WM-002", "Electronics", 29.99m, 200),
+        new("Standing Desk", "SD-003", "Furniture", 499.99m, 30),
+        new("Monitor 27\"", "MN-004", "Electronics", 349.99m, 85),
+        new("Desk Lamp", "DL-005", "Furniture", 45.99m, 100),
+    ];
+}
