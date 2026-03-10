@@ -1,0 +1,21 @@
+@* RnFieldSet component - Blazor port of shadcn/ui FieldSet *@
+
+<fieldset data-slot="field-set"
+          class="@ComputedClass"
+          @attributes="AdditionalAttributes">
+    @ChildContent
+</fieldset>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string ComputedClass => CssUtils.Cn(
+        "cn-field-set",
+        Class
+    );
+}

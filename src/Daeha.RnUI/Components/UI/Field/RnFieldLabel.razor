@@ -1,0 +1,25 @@
+@* RnFieldLabel component - Blazor port of shadcn/ui FieldLabel *@
+
+<label data-slot="field-label"
+       for="@For"
+       class="@ComputedClass"
+       @attributes="AdditionalAttributes">
+    @ChildContent
+</label>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>The id of the form element this label is for.</summary>
+    [Parameter] public string? For { get; set; }
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string ComputedClass => CssUtils.Cn(
+        "cn-field-label",
+        Class
+    );
+}

@@ -1,0 +1,35 @@
+@* RnFieldError component - Blazor port of shadcn/ui FieldError *@
+
+@if (ChildContent is not null || !string.IsNullOrEmpty(Message))
+{
+    <div role="alert"
+         data-slot="field-error"
+         class="@ComputedClass"
+         @attributes="AdditionalAttributes">
+        @if (ChildContent is not null)
+        {
+            @ChildContent
+        }
+        else
+        {
+            @Message
+        }
+    </div>
+}
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Error message text (alternative to ChildContent).</summary>
+    [Parameter] public string? Message { get; set; }
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string ComputedClass => CssUtils.Cn(
+        "cn-field-error",
+        Class
+    );
+}

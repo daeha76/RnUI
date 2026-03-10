@@ -1,0 +1,108 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+@using Daeha.RnUI.Demo.Wasm.BlockDemos.Signup.Components
+
+@code {
+    public static BlockDemo GetDemo() => new(
+        Name: "Signup 01",
+        Slug: "signup-01",
+        Description: "A simple signup form with name, email, password, and confirmation inside a card.",
+        Category: "signup",
+        Demo: @<div class="flex min-h-[500px] w-full items-center justify-center p-6 md:p-10">
+            <div class="w-full max-w-sm">
+                <SignupForm01 />
+            </div>
+        </div>,
+        Thumbnail: @<div class="scale-[0.5] origin-top-left pointer-events-none w-[200%] h-[300px] overflow-hidden">
+            <div class="flex items-center justify-center h-full">
+                <div class="w-full max-w-sm">
+                    <SignupForm01 />
+                </div>
+            </div>
+        </div>,
+        Files:
+        [
+            new("signup-form.razor",
+                """
+                @using System.ComponentModel.DataAnnotations
+
+                <RnCard>
+                    <RnCardHeader>
+                        <RnCardTitle>Create an account</RnCardTitle>
+                        <RnCardDescription>Enter your information below to create your account</RnCardDescription>
+                    </RnCardHeader>
+                    <RnCardContent>
+                        <EditForm Model="_model" FormName="signup-form" OnValidSubmit="HandleSubmit">
+                            <RnFieldGroup>
+                                <RnField>
+                                    <RnFieldLabel For="name">Full Name</RnFieldLabel>
+                                    <RnInput Id="name" Type="text" Placeholder="John Doe"
+                                             @bind-Value="_model.Name" required />
+                                </RnField>
+                                <RnField>
+                                    <RnFieldLabel For="email">Email</RnFieldLabel>
+                                    <RnInput Id="email" Type="email" Placeholder="m@example.com"
+                                             @bind-Value="_model.Email" required />
+                                    <RnFieldDescription>
+                                        We'll use this to contact you. We will not share your email with anyone else.
+                                    </RnFieldDescription>
+                                </RnField>
+                                <RnField>
+                                    <RnFieldLabel For="password">Password</RnFieldLabel>
+                                    <RnInput Id="password" Type="password"
+                                             @bind-Value="_model.Password" required />
+                                    <RnFieldDescription>
+                                        Must be at least 8 characters long.
+                                    </RnFieldDescription>
+                                </RnField>
+                                <RnField>
+                                    <RnFieldLabel For="confirm-password">Confirm Password</RnFieldLabel>
+                                    <RnInput Id="confirm-password" Type="password"
+                                             @bind-Value="_model.ConfirmPassword" required />
+                                    <RnFieldDescription>Please confirm your password.</RnFieldDescription>
+                                </RnField>
+                                <RnFieldGroup>
+                                    <RnField>
+                                        <RnButton Type="submit" Class="w-full">Create Account</RnButton>
+                                        <RnButton Variant="ButtonVariant.Outline" Class="w-full" Type="button">
+                                            Sign up with Google
+                                        </RnButton>
+                                        <RnFieldDescription Class="px-6 text-center">
+                                            Already have an account? <a href="#">Sign in</a>
+                                        </RnFieldDescription>
+                                    </RnField>
+                                </RnFieldGroup>
+                            </RnFieldGroup>
+                        </EditForm>
+                    </RnCardContent>
+                </RnCard>
+
+                @code {
+                    private SignupModel _model = new();
+
+                    private async Task HandleSubmit()
+                    {
+                        await Task.Delay(1500);
+                    }
+
+                    private sealed class SignupModel
+                    {
+                        public string Name { get; set; } = "";
+                        public string Email { get; set; } = "";
+                        public string Password { get; set; } = "";
+                        public string ConfirmPassword { get; set; } = "";
+                    }
+                }
+                """),
+            new("page.razor",
+                """
+                @page "/signup"
+
+                <div class="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+                    <div class="w-full max-w-sm">
+                        <SignupForm />
+                    </div>
+                </div>
+                """)
+        ]
+    );
+}

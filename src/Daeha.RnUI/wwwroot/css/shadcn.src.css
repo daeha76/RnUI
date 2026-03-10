@@ -271,7 +271,7 @@
 
 /* Label */
 .cn-label {
-  @apply flex items-center gap-2 text-sm leading-snug font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50;
+  @apply flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50;
 }
 
 /* Card */
@@ -1461,6 +1461,139 @@
 
 .cn-form-message {
   @apply text-sm text-destructive;
+}
+
+/* Field */
+.cn-field {
+  @apply flex w-full gap-3 data-[invalid=true]:text-destructive;
+}
+
+.cn-field-orientation-vertical {
+  @apply flex-col;
+}
+
+.cn-field-orientation-vertical > * {
+  width: 100%;
+}
+
+.cn-field-orientation-vertical > .sr-only {
+  width: auto;
+}
+
+.cn-field-orientation-horizontal {
+  @apply flex-row items-center;
+}
+
+.cn-field-orientation-horizontal > [data-slot="field-label"] {
+  @apply flex-auto;
+}
+
+.cn-field-orientation-responsive {
+  @apply flex-col;
+}
+
+.cn-field-orientation-responsive > * {
+  width: 100%;
+}
+
+.cn-field-orientation-responsive > .sr-only {
+  width: auto;
+}
+
+@container field-group (min-width: 28rem) {
+  .cn-field-orientation-responsive {
+    @apply flex-row items-center;
+  }
+
+  .cn-field-orientation-responsive > * {
+    width: auto;
+  }
+
+  .cn-field-orientation-responsive > [data-slot="field-label"] {
+    @apply flex-auto;
+  }
+}
+
+.cn-field-group {
+  @apply flex w-full flex-col gap-7;
+  container-type: inline-size;
+  container-name: field-group;
+}
+
+.cn-field-group > [data-slot="field-group"] {
+  gap: 1rem;
+}
+
+.cn-field-set {
+  @apply flex flex-col gap-6;
+}
+
+.cn-field-legend {
+  @apply mb-3 font-medium;
+}
+
+.cn-field-legend[data-variant="legend"] {
+  @apply text-base;
+}
+
+.cn-field-legend[data-variant="label"] {
+  @apply text-sm;
+}
+
+.cn-field-label {
+  @apply flex items-center gap-2 text-sm leading-snug font-medium select-none w-fit;
+}
+
+.cn-field-label:has(> [data-slot="field"]) {
+  @apply w-full flex-col rounded-md border;
+}
+
+.cn-field-label > *[data-slot="field"] {
+  @apply p-4;
+}
+
+.cn-field-label:has([data-state="checked"]) {
+  @apply border-primary bg-primary/5;
+}
+
+.dark .cn-field-label:has([data-state="checked"]) {
+  @apply bg-primary/10;
+}
+
+[data-disabled="true"] .cn-field-label {
+  @apply opacity-50;
+}
+
+.cn-field-title {
+  @apply flex w-fit items-center gap-2 text-sm leading-snug font-medium;
+}
+
+[data-disabled="true"] .cn-field-title {
+  @apply opacity-50;
+}
+
+.cn-field-description {
+  @apply text-sm leading-normal font-normal text-muted-foreground;
+}
+
+.cn-field-description a {
+  @apply underline underline-offset-4;
+}
+
+.cn-field-description a:hover {
+  color: var(--color-primary);
+}
+
+.cn-field-content {
+  @apply flex flex-1 flex-col gap-1.5 leading-snug;
+}
+
+.cn-field-error {
+  @apply text-sm font-normal text-destructive;
+}
+
+.cn-field-separator {
+  @apply relative -my-2 h-5 text-sm;
 }
 
 /* sr-only utility */

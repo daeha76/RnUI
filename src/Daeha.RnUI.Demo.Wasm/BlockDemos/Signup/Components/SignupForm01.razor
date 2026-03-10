@@ -1,0 +1,93 @@
+@using System.ComponentModel.DataAnnotations
+
+<RnCard>
+    <RnCardHeader>
+        <RnCardTitle>Create an account</RnCardTitle>
+        <RnCardDescription>Enter your information below to create your account</RnCardDescription>
+    </RnCardHeader>
+    <RnCardContent>
+        <EditForm Model="_model" FormName="signup-01-form" OnValidSubmit="HandleSubmit">
+            <RnFieldGroup>
+                <RnField>
+                    <RnFieldLabel For="signup01-name">Full Name</RnFieldLabel>
+                    <RnInput Id="signup01-name" Type="text" Placeholder="John Doe"
+                             @bind-Value="_model.Name" required />
+                </RnField>
+                <RnField>
+                    <RnFieldLabel For="signup01-email">Email</RnFieldLabel>
+                    <RnInput Id="signup01-email" Type="email" Placeholder="m@example.com"
+                             @bind-Value="_model.Email" required />
+                    <RnFieldDescription>
+                        We'll use this to contact you. We will not share your email with anyone else.
+                    </RnFieldDescription>
+                </RnField>
+                <RnField>
+                    <RnFieldLabel For="signup01-password">Password</RnFieldLabel>
+                    <RnInput Id="signup01-password" Type="password"
+                             @bind-Value="_model.Password" required />
+                    <RnFieldDescription>
+                        Must be at least 8 characters long.
+                    </RnFieldDescription>
+                </RnField>
+                <RnField>
+                    <RnFieldLabel For="signup01-confirm-password">Confirm Password</RnFieldLabel>
+                    <RnInput Id="signup01-confirm-password" Type="password"
+                             @bind-Value="_model.ConfirmPassword" required />
+                    <RnFieldDescription>Please confirm your password.</RnFieldDescription>
+                </RnField>
+                <RnFieldGroup>
+                    <RnField>
+                        <RnButton Type="submit" Class="w-full" Disabled="_isLoading">
+                            @if (_isLoading)
+                            {
+                                <RnSpinner Class="mr-2" />
+                                <span>Creating account...</span>
+                            }
+                            else
+                            {
+                                <span>Create Account</span>
+                            }
+                        </RnButton>
+                        <RnButton Variant="ButtonVariant.Outline" Class="w-full" Type="button">
+                            Sign up with Google
+                        </RnButton>
+                        <RnFieldDescription Class="px-6 text-center">
+                            Already have an account? <a href="#">Sign in</a>
+                        </RnFieldDescription>
+                    </RnField>
+                </RnFieldGroup>
+            </RnFieldGroup>
+        </EditForm>
+    </RnCardContent>
+</RnCard>
+
+@code {
+    private SignupModel _model = new();
+    private bool _isLoading;
+
+    private async Task HandleSubmit()
+    {
+        _isLoading = true;
+        StateHasChanged();
+        await Task.Delay(1500);
+        _isLoading = false;
+        StateHasChanged();
+    }
+
+    private sealed class SignupModel
+    {
+        [Required]
+        public string Name { get; set; } = "";
+
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = "";
+
+        [Required]
+        [MinLength(8)]
+        public string Password { get; set; } = "";
+
+        [Required]
+        public string ConfirmPassword { get; set; } = "";
+    }
+}

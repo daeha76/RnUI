@@ -1,0 +1,21 @@
+@* RnFieldTitle component - Blazor port of shadcn/ui FieldTitle *@
+
+<div data-slot="field-label"
+     class="@ComputedClass"
+     @attributes="AdditionalAttributes">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string ComputedClass => CssUtils.Cn(
+        "cn-field-title",
+        Class
+    );
+}

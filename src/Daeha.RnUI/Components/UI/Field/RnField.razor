@@ -1,0 +1,35 @@
+@* RnField component - Blazor port of shadcn/ui Field *@
+
+<div role="group"
+     data-slot="field"
+     data-orientation="@Orientation.ToString().ToLowerInvariant()"
+     class="@ComputedClass"
+     @attributes="AdditionalAttributes">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Layout orientation of the field.</summary>
+    [Parameter] public FieldOrientation Orientation { get; set; } = FieldOrientation.Vertical;
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string OrientationClass => Orientation switch
+    {
+        FieldOrientation.Vertical => "cn-field-orientation-vertical",
+        FieldOrientation.Horizontal => "cn-field-orientation-horizontal",
+        FieldOrientation.Responsive => "cn-field-orientation-responsive",
+        _ => "cn-field-orientation-vertical"
+    };
+
+    private string ComputedClass => CssUtils.Cn(
+        "cn-field",
+        OrientationClass,
+        Class
+    );
+}
