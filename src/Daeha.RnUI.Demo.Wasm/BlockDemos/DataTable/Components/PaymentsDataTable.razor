@@ -4,7 +4,7 @@
             <h2 class="text-2xl font-bold tracking-tight">Payments</h2>
             <p class="text-muted-foreground">Manage your payment transactions.</p>
         </div>
-        <RnButton>
+        <RnButton OnClick="() => _addDialogOpen = true">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4">
                 <path d="M5 12h14"/><path d="M12 5v14"/>
@@ -12,6 +12,8 @@
             Add Payment
         </RnButton>
     </div>
+
+    <AddPaymentDialog @bind-Open="_addDialogOpen" OnSubmit="HandleAddPayment" />
 
     <RnDataTable TItem="PaymentRecord"
                  Items="_payments"
@@ -84,6 +86,17 @@
             </RnDataTableColumn>
             <RnDataTableColumn TItem="PaymentRecord" Property="x => x.Amount" Title="Amount" Sortable
                                CellClass="@(item => item.Amount > 500 ? "text-green-600 dark:text-green-400 font-semibold" : null)">
+                <HeaderTemplate>
+                    <div class="flex items-center justify-end gap-1.5 w-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="text-muted-foreground">
+                            <line x1="12" x2="12" y1="2" y2="22"/>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                        <span>Amount</span>
+                    </div>
+                </HeaderTemplate>
                 <CellTemplate Context="item">
                     <div class="text-right font-medium tabular-nums">
                         @item.Amount.ToString("C")
@@ -196,7 +209,9 @@
         string Id, string Customer, string Email, string Status,
         string Method, string Category, decimal Amount, DateTime Date);
 
-    private readonly List<PaymentRecord> _payments =
+    private bool _addDialogOpen;
+
+    private List<PaymentRecord> _payments =
     [
         new("TXN-8A3F01", "Olivia Martin", "olivia@example.com", "Success", "Visa ****4242", "Subscription", 316.00m, new(2026, 3, 1)),
         new("TXN-8A3F02", "Jackson Lee", "jackson@example.com", "Success", "Mastercard ****1234", "One-time", 242.00m, new(2026, 3, 2)),
@@ -250,5 +265,21 @@
         if (parts.Length >= 2)
             return $"{parts[0][0]}{parts[^1][0]}";
         return parts.Length > 0 ? parts[0][..1] : "?";
+    }
+
+    private int _nextId = 21;
+
+    private void HandleAddPayment(AddPaymentDialog.PaymentFormData data)
+    {
+        var newPayment = new PaymentRecord(
+            $"TXN-8A3F{_nextId++:D2}",
+            data.Customer, data.Email,
+            "Pending",
+            data.Method, data.Category,
+            data.Amount,
+            DateTime.Now
+        );
+        // Immutable update: create a new list reference so Blazor detects the change
+        _payments = [.._payments, newPayment];
     }
 }

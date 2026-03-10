@@ -1,0 +1,105 @@
+@* AddPaymentDialog — Dialog-based form for adding a new payment *@
+
+<RnDialog @bind-Open="Open" Class="max-w-lg">
+    <RnDialogHeader>
+        <RnDialogTitle>Add Payment</RnDialogTitle>
+        <RnDialogDescription>Enter the payment details below.</RnDialogDescription>
+    </RnDialogHeader>
+
+    <div class="grid gap-4 py-4">
+        <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-2">
+                <RnLabel For="customer">Customer</RnLabel>
+                <RnInput id="customer" Placeholder="Full name" @bind-Value="_customer" />
+            </div>
+            <div class="space-y-2">
+                <RnLabel For="email">Email</RnLabel>
+                <RnInput id="email" Type="email" Placeholder="email@example.com" @bind-Value="_email" />
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-2">
+                <RnLabel For="method">Payment Method</RnLabel>
+                <RnSelect @bind-Value="_method" Placeholder="Select method">
+                    <RnSelectItem Value="Visa ****4242">Visa ****4242</RnSelectItem>
+                    <RnSelectItem Value="Mastercard ****1234">Mastercard ****1234</RnSelectItem>
+                    <RnSelectItem Value="PayPal">PayPal</RnSelectItem>
+                    <RnSelectItem Value="Apple Pay">Apple Pay</RnSelectItem>
+                    <RnSelectItem Value="Google Pay">Google Pay</RnSelectItem>
+                    <RnSelectItem Value="Bank Transfer">Bank Transfer</RnSelectItem>
+                </RnSelect>
+            </div>
+            <div class="space-y-2">
+                <RnLabel For="category">Category</RnLabel>
+                <RnSelect @bind-Value="_category" Placeholder="Select category">
+                    <RnSelectItem Value="Subscription">Subscription</RnSelectItem>
+                    <RnSelectItem Value="One-time">One-time</RnSelectItem>
+                    <RnSelectItem Value="Invoice">Invoice</RnSelectItem>
+                    <RnSelectItem Value="Refund">Refund</RnSelectItem>
+                </RnSelect>
+            </div>
+        </div>
+        <div class="space-y-2">
+            <RnLabel For="amount">Amount ($)</RnLabel>
+            <RnInput id="amount" Type="number" Placeholder="0.00" @bind-Value="_amountText" />
+        </div>
+    </div>
+
+    <RnDialogFooter>
+        <RnButton Variant="ButtonVariant.Outline" OnClick="HandleCancel">Cancel</RnButton>
+        <RnButton OnClick="HandleSubmit" Disabled="@(!IsValid)">Add Payment</RnButton>
+    </RnDialogFooter>
+</RnDialog>
+
+@code {
+    [Parameter] public bool Open { get; set; }
+    [Parameter] public EventCallback<bool> OpenChanged { get; set; }
+    [Parameter] public EventCallback<PaymentFormData> OnSubmit { get; set; }
+
+    public record PaymentFormData(string Customer, string Email, string Method, string Category, decimal Amount);
+
+    private string _customer = "";
+    private string _email = "";
+    private string _method = "";
+    private string _category = "";
+    private string _amountText = "";
+
+    private bool IsValid =>
+        !string.IsNullOrWhiteSpace(_customer) &&
+        !string.IsNullOrWhiteSpace(_email) &&
+        !string.IsNullOrWhiteSpace(_method) &&
+        !string.IsNullOrWhiteSpace(_category) &&
+        decimal.TryParse(_amountText, out var amt) && amt > 0;
+
+    private async Task HandleSubmit()
+    {
+        if (!IsValid) return;
+
+        var data = new PaymentFormData(
+            _customer.Trim(),
+            _email.Trim(),
+            _method,
+            _category,
+            decimal.Parse(_amountText)
+        );
+
+        await OnSubmit.InvokeAsync(data);
+        ResetForm();
+        await OpenChanged.InvokeAsync(false);
+    }
+
+    private async Task HandleCancel()
+    {
+        ResetForm();
+        await OpenChanged.InvokeAsync(false);
+    }
+
+    private void ResetForm()
+    {
+        _customer = "";
+        _email = "";
+        _method = "";
+        _category = "";
+        _amountText = "";
+    }
+}

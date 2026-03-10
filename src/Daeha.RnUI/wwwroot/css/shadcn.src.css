@@ -700,6 +700,11 @@
 }
 
 /* Table */
+[data-slot="table-container"] {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklch, var(--color-border) 50%, transparent) transparent;
+}
+
 .cn-table {
   @apply w-full caption-bottom text-sm;
 }

@@ -174,6 +174,15 @@ public class Rn{Name}Tests : BunitContext
 }
 ```
 
+## 문서 동기화 규칙 (필수)
+
+컴포넌트/블록 추가 또는 수정 시 반드시 아래 문서를 함께 업데이트:
+
+1. `README.md` — Components 테이블 + Usage Examples
+2. `.agents/knowledge/component-catalog.md` — 컴포넌트 목록
+3. `.agents/knowledge/block-catalog.md` — 블록 목록 (해당 시)
+4. 데모 코드블록 (`DataTable01Demo` 등) — 사용법 코드
+
 ## 절대 금지
 
 - `shadcn.css` 직접 수정

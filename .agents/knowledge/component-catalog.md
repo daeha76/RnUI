@@ -23,6 +23,7 @@
 | **DatePicker** | RnDatePicker | — | Stateful |
 | **Calendar** | RnCalendar | — | Stateful |
 | **Form** | RnFormItem + Label + Description + Message | — | Composite |
+| **Field** | RnField + Group/Label/Description/Error/Set/Legend/Content/Title/Separator | — | Composite |
 
 ### Data Display — 데이터 표시
 
@@ -30,6 +31,7 @@
 |----------|------|-------------|------|
 | **Card** | RnCard + Header/Title/Description/Content/Footer/Action | ComponentSize | Composite |
 | **Table** | RnTable + Header/Body/Footer/Row/Head/Cell/Caption | — | Composite |
+| **DataTable** | RnDataTable + Column/Search/ColumnToggle/Pagination/RowActions/ColumnHeader | SelectionMode | Stateful (CascadingValue) |
 | **Badge** | RnBadge | BadgeVariant(6) | Variant |
 | **Avatar** | RnAvatar + Fallback | — | Composite |
 | **AvatarGroup** | RnAvatarGroup | — | Composite |
@@ -99,6 +101,7 @@
 | `ToastEnums.cs` | ToastVariant |
 | `TabsEnums.cs` | TabsOrientation |
 | `SidebarEnums.cs` | SidebarSide, SidebarVariant, SidebarCollapsible |
+| `DataTableEnums.cs` | SelectionMode |
 | `SharedEnums.cs` | ComponentSize, Side, Alignment, Orientation |
 
 ---
@@ -109,5 +112,3 @@
 
 - Sonner (toast 대체 — 현재 RnToast로 커버)
 - Chart (Recharts 기반 — Blazor 차트 라이브러리 필요)
-- Data Table (TanStack Table 기반 — 별도 구현 필요)
-- Toggle Group (구현 완료)

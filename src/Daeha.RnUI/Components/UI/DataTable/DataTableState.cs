@@ -9,6 +9,11 @@ public class SortDescriptor<TItem>
 
 public class DataTableState<TItem>
 {
+    // --- Change notification (for cascading child components) ---
+    public event Action? OnChange;
+
+    private void NotifyChange() => OnChange?.Invoke();
+
     // --- Source data ---
     private IReadOnlyList<TItem> _sourceItems = [];
 
@@ -371,6 +376,7 @@ public class DataTableState<TItem>
         GlobalFilter = filter;
         PageIndex = 0;
         Recalculate();
+        NotifyChange();
     }
 
     // --- Column filter ---
@@ -379,12 +385,14 @@ public class DataTableState<TItem>
         ColumnFilters[columnId] = filter;
         PageIndex = 0;
         Recalculate();
+        NotifyChange();
     }
 
     // --- Column visibility ---
     public void SetColumnVisibility(string columnId, bool visible)
     {
         ColumnVisibility[columnId] = visible;
+        NotifyChange();
     }
 
     public bool IsColumnVisible(string columnId)

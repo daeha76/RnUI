@@ -5,9 +5,9 @@
 <div data-slot="data-table-search" class="cn-data-table-search">
     <RnInput Type="text"
              Value="@_searchValue"
+             ValueChanged="HandleInput"
              Placeholder="@Placeholder"
              Class="@Class"
-             @oninput="HandleInput"
              @attributes="AdditionalAttributes" />
 </div>
 
@@ -22,9 +22,9 @@
     private string _searchValue = "";
     private Timer? _debounceTimer;
 
-    private void HandleInput(ChangeEventArgs e)
+    private void HandleInput(string value)
     {
-        _searchValue = e.Value?.ToString() ?? "";
+        _searchValue = value;
         _debounceTimer?.Dispose();
         _debounceTimer = new Timer(_ =>
         {

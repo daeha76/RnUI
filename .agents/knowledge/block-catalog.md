@@ -34,6 +34,12 @@
 | **sidebar-06** | Tree view | Default | Sidebar*, Collapsible | ✅ |
 | **sidebar-07** | With footer | Default | Sidebar*, DropdownMenu | ✅ |
 
+### DataTable (1종)
+
+| Block | 설명 | 필요 컴포넌트 | 구현 가능 |
+|-------|------|--------------|----------|
+| **data-table-01** | 결제 데이터 테이블 | DataTable, Badge, DropdownMenu, Dialog, Select, Input | ✅ |
+
 ### Dashboard (Featured)
 
 | Block | 설명 | 필요 컴포넌트 | 구현 가능 |
@@ -65,7 +71,7 @@
 ### 미구현 (Dashboard에 필요)
 
 - [ ] Chart 컴포넌트 (영역 차트, 바 차트, 라인 차트)
-- [ ] DataTable (정렬, 필터, 페이지네이션 통합)
+- [x] DataTable (정렬, 필터, 페이지네이션 통합)
 
 ---
 

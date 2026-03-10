@@ -19,7 +19,7 @@
             {
                 var columnId = col.Id;
                 var isVisible = State.IsColumnVisible(columnId);
-                <RnDropdownMenuItem @onclick="() => ToggleColumn(columnId, isVisible)">
+                <RnDropdownMenuItem OnClick="() => ToggleColumn(columnId, isVisible)">
                     <span class="@CssUtils.Cn("mr-2 inline-block w-4 text-center", isVisible ? "" : "opacity-30")">
                         @if (isVisible) { <text>&#10003;</text> }
                     </span>

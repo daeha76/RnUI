@@ -1,5 +1,6 @@
 @* RnDataTable component - Data table with sorting, filtering, pagination, selection *@
 @typeparam TItem
+@implements IDisposable
 
 <div data-slot="data-table" class="@CssUtils.Cn("cn-data-table", Class)" @attributes="AdditionalAttributes">
     @* Toolbar *@
@@ -177,9 +178,9 @@
                             @if (State.SelectionMode != SelectionMode.None)
                             {
                                 <RnTableCell Class="w-[40px]">
-                                    <RnCheckbox Checked="@isSelected"
-                                                CheckedChanged="@(async _ => await HandleRowSelect(item, rowIndex))"
-                                                aria-label="Select row" />
+                                    <div @onclick="(MouseEventArgs e) => HandleRowClick(e, item, rowIndex)">
+                                        <RnCheckbox Checked="@isSelected" aria-label="Select row" />
+                                    </div>
                                 </RnTableCell>
                             }
                             @foreach (var col in State.GetVisibleColumns())
@@ -290,6 +291,32 @@
 
     private bool _initialized;
 
+    protected override void OnInitialized()
+    {
+        State.OnChange += HandleStateChange;
+    }
+
+    private void HandleStateChange()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        State.OnChange -= HandleStateChange;
+    }
+
+    /// <summary>
+    /// Forces a data refresh. Call this when the source list is mutated in-place
+    /// (e.g., items added/removed without creating a new list reference).
+    /// Prefer passing a new list reference via Items parameter instead.
+    /// </summary>
+    public void RefreshData()
+    {
+        if (Items != null) State.SetItems(Items);
+        StateHasChanged();
+    }
+
     protected override void OnParametersSet()
     {
         State.SelectionMode = SelectionMode;
@@ -332,9 +359,9 @@
         StateHasChanged();
     }
 
-    private async Task HandleRowSelect(TItem item, int rowIndex)
+    private async Task HandleRowClick(MouseEventArgs e, TItem item, int rowIndex)
     {
-        State.ToggleRow(item, rowIndex);
+        State.ToggleRow(item, rowIndex, e.ShiftKey);
         await NotifySelectionChanged();
         StateHasChanged();
     }

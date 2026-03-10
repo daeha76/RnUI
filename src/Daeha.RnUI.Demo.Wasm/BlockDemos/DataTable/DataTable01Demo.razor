@@ -27,11 +27,13 @@
                             <h2 class="text-2xl font-bold tracking-tight">Payments</h2>
                             <p class="text-muted-foreground">Manage your payment transactions.</p>
                         </div>
-                        <RnButton>
+                        <RnButton OnClick="() => _addDialogOpen = true">
                             <PlusIcon class="mr-2 h-4 w-4" />
                             Add Payment
                         </RnButton>
                     </div>
+
+                    <AddPaymentDialog @bind-Open="_addDialogOpen" OnSubmit="HandleAddPayment" />
 
                     <RnDataTable TItem="PaymentRecord"
                                  Items="_payments"
@@ -55,42 +57,21 @@
                             <RnDataTableColumn TItem="PaymentRecord"
                                                Property="x => x.Status" Title="Status" Sortable Filterable>
                                 <CellTemplate Context="item">
-                                    <RnBadge Variant="@GetStatusVariant(item.Status)">
-                                        @item.Status
-                                    </RnBadge>
+                                    <RnBadge Variant="@GetStatusVariant(item.Status)">@item.Status</RnBadge>
                                 </CellTemplate>
                             </RnDataTableColumn>
                             <RnDataTableColumn TItem="PaymentRecord"
-                                               Property="x => x.Customer" Title="Customer" Sortable Filterable>
-                                <CellTemplate Context="item">
-                                    <div class="flex items-center space-x-3">
-                                        <RnAvatar Class="h-8 w-8">
-                                            <RnAvatarFallback>@GetInitials(item.Customer)</RnAvatarFallback>
-                                        </RnAvatar>
-                                        <div>
-                                            <span class="font-medium text-sm">@item.Customer</span>
-                                            <span class="text-xs text-muted-foreground block">@item.Email</span>
-                                        </div>
-                                    </div>
-                                </CellTemplate>
-                            </RnDataTableColumn>
+                                               Property="x => x.Customer" Title="Customer" Sortable Filterable />
                             <RnDataTableColumn TItem="PaymentRecord"
                                                Property="x => x.Method" Title="Method" Sortable />
                             <RnDataTableColumn TItem="PaymentRecord"
-                                               Property="x => x.Category" Title="Category" Sortable Filterable>
-                                <CellTemplate Context="item">
-                                    <RnBadge Variant="BadgeVariant.Outline">@item.Category</RnBadge>
-                                </CellTemplate>
-                            </RnDataTableColumn>
-                            <RnDataTableColumn TItem="PaymentRecord"
-                                               Property="x => x.Date" Title="Date" Sortable>
-                                <CellTemplate Context="item">
-                                    @item.Date.ToString("MMM dd, yyyy")
-                                </CellTemplate>
-                            </RnDataTableColumn>
-                            <RnDataTableColumn TItem="PaymentRecord"
-                                               Property="x => x.Amount" Title="Amount" Sortable
-                                               CellClass="@(item => item.Amount > 500 ? "text-green-600 font-semibold" : null)">
+                                               Property="x => x.Amount" Title="Amount" Sortable>
+                                <HeaderTemplate>
+                                    <div class="flex items-center justify-end gap-1.5 w-full">
+                                        <DollarSignIcon class="h-3.5 w-3.5 text-muted-foreground" />
+                                        <span>Amount</span>
+                                    </div>
+                                </HeaderTemplate>
                                 <CellTemplate Context="item">
                                     <div class="text-right font-medium">@item.Amount.ToString("C")</div>
                                 </CellTemplate>
@@ -100,52 +81,43 @@
                                     <RnDataTableRowActions>
                                         <RnDropdownMenuLabel>Actions</RnDropdownMenuLabel>
                                         <RnDropdownMenuSeparator />
-                                        <RnDropdownMenuItem>Copy ID</RnDropdownMenuItem>
                                         <RnDropdownMenuItem>View Details</RnDropdownMenuItem>
-                                        <RnDropdownMenuItem>Edit Payment</RnDropdownMenuItem>
-                                        <RnDropdownMenuSeparator />
                                         <RnDropdownMenuItem Class="text-destructive">Delete</RnDropdownMenuItem>
                                     </RnDataTableRowActions>
                                 </CellTemplate>
                             </RnDataTableColumn>
                         </Columns>
-                        <DetailTemplate Context="item">
-                            <div class="p-6 grid grid-cols-4 gap-4">
-                                <div>
-                                    <p class="text-xs text-muted-foreground">Transaction ID</p>
-                                    <p class="text-sm font-mono">@item.Id</p>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-muted-foreground">Customer</p>
-                                    <p class="text-sm">@item.Customer (@item.Email)</p>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-muted-foreground">Method</p>
-                                    <p class="text-sm">@item.Method</p>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-muted-foreground">Amount</p>
-                                    <p class="text-sm font-semibold">@item.Amount.ToString("C")</p>
-                                </div>
-                            </div>
-                        </DetailTemplate>
                         <EmptyContent>
                             <div class="py-10 text-center">
                                 <p class="font-medium">No payments found</p>
-                                <p class="text-xs text-muted-foreground mt-1">
-                                    Try adjusting your search or filter.
-                                </p>
                             </div>
                         </EmptyContent>
                     </RnDataTable>
                 </div>
 
                 @code {
-                    public record PaymentRecord(
-                        string Id, string Customer, string Email, string Status,
-                        string Method, string Category, decimal Amount, DateTime Date);
+                    public record PaymentRecord(string Id, string Customer, string Email,
+                        string Status, string Method, string Category, decimal Amount, DateTime Date);
 
-                    private readonly List<PaymentRecord> _payments = [ /* your data */ ];
+                    private bool _addDialogOpen;
+                    private int _nextId = 4;
+
+                    // Important: Use a non-readonly list so you can create a new reference on add
+                    private List<PaymentRecord> _payments =
+                    [
+                        new("TXN-001", "Olivia Martin", "olivia@example.com", "Success", "Visa ****4242", "Subscription", 316.00m, new(2026, 3, 1)),
+                        new("TXN-002", "Jackson Lee", "jackson@example.com", "Processing", "PayPal", "One-time", 242.00m, new(2026, 3, 2)),
+                        new("TXN-003", "Isabella Nguyen", "isabella@example.com", "Failed", "Visa ****9876", "Refund", 874.00m, new(2026, 3, 3)),
+                    ];
+
+                    private void HandleAddPayment(AddPaymentDialog.PaymentFormData data)
+                    {
+                        var payment = new PaymentRecord(
+                            $"TXN-{_nextId++:D3}", data.Customer, data.Email,
+                            "Pending", data.Method, data.Category, data.Amount, DateTime.Now);
+                        // Immutable update: new list reference triggers Blazor change detection
+                        _payments = [.._payments, payment];
+                    }
 
                     private static string? GetRowClass(PaymentRecord item) =>
                         item.Status == "Failed" ? "bg-destructive/5" : null;
@@ -154,16 +126,9 @@
                     {
                         "Success" => BadgeVariant.Default,
                         "Processing" => BadgeVariant.Secondary,
-                        "Pending" => BadgeVariant.Outline,
                         "Failed" => BadgeVariant.Destructive,
                         _ => BadgeVariant.Outline
                     };
-
-                    private static string GetInitials(string name)
-                    {
-                        var parts = name.Split(' ');
-                        return parts.Length >= 2 ? $"{parts[0][0]}{parts[^1][0]}" : name[..1];
-                    }
                 }
                 """),
             new("page.razor",

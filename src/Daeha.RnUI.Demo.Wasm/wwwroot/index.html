@@ -36,7 +36,6 @@
             text-shadow: none !important;
         }
     </style>
-    <link href="Daeha.RnUI.Demo.Wasm.styles.css" rel="stylesheet" />
     <script type="importmap"></script>
 </head>
 
@@ -66,6 +65,15 @@
                 // Prism 아직 로드 중이면 재시도
                 setTimeout(function() { window.highlightCode(element); }, 200);
             }
+        };
+        // Sidebar scroll position preservation
+        window.rnuiGetScrollTop = function(elementId) {
+            var el = document.getElementById(elementId);
+            return el ? el.scrollTop : 0;
+        };
+        window.rnuiSetScrollTop = function(elementId, top) {
+            var el = document.getElementById(elementId);
+            if (el) el.scrollTop = top;
         };
     </script>
 </body>

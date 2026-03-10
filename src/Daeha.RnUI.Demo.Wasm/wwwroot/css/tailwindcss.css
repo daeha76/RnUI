@@ -7,8 +7,16 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-red-500: oklch(63.7% 0.237 25.331);
+    --color-yellow-500: oklch(79.5% 0.184 86.047);
+    --color-green-50: oklch(98.2% 0.018 155.826);
+    --color-green-400: oklch(79.2% 0.209 151.711);
+    --color-green-500: oklch(72.3% 0.219 149.579);
+    --color-green-600: oklch(62.7% 0.194 149.214);
+    --color-green-950: oklch(26.6% 0.065 152.934);
     --color-blue-500: oklch(62.3% 0.214 259.815);
     --color-blue-600: oklch(54.6% 0.245 262.881);
+    --color-gray-500: oklch(55.1% 0.027 264.364);
     --color-zinc-100: oklch(96.7% 0.001 286.375);
     --color-zinc-200: oklch(92% 0.004 286.32);
     --color-zinc-300: oklch(87.1% 0.006 286.286);
@@ -52,6 +60,7 @@
     --font-weight-bold: 700;
     --tracking-tighter: -0.05em;
     --tracking-tight: -0.025em;
+    --tracking-wider: 0.05em;
     --tracking-widest: 0.1em;
     --leading-tight: 1.25;
     --leading-normal: 1.5;
@@ -61,6 +70,7 @@
     --radius-lg: 0.5rem;
     --radius-xl: 0.75rem;
     --animate-spin: spin 1s linear infinite;
+    --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     --aspect-video: 16 / 9;
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -354,6 +364,9 @@
   .mb-2 {
     margin-bottom: calc(var(--spacing) * 2);
   }
+  .mb-3 {
+    margin-bottom: calc(var(--spacing) * 3);
+  }
   .mb-4 {
     margin-bottom: calc(var(--spacing) * 4);
   }
@@ -427,6 +440,9 @@
   .size-8 {
     width: calc(var(--spacing) * 8);
     height: calc(var(--spacing) * 8);
+  }
+  .h-2 {
+    height: calc(var(--spacing) * 2);
   }
   .h-3 {
     height: calc(var(--spacing) * 3);
@@ -506,11 +522,17 @@
   .min-h-svh {
     min-height: 100svh;
   }
+  .w-2 {
+    width: calc(var(--spacing) * 2);
+  }
   .w-3 {
     width: calc(var(--spacing) * 3);
   }
   .w-3\/5 {
     width: calc(3 / 5 * 100%);
+  }
+  .w-4 {
+    width: calc(var(--spacing) * 4);
   }
   .w-7 {
     width: calc(var(--spacing) * 7);
@@ -521,11 +543,17 @@
   .w-12 {
     width: calc(var(--spacing) * 12);
   }
+  .w-20 {
+    width: calc(var(--spacing) * 20);
+  }
   .w-48 {
     width: calc(var(--spacing) * 48);
   }
   .w-72 {
     width: calc(var(--spacing) * 72);
+  }
+  .w-\[40px\] {
+    width: 40px;
   }
   .w-\[60px\] {
     width: 60px;
@@ -562,6 +590,9 @@
   }
   .w-\[250px\] {
     width: 250px;
+  }
+  .w-\[286\%\] {
+    width: 286%;
   }
   .w-\[300px\] {
     width: 300px;
@@ -637,11 +668,20 @@
   .scale-\[0\.8\] {
     scale: 0.8;
   }
+  .scale-\[0\.35\] {
+    scale: 0.35;
+  }
+  .rotate-180 {
+    rotate: 180deg;
+  }
   .\[transform\:translateZ\(0\)\] {
     transform: translateZ(0);
   }
   .transform {
     transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
+  }
+  .animate-pulse {
+    animation: var(--animate-pulse);
   }
   .animate-spin {
     animation: var(--animate-spin);
@@ -791,6 +831,13 @@
       margin-inline-end: calc(calc(var(--spacing) * 2) * calc(1 - var(--tw-space-x-reverse)));
     }
   }
+  .space-x-3 {
+    :where(& > :not(:last-child)) {
+      --tw-space-x-reverse: 0;
+      margin-inline-start: calc(calc(var(--spacing) * 3) * var(--tw-space-x-reverse));
+      margin-inline-end: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-x-reverse)));
+    }
+  }
   .space-x-4 {
     :where(& > :not(:last-child)) {
       --tw-space-x-reverse: 0;
@@ -883,6 +930,18 @@
   .bg-blue-500 {
     background-color: var(--color-blue-500);
   }
+  .bg-gray-500 {
+    background-color: var(--color-gray-500);
+  }
+  .bg-green-50 {
+    background-color: var(--color-green-50);
+  }
+  .bg-green-500 {
+    background-color: var(--color-green-500);
+  }
+  .bg-red-500 {
+    background-color: var(--color-red-500);
+  }
   .bg-transparent {
     background-color: transparent;
   }
@@ -891,6 +950,9 @@
     @supports (color: color-mix(in lab, red, red)) {
       background-color: color-mix(in oklab, var(--color-white) 5%, transparent);
     }
+  }
+  .bg-yellow-500 {
+    background-color: var(--color-yellow-500);
   }
   .bg-zinc-900 {
     background-color: var(--color-zinc-900);
@@ -971,6 +1033,9 @@
   }
   .py-8 {
     padding-block: calc(var(--spacing) * 8);
+  }
+  .py-10 {
+    padding-block: calc(var(--spacing) * 10);
   }
   .py-12 {
     padding-block: calc(var(--spacing) * 12);
@@ -1062,6 +1127,9 @@
   .text-\[0\.70rem\] {
     font-size: 0.70rem;
   }
+  .text-\[10px\] {
+    font-size: 10px;
+  }
   .leading-none {
     --tw-leading: 1;
     line-height: 1;
@@ -1102,6 +1170,10 @@
     --tw-tracking: var(--tracking-tighter);
     letter-spacing: var(--tracking-tighter);
   }
+  .tracking-wider {
+    --tw-tracking: var(--tracking-wider);
+    letter-spacing: var(--tracking-wider);
+  }
   .tracking-widest {
     --tw-tracking: var(--tracking-widest);
     letter-spacing: var(--tracking-widest);
@@ -1111,6 +1183,9 @@
   }
   .whitespace-nowrap {
     white-space: nowrap;
+  }
+  .text-green-600 {
+    color: var(--color-green-600);
   }
   .text-white {
     color: var(--color-white);
@@ -1123,6 +1198,9 @@
   }
   .text-zinc-400 {
     color: var(--color-zinc-400);
+  }
+  .capitalize {
+    text-transform: capitalize;
   }
   .uppercase {
     text-transform: uppercase;
@@ -1145,6 +1223,9 @@
   }
   .opacity-25 {
     opacity: 25%;
+  }
+  .opacity-30 {
+    opacity: 30%;
   }
   .opacity-50 {
     opacity: 50%;
@@ -1379,6 +1460,19 @@
   .dark\:bg-blue-600 {
     @media (prefers-color-scheme: dark) {
       background-color: var(--color-blue-600);
+    }
+  }
+  .dark\:bg-green-950\/20 {
+    @media (prefers-color-scheme: dark) {
+      background-color: color-mix(in srgb, oklch(26.6% 0.065 152.934) 20%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        background-color: color-mix(in oklab, var(--color-green-950) 20%, transparent);
+      }
+    }
+  }
+  .dark\:text-green-400 {
+    @media (prefers-color-scheme: dark) {
+      color: var(--color-green-400);
     }
   }
   .\[\&\>a\]\:underline {
@@ -1709,6 +1803,11 @@
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
   }
 }
 @layer properties {

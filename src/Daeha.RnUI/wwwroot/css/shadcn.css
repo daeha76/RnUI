@@ -3022,6 +3022,13 @@
     height: calc(var(--spacing) * 4);
   }
 }
+[data-slot="table-container"] {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, oklch(0.922 0 0) 50%, transparent) transparent;
+  @supports (color: color-mix(in lab, red, red)) {
+    scrollbar-color: color-mix(in oklch, var(--color-border) 50%, transparent) transparent;
+  }
+}
 .cn-table {
   width: 100%;
   caption-side: bottom;
