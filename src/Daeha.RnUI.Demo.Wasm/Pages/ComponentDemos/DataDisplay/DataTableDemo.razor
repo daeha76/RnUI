@@ -176,19 +176,20 @@
             new("Row Selection",
                 "Use SelectionMode.Multiple for checkbox selection with Shift+click range select. Bind selected items with @bind-SelectedItems.",
                 @<SelectionExample />,
-                @"<RnDataTable TItem=""Task"" Items=""tasks""
+                @"<RnDataTable TItem=""TaskItem"" Items=""tasks""
              SelectionMode=""SelectionMode.Multiple""
              @bind-SelectedItems=""_selected"">
     <Columns>
-        <RnDataTableColumn TItem=""Task""
+        <RnDataTableColumn TItem=""TaskItem""
             Property=""x => x.Title"" Title=""Task"" />
-        <RnDataTableColumn TItem=""Task""
+        <RnDataTableColumn TItem=""TaskItem""
             Property=""x => x.Priority"" Title=""Priority"" />
     </Columns>
 </RnDataTable>
 
 @code {
-    private HashSet<Task> _selected = [];
+    private record TaskItem(string Title, string Priority, string Assignee);
+    private HashSet<TaskItem> _selected = [];
 }
 
 @* SelectionMode: None (default), Single, Multiple *@
