@@ -1,15 +1,15 @@
 @* Selection Example - Multiple selection with Shift+click range select *@
 
-<RnDataTable TItem="Task" Items="_tasks" SelectionMode="SelectionMode.Multiple"
+<RnDataTable TItem="TaskItem" Items="_tasks" SelectionMode="SelectionMode.Multiple"
              @bind-SelectedItems="_selected" PageSize="5" ShowPagination="false">
     <Columns>
-        <RnDataTableColumn TItem="Task" Property="x => x.Title" Title="Task" Sortable />
-        <RnDataTableColumn TItem="Task" Property="x => x.Priority" Title="Priority" Sortable Filterable>
+        <RnDataTableColumn TItem="TaskItem" Property="x => x.Title" Title="Task" Sortable />
+        <RnDataTableColumn TItem="TaskItem" Property="x => x.Priority" Title="Priority" Sortable Filterable>
             <CellTemplate Context="item">
                 <RnBadge Variant="@GetPriorityVariant(item.Priority)">@item.Priority</RnBadge>
             </CellTemplate>
         </RnDataTableColumn>
-        <RnDataTableColumn TItem="Task" Property="x => x.Assignee" Title="Assignee" />
+        <RnDataTableColumn TItem="TaskItem" Property="x => x.Assignee" Title="Assignee" />
     </Columns>
 </RnDataTable>
 
@@ -19,11 +19,11 @@
 }
 
 @code {
-    private record Task(string Title, string Priority, string Assignee);
+    private record TaskItem(string Title, string Priority, string Assignee);
 
-    private HashSet<Task> _selected = [];
+    private HashSet<TaskItem> _selected = [];
 
-    private readonly List<Task> _tasks =
+    private readonly List<TaskItem> _tasks =
     [
         new("Fix login bug", "High", "Alice"),
         new("Update docs", "Low", "Bob"),
