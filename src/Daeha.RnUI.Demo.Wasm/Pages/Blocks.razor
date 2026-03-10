@@ -1,0 +1,104 @@
+@page "/blocks"
+@page "/blocks/{Slug}"
+@using Daeha.RnUI.Demo.Wasm.Models
+@using Daeha.RnUI.Demo.Wasm.BlockDemos.Login
+
+<PageTitle>@(_currentBlock?.Name ?? "Blocks") - RnUI</PageTitle>
+
+@if (string.IsNullOrEmpty(Slug))
+{
+    <div class="space-y-6">
+        <div>
+            <h1 class="scroll-m-20 text-3xl font-semibold tracking-tight">Blocks</h1>
+            <p class="text-base text-muted-foreground leading-relaxed">
+                Ready-made page layouts built with RnUI components. Copy and paste into your apps.
+            </p>
+        </div>
+
+        @* Category filter *@
+        <div class="flex gap-2">
+            <RnButton Variant="@(_selectedCategory is null ? ButtonVariant.Default : ButtonVariant.Outline)"
+                      Size="ButtonSize.Sm"
+                      OnClick="() => _selectedCategory = null">
+                All
+            </RnButton>
+            @foreach (var category in _categories)
+            {
+                var cat = category;
+                <RnButton Variant="@(_selectedCategory == cat ? ButtonVariant.Default : ButtonVariant.Outline)"
+                          Size="ButtonSize.Sm"
+                          OnClick="() => _selectedCategory = cat">
+                    @char.ToUpper(cat[0])@cat[1..]
+                </RnButton>
+            }
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            @foreach (var block in FilteredBlocks)
+            {
+                <a href="blocks/@block.Slug" class="group block">
+                    <div class="rounded-xl border border-[var(--color-border-subtle)] bg-card transition-colors hover:border-foreground/30 overflow-hidden">
+                        <div class="flex h-[180px] items-center justify-center border-b border-[var(--color-border-subtle)] p-4 overflow-hidden">
+                            @block.Thumbnail
+                        </div>
+                        <div class="p-4">
+                            <h3 class="text-sm font-medium">@block.Name</h3>
+                            <p class="text-xs text-muted-foreground mt-1 line-clamp-1">@block.Description</p>
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+}
+else if (_currentBlock is not null)
+{
+    <div class="space-y-8">
+        <div>
+            <h1 class="scroll-m-20 text-3xl font-semibold tracking-tight">@_currentBlock.Name</h1>
+            <p class="text-base text-muted-foreground leading-relaxed mt-1.5">@_currentBlock.Description</p>
+        </div>
+
+        <BlockPreview Files="@_currentBlock.Files">
+            @_currentBlock.Demo
+        </BlockPreview>
+    </div>
+}
+else
+{
+    <div class="space-y-4">
+        <h1 class="text-3xl font-semibold tracking-tight">Block not found</h1>
+        <p class="text-muted-foreground">The block "@Slug" does not exist.</p>
+        <RnButton OnClick="@(() => Navigation.NavigateTo("blocks"))">Back to Blocks</RnButton>
+    </div>
+}
+
+@code {
+    [Parameter] public string? Slug { get; set; }
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
+
+    private BlockDemo? _currentBlock;
+    private string? _selectedCategory;
+
+    private string[] _categories => _blockDemos
+        .Select(b => b.Category)
+        .Distinct()
+        .OrderBy(c => c)
+        .ToArray();
+
+    private BlockDemo[] FilteredBlocks => _selectedCategory is null
+        ? _blockDemos
+        : _blockDemos.Where(b => b.Category == _selectedCategory).ToArray();
+
+    protected override void OnParametersSet()
+    {
+        _currentBlock = string.IsNullOrEmpty(Slug)
+            ? null
+            : _blockDemos.FirstOrDefault(b => b.Slug == Slug);
+    }
+
+    private BlockDemo[] _blockDemos =>
+    [
+        Login01Demo.GetDemo(),
+    ];
+}

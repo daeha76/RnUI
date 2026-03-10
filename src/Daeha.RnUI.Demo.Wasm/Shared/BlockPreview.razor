@@ -1,0 +1,95 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+@inject IJSRuntime JS
+
+<div class="group relative my-4 flex flex-col overflow-hidden rounded-xl border border-[var(--color-border-subtle)]">
+    <div class="preview-area flex min-h-[500px] items-center justify-center">
+        @ChildContent
+    </div>
+    @if (Files is { Length: > 0 })
+    {
+        <div class="relative border-t border-[var(--color-border-subtle)]">
+            @* File tabs *@
+            <div class="flex items-center border-b border-white/5 bg-zinc-900">
+                <div class="flex overflow-x-auto">
+                    @for (var i = 0; i < Files.Length; i++)
+                    {
+                        var index = i;
+                        var file = Files[i];
+                        <button class="whitespace-nowrap px-4 py-2 text-xs font-medium transition-colors @(index == _selectedFileIndex ? "text-zinc-100 bg-zinc-950 border-b-2 border-primary" : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800")"
+                                @onclick="() => SelectFile(index)">
+                            @file.FileName
+                        </button>
+                    }
+                </div>
+                <div class="ml-auto pr-3">
+                    <button class="inline-flex h-7 w-7 items-center justify-center rounded-md border border-white/10 bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-zinc-200 transition-colors"
+                            @onclick="CopyCode"
+                            title="Copy code">
+                        @if (_copied)
+                        {
+                            <RnIcon Icon="RnIcons.Check" Size="14" />
+                        }
+                        else
+                        {
+                            <RnIcon Icon="RnIcons.Copy" Size="14" />
+                        }
+                    </button>
+                </div>
+            </div>
+            @* Code area *@
+            <div class="code-block overflow-x-auto bg-zinc-950 @(_expanded ? "" : "max-h-[120px] overflow-hidden")">
+                <pre class="p-4 text-sm leading-relaxed text-zinc-300"><code class="font-mono">@SyntaxHighlighter.HighlightXml(SelectedCode)</code></pre>
+            </div>
+            @if (!_expanded && SelectedCode.Split('\n').Length > 4)
+            {
+                <div class="absolute bottom-0 left-0 right-0 flex items-end justify-center bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent pb-2 pt-8">
+                    <button class="inline-flex items-center gap-1 rounded-md border border-white/10 bg-zinc-900 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100 transition-colors"
+                            @onclick="() => _expanded = true">
+                        View Code
+                        <RnIcon Icon="RnIcons.ChevronDown" Size="12" />
+                    </button>
+                </div>
+            }
+            @if (_expanded && SelectedCode.Split('\n').Length > 4)
+            {
+                <div class="flex justify-center border-t border-white/5 bg-zinc-950 py-2">
+                    <button class="inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-xs font-medium text-zinc-400 hover:text-zinc-200 transition-colors"
+                            @onclick="() => _expanded = false">
+                        Collapse
+                        <RnIcon Icon="RnIcons.ChevronUp" Size="12" />
+                    </button>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public BlockFile[]? Files { get; set; }
+
+    private int _selectedFileIndex;
+    private bool _expanded;
+    private bool _copied;
+
+    private string SelectedCode => Files is { Length: > 0 } && _selectedFileIndex < Files.Length
+        ? Files[_selectedFileIndex].Code
+        : "";
+
+    private void SelectFile(int index)
+    {
+        _selectedFileIndex = index;
+        _expanded = false;
+    }
+
+    private async Task CopyCode()
+    {
+        if (string.IsNullOrEmpty(SelectedCode)) return;
+        await JS.InvokeVoidAsync("navigator.clipboard.writeText", SelectedCode);
+        _copied = true;
+        StateHasChanged();
+        await Task.Delay(2000);
+        _copied = false;
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,95 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+@using Daeha.RnUI.Demo.Wasm.BlockDemos.Login.Components
+
+@code {
+    public static BlockDemo GetDemo() => new(
+        Name: "Login 01",
+        Slug: "login-01",
+        Description: "A simple login form with email and password inside a card.",
+        Category: "login",
+        Demo: @<div class="flex min-h-[500px] w-full items-center justify-center p-6 md:p-10">
+            <div class="w-full max-w-sm">
+                <LoginForm01 />
+            </div>
+        </div>,
+        Thumbnail: @<div class="scale-[0.5] origin-top-left pointer-events-none w-[200%] h-[300px] overflow-hidden">
+            <div class="flex items-center justify-center h-full">
+                <div class="w-full max-w-sm">
+                    <LoginForm01 />
+                </div>
+            </div>
+        </div>,
+        Files:
+        [
+            new("login-form.razor",
+                """
+                @using System.ComponentModel.DataAnnotations
+
+                <div class="flex flex-col gap-6">
+                    <RnCard>
+                        <RnCardHeader>
+                            <RnCardTitle Class="text-2xl">Login to your account</RnCardTitle>
+                            <RnCardDescription>Enter your email below to login to your account</RnCardDescription>
+                        </RnCardHeader>
+                        <RnCardContent>
+                            <EditForm Model="_model" FormName="login-form" OnValidSubmit="HandleSubmit">
+                                <div class="grid gap-6">
+                                    <div class="grid gap-2">
+                                        <RnLabel For="email">Email</RnLabel>
+                                        <RnInput Id="email" Type="email" Placeholder="m@example.com"
+                                                 @bind-Value="_model.Email" required />
+                                    </div>
+                                    <div class="grid gap-2">
+                                        <div class="flex items-center">
+                                            <RnLabel For="password">Password</RnLabel>
+                                            <a href="#" class="ml-auto inline-block text-sm underline-offset-4 hover:underline">
+                                                Forgot your password?
+                                            </a>
+                                        </div>
+                                        <RnInput Id="password" Type="password"
+                                                 @bind-Value="_model.Password" required />
+                                    </div>
+                                    <div class="flex flex-col gap-3">
+                                        <RnButton Type="submit" Class="w-full">Login</RnButton>
+                                        <RnButton Variant="ButtonVariant.Outline" Class="w-full" Type="button">
+                                            Login with Google
+                                        </RnButton>
+                                    </div>
+                                    <div class="text-center text-sm">
+                                        Don't have an account?
+                                        <a href="#" class="underline underline-offset-4">Sign up</a>
+                                    </div>
+                                </div>
+                            </EditForm>
+                        </RnCardContent>
+                    </RnCard>
+                </div>
+
+                @code {
+                    private LoginModel _model = new();
+
+                    private async Task HandleSubmit()
+                    {
+                        await Task.Delay(1500);
+                    }
+
+                    private sealed class LoginModel
+                    {
+                        public string Email { get; set; } = "";
+                        public string Password { get; set; } = "";
+                    }
+                }
+                """),
+            new("page.razor",
+                """
+                @page "/login"
+
+                <div class="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+                    <div class="w-full max-w-sm">
+                        <LoginForm />
+                    </div>
+                </div>
+                """)
+        ]
+    );
+}

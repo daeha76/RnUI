@@ -20,6 +20,21 @@
         </RnSidebarGroup>
 
         <RnSidebarGroup>
+            <RnSidebarGroupLabel>Blocks</RnSidebarGroupLabel>
+            <RnSidebarMenu>
+                @foreach (var block in _blocks)
+                {
+                    var href = $"/blocks/{block.Slug}";
+                    <RnSidebarMenuItem>
+                        <RnSidebarMenuButton Href="@href" IsActive="@IsCurrentPage(href)">
+                            @block.Name
+                        </RnSidebarMenuButton>
+                    </RnSidebarMenuItem>
+                }
+            </RnSidebarMenu>
+        </RnSidebarGroup>
+
+        <RnSidebarGroup>
             <RnSidebarGroupLabel>Components</RnSidebarGroupLabel>
             <RnSidebarMenu>
                 @foreach (var component in _components)
@@ -37,6 +52,13 @@
 </RnSidebar>
 
 @code {
+    private record SidebarItem(string Name, string Slug);
+
+    private readonly SidebarItem[] _blocks =
+    [
+        new("Login 01", "login-01"),
+    ];
+
     private record ComponentItem(string Name, string Slug);
 
     protected override void OnInitialized()
