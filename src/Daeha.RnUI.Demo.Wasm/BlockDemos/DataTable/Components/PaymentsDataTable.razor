@@ -1,0 +1,254 @@
+<div class="w-full space-y-4">
+    <div class="flex items-center justify-between">
+        <div>
+            <h2 class="text-2xl font-bold tracking-tight">Payments</h2>
+            <p class="text-muted-foreground">Manage your payment transactions.</p>
+        </div>
+        <RnButton>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4">
+                <path d="M5 12h14"/><path d="M12 5v14"/>
+            </svg>
+            Add Payment
+        </RnButton>
+    </div>
+
+    <RnDataTable TItem="PaymentRecord"
+                 Items="_payments"
+                 SelectionMode="SelectionMode.Multiple"
+                 PageSize="10"
+                 PageSizeOptions="@(new[] { 5, 10, 20, 50 })"
+                 FilterMode="FilterMode.Contains"
+                 RowClass="@GetRowClass">
+        <Toolbar>
+            <div class="flex items-center justify-between w-full">
+                <div class="flex flex-1 items-center space-x-2">
+                    <RnDataTableSearch TItem="PaymentRecord" Placeholder="Filter payments..." />
+                </div>
+                <div class="flex items-center space-x-2">
+                    <RnDataTableColumnToggle TItem="PaymentRecord" />
+                </div>
+            </div>
+        </Toolbar>
+        <Columns>
+            <RnDataTableColumn TItem="PaymentRecord" Property="x => x.Id" Title="Transaction" Sortable Width="120px">
+                <CellTemplate Context="item">
+                    <span class="font-mono text-xs">@item.Id</span>
+                </CellTemplate>
+            </RnDataTableColumn>
+            <RnDataTableColumn TItem="PaymentRecord" Property="x => x.Status" Title="Status" Sortable Filterable>
+                <CellTemplate Context="item">
+                    <div class="flex items-center">
+                        <span class="@GetStatusDotClass(item.Status)"></span>
+                        <RnBadge Variant="@GetStatusVariant(item.Status)" Class="capitalize">
+                            @item.Status.ToLower()
+                        </RnBadge>
+                    </div>
+                </CellTemplate>
+            </RnDataTableColumn>
+            <RnDataTableColumn TItem="PaymentRecord" Property="x => x.Customer" Title="Customer" Sortable Filterable>
+                <CellTemplate Context="item">
+                    <div class="flex items-center space-x-3">
+                        <RnAvatar Class="h-8 w-8">
+                            <RnAvatarFallback>@GetInitials(item.Customer)</RnAvatarFallback>
+                        </RnAvatar>
+                        <div class="flex flex-col">
+                            <span class="font-medium text-sm">@item.Customer</span>
+                            <span class="text-xs text-muted-foreground">@item.Email</span>
+                        </div>
+                    </div>
+                </CellTemplate>
+            </RnDataTableColumn>
+            <RnDataTableColumn TItem="PaymentRecord" Property="x => x.Method" Title="Method" Sortable Filterable>
+                <CellTemplate Context="item">
+                    <div class="flex items-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="h-4 w-4 text-muted-foreground">
+                            <rect width="20" height="14" x="2" y="5" rx="2"/>
+                            <line x1="2" x2="22" y1="10" y2="10"/>
+                        </svg>
+                        <span>@item.Method</span>
+                    </div>
+                </CellTemplate>
+            </RnDataTableColumn>
+            <RnDataTableColumn TItem="PaymentRecord" Property="x => x.Category" Title="Category" Sortable Filterable>
+                <CellTemplate Context="item">
+                    <RnBadge Variant="BadgeVariant.Outline" Class="text-xs">@item.Category</RnBadge>
+                </CellTemplate>
+            </RnDataTableColumn>
+            <RnDataTableColumn TItem="PaymentRecord" Property="x => x.Date" Title="Date" Sortable>
+                <CellTemplate Context="item">
+                    <span class="text-sm text-muted-foreground">@item.Date.ToString("MMM dd, yyyy")</span>
+                </CellTemplate>
+            </RnDataTableColumn>
+            <RnDataTableColumn TItem="PaymentRecord" Property="x => x.Amount" Title="Amount" Sortable
+                               CellClass="@(item => item.Amount > 500 ? "text-green-600 dark:text-green-400 font-semibold" : null)">
+                <CellTemplate Context="item">
+                    <div class="text-right font-medium tabular-nums">
+                        @item.Amount.ToString("C")
+                    </div>
+                </CellTemplate>
+            </RnDataTableColumn>
+            <RnDataTableColumn TItem="PaymentRecord" Title="" Id="actions" Width="50px">
+                <CellTemplate Context="item">
+                    <RnDataTableRowActions>
+                        <RnDropdownMenuLabel>Actions</RnDropdownMenuLabel>
+                        <RnDropdownMenuSeparator />
+                        <RnDropdownMenuItem>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4">
+                                <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                            </svg>
+                            Copy ID
+                        </RnDropdownMenuItem>
+                        <RnDropdownMenuItem>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4">
+                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            View Details
+                        </RnDropdownMenuItem>
+                        <RnDropdownMenuItem>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4">
+                                <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+                            </svg>
+                            Edit Payment
+                        </RnDropdownMenuItem>
+                        <RnDropdownMenuSeparator />
+                        <RnDropdownMenuItem Class="text-destructive">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4">
+                                <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                                <line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/>
+                            </svg>
+                            Delete
+                        </RnDropdownMenuItem>
+                    </RnDataTableRowActions>
+                </CellTemplate>
+            </RnDataTableColumn>
+        </Columns>
+        <DetailTemplate Context="item">
+            <div class="p-6 space-y-4">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                        <p class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Transaction ID</p>
+                        <p class="text-sm font-mono mt-1">@item.Id</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Customer</p>
+                        <p class="text-sm mt-1">@item.Customer</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Email</p>
+                        <p class="text-sm mt-1">@item.Email</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Amount</p>
+                        <p class="text-sm font-semibold mt-1">@item.Amount.ToString("C")</p>
+                    </div>
+                </div>
+                <RnSeparator />
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                        <p class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</p>
+                        <div class="mt-1">
+                            <RnBadge Variant="@GetStatusVariant(item.Status)">@item.Status</RnBadge>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Method</p>
+                        <p class="text-sm mt-1">@item.Method</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Category</p>
+                        <p class="text-sm mt-1">@item.Category</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Date</p>
+                        <p class="text-sm mt-1">@item.Date.ToString("MMMM dd, yyyy")</p>
+                    </div>
+                </div>
+                <div class="flex gap-2 pt-2">
+                    <RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">Download Receipt</RnButton>
+                    <RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">Send Reminder</RnButton>
+                    <RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Destructive">Refund</RnButton>
+                </div>
+            </div>
+        </DetailTemplate>
+        <EmptyContent>
+            <div class="flex flex-col items-center justify-center py-10">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground/50 mb-4">
+                    <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/>
+                    <path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/>
+                </svg>
+                <p class="text-sm font-medium">No payments found</p>
+                <p class="text-xs text-muted-foreground mt-1">Try adjusting your search or filter to find what you're looking for.</p>
+            </div>
+        </EmptyContent>
+    </RnDataTable>
+</div>
+
+@code {
+    public record PaymentRecord(
+        string Id, string Customer, string Email, string Status,
+        string Method, string Category, decimal Amount, DateTime Date);
+
+    private readonly List<PaymentRecord> _payments =
+    [
+        new("TXN-8A3F01", "Olivia Martin", "olivia@example.com", "Success", "Visa ****4242", "Subscription", 316.00m, new(2026, 3, 1)),
+        new("TXN-8A3F02", "Jackson Lee", "jackson@example.com", "Success", "Mastercard ****1234", "One-time", 242.00m, new(2026, 3, 2)),
+        new("TXN-8A3F03", "Isabella Nguyen", "isabella@example.com", "Processing", "PayPal", "Subscription", 837.00m, new(2026, 3, 2)),
+        new("TXN-8A3F04", "William Kim", "william@example.com", "Failed", "Visa ****9876", "Refund", 874.00m, new(2026, 3, 3)),
+        new("TXN-8A3F05", "Sofia Davis", "sofia@example.com", "Success", "Apple Pay", "One-time", 125.00m, new(2026, 3, 3)),
+        new("TXN-8A3F06", "Liam Johnson", "liam@example.com", "Success", "Visa ****4242", "Subscription", 450.00m, new(2026, 3, 4)),
+        new("TXN-8A3F07", "Emma Wilson", "emma@example.com", "Pending", "Bank Transfer", "Invoice", 1250.00m, new(2026, 3, 4)),
+        new("TXN-8A3F08", "Noah Brown", "noah@example.com", "Success", "Mastercard ****5678", "One-time", 89.00m, new(2026, 3, 5)),
+        new("TXN-8A3F09", "Ava Taylor", "ava@example.com", "Failed", "Visa ****3456", "Subscription", 199.00m, new(2026, 3, 5)),
+        new("TXN-8A3F10", "Lucas Anderson", "lucas@example.com", "Success", "Google Pay", "One-time", 675.00m, new(2026, 3, 6)),
+        new("TXN-8A3F11", "Mia Thomas", "mia@example.com", "Processing", "PayPal", "Invoice", 2100.00m, new(2026, 3, 6)),
+        new("TXN-8A3F12", "Ethan Martinez", "ethan@example.com", "Success", "Visa ****7890", "Subscription", 35.00m, new(2026, 3, 7)),
+        new("TXN-8A3F13", "Charlotte Garcia", "charlotte@example.com", "Pending", "Bank Transfer", "One-time", 520.00m, new(2026, 3, 7)),
+        new("TXN-8A3F14", "James Rodriguez", "james@example.com", "Success", "Apple Pay", "One-time", 159.00m, new(2026, 3, 8)),
+        new("TXN-8A3F15", "Amelia Hernandez", "amelia@example.com", "Failed", "Mastercard ****2468", "Refund", 410.00m, new(2026, 3, 8)),
+        new("TXN-8A3F16", "Benjamin Lopez", "benjamin@example.com", "Success", "Visa ****1357", "Subscription", 79.00m, new(2026, 3, 9)),
+        new("TXN-8A3F17", "Harper Gonzalez", "harper@example.com", "Success", "Google Pay", "One-time", 932.00m, new(2026, 3, 9)),
+        new("TXN-8A3F18", "Alexander Moore", "alexander@example.com", "Processing", "PayPal", "Invoice", 1575.00m, new(2026, 3, 10)),
+        new("TXN-8A3F19", "Evelyn Clark", "evelyn@example.com", "Success", "Visa ****8642", "Subscription", 249.00m, new(2026, 3, 10)),
+        new("TXN-8A3F20", "Daniel Lewis", "daniel@example.com", "Pending", "Bank Transfer", "One-time", 3200.00m, new(2026, 3, 10)),
+    ];
+
+    private static string? GetRowClass(PaymentRecord item) => item.Status switch
+    {
+        "Failed" => "bg-destructive/5",
+        _ => null
+    };
+
+    private static BadgeVariant GetStatusVariant(string status) => status switch
+    {
+        "Success" => BadgeVariant.Default,
+        "Processing" => BadgeVariant.Secondary,
+        "Pending" => BadgeVariant.Outline,
+        "Failed" => BadgeVariant.Destructive,
+        _ => BadgeVariant.Outline
+    };
+
+    private static string GetStatusDotClass(string status) => status switch
+    {
+        "Success" => "mr-2 h-2 w-2 rounded-full bg-green-500",
+        "Processing" => "mr-2 h-2 w-2 rounded-full bg-blue-500 animate-pulse",
+        "Pending" => "mr-2 h-2 w-2 rounded-full bg-yellow-500",
+        "Failed" => "mr-2 h-2 w-2 rounded-full bg-red-500",
+        _ => "mr-2 h-2 w-2 rounded-full bg-gray-500"
+    };
+
+    private static string GetInitials(string name)
+    {
+        var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length >= 2)
+            return $"{parts[0][0]}{parts[^1][0]}";
+        return parts.Length > 0 ? parts[0][..1] : "?";
+    }
+}

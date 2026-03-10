@@ -5,6 +5,7 @@
 @using Daeha.RnUI.Demo.Wasm.BlockDemos.Login
 @using Daeha.RnUI.Demo.Wasm.BlockDemos.Sidebar
 @using Daeha.RnUI.Demo.Wasm.BlockDemos.Signup
+@using Daeha.RnUI.Demo.Wasm.BlockDemos.DataTable
 
 <PageTitle>@(_currentBlock?.Name ?? "Blocks") - RnUI</PageTitle>
 
@@ -105,5 +106,6 @@ else
         Login01Demo.GetDemo(),
         Signup01Demo.GetDemo(),
         Sidebar07Demo.GetDemo(),
+        DataTable01Demo.GetDemo(),
     ];
 }
