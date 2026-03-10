@@ -52,21 +52,21 @@ public class RnSwitchTests : BunitContext
     }
 
     [Fact]
-    public void RnSwitch_WithCheckedFalse_HasNoDataCheckedAttribute()
+    public void RnSwitch_WithCheckedFalse_HasDataStateUnchecked()
     {
         var cut = Render<RnSwitch>(p => p
             .Add(x => x.Checked, false));
 
-        cut.Find("[data-slot='switch']").HasAttribute("data-checked").Should().BeFalse();
+        cut.Find("[data-slot='switch']").GetAttribute("data-state").Should().Be("unchecked");
     }
 
     [Fact]
-    public void RnSwitch_WithCheckedTrue_HasDataCheckedAttribute()
+    public void RnSwitch_WithCheckedTrue_HasDataStateChecked()
     {
         var cut = Render<RnSwitch>(p => p
             .Add(x => x.Checked, true));
 
-        cut.Find("[data-slot='switch']").HasAttribute("data-checked").Should().BeTrue();
+        cut.Find("[data-slot='switch']").GetAttribute("data-state").Should().Be("checked");
     }
 
     [Fact]
@@ -86,23 +86,21 @@ public class RnSwitchTests : BunitContext
     }
 
     [Fact]
-    public void RnSwitch_Disabled_HasDisabledClasses()
+    public void RnSwitch_Disabled_HasDisabledAttribute()
     {
         var cut = Render<RnSwitch>(p => p
             .Add(x => x.Disabled, true));
 
-        // RnSwitch uses CnDisabled which adds pointer-events-none opacity-50
-        var switchEl = cut.Find("[data-slot='switch']");
-        switchEl.ClassList.Should().Contain("pointer-events-none");
+        cut.Find("[data-slot='switch']").HasAttribute("disabled").Should().BeTrue();
     }
 
     [Fact]
-    public void RnSwitch_NotDisabled_DoesNotHaveDisabledClasses()
+    public void RnSwitch_NotDisabled_HasNoDisabledAttribute()
     {
         var cut = Render<RnSwitch>(p => p
             .Add(x => x.Disabled, false));
 
-        cut.Find("[data-slot='switch']").ClassList.Should().NotContain("pointer-events-none");
+        cut.Find("[data-slot='switch']").HasAttribute("disabled").Should().BeFalse();
     }
 
     [Fact]

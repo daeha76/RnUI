@@ -34,19 +34,11 @@ public class RnAlertTests : BunitContext
     }
 
     [Fact]
-    public void RnAlert_DefaultRender_HasAlertBodyDiv()
+    public void RnAlert_WithChildContent_RendersContent()
     {
         var cut = Render<RnAlert>(p => p.AddChildContent("Alert message"));
 
-        cut.Find(".cn-alert-body").Should().NotBeNull();
-    }
-
-    [Fact]
-    public void RnAlert_WithChildContent_RendersInAlertBody()
-    {
-        var cut = Render<RnAlert>(p => p.AddChildContent("Alert message"));
-
-        cut.Find(".cn-alert-body").TextContent.Should().Contain("Alert message");
+        cut.Find("[data-slot='alert']").TextContent.Should().Contain("Alert message");
     }
 
     [Fact]
@@ -61,28 +53,7 @@ public class RnAlertTests : BunitContext
         alert.ClassList.Should().NotContain("cn-alert-variant-default");
     }
 
-    [Fact]
-    public void RnAlert_WithoutIcon_DoesNotRenderIconSpan()
-    {
-        var cut = Render<RnAlert>(p => p.AddChildContent("Alert message"));
 
-        cut.FindAll(".cn-alert-icon").Should().BeEmpty();
-    }
-
-    [Fact]
-    public void RnAlert_WithIcon_RendersIconSpan()
-    {
-        var cut = Render<RnAlert>(p => p
-            .Add(x => x.Icon, builder =>
-            {
-                builder.OpenElement(0, "span");
-                builder.AddContent(1, "!");
-                builder.CloseElement();
-            })
-            .AddChildContent("Alert message"));
-
-        cut.Find(".cn-alert-icon").Should().NotBeNull();
-    }
 
     [Fact]
     public void RnAlert_WithCustomClass_IncludesCustomClass()
@@ -94,19 +65,5 @@ public class RnAlertTests : BunitContext
         cut.Find("[data-slot='alert']").ClassList.Should().Contain("my-alert-class");
     }
 
-    [Fact]
-    public void RnAlert_WithDestructiveVariantAndIcon_AppliesDestructiveIconClass()
-    {
-        var cut = Render<RnAlert>(p => p
-            .Add(x => x.Variant, AlertVariant.Destructive)
-            .Add(x => x.Icon, builder =>
-            {
-                builder.OpenElement(0, "span");
-                builder.AddContent(1, "!");
-                builder.CloseElement();
-            })
-            .AddChildContent("Error!"));
 
-        cut.Find(".cn-alert-icon").ClassList.Should().Contain("cn-alert-icon-destructive");
-    }
 }

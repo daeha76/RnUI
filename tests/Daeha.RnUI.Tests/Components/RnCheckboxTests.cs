@@ -51,21 +51,21 @@ public class RnCheckboxTests : BunitContext
     }
 
     [Fact]
-    public void RnCheckbox_WithCheckedFalse_HasNoDataCheckedAttribute()
+    public void RnCheckbox_WithCheckedFalse_HasDataStateUnchecked()
     {
         var cut = Render<RnCheckbox>(p => p
             .Add(x => x.Checked, false));
 
-        cut.Find("[data-slot='checkbox']").HasAttribute("data-checked").Should().BeFalse();
+        cut.Find("[data-slot='checkbox']").GetAttribute("data-state").Should().Be("unchecked");
     }
 
     [Fact]
-    public void RnCheckbox_WithCheckedTrue_HasDataCheckedAttribute()
+    public void RnCheckbox_WithCheckedTrue_HasDataStateChecked()
     {
         var cut = Render<RnCheckbox>(p => p
             .Add(x => x.Checked, true));
 
-        cut.Find("[data-slot='checkbox']").HasAttribute("data-checked").Should().BeTrue();
+        cut.Find("[data-slot='checkbox']").GetAttribute("data-state").Should().Be("checked");
     }
 
     [Fact]

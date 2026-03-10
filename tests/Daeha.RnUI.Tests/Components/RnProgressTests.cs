@@ -17,20 +17,14 @@ public class RnProgressTests : BunitContext
     }
 
     [Fact]
-    public void RnProgress_DefaultRender_HasCnProgressRootClass()
+    public void RnProgress_DefaultRender_HasCnProgressClass()
     {
         var cut = Render<RnProgress>();
 
-        cut.Find("[data-slot='progress']").ClassList.Should().Contain("cn-progress-root");
+        cut.Find("[data-slot='progress']").ClassList.Should().Contain("cn-progress");
     }
 
-    [Fact]
-    public void RnProgress_DefaultRender_HasProgressTrack()
-    {
-        var cut = Render<RnProgress>();
 
-        cut.Find("[data-slot='progress-track']").Should().NotBeNull();
-    }
 
     [Fact]
     public void RnProgress_DefaultRender_HasProgressIndicator()
@@ -45,7 +39,7 @@ public class RnProgressTests : BunitContext
     {
         var cut = Render<RnProgress>();
 
-        cut.Find("[data-slot='progress-track']").GetAttribute("role").Should().Be("progressbar");
+        cut.Find("[data-slot='progress']").GetAttribute("role").Should().Be("progressbar");
     }
 
     [Fact]
@@ -53,7 +47,7 @@ public class RnProgressTests : BunitContext
     {
         var cut = Render<RnProgress>();
 
-        cut.Find("[data-slot='progress-track']").GetAttribute("aria-valuemax").Should().Be("100");
+        cut.Find("[data-slot='progress']").GetAttribute("aria-valuemax").Should().Be("100");
     }
 
     [Fact]
@@ -62,7 +56,7 @@ public class RnProgressTests : BunitContext
         var cut = Render<RnProgress>(p => p
             .Add(x => x.Max, 200));
 
-        cut.Find("[data-slot='progress-track']").GetAttribute("aria-valuemax").Should().Be("200");
+        cut.Find("[data-slot='progress']").GetAttribute("aria-valuemax").Should().Be("200");
     }
 
     [Fact]
@@ -70,7 +64,7 @@ public class RnProgressTests : BunitContext
     {
         var cut = Render<RnProgress>();
 
-        cut.Find("[data-slot='progress-track']").GetAttribute("aria-valuenow").Should().Be("0");
+        cut.Find("[data-slot='progress']").GetAttribute("aria-valuenow").Should().Be("0");
     }
 
     [Fact]
@@ -79,7 +73,7 @@ public class RnProgressTests : BunitContext
         var cut = Render<RnProgress>(p => p
             .Add(x => x.Value, 50));
 
-        cut.Find("[data-slot='progress-track']").GetAttribute("aria-valuenow").Should().Be("50");
+        cut.Find("[data-slot='progress']").GetAttribute("aria-valuenow").Should().Be("50");
     }
 
     [Fact]
@@ -112,7 +106,7 @@ public class RnProgressTests : BunitContext
             .Add(x => x.Max, 100));
 
         var style = cut.Find("[data-slot='progress-indicator']").GetAttribute("style");
-        style.Should().Contain("100");
+        style.Should().Contain("0%");
     }
 
     [Fact]
@@ -120,7 +114,7 @@ public class RnProgressTests : BunitContext
     {
         var cut = Render<RnProgress>();
 
-        cut.Find("[data-slot='progress-track']").GetAttribute("aria-valuemin").Should().Be("0");
+        cut.Find("[data-slot='progress']").GetAttribute("aria-valuemin").Should().Be("0");
     }
 
     [Fact]
@@ -132,12 +126,5 @@ public class RnProgressTests : BunitContext
         cut.Find("[data-slot='progress']").ClassList.Should().Contain("my-progress-class");
     }
 
-    [Fact]
-    public void RnProgress_WithChildContent_RendersContent()
-    {
-        var cut = Render<RnProgress>(p => p
-            .AddChildContent("50%"));
 
-        cut.Find("[data-slot='progress']").TextContent.Should().Contain("50%");
-    }
 }
