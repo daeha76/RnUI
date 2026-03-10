@@ -7,12 +7,12 @@
             <RnSidebarGroupLabel>Getting Started</RnSidebarGroupLabel>
             <RnSidebarMenu>
                 <RnSidebarMenuItem>
-                    <RnSidebarMenuButton Href="/docs/getting-started" IsActive="@IsCurrentPage("/docs/getting-started")">
+                    <RnSidebarMenuButton Href="docs/getting-started" IsActive="@IsCurrentPage("/docs/getting-started")">
                         Introduction
                     </RnSidebarMenuButton>
                 </RnSidebarMenuItem>
                 <RnSidebarMenuItem>
-                    <RnSidebarMenuButton Href="/docs/theming" IsActive="@IsCurrentPage("/docs/theming")">
+                    <RnSidebarMenuButton Href="docs/theming" IsActive="@IsCurrentPage("/docs/theming")">
                         Theming
                     </RnSidebarMenuButton>
                 </RnSidebarMenuItem>
@@ -39,7 +39,7 @@
             <RnSidebarMenu>
                 @foreach (var component in _components)
                 {
-                    var href = $"/components/{component.Slug}";
+                    var href = $"components/{component.Slug}";
                     <RnSidebarMenuItem>
                         <RnSidebarMenuButton Href="@href" IsActive="@IsCurrentPage(href)">
                             @component.Name
