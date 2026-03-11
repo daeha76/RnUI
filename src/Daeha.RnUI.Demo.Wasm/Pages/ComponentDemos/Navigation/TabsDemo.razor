@@ -15,12 +15,14 @@
                                 <RnCardTitle>Account</RnCardTitle>
                                 <RnCardDescription>Make changes to your account here. Click save when you're done.</RnCardDescription>
                             </RnCardHeader>
-                            <RnCardContent>
-                                <div class="grid gap-6">
-                                    <div class="grid gap-3">
-                                        <RnLabel For="tabs-demo-name">Name</RnLabel>
-                                        <RnInput id="tabs-demo-name" Placeholder="Pedro Duarte" />
-                                    </div>
+                            <RnCardContent Class="grid gap-6">
+                                <div class="grid gap-3">
+                                    <RnLabel For="tabs-demo-name">Name</RnLabel>
+                                    <RnInput id="tabs-demo-name" Value="Pedro Duarte" />
+                                </div>
+                                <div class="grid gap-3">
+                                    <RnLabel For="tabs-demo-username">Username</RnLabel>
+                                    <RnInput id="tabs-demo-username" Value="@("@peduarte")" />
                                 </div>
                             </RnCardContent>
                             <RnCardFooter>
@@ -32,18 +34,16 @@
                         <RnCard>
                             <RnCardHeader>
                                 <RnCardTitle>Password</RnCardTitle>
-                                <RnCardDescription>Change your password here.</RnCardDescription>
+                                <RnCardDescription>Change your password here. After saving, you'll be logged out.</RnCardDescription>
                             </RnCardHeader>
-                            <RnCardContent>
-                                <div class="grid gap-6">
-                                    <div class="grid gap-3">
-                                        <RnLabel For="tabs-demo-current">Current password</RnLabel>
-                                        <RnInput id="tabs-demo-current" Type="password" />
-                                    </div>
-                                    <div class="grid gap-3">
-                                        <RnLabel For="tabs-demo-new">New password</RnLabel>
-                                        <RnInput id="tabs-demo-new" Type="password" />
-                                    </div>
+                            <RnCardContent Class="grid gap-6">
+                                <div class="grid gap-3">
+                                    <RnLabel For="tabs-demo-current">Current password</RnLabel>
+                                    <RnInput id="tabs-demo-current" Type="password" />
+                                </div>
+                                <div class="grid gap-3">
+                                    <RnLabel For="tabs-demo-new">New password</RnLabel>
+                                    <RnInput id="tabs-demo-new" Type="password" />
                                 </div>
                             </RnCardContent>
                             <RnCardFooter>
@@ -63,16 +63,45 @@
         <RnCard>
             <RnCardHeader>
                 <RnCardTitle>Account</RnCardTitle>
-                <RnCardDescription>Make changes to your account here.</RnCardDescription>
+                <RnCardDescription>
+                    Make changes to your account here. Click save when you're done.
+                </RnCardDescription>
             </RnCardHeader>
-            <RnCardContent>
+            <RnCardContent Class=""grid gap-6"">
                 <div class=""grid gap-3"">
-                    <RnLabel>Name</RnLabel>
-                    <RnInput Placeholder=""Pedro Duarte"" />
+                    <RnLabel For=""name"">Name</RnLabel>
+                    <RnInput id=""name"" Value=""Pedro Duarte"" />
+                </div>
+                <div class=""grid gap-3"">
+                    <RnLabel For=""username"">Username</RnLabel>
+                    <RnInput id=""username"" Value=""@peduarte"" />
                 </div>
             </RnCardContent>
             <RnCardFooter>
                 <RnButton>Save changes</RnButton>
+            </RnCardFooter>
+        </RnCard>
+    </RnTabsContent>
+    <RnTabsContent Value=""password"">
+        <RnCard>
+            <RnCardHeader>
+                <RnCardTitle>Password</RnCardTitle>
+                <RnCardDescription>
+                    Change your password here. After saving, you'll be logged out.
+                </RnCardDescription>
+            </RnCardHeader>
+            <RnCardContent Class=""grid gap-6"">
+                <div class=""grid gap-3"">
+                    <RnLabel For=""current"">Current password</RnLabel>
+                    <RnInput id=""current"" Type=""password"" />
+                </div>
+                <div class=""grid gap-3"">
+                    <RnLabel For=""new"">New password</RnLabel>
+                    <RnInput id=""new"" Type=""password"" />
+                </div>
+            </RnCardContent>
+            <RnCardFooter>
+                <RnButton>Save password</RnButton>
             </RnCardFooter>
         </RnCard>
     </RnTabsContent>

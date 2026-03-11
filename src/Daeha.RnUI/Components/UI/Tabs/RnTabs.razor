@@ -23,5 +23,6 @@
     {
         ActiveTab = tab;
         await ActiveTabChanged.InvokeAsync(tab);
+        StateHasChanged();
     }
 }
