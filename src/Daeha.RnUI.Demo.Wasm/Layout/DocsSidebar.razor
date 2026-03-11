@@ -25,7 +25,7 @@
             <RnSidebarMenu>
                 @foreach (var block in _blocks)
                 {
-                    var href = $"/blocks/{block.Slug}";
+                    var href = $"blocks/{block.Slug}";
                     <RnSidebarMenuItem>
                         <RnSidebarMenuButton Href="@href" IsActive="@IsCurrentPage(href)">
                             @block.Name
