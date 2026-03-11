@@ -1,0 +1,172 @@
+<div class="w-full space-y-4">
+    <div class="flex items-center justify-between">
+        <div>
+            <h2 class="text-2xl font-bold tracking-tight">Sales Report</h2>
+            <p class="text-muted-foreground">Quarterly performance by region and representative.</p>
+        </div>
+    </div>
+
+    <RnDataTable TItem="SalesRecord"
+                 Items="_sales"
+                 SelectionMode="SelectionMode.None"
+                 PageSize="10"
+                 PageSizeOptions="@(new[] { 5, 10, 20 })"
+                 FilterMode="FilterMode.Contains"
+                 RowClass="@GetRowClass">
+        <Toolbar>
+            <div class="flex items-center justify-between w-full">
+                <div class="flex flex-1 items-center space-x-2">
+                    <RnDataTableSearch TItem="SalesRecord" Placeholder="Filter sales..." />
+                </div>
+                <div class="flex items-center space-x-2">
+                    <RnDataTableColumnToggle TItem="SalesRecord" />
+                </div>
+            </div>
+        </Toolbar>
+        <Columns>
+            <RnDataTableColumn TItem="SalesRecord" Property="x => x.Region" Title="Region" Sortable Filterable>
+                <CellTemplate Context="item">
+                    <RnBadge Variant="BadgeVariant.Outline" Class="text-xs">@item.Region</RnBadge>
+                </CellTemplate>
+            </RnDataTableColumn>
+            <RnDataTableColumn TItem="SalesRecord" Property="x => x.Representative" Title="Representative" Sortable>
+                <CellTemplate Context="item">
+                    <div class="flex items-center space-x-3">
+                        <RnAvatar Class="h-8 w-8">
+                            <RnAvatarFallback>@GetInitials(item.Representative)</RnAvatarFallback>
+                        </RnAvatar>
+                        <div class="flex flex-col">
+                            <span class="font-medium text-sm">@item.Representative</span>
+                            <span class="text-xs text-muted-foreground">@item.Email</span>
+                        </div>
+                    </div>
+                </CellTemplate>
+            </RnDataTableColumn>
+
+            @* 2-level header: Revenue group *@
+            <RnDataTableColumnGroup TItem="SalesRecord" Title="Revenue">
+                <RnDataTableColumn TItem="SalesRecord" Property="x => x.Q1Revenue" Title="Q1" Sortable>
+                    <CellTemplate Context="item">
+                        <div class="text-right tabular-nums text-sm">@item.Q1Revenue.ToString("C0")</div>
+                    </CellTemplate>
+                </RnDataTableColumn>
+                <RnDataTableColumn TItem="SalesRecord" Property="x => x.Q2Revenue" Title="Q2" Sortable>
+                    <CellTemplate Context="item">
+                        <div class="text-right tabular-nums text-sm">@item.Q2Revenue.ToString("C0")</div>
+                    </CellTemplate>
+                </RnDataTableColumn>
+                <RnDataTableColumn TItem="SalesRecord" Property="x => x.Q3Revenue" Title="Q3" Sortable>
+                    <CellTemplate Context="item">
+                        <div class="text-right tabular-nums text-sm">@item.Q3Revenue.ToString("C0")</div>
+                    </CellTemplate>
+                </RnDataTableColumn>
+                <RnDataTableColumn TItem="SalesRecord" Property="x => x.Q4Revenue" Title="Q4" Sortable>
+                    <CellTemplate Context="item">
+                        <div class="text-right tabular-nums text-sm">@item.Q4Revenue.ToString("C0")</div>
+                    </CellTemplate>
+                </RnDataTableColumn>
+            </RnDataTableColumnGroup>
+
+            @* 2-level header: Deals group *@
+            <RnDataTableColumnGroup TItem="SalesRecord" Title="Deals Closed">
+                <RnDataTableColumn TItem="SalesRecord" Property="x => x.Q1Deals" Title="Q1" Sortable>
+                    <CellTemplate Context="item">
+                        <div class="text-center tabular-nums text-sm">@item.Q1Deals</div>
+                    </CellTemplate>
+                </RnDataTableColumn>
+                <RnDataTableColumn TItem="SalesRecord" Property="x => x.Q2Deals" Title="Q2" Sortable>
+                    <CellTemplate Context="item">
+                        <div class="text-center tabular-nums text-sm">@item.Q2Deals</div>
+                    </CellTemplate>
+                </RnDataTableColumn>
+                <RnDataTableColumn TItem="SalesRecord" Property="x => x.Q3Deals" Title="Q3" Sortable>
+                    <CellTemplate Context="item">
+                        <div class="text-center tabular-nums text-sm">@item.Q3Deals</div>
+                    </CellTemplate>
+                </RnDataTableColumn>
+                <RnDataTableColumn TItem="SalesRecord" Property="x => x.Q4Deals" Title="Q4" Sortable>
+                    <CellTemplate Context="item">
+                        <div class="text-center tabular-nums text-sm">@item.Q4Deals</div>
+                    </CellTemplate>
+                </RnDataTableColumn>
+            </RnDataTableColumnGroup>
+
+            <RnDataTableColumn TItem="SalesRecord" Property="x => x.TotalRevenue" Title="Total" Sortable>
+                <HeaderTemplate>
+                    <div class="flex items-center justify-end gap-1.5 w-full font-semibold">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="text-muted-foreground">
+                            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+                            <polyline points="16 7 22 7 22 13"/>
+                        </svg>
+                        <span>Total</span>
+                    </div>
+                </HeaderTemplate>
+                <CellTemplate Context="item">
+                    <div class="text-right font-bold tabular-nums">@item.TotalRevenue.ToString("C0")</div>
+                </CellTemplate>
+            </RnDataTableColumn>
+            <RnDataTableColumn TItem="SalesRecord" Property="x => x.Performance" Title="Performance" Sortable Filterable>
+                <CellTemplate Context="item">
+                    <RnBadge Variant="@GetPerformanceVariant(item.Performance)">@item.Performance</RnBadge>
+                </CellTemplate>
+            </RnDataTableColumn>
+        </Columns>
+        <EmptyContent>
+            <div class="flex flex-col items-center justify-center py-10">
+                <p class="text-sm font-medium">No sales data found</p>
+                <p class="text-xs text-muted-foreground mt-1">Try adjusting your search or filter.</p>
+            </div>
+        </EmptyContent>
+    </RnDataTable>
+</div>
+
+@code {
+    public record SalesRecord(
+        string Region, string Representative, string Email,
+        decimal Q1Revenue, decimal Q2Revenue, decimal Q3Revenue, decimal Q4Revenue,
+        int Q1Deals, int Q2Deals, int Q3Deals, int Q4Deals,
+        decimal TotalRevenue, string Performance);
+
+    private readonly List<SalesRecord> _sales =
+    [
+        new("North America", "Sarah Chen", "sarah@example.com", 245_000m, 312_000m, 287_000m, 356_000m, 18, 24, 21, 28, 1_200_000m, "Exceeds"),
+        new("North America", "Michael Park", "michael@example.com", 189_000m, 201_000m, 178_000m, 215_000m, 14, 16, 13, 17, 783_000m, "Meets"),
+        new("North America", "Emily Rodriguez", "emily@example.com", 156_000m, 142_000m, 168_000m, 190_000m, 11, 10, 12, 14, 656_000m, "Meets"),
+        new("Europe", "Thomas Mueller", "thomas@example.com", 278_000m, 295_000m, 310_000m, 342_000m, 22, 23, 25, 27, 1_225_000m, "Exceeds"),
+        new("Europe", "Sophie Dubois", "sophie@example.com", 198_000m, 185_000m, 210_000m, 225_000m, 15, 14, 16, 18, 818_000m, "Meets"),
+        new("Europe", "Luca Rossi", "luca@example.com", 120_000m, 135_000m, 128_000m, 142_000m, 9, 10, 9, 11, 525_000m, "Below"),
+        new("Asia Pacific", "Yuki Tanaka", "yuki@example.com", 310_000m, 328_000m, 345_000m, 389_000m, 25, 27, 28, 32, 1_372_000m, "Exceeds"),
+        new("Asia Pacific", "Wei Zhang", "wei@example.com", 205_000m, 218_000m, 195_000m, 232_000m, 16, 17, 15, 19, 850_000m, "Meets"),
+        new("Asia Pacific", "Priya Sharma", "priya@example.com", 175_000m, 160_000m, 148_000m, 155_000m, 13, 12, 11, 12, 638_000m, "Below"),
+        new("Latin America", "Carlos Mendez", "carlos@example.com", 165_000m, 178_000m, 192_000m, 210_000m, 12, 13, 15, 16, 745_000m, "Meets"),
+        new("Latin America", "Ana Silva", "ana@example.com", 142_000m, 155_000m, 168_000m, 185_000m, 10, 11, 12, 14, 650_000m, "Meets"),
+        new("Latin America", "Diego Torres", "diego@example.com", 98_000m, 105_000m, 95_000m, 112_000m, 7, 8, 7, 9, 410_000m, "Below"),
+        new("Middle East", "Ahmed Hassan", "ahmed@example.com", 225_000m, 248_000m, 265_000m, 290_000m, 18, 20, 21, 23, 1_028_000m, "Exceeds"),
+        new("Middle East", "Fatima Al-Rashid", "fatima@example.com", 180_000m, 192_000m, 175_000m, 198_000m, 14, 15, 13, 15, 745_000m, "Meets"),
+        new("Africa", "Amara Okafor", "amara@example.com", 135_000m, 148_000m, 155_000m, 172_000m, 10, 11, 12, 13, 610_000m, "Meets"),
+    ];
+
+    private static string? GetRowClass(SalesRecord item) => item.Performance switch
+    {
+        "Below" => "bg-destructive/5",
+        _ => null
+    };
+
+    private static BadgeVariant GetPerformanceVariant(string perf) => perf switch
+    {
+        "Exceeds" => BadgeVariant.Default,
+        "Meets" => BadgeVariant.Secondary,
+        "Below" => BadgeVariant.Destructive,
+        _ => BadgeVariant.Outline
+    };
+
+    private static string GetInitials(string name)
+    {
+        var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length >= 2)
+            return $"{parts[0][0]}{parts[^1][0]}";
+        return parts.Length > 0 ? parts[0][..1] : "?";
+    }
+}

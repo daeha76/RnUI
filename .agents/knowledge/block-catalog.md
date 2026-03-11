@@ -34,11 +34,12 @@
 | **sidebar-06** | Tree view | Default | Sidebar*, Collapsible | ✅ |
 | **sidebar-07** | With footer | Default | Sidebar*, DropdownMenu | ✅ |
 
-### DataTable (1종)
+### DataTable (2종)
 
 | Block | 설명 | 필요 컴포넌트 | 구현 가능 |
 |-------|------|--------------|----------|
 | **data-table-01** | 결제 데이터 테이블 | DataTable, Badge, DropdownMenu, Dialog, Select, Input | ✅ |
+| **data-table-02** | 분기별 매출 리포트 (2단 헤더) | DataTable, ColumnGroup, Badge, Avatar | ✅ |
 
 ### Dashboard (Featured)
 

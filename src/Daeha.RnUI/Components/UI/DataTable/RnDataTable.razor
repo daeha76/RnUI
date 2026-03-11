@@ -58,33 +58,71 @@
             @if (State.ColumnGroups.Count > 0)
             {
                 <RnTableHeader>
+                    @{
+                        var groupCells = GetGroupHeaderCells();
+                        var visibleCols = State.GetVisibleColumns();
+                        var nonGroupedIndices = new HashSet<int>();
+                        var groupFirstIndices = new HashSet<int>();
+                        var groupLastIndices = new HashSet<int>();
+                        foreach (var cell in groupCells)
+                        {
+                            if (!cell.IsGrouped)
+                            {
+                                nonGroupedIndices.Add(cell.StartIndex);
+                            }
+                            else
+                            {
+                                groupFirstIndices.Add(cell.StartIndex);
+                                groupLastIndices.Add(cell.StartIndex + cell.ColSpan - 1);
+                            }
+                        }
+                    }
                     <RnTableRow>
                         @if (State.SelectionMode != SelectionMode.None)
                         {
-                            <RnTableHead Class="w-[40px]" />
+                            <RnTableHead Class="w-[40px] align-middle" @attributes="@(new Dictionary<string, object> { ["rowspan"] = "2" })" />
                         }
-                        @foreach (var group in GetGroupHeaderCells())
+                        @foreach (var group in groupCells)
                         {
-                            <RnTableHead Class="cn-data-table-group-header text-center" @attributes="@(new Dictionary<string, object> { ["colspan"] = group.ColSpan.ToString() })">
-                                @group.Title
-                            </RnTableHead>
+                            if (group.IsGrouped)
+                            {
+                                <RnTableHead Class="cn-data-table-group-header text-center" @attributes="@(new Dictionary<string, object> { ["colspan"] = group.ColSpan.ToString() })">
+                                    @group.Title
+                                </RnTableHead>
+                            }
+                            else
+                            {
+                                var col = visibleCols[group.StartIndex];
+                                <RnTableHead Class="align-middle" style="@GetColumnWidthStyle(col)"
+                                             @attributes="@(new Dictionary<string, object> { ["rowspan"] = "2" })">
+                                    @if (col.HeaderTemplate != null)
+                                    {
+                                        @col.HeaderTemplate(default(TItem)!)
+                                    }
+                                    else
+                                    {
+                                        <RnDataTableColumnHeader TItem="TItem"
+                                                                 State="State"
+                                                                 ColumnId="@col.Id"
+                                                                 Title="@col.Title"
+                                                                 IsSortable="@col.Sortable"
+                                                                 OnSortChanged="StateHasChanged" />
+                                    }
+                                </RnTableHead>
+                            }
                         }
                     </RnTableRow>
                     <RnTableRow>
-                        @if (State.SelectionMode != SelectionMode.None)
+                        @for (var colIdx = 0; colIdx < visibleCols.Count; colIdx++)
                         {
-                            <RnTableHead Class="w-[40px]">
-                                @if (State.SelectionMode == SelectionMode.Multiple)
-                                {
-                                    <RnCheckbox Checked="@State.IsAllOnPageSelected"
-                                                CheckedChanged="@HandleSelectAll"
-                                                aria-label="Select all" />
-                                }
-                            </RnTableHead>
-                        }
-                        @foreach (var col in State.GetVisibleColumns())
-                        {
-                            <RnTableHead style="@GetColumnWidthStyle(col)">
+                            if (nonGroupedIndices.Contains(colIdx))
+                                continue;
+
+                            var col = visibleCols[colIdx];
+                            var borderClass = CssUtils.Cn(
+                                groupFirstIndices.Contains(colIdx) ? "cn-data-table-group-col-first" : null,
+                                groupLastIndices.Contains(colIdx) ? "cn-data-table-group-col-last" : null);
+                            <RnTableHead Class="@borderClass" style="@GetColumnWidthStyle(col)">
                                 @if (col.HeaderTemplate != null)
                                 {
                                     @col.HeaderTemplate(default(TItem)!)
@@ -166,6 +204,8 @@
                 }
                 else
                 {
+                    var bodyVisibleCols = State.GetVisibleColumns();
+                    var bodyGroupBorders = GetGroupBorderColumns(bodyVisibleCols);
                     @for (var i = 0; i < State.PagedItems.Count; i++)
                     {
                         var rowIndex = i;
@@ -183,7 +223,7 @@
                                     </div>
                                 </RnTableCell>
                             }
-                            @foreach (var col in State.GetVisibleColumns())
+                            @foreach (var col in bodyVisibleCols)
                             {
                                 var span = State.GetRowSpan(col.Id, rowIndex);
                                 @if (span == 0)
@@ -191,14 +231,17 @@
                                     continue;
                                 }
 
-                                var cellClass = col.CellClass?.Invoke(item);
+                                var cellBorderClass = CssUtils.Cn(
+                                    col.CellClass?.Invoke(item),
+                                    bodyGroupBorders.firstIds.Contains(col.Id) ? "cn-data-table-group-col-first" : null,
+                                    bodyGroupBorders.lastIds.Contains(col.Id) ? "cn-data-table-group-col-last" : null);
                                 var cellAttrs = new Dictionary<string, object>();
                                 if (span > 1)
                                 {
                                     cellAttrs["rowspan"] = span.ToString();
                                 }
 
-                                <RnTableCell Class="@cellClass" @attributes="cellAttrs">
+                                <RnTableCell Class="@cellBorderClass" @attributes="cellAttrs">
                                     @if (col.CellTemplate != null)
                                     {
                                         @col.CellTemplate(item)
@@ -385,7 +428,7 @@
         return col.Width != null ? $"width: {col.Width}" : null;
     }
 
-    private record GroupHeaderCell(string Title, int ColSpan);
+    private record GroupHeaderCell(string Title, int ColSpan, bool IsGrouped, int StartIndex = 0);
 
     private IReadOnlyList<GroupHeaderCell> GetGroupHeaderCells()
     {
@@ -406,20 +449,48 @@
                     {
                         span++;
                     }
-                    cells.Add(new GroupHeaderCell(group.Title, span));
+                    cells.Add(new GroupHeaderCell(group.Title, span, IsGrouped: true, StartIndex: i));
                     i += span;
                     continue;
                 }
             }
-            cells.Add(new GroupHeaderCell("", 1));
+            cells.Add(new GroupHeaderCell("", 1, IsGrouped: false, StartIndex: i));
             i++;
         }
 
         if (DetailTemplate != null)
         {
-            cells.Add(new GroupHeaderCell("", 1));
+            cells.Add(new GroupHeaderCell("", 1, IsGrouped: false));
         }
 
         return cells;
+    }
+
+    private (HashSet<string> firstIds, HashSet<string> lastIds) GetGroupBorderColumns(
+        IReadOnlyList<DataTableColumnDef<TItem>> cols)
+    {
+        var firstIds = new HashSet<string>();
+        var lastIds = new HashSet<string>();
+
+        if (State.ColumnGroups.Count == 0)
+            return (firstIds, lastIds);
+
+        string? prevGroupId = null;
+        for (var i = 0; i < cols.Count; i++)
+        {
+            var groupId = cols[i].GroupId;
+            if (!string.IsNullOrEmpty(groupId))
+            {
+                if (groupId != prevGroupId)
+                    firstIds.Add(cols[i].Id);
+
+                var isLast = i + 1 >= cols.Count || cols[i + 1].GroupId != groupId;
+                if (isLast)
+                    lastIds.Add(cols[i].Id);
+            }
+            prevGroupId = groupId;
+        }
+
+        return (firstIds, lastIds);
     }
 }

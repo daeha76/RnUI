@@ -775,6 +775,26 @@
 .cn-data-table-group-header {
   @apply font-semibold text-center;
   border-bottom: 1px solid var(--color-border-subtle);
+  border-left: 1px solid var(--color-border-subtle);
+  border-right: 1px solid var(--color-border-subtle);
+}
+
+.cn-data-table-group-header:first-of-type {
+  border-left: none;
+}
+
+.cn-data-table-group-header:last-of-type {
+  border-right: none;
+}
+
+/* Sub-columns under a group: left border on first child of each group */
+.cn-data-table-group-col-first {
+  border-left: 1px solid var(--color-border-subtle);
+}
+
+/* Sub-columns under a group: right border on last child of each group */
+.cn-data-table-group-col-last {
+  border-right: 1px solid var(--color-border-subtle);
 }
 
 .cn-data-table-pagination {

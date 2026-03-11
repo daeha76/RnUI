@@ -1,0 +1,146 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+@using Daeha.RnUI.Demo.Wasm.BlockDemos.DataTable.Components
+
+@code {
+    public static BlockDemo GetDemo() => new(
+        Name: "DataTable 02",
+        Slug: "data-table-02",
+        Description: "A sales report data table with multi-level column headers (ColumnGroup), grouped quarterly data, and performance indicators.",
+        Category: "data-table",
+        Demo: @<div class="w-full p-6 md:p-10">
+            <SalesReportTable />
+        </div>,
+        Thumbnail: @<div class="scale-[0.35] origin-top-left pointer-events-none w-[286%] h-[300px] overflow-hidden">
+            <div class="p-6">
+                <SalesReportTable />
+            </div>
+        </div>,
+        Files:
+        [
+            new("sales-report-table.razor",
+                """
+                @using RnUI.Components.UI.DataTable
+
+                <div class="w-full space-y-4">
+                    <div>
+                        <h2 class="text-2xl font-bold tracking-tight">Sales Report</h2>
+                        <p class="text-muted-foreground">Quarterly performance by region and representative.</p>
+                    </div>
+
+                    <RnDataTable TItem="SalesRecord"
+                                 Items="_sales"
+                                 PageSize="10"
+                                 RowClass="@GetRowClass">
+                        <Toolbar>
+                            <div class="flex items-center justify-between w-full">
+                                <RnDataTableSearch TItem="SalesRecord" Placeholder="Filter sales..." />
+                                <RnDataTableColumnToggle TItem="SalesRecord" />
+                            </div>
+                        </Toolbar>
+                        <Columns>
+                            <RnDataTableColumn TItem="SalesRecord"
+                                               Property="x => x.Region" Title="Region" Sortable Filterable />
+                            <RnDataTableColumn TItem="SalesRecord"
+                                               Property="x => x.Representative" Title="Rep" Sortable />
+
+                            @* Multi-level header: Revenue group *@
+                            <RnDataTableColumnGroup TItem="SalesRecord" Title="Revenue">
+                                <RnDataTableColumn TItem="SalesRecord" Property="x => x.Q1Revenue" Title="Q1" Sortable>
+                                    <CellTemplate Context="item">
+                                        <div class="text-right tabular-nums">@item.Q1Revenue.ToString("C0")</div>
+                                    </CellTemplate>
+                                </RnDataTableColumn>
+                                <RnDataTableColumn TItem="SalesRecord" Property="x => x.Q2Revenue" Title="Q2" Sortable>
+                                    <CellTemplate Context="item">
+                                        <div class="text-right tabular-nums">@item.Q2Revenue.ToString("C0")</div>
+                                    </CellTemplate>
+                                </RnDataTableColumn>
+                                <RnDataTableColumn TItem="SalesRecord" Property="x => x.Q3Revenue" Title="Q3" Sortable>
+                                    <CellTemplate Context="item">
+                                        <div class="text-right tabular-nums">@item.Q3Revenue.ToString("C0")</div>
+                                    </CellTemplate>
+                                </RnDataTableColumn>
+                                <RnDataTableColumn TItem="SalesRecord" Property="x => x.Q4Revenue" Title="Q4" Sortable>
+                                    <CellTemplate Context="item">
+                                        <div class="text-right tabular-nums">@item.Q4Revenue.ToString("C0")</div>
+                                    </CellTemplate>
+                                </RnDataTableColumn>
+                            </RnDataTableColumnGroup>
+
+                            @* Multi-level header: Deals group *@
+                            <RnDataTableColumnGroup TItem="SalesRecord" Title="Deals Closed">
+                                <RnDataTableColumn TItem="SalesRecord" Property="x => x.Q1Deals" Title="Q1" Sortable>
+                                    <CellTemplate Context="item">
+                                        <div class="text-center tabular-nums">@item.Q1Deals</div>
+                                    </CellTemplate>
+                                </RnDataTableColumn>
+                                <RnDataTableColumn TItem="SalesRecord" Property="x => x.Q2Deals" Title="Q2" Sortable>
+                                    <CellTemplate Context="item">
+                                        <div class="text-center tabular-nums">@item.Q2Deals</div>
+                                    </CellTemplate>
+                                </RnDataTableColumn>
+                                <RnDataTableColumn TItem="SalesRecord" Property="x => x.Q3Deals" Title="Q3" Sortable>
+                                    <CellTemplate Context="item">
+                                        <div class="text-center tabular-nums">@item.Q3Deals</div>
+                                    </CellTemplate>
+                                </RnDataTableColumn>
+                                <RnDataTableColumn TItem="SalesRecord" Property="x => x.Q4Deals" Title="Q4" Sortable>
+                                    <CellTemplate Context="item">
+                                        <div class="text-center tabular-nums">@item.Q4Deals</div>
+                                    </CellTemplate>
+                                </RnDataTableColumn>
+                            </RnDataTableColumnGroup>
+
+                            <RnDataTableColumn TItem="SalesRecord" Property="x => x.TotalRevenue" Title="Total" Sortable>
+                                <HeaderTemplate>
+                                    <div class="flex items-center justify-end gap-1.5 w-full font-semibold">
+                                        <TrendingUpIcon class="h-3.5 w-3.5 text-muted-foreground" />
+                                        <span>Total</span>
+                                    </div>
+                                </HeaderTemplate>
+                                <CellTemplate Context="item">
+                                    <div class="text-right font-bold tabular-nums">@item.TotalRevenue.ToString("C0")</div>
+                                </CellTemplate>
+                            </RnDataTableColumn>
+                            <RnDataTableColumn TItem="SalesRecord"
+                                               Property="x => x.Performance" Title="Performance" Sortable Filterable>
+                                <CellTemplate Context="item">
+                                    <RnBadge Variant="@GetPerfVariant(item.Performance)">@item.Performance</RnBadge>
+                                </CellTemplate>
+                            </RnDataTableColumn>
+                        </Columns>
+                    </RnDataTable>
+                </div>
+
+                @code {
+                    public record SalesRecord(
+                        string Region, string Representative, string Email,
+                        decimal Q1Revenue, decimal Q2Revenue, decimal Q3Revenue, decimal Q4Revenue,
+                        int Q1Deals, int Q2Deals, int Q3Deals, int Q4Deals,
+                        decimal TotalRevenue, string Performance);
+
+                    private readonly List<SalesRecord> _sales = [ /* sample data */ ];
+
+                    private static string? GetRowClass(SalesRecord item) =>
+                        item.Performance == "Below" ? "bg-destructive/5" : null;
+
+                    private static BadgeVariant GetPerfVariant(string perf) => perf switch
+                    {
+                        "Exceeds" => BadgeVariant.Default,
+                        "Meets" => BadgeVariant.Secondary,
+                        "Below" => BadgeVariant.Destructive,
+                        _ => BadgeVariant.Outline
+                    };
+                }
+                """),
+            new("page.razor",
+                """
+                @page "/sales-report"
+
+                <div class="container mx-auto py-10">
+                    <SalesReportTable />
+                </div>
+                """)
+        ]
+    );
+}
