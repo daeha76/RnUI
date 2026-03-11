@@ -17,7 +17,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/daeha76/RnUI</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/daeha76/RnUI</PackageProjectUrl>
+    <PackageProjectUrl>https://daeha76.github.io/RnUI</PackageProjectUrl>
     <PackageOutputPath>$(MSBuildProjectDirectory)/../nupkgs</PackageOutputPath>
     <IsPackable>true</IsPackable>
   </PropertyGroup>
