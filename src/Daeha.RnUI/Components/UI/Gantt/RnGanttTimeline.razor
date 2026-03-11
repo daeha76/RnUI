@@ -1,0 +1,15 @@
+@* RnGanttTimeline - Scrollable right timeline area *@
+
+<div data-slot="gantt-timeline" class="cn-gantt-timeline">
+    <RnGanttTimelineHeader />
+
+    <div data-slot="gantt-timeline-scroll"
+         class="cn-gantt-timeline-scroll"
+         @ref="Parent.ScrollRef">
+        <RnGanttTimelineBody />
+    </div>
+</div>
+
+@code {
+    [CascadingParameter] public RnGantt Parent { get; set; } = default!;
+}

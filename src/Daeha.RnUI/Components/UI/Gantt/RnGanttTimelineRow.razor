@@ -1,0 +1,15 @@
+@* RnGanttTimelineRow - Single row in the timeline body *@
+
+<div data-slot="gantt-timeline-row"
+     class="cn-gantt-timeline-row"
+     style="height: @(Parent.State.RowHeightPx)px; --gantt-cell-width: @(Parent.State.CellWidthPx)px;">
+    @foreach (var task in Row.Tasks)
+    {
+        <RnGanttBar Task="task" />
+    }
+</div>
+
+@code {
+    [CascadingParameter] public RnGantt Parent { get; set; } = default!;
+    [Parameter] public GanttRow Row { get; set; } = default!;
+}

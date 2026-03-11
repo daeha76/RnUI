@@ -1,0 +1,19 @@
+@* RnGanttTodayMarker - Vertical "today" line *@
+
+@{
+    var offset = GanttDateUtils.GetTodayOffset(
+        Parent.State.RangeStart, Parent.State.RangeEnd, Parent.State.TimelineWidthPx, Parent.Today);
+}
+
+@if (offset.HasValue)
+{
+    <div data-slot="gantt-today-marker"
+         class="cn-gantt-today-marker"
+         style="left: @(offset.Value)px;">
+        <span class="cn-gantt-today-label">Today</span>
+    </div>
+}
+
+@code {
+    [CascadingParameter] public RnGantt Parent { get; set; } = default!;
+}

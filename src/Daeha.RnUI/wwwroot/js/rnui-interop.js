@@ -314,6 +314,43 @@ export function disposeScrollArea(id) {
     _scrollAreas.delete(id);
 }
 
+// ─── Gantt Scroll Sync ──────────────────────────────────────────────────────
+
+const _ganttInstances = new Map();
+
+export function initGanttScrollSync(id, scrollEl, headerEl, sidebarBodyEl) {
+    if (!scrollEl) return;
+
+    // Dispose existing if any
+    disposeGanttScrollSync(id);
+
+    const state = { scrollEl, headerEl, sidebarBodyEl, handler: null };
+
+    state.handler = () => {
+        requestAnimationFrame(() => {
+            if (headerEl) {
+                headerEl.scrollLeft = scrollEl.scrollLeft;
+            }
+            if (sidebarBodyEl) {
+                sidebarBodyEl.scrollTop = scrollEl.scrollTop;
+            }
+        });
+    };
+
+    scrollEl.addEventListener('scroll', state.handler, { passive: true });
+    _ganttInstances.set(id, state);
+}
+
+export function disposeGanttScrollSync(id) {
+    const state = _ganttInstances.get(id);
+    if (!state) return;
+
+    if (state.handler) {
+        state.scrollEl.removeEventListener('scroll', state.handler);
+    }
+    _ganttInstances.delete(id);
+}
+
 // ─── Internal Helpers ────────────────────────────────────────────────────────
 
 function _storeListener(id, type, handler, target, useCapture = false) {

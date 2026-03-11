@@ -1,0 +1,33 @@
+@* RnGanttLegend - Footer legend *@
+
+<div data-slot="gantt-legend"
+     class="@CssUtils.Cn("cn-gantt-legend", Class)"
+     @attributes="AdditionalAttributes">
+    @foreach (var item in Items)
+    {
+        <div class="cn-gantt-legend-item">
+            <span class="cn-gantt-legend-swatch @GetSwatchClass(item)"></span>
+            <span class="cn-gantt-legend-label">@item.Label</span>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public IReadOnlyList<GanttLegendItem> Items { get; set; } = [];
+    [Parameter] public string? Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private static string GetSwatchClass(GanttLegendItem item) => item.Variant switch
+    {
+        BarVariant.Blue => "cn-gantt-bar-variant-blue",
+        BarVariant.Green => "cn-gantt-bar-variant-green",
+        BarVariant.Orange => "cn-gantt-bar-variant-orange",
+        BarVariant.Red => "cn-gantt-bar-variant-red",
+        BarVariant.Purple => "cn-gantt-bar-variant-purple",
+        BarVariant.Yellow => "cn-gantt-bar-variant-yellow",
+        BarVariant.Teal => "cn-gantt-bar-variant-teal",
+        BarVariant.Muted => "cn-gantt-bar-variant-muted",
+        _ => "cn-gantt-bar-variant-default"
+    };
+}

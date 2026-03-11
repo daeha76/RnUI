@@ -1,0 +1,47 @@
+@* RnGanttTimelineHeader - Year/Month/Week/Day header rows *@
+
+<div data-slot="gantt-timeline-header"
+     class="cn-gantt-timeline-header"
+     @ref="Parent.HeaderRef">
+
+    @if (_primaryHeaders.Count > 0)
+    {
+        <div class="cn-gantt-header-row cn-gantt-header-primary"
+             style="width: @(Parent.State.TimelineWidthPx)px;">
+            @foreach (var cell in _primaryHeaders)
+            {
+                <div class="cn-gantt-header-cell"
+                     style="width: @(cell.WidthPx)px;">
+                    @cell.Label
+                </div>
+            }
+        </div>
+    }
+
+    <div class="cn-gantt-header-row cn-gantt-header-secondary"
+         style="width: @(Parent.State.TimelineWidthPx)px;">
+        @foreach (var cell in _secondaryHeaders)
+        {
+            <div class="cn-gantt-header-cell"
+                 style="width: @(cell.WidthPx)px;">
+                @cell.Label
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [CascadingParameter] public RnGantt Parent { get; set; } = default!;
+
+    private IReadOnlyList<GanttHeaderCell> _primaryHeaders = [];
+    private IReadOnlyList<GanttHeaderCell> _secondaryHeaders = [];
+
+    protected override void OnParametersSet()
+    {
+        var state = Parent.State;
+        _primaryHeaders = GanttDateUtils.GetPrimaryHeaders(
+            state.RangeStart, state.RangeEnd, state.ViewMode, state.CellWidthPx);
+        _secondaryHeaders = GanttDateUtils.GetSecondaryHeaders(
+            state.RangeStart, state.RangeEnd, state.ViewMode, state.CellWidthPx);
+    }
+}

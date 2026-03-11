@@ -1,0 +1,171 @@
+<div class="flex flex-col gap-4">
+    <div class="flex items-center gap-2 flex-wrap">
+        <span class="text-sm font-medium text-muted-foreground">View:</span>
+        @foreach (var mode in Enum.GetValues<GanttViewMode>())
+        {
+            <RnButton Variant="@(_viewMode == mode ? ButtonVariant.Default : ButtonVariant.Outline)"
+                      Size="ButtonSize.Sm"
+                      OnClick="@(() => SetViewMode(mode))">
+                @mode.ToString()
+            </RnButton>
+        }
+        <div class="h-6 w-px bg-border mx-1"></div>
+        <span class="text-sm font-medium text-muted-foreground">Zoom:</span>
+        <RnButton Variant="ButtonVariant.Outline" Size="ButtonSize.Sm"
+                  OnClick="ZoomOut">-</RnButton>
+        <RnButton Variant="ButtonVariant.Outline" Size="ButtonSize.Sm"
+                  OnClick="ZoomIn">+</RnButton>
+    </div>
+
+    <div style="height: 500px;">
+        <RnGantt @ref="_gantt"
+                 Rows="_rows"
+                 ViewMode="_viewMode"
+                 Today="DateTime.Today"
+                 ShowTodayMarker="true"
+                 ShowLegend="true"
+                 LegendItems="_legendItems"
+                 OnBarClick="HandleBarClick"
+                 Class="h-full" />
+    </div>
+
+    @if (_selectedTask != null)
+    {
+        <div class="p-3 rounded-lg bg-muted text-sm">
+            <span class="font-medium">Selected:</span> @_selectedTask.Label
+            (@_selectedTask.StartDate.ToString("yyyy-MM-dd") ~ @_selectedTask.EndDate.ToString("yyyy-MM-dd"))
+        </div>
+    }
+</div>
+
+@code {
+    private RnGantt _gantt = default!;
+    private GanttViewMode _viewMode = GanttViewMode.Month;
+    private GanttTask? _selectedTask;
+
+    private void SetViewMode(GanttViewMode mode)
+    {
+        _viewMode = mode;
+    }
+
+    private void ZoomIn() => _gantt.ZoomIn();
+    private void ZoomOut() => _gantt.ZoomOut();
+
+    private void HandleBarClick(GanttTask task)
+    {
+        _selectedTask = task;
+    }
+
+    private readonly List<GanttLegendItem> _legendItems =
+    [
+        new() { Label = "Structural", Variant = BarVariant.Blue },
+        new() { Label = "MEP", Variant = BarVariant.Green },
+        new() { Label = "Civil", Variant = BarVariant.Orange },
+        new() { Label = "Management", Variant = BarVariant.Purple },
+        new() { Label = "Architecture", Variant = BarVariant.Teal },
+        new() { Label = "Pending", Variant = BarVariant.Muted },
+    ];
+
+    private readonly List<GanttRow> _rows =
+    [
+        new()
+        {
+            Id = "1", Label = "Alex Morgan", SubLabel = "Senior Structural Eng.",
+            Tasks =
+            [
+                new()
+                {
+                    Id = "t1", Label = "Alpha Tower Foundation",
+                    StartDate = new(2025, 11, 1), EndDate = new(2026, 3, 31),
+                    Variant = BarVariant.Blue,
+                    TooltipText = "Foundation and structural work"
+                },
+                new()
+                {
+                    Id = "t2", Label = "Beta Bridge Phase 2",
+                    StartDate = new(2026, 5, 1), EndDate = new(2026, 8, 31),
+                    Variant = BarVariant.Blue
+                }
+            ]
+        },
+        new()
+        {
+            Id = "2", Label = "Sarah Chen", SubLabel = "MEP Coordinator",
+            Tasks =
+            [
+                new()
+                {
+                    Id = "t3", Label = "Gamma Mall HVAC",
+                    StartDate = new(2026, 1, 15), EndDate = new(2026, 6, 30),
+                    Variant = BarVariant.Green,
+                    TooltipText = "HVAC system installation"
+                }
+            ]
+        },
+        new()
+        {
+            Id = "3", Label = "David Miller", SubLabel = "Civil Engineer",
+            Tasks =
+            [
+                new()
+                {
+                    Id = "t4", Label = "Road Expansion",
+                    StartDate = new(2026, 3, 1), EndDate = new(2026, 5, 31),
+                    Variant = BarVariant.Orange
+                },
+                new()
+                {
+                    Id = "t5", Label = "Pending Allocation",
+                    StartDate = new(2026, 8, 1), EndDate = new(2026, 12, 31),
+                    Variant = BarVariant.Muted,
+                    TooltipText = "Tentative assignment"
+                }
+            ]
+        },
+        new()
+        {
+            Id = "4", Label = "Emily Davis", SubLabel = "Project Manager",
+            Tasks =
+            [
+                new()
+                {
+                    Id = "t6", Label = "Delta Complex Management",
+                    StartDate = new(2025, 12, 1), EndDate = new(2026, 7, 31),
+                    Variant = BarVariant.Purple,
+                    TooltipText = "Overall project management"
+                }
+            ]
+        },
+        new()
+        {
+            Id = "5", Label = "James Wilson", SubLabel = "Architect",
+            Tasks =
+            [
+                new()
+                {
+                    Id = "t7", Label = "Epsilon Interior Fit-out",
+                    StartDate = new(2026, 2, 1), EndDate = new(2026, 9, 15),
+                    Variant = BarVariant.Teal
+                }
+            ]
+        },
+        new()
+        {
+            Id = "6", Label = "Robert Brown", SubLabel = "Safety Officer",
+            Tasks = []
+        },
+        new()
+        {
+            Id = "7", Label = "Linda Martinez", SubLabel = "Electrical Eng.",
+            Tasks =
+            [
+                new()
+                {
+                    Id = "t8", Label = "Substation Wiring",
+                    StartDate = new(2026, 6, 1), EndDate = new(2026, 10, 31),
+                    Variant = BarVariant.Blue
+                }
+            ]
+        }
+    ];
+}

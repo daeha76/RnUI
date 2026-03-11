@@ -1,0 +1,25 @@
+@* RnGanttSidebarRow - Individual row in the sidebar *@
+
+<div data-slot="gantt-sidebar-row"
+     class="cn-gantt-sidebar-row"
+     style="height: @(Parent.State.RowHeightPx)px;">
+    @if (Parent.SidebarRowTemplate != null)
+    {
+        @Parent.SidebarRowTemplate(Row)
+    }
+    else
+    {
+        <div class="cn-gantt-sidebar-row-content">
+            <span class="cn-gantt-sidebar-row-label">@Row.Label</span>
+            @if (!string.IsNullOrEmpty(Row.SubLabel))
+            {
+                <span class="cn-gantt-sidebar-row-sublabel">@Row.SubLabel</span>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [CascadingParameter] public RnGantt Parent { get; set; } = default!;
+    [Parameter] public GanttRow Row { get; set; } = default!;
+}

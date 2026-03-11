@@ -1,0 +1,20 @@
+@* RnGanttTimelineBody - Grid rows containing bars *@
+
+<div data-slot="gantt-timeline-body"
+     class="cn-gantt-timeline-body"
+     style="width: @(Parent.State.TimelineWidthPx)px; --gantt-cell-width: @(Parent.State.CellWidthPx)px;">
+
+    @foreach (var row in Parent.State.Rows)
+    {
+        <RnGanttTimelineRow Row="row" />
+    }
+
+    @if (Parent.ShowTodayMarker)
+    {
+        <RnGanttTodayMarker />
+    }
+</div>
+
+@code {
+    [CascadingParameter] public RnGantt Parent { get; set; } = default!;
+}

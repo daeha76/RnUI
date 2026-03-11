@@ -1,0 +1,54 @@
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Gantt", "gantt", "A timeline chart for visualizing resource allocations and project schedules.",
+        Demo: @<GanttDemoContent />,
+        Thumbnail: @<div class="text-xs text-muted-foreground">Gantt</div>,
+        Code: @"<RnGantt Rows=""rows"" ViewMode=""GanttViewMode.Month""
+         OnBarClick=""HandleBarClick""
+         ShowTodayMarker=""true""
+         ShowLegend=""true""
+         LegendItems=""legendItems"">
+    <Toolbar>
+        <div class=""flex items-center gap-2"">
+            <RnButton Variant=""ButtonVariant.Outline"" Size=""ButtonSize.Sm""
+                      OnClick=""@(() => gantt.ZoomOut())"">-</RnButton>
+            <RnButton Variant=""ButtonVariant.Outline"" Size=""ButtonSize.Sm""
+                      OnClick=""@(() => gantt.ZoomIn())"">+</RnButton>
+        </div>
+    </Toolbar>
+</RnGantt>",
+        UsageCode: @"@using RnUI.Components.UI.Gantt
+
+<RnGantt Rows=""rows""
+         ViewMode=""GanttViewMode.Month""
+         OnBarClick=""HandleBarClick"">
+</RnGantt>
+
+@code {
+    private List<GanttRow> rows =
+    [
+        new()
+        {
+            Id = ""1"", Label = ""Alex Morgan"",
+            SubLabel = ""Senior Engineer"",
+            Tasks =
+            [
+                new()
+                {
+                    Id = ""t1"",
+                    Label = ""Alpha Project"",
+                    StartDate = new(2026, 1, 1),
+                    EndDate = new(2026, 4, 30),
+                    Variant = BarVariant.Blue
+                }
+            ]
+        }
+    ];
+
+    private void HandleBarClick(GanttTask task)
+    {
+        // Open edit dialog
+    }
+}"
+    );
+}

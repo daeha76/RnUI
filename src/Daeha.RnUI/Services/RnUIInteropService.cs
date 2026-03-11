@@ -8,7 +8,7 @@ namespace RnUI.Services;
 /// Handles body scroll locking, focus trapping, escape key listeners,
 /// and click-outside listeners.
 /// </summary>
-public sealed class RnUIInteropService : IAsyncDisposable
+public sealed class RnUIInteropService : IAsyncDisposable, IDisposable
 {
     private readonly IJSRuntime _js;
     private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
@@ -200,6 +200,32 @@ public sealed class RnUIInteropService : IAsyncDisposable
         catch (JSDisconnectedException) { }
     }
 
+    // ─── Gantt Scroll Sync ────────────────────────────────────────────────────
+
+    /// <summary>Initializes scroll synchronization for a Gantt chart.</summary>
+    public async ValueTask InitGanttScrollSyncAsync(
+        string id, ElementReference scrollEl,
+        ElementReference headerEl, ElementReference sidebarBodyEl)
+    {
+        try
+        {
+            var module = await _moduleTask.Value;
+            await module.InvokeVoidAsync("initGanttScrollSync", id, scrollEl, headerEl, sidebarBodyEl);
+        }
+        catch (JSDisconnectedException) { }
+    }
+
+    /// <summary>Disposes Gantt scroll synchronization.</summary>
+    public async ValueTask DisposeGanttScrollSyncAsync(string id)
+    {
+        try
+        {
+            var module = await _moduleTask.Value;
+            await module.InvokeVoidAsync("disposeGanttScrollSync", id);
+        }
+        catch (JSDisconnectedException) { }
+    }
+
     // ─── Dispose All ─────────────────────────────────────────────────────────
 
     /// <summary>Removes all JS listeners registered under <paramref name="id"/>.</summary>
@@ -213,7 +239,12 @@ public sealed class RnUIInteropService : IAsyncDisposable
         catch (JSDisconnectedException) { }
     }
 
-    // ─── IAsyncDisposable ────────────────────────────────────────────────────
+    // ─── IDisposable / IAsyncDisposable ──────────────────────────────────────
+
+    public void Dispose()
+    {
+        // Synchronous dispose — no-op; real cleanup is in DisposeAsync.
+    }
 
     public async ValueTask DisposeAsync()
     {

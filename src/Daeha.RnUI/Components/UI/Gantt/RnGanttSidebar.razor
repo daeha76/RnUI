@@ -1,0 +1,25 @@
+@* RnGanttSidebar - Fixed left sidebar with row labels *@
+
+<div data-slot="gantt-sidebar"
+     class="cn-gantt-sidebar"
+     style="width: @(Parent.State.SidebarWidthPx)px;">
+
+    <div data-slot="gantt-sidebar-header"
+         class="cn-gantt-sidebar-header"
+         style="height: @(Parent.State.TotalHeaderHeightPx)px;">
+        <span class="cn-gantt-sidebar-header-label">Name</span>
+    </div>
+
+    <div data-slot="gantt-sidebar-body"
+         class="cn-gantt-sidebar-body"
+         @ref="Parent.SidebarBodyRef">
+        @foreach (var row in Parent.State.Rows)
+        {
+            <RnGanttSidebarRow Row="row" />
+        }
+    </div>
+</div>
+
+@code {
+    [CascadingParameter] public RnGantt Parent { get; set; } = default!;
+}

@@ -1,0 +1,76 @@
+@* RnGanttBar - Individual task bar with tooltip *@
+
+@{
+    var (left, width) = GanttDateUtils.GetBarPosition(
+        Task, Parent.State.RangeStart, Parent.State.RangeEnd, Parent.State.TimelineWidthPx);
+    var variantClass = GetVariantClass();
+    var wrapperStyle = $"left: {left}px; width: {width}px;";
+    var barStyle = !string.IsNullOrEmpty(Task.Color) ? $"background-color: {Task.Color};" : "";
+}
+
+<div class="cn-gantt-bar-wrapper" style="@wrapperStyle">
+    <RnTooltip Side="Side.Top">
+        <Trigger>
+            <div data-slot="gantt-bar"
+                 data-variant="@Task.Variant.ToString().ToLowerInvariant()"
+                 class="@CssUtils.Cn("cn-gantt-bar", variantClass)"
+                 style="@barStyle"
+                 @onclick="HandleClick"
+                 @onclick:stopPropagation="true"
+                 role="button"
+                 tabindex="0"
+                 aria-label="@Task.Label">
+                @if (Parent.BarTemplate != null)
+                {
+                    @Parent.BarTemplate(Task)
+                }
+                else
+                {
+                    <span class="cn-gantt-bar-text">@Task.Label</span>
+                }
+            </div>
+        </Trigger>
+        <ChildContent>
+            @if (Parent.BarTooltipTemplate != null)
+            {
+                @Parent.BarTooltipTemplate(Task)
+            }
+            else
+            {
+                <div class="cn-gantt-bar-tooltip">
+                    <div class="font-medium text-sm">@Task.Label</div>
+                    <div class="text-xs text-muted-foreground">
+                        @Task.StartDate.ToString("yyyy-MM-dd") ~ @Task.EndDate.ToString("yyyy-MM-dd")
+                    </div>
+                    @if (!string.IsNullOrEmpty(Task.TooltipText))
+                    {
+                        <div class="text-xs mt-1">@Task.TooltipText</div>
+                    }
+                </div>
+            }
+        </ChildContent>
+    </RnTooltip>
+</div>
+
+@code {
+    [CascadingParameter] public RnGantt Parent { get; set; } = default!;
+    [Parameter] public GanttTask Task { get; set; } = default!;
+
+    private string GetVariantClass() => Task.Variant switch
+    {
+        BarVariant.Blue => "cn-gantt-bar-variant-blue",
+        BarVariant.Green => "cn-gantt-bar-variant-green",
+        BarVariant.Orange => "cn-gantt-bar-variant-orange",
+        BarVariant.Red => "cn-gantt-bar-variant-red",
+        BarVariant.Purple => "cn-gantt-bar-variant-purple",
+        BarVariant.Yellow => "cn-gantt-bar-variant-yellow",
+        BarVariant.Teal => "cn-gantt-bar-variant-teal",
+        BarVariant.Muted => "cn-gantt-bar-variant-muted",
+        _ => "cn-gantt-bar-variant-default"
+    };
+
+    private async Task HandleClick()
+    {
+        await Parent.HandleBarClick(Task);
+    }
+}

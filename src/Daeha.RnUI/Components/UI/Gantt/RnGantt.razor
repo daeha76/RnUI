@@ -1,0 +1,161 @@
+@* RnGantt component - Gantt chart root orchestrator *@
+@implements IAsyncDisposable
+@inject RnUIInteropService Interop
+
+<div data-slot="gantt"
+     class="@CssUtils.Cn("cn-gantt", Class)"
+     @attributes="AdditionalAttributes">
+
+    @if (Toolbar != null)
+    {
+        <div data-slot="gantt-toolbar" class="cn-gantt-toolbar">
+            @Toolbar
+        </div>
+    }
+
+    <div data-slot="gantt-container" class="cn-gantt-container">
+        <CascadingValue Value="this" IsFixed="false">
+            <RnGanttSidebar />
+            <RnGanttTimeline />
+        </CascadingValue>
+    </div>
+
+    @if (ShowLegend && LegendItems?.Count > 0)
+    {
+        <RnGanttLegend Items="LegendItems" />
+    }
+</div>
+
+@code {
+    private readonly GanttState _state = new();
+    private readonly string _id = Guid.NewGuid().ToString("N")[..8];
+    private bool _scrollSyncInitialized;
+
+    // --- Data ---
+    [Parameter] public IReadOnlyList<GanttRow> Rows { get; set; } = [];
+    [Parameter] public IReadOnlyList<GanttGroup>? Groups { get; set; }
+
+    // --- View ---
+    [Parameter] public GanttViewMode ViewMode { get; set; } = GanttViewMode.Month;
+    [Parameter] public EventCallback<GanttViewMode> ViewModeChanged { get; set; }
+    [Parameter] public DateTime? RangeStart { get; set; }
+    [Parameter] public DateTime? RangeEnd { get; set; }
+    [Parameter] public int CellWidth { get; set; }
+    [Parameter] public int RowHeight { get; set; } = 48;
+    [Parameter] public int SidebarWidth { get; set; } = 250;
+
+    // --- Features ---
+    [Parameter] public bool ShowTodayMarker { get; set; } = true;
+    [Parameter] public DateTime? Today { get; set; }
+    [Parameter] public bool ShowLegend { get; set; } = true;
+    [Parameter] public IReadOnlyList<GanttLegendItem>? LegendItems { get; set; }
+
+    // --- Callbacks ---
+    [Parameter] public EventCallback<GanttTask> OnBarClick { get; set; }
+
+    // --- Templates ---
+    [Parameter] public RenderFragment? Toolbar { get; set; }
+    [Parameter] public RenderFragment<GanttRow>? SidebarRowTemplate { get; set; }
+    [Parameter] public RenderFragment<GanttTask>? BarTemplate { get; set; }
+    [Parameter] public RenderFragment<GanttTask>? BarTooltipTemplate { get; set; }
+
+    // --- Standard ---
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    // --- Internal accessors ---
+    internal GanttState State => _state;
+    internal string GanttId => _id;
+
+    // --- Element references for scroll sync ---
+    internal ElementReference ScrollRef { get; set; }
+    internal ElementReference HeaderRef { get; set; }
+    internal ElementReference SidebarBodyRef { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        _state.SetRows(Rows);
+        if (Groups != null) _state.SetGroups(Groups);
+
+        _state.RowHeightPx = RowHeight;
+        _state.SidebarWidthPx = SidebarWidth;
+
+        // Set view mode (and default cell width)
+        if (_state.ViewMode != ViewMode)
+        {
+            _state.SetViewMode(ViewMode);
+        }
+
+        // Override cell width if explicitly set
+        if (CellWidth > 0)
+        {
+            _state.SetCellWidth(CellWidth);
+        }
+
+        // Set date range
+        if (RangeStart.HasValue && RangeEnd.HasValue)
+        {
+            _state.SetDateRange(RangeStart.Value, RangeEnd.Value);
+        }
+        else
+        {
+            _state.AutoCalculateRange();
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender || !_scrollSyncInitialized)
+        {
+            await InitScrollSync();
+        }
+    }
+
+    private async Task InitScrollSync()
+    {
+        try
+        {
+            await Interop.InitGanttScrollSyncAsync(_id, ScrollRef, HeaderRef, SidebarBodyRef);
+            _scrollSyncInitialized = true;
+        }
+        catch (Exception)
+        {
+            // Element refs may not be available yet
+        }
+    }
+
+    internal async Task HandleBarClick(GanttTask task)
+    {
+        await OnBarClick.InvokeAsync(task);
+    }
+
+    internal async Task ChangeViewMode(GanttViewMode mode)
+    {
+        ViewMode = mode;
+        _state.SetViewMode(mode);
+        await ViewModeChanged.InvokeAsync(mode);
+        StateHasChanged();
+    }
+
+    public void ZoomIn()
+    {
+        _state.SetCellWidth(_state.CellWidthPx + 10);
+        StateHasChanged();
+    }
+
+    public void ZoomOut()
+    {
+        _state.SetCellWidth(_state.CellWidthPx - 10);
+        StateHasChanged();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_scrollSyncInitialized)
+        {
+            await Interop.DisposeGanttScrollSyncAsync(_id);
+        }
+    }
+}
