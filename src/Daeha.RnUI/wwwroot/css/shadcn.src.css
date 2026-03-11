@@ -364,7 +364,8 @@
 }
 
 .cn-dialog-content {
-  @apply grid w-full max-w-[calc(100%-2rem)] gap-4 rounded-lg border bg-background p-6 shadow-lg outline-none sm:max-w-lg;
+  @apply grid w-full max-w-[calc(100%-2rem)] gap-4 rounded-lg bg-background p-6 shadow-lg outline-none sm:max-w-lg;
+  border: 1px solid var(--color-border-subtle);
 }
 
 .cn-dialog-close {
@@ -434,7 +435,8 @@
 
 /* Popover */
 .cn-popover-content {
-  @apply rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-hidden;
+  @apply rounded-md bg-popover p-4 text-popover-foreground shadow-md outline-hidden;
+  border: 1px solid var(--color-border-subtle);
 }
 
 .cn-popover-header {
@@ -588,7 +590,8 @@
 
 /* Dropdown Menu */
 .cn-dropdown-menu-content {
-  @apply z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md;
+  @apply z-50 min-w-[8rem] overflow-hidden rounded-md bg-popover p-1 text-popover-foreground shadow-md;
+  border: 1px solid var(--color-border-subtle);
 }
 
 .cn-dropdown-menu-item {
@@ -628,12 +631,13 @@
 }
 
 .cn-dropdown-menu-sub-content {
-  @apply z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-lg;
+  @apply z-50 min-w-[8rem] overflow-hidden rounded-md bg-popover p-1 text-popover-foreground shadow-lg;
+  border: 1px solid var(--color-border-subtle);
 }
 
 /* Navigation Menu */
 .cn-navigation-menu {
-  @apply relative flex max-w-max flex-1 items-center justify-center z-10;
+  @apply relative flex max-w-max flex-1 items-center justify-center;
 }
 
 .cn-navigation-menu-list {
@@ -645,7 +649,7 @@
 }
 
 .cn-navigation-menu-trigger {
-  @apply inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-[color,box-shadow] outline-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-accent/50 data-[state=open]:text-accent-foreground;
+  @apply inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-[color,box-shadow] outline-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-accent/50 data-[state=open]:text-accent-foreground data-[state=open]:hover:bg-accent data-[state=open]:focus:bg-accent;
 }
 
 .cn-navigation-menu-trigger-icon {
@@ -653,11 +657,64 @@
 }
 
 .cn-navigation-menu-content {
-  @apply top-0 left-0 w-full p-2 pr-2.5;
+  @apply top-0 left-0 w-full p-2 pr-2.5 md:w-auto;
+  animation: nav-menu-in 0.15s ease-out;
+}
+
+/* Content in non-viewport mode (viewport=false): renders inline with full popover styling */
+:where([data-viewport="false"]) .cn-navigation-menu-content {
+  @apply absolute top-full mt-1.5 overflow-hidden rounded-md bg-popover text-popover-foreground shadow;
+  border: 1px solid var(--color-border-subtle);
+}
+
+.cn-navigation-menu-viewport-wrapper {
+  @apply absolute top-full left-0 isolate z-50 flex justify-center;
+}
+
+.cn-navigation-menu-viewport {
+  @apply relative mt-1.5 w-full overflow-hidden rounded-md bg-popover text-popover-foreground shadow;
+  border: 1px solid var(--color-border-subtle);
+  animation: nav-menu-in 0.15s ease-out;
+}
+
+.cn-navigation-menu-viewport[data-state="closed"] {
+  display: none;
+}
+
+.cn-navigation-menu-indicator {
+  @apply top-full z-[1] flex h-1.5 items-end justify-center overflow-hidden;
+  animation: nav-indicator-in 0.15s ease-out;
+}
+
+.cn-navigation-menu-indicator-arrow {
+  @apply relative h-2 w-2 rotate-45 rounded-tl-sm bg-border shadow-md;
+  top: 60%;
+}
+
+/* Reusable trigger style — apply to <a> tags to look like a trigger without the dropdown arrow */
+.cn-navigation-menu-trigger-style {
+  @apply inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-[color,box-shadow] outline-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50;
+}
+
+@keyframes nav-menu-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes nav-indicator-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .cn-navigation-menu-link {
-  @apply flex flex-col gap-1 rounded-sm p-2 text-sm transition-all outline-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground;
+  @apply flex flex-col gap-1 rounded-sm p-2 text-sm transition-all outline-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground;
+  @apply data-[active=true]:bg-accent/50 data-[active=true]:text-accent-foreground data-[active=true]:hover:bg-accent data-[active=true]:focus:bg-accent;
 }
 
 /* Progress */
@@ -974,7 +1031,8 @@
 }
 
 .cn-alert-dialog-content {
-  @apply fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border bg-background p-6 shadow-lg duration-200 sm:max-w-lg;
+  @apply fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg bg-background p-6 shadow-lg duration-200 sm:max-w-lg;
+  border: 1px solid var(--color-border-subtle);
 }
 
 .cn-alert-dialog-header {
@@ -995,7 +1053,8 @@
 
 /* Context Menu */
 .cn-context-menu-content {
-  @apply z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md;
+  @apply z-50 min-w-[8rem] overflow-hidden rounded-md bg-popover p-1 text-popover-foreground shadow-md;
+  border: 1px solid var(--color-border-subtle);
 }
 
 .cn-context-menu-item {
@@ -1004,7 +1063,8 @@
 
 /* Hover Card */
 .cn-hover-card-content {
-  @apply w-64 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-hidden;
+  @apply w-64 rounded-md bg-popover p-4 text-popover-foreground shadow-md outline-hidden;
+  border: 1px solid var(--color-border-subtle);
 }
 
 /* Toast / Sonner */
@@ -1265,6 +1325,12 @@
   @apply ml-auto text-xs tracking-widest text-muted-foreground;
 }
 
+/* Date Picker */
+.cn-date-picker-content {
+  @apply rounded-md bg-popover text-popover-foreground shadow-md outline-none;
+  border: 1px solid var(--color-border-subtle);
+}
+
 /* Calendar */
 .cn-calendar {
   @apply bg-background p-3;
@@ -1389,7 +1455,8 @@
 }
 
 .cn-combobox-content {
-  @apply absolute z-50 mt-1 w-full min-w-[200px] overflow-hidden rounded-md border bg-popover p-0 text-popover-foreground shadow-md;
+  @apply absolute z-50 mt-1 w-full min-w-[200px] overflow-hidden rounded-md bg-popover p-0 text-popover-foreground shadow-md;
+  border: 1px solid var(--color-border-subtle);
 }
 
 .cn-combobox-input {
@@ -1470,6 +1537,7 @@
 /* Command */
 .cn-command {
   @apply flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground;
+  border: 1px solid var(--color-border-subtle);
 }
 
 .cn-command-input-wrapper {

@@ -1,0 +1,20 @@
+@* RnNavigationMenuIndicator - Arrow indicator below active navigation menu item *@
+
+@if (IsVisible)
+{
+    <div data-slot="navigation-menu-indicator"
+         data-state="visible"
+         class="@CssUtils.Cn("cn-navigation-menu-indicator", Class)"
+         @attributes="AdditionalAttributes">
+        <div class="cn-navigation-menu-indicator-arrow"></div>
+    </div>
+}
+
+@code {
+    [CascadingParameter] public RnNavigationMenu? Menu { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private bool IsVisible => Menu?.ActiveItem is not null;
+}

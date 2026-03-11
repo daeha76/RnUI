@@ -1,18 +1,18 @@
 @* RnNavigationMenuContent - Dropdown content for a navigation menu item *@
+@implements IDisposable
 
-@if (IsOpen)
+@if (!UseViewport && IsOpen)
 {
     <div data-slot="navigation-menu-content"
          data-state="open"
-         class="@CssUtils.Cn("cn-navigation-menu-content absolute top-full md:w-auto", Class)"
+         class="@CssUtils.Cn("cn-navigation-menu-content", Class)"
          @attributes="AdditionalAttributes">
-        <ul class="grid gap-3 p-4 md:w-[400px] md:grid-cols-2">
-            @ChildContent
-        </ul>
+        @ChildContent
     </div>
 }
 
 @code {
+    [CascadingParameter] public RnNavigationMenu? Menu { get; set; }
     [CascadingParameter] public RnNavigationMenuItem? MenuItem { get; set; }
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
@@ -20,4 +20,37 @@
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
     private bool IsOpen => MenuItem?.IsOpen ?? false;
+    private bool UseViewport => Menu?.Viewport ?? false;
+
+    protected override void OnParametersSet()
+    {
+        if (UseViewport && MenuItem is not null && ChildContent is not null)
+        {
+            // Wrap with the same div structure for viewport rendering
+            var cls = CssUtils.Cn("cn-navigation-menu-content", Class);
+            var attrs = AdditionalAttributes;
+            RenderFragment wrappedContent = builder =>
+            {
+                builder.OpenElement(0, "div");
+                builder.AddAttribute(1, "data-slot", "navigation-menu-content");
+                builder.AddAttribute(2, "data-state", "open");
+                builder.AddAttribute(3, "class", cls);
+                if (attrs is not null)
+                {
+                    builder.AddMultipleAttributes(4, attrs);
+                }
+                builder.AddContent(5, ChildContent);
+                builder.CloseElement();
+            };
+            Menu!.RegisterContent(MenuItem.ItemId, wrappedContent);
+        }
+    }
+
+    public void Dispose()
+    {
+        if (MenuItem is not null)
+        {
+            Menu?.UnregisterContent(MenuItem.ItemId);
+        }
+    }
 }

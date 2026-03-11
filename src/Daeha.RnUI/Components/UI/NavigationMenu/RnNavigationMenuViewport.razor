@@ -1,0 +1,23 @@
+@* RnNavigationMenuViewport - Shared viewport container for navigation menu content *@
+
+<div class="cn-navigation-menu-viewport-wrapper">
+    <div data-slot="navigation-menu-viewport"
+         data-state="@(HasActiveContent ? "open" : "closed")"
+         class="@CssUtils.Cn("cn-navigation-menu-viewport", Class)"
+         @attributes="AdditionalAttributes">
+        @if (HasActiveContent)
+        {
+            @ActiveContent
+        }
+    </div>
+</div>
+
+@code {
+    [CascadingParameter] public RnNavigationMenu? Menu { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private RenderFragment? ActiveContent => Menu?.GetActiveContent();
+    private bool HasActiveContent => ActiveContent is not null;
+}

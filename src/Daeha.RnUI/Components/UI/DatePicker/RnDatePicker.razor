@@ -3,7 +3,8 @@
 @inject RnUIInteropService Interop
 
 <div data-slot="date-picker" class="@CssUtils.Cn("relative inline-block", Class)" @attributes="AdditionalAttributes">
-    <button type="button"
+    <button @ref="_triggerRef"
+            type="button"
             data-slot="date-picker-trigger"
             disabled="@(Disabled ? true : (object?)null)"
             class="@CssUtils.Cn("cn-button cn-button-variant-outline cn-button-size-default w-[240px] justify-start text-left font-normal inline-flex items-center", Value.HasValue ? "" : "text-muted-foreground")"
@@ -18,7 +19,8 @@
     {
         <div @ref="_contentRef"
              data-slot="date-picker-content"
-             class="absolute z-50 mt-1 rounded-md border bg-popover text-popover-foreground shadow-md outline-none">
+             class="cn-date-picker-content fixed z-50"
+             style="@_positionStyle">
             <RnCalendar Selected="Value"
                         SelectedChanged="HandleDateSelected"
                         MinDate="MinDate"
@@ -55,10 +57,12 @@
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
     private readonly string _id = Guid.NewGuid().ToString("N")[..8];
+    private ElementReference _triggerRef;
     private ElementReference _contentRef;
     private DotNetObjectReference<RnDatePicker>? _dotNetRef;
     private bool _isOpen;
     private bool _previousOpen;
+    private string _positionStyle = "";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -70,6 +74,14 @@
         if (_isOpen && !_previousOpen)
         {
             _previousOpen = true;
+
+            var rect = await Interop.GetElementRectAsync(_triggerRef);
+            if (rect is not null)
+            {
+                _positionStyle = $"top: {rect.Bottom + 4}px; left: {rect.Left}px;";
+                StateHasChanged();
+            }
+
             await Interop.AddClickOutsideListenerAsync(_id, _contentRef, _dotNetRef!, nameof(ClosePopover));
             await Interop.AddEscapeListenerAsync(_id, _dotNetRef!, nameof(ClosePopover));
         }

@@ -160,6 +160,22 @@ public sealed class RnUIInteropService : IAsyncDisposable
         catch (JSDisconnectedException) { }
     }
 
+    // ─── Element Position ──────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Returns the bounding client rect of <paramref name="element"/>.
+    /// Used for fixed-positioning overlays relative to a trigger element.
+    /// </summary>
+    public async ValueTask<ElementRect?> GetElementRectAsync(ElementReference element)
+    {
+        try
+        {
+            var module = await _moduleTask.Value;
+            return await module.InvokeAsync<ElementRect?>("getElementRect", element);
+        }
+        catch (JSDisconnectedException) { return null; }
+    }
+
     // ─── Dispose All ─────────────────────────────────────────────────────────
 
     /// <summary>Removes all JS listeners registered under <paramref name="id"/>.</summary>

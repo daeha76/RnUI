@@ -1,24 +1,113 @@
 @* RnNavigationMenu - Blazor port of shadcn/ui NavigationMenu *@
+@implements IAsyncDisposable
+@inject RnUI.Services.RnUIInteropService Interop
 
 <CascadingValue Value="this" IsFixed="false">
-    <nav data-slot="navigation-menu"
+    <nav @ref="_element"
+         data-slot="navigation-menu"
+         data-viewport="@Viewport.ToString().ToLower()"
          aria-label="Main"
-         class="@CssUtils.Cn("cn-navigation-menu", Class)"
+         class="@CssUtils.Cn("cn-navigation-menu group/navigation-menu", Class)"
          @attributes="AdditionalAttributes">
         @ChildContent
+        @if (Viewport)
+        {
+            <RnNavigationMenuViewport />
+        }
     </nav>
 </CascadingValue>
 
 @code {
     [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public bool Viewport { get; set; } = true;
     [Parameter] public string? Class { get; set; }
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
+    private ElementReference _element;
+    private DotNetObjectReference<RnNavigationMenu>? _dotNetRef;
+    private readonly string _id = $"nav-menu-{Guid.NewGuid():N}"[..16];
+    private bool _listenersRegistered;
+
     internal string? ActiveItem { get; private set; }
+
+    // Content registration for Viewport mode
+    private readonly Dictionary<string, RenderFragment> _contentRegistry = new();
+
+    internal void RegisterContent(string itemId, RenderFragment content)
+    {
+        _contentRegistry[itemId] = content;
+    }
+
+    internal void UnregisterContent(string itemId)
+    {
+        _contentRegistry.Remove(itemId);
+    }
+
+    internal RenderFragment? GetActiveContent()
+    {
+        if (ActiveItem is not null && _contentRegistry.TryGetValue(ActiveItem, out var content))
+            return content;
+        return null;
+    }
 
     internal void SetActiveItem(string? itemId)
     {
-        ActiveItem = ActiveItem == itemId ? null : itemId;
+        var newValue = ActiveItem == itemId ? null : itemId;
+        ActiveItem = newValue;
         StateHasChanged();
+        _ = UpdateListenersAsync(newValue is not null);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+        }
+    }
+
+    private async Task UpdateListenersAsync(bool hasOpenItem)
+    {
+        if (hasOpenItem && !_listenersRegistered)
+        {
+            _listenersRegistered = true;
+            await Interop.AddClickOutsideListenerAsync(_id, _element, _dotNetRef!, nameof(OnClickOutside));
+            await Interop.AddEscapeListenerAsync(_id, _dotNetRef!, nameof(OnEscapePressed));
+        }
+        else if (!hasOpenItem && _listenersRegistered)
+        {
+            _listenersRegistered = false;
+            await Interop.RemoveClickOutsideListenerAsync(_id);
+            await Interop.RemoveEscapeListenerAsync(_id);
+        }
+    }
+
+    [JSInvokable]
+    public void OnClickOutside()
+    {
+        if (ActiveItem is not null)
+        {
+            ActiveItem = null;
+            StateHasChanged();
+        }
+    }
+
+    [JSInvokable]
+    public void OnEscapePressed()
+    {
+        if (ActiveItem is not null)
+        {
+            ActiveItem = null;
+            StateHasChanged();
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_listenersRegistered)
+        {
+            await Interop.DisposeAllAsync(_id);
+        }
+        _dotNetRef?.Dispose();
     }
 }

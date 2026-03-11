@@ -133,6 +133,21 @@ export function removeKeyboardShortcutListener(id) {
     _removeListener(id, 'keyboardshortcut');
 }
 
+// ─── Element Position ────────────────────────────────────────────────────────
+
+export function getElementRect(element) {
+    if (!element) return null;
+    const rect = element.getBoundingClientRect();
+    return {
+        top: rect.top,
+        left: rect.left,
+        bottom: rect.bottom,
+        right: rect.right,
+        width: rect.width,
+        height: rect.height
+    };
+}
+
 // ─── Dispose All ─────────────────────────────────────────────────────────────
 
 export function disposeAll(id) {

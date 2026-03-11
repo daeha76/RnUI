@@ -3,7 +3,7 @@
 <div data-slot="radio-group" role="radiogroup"
      class="@CssUtils.Cn("cn-radio-group", Class)"
      @attributes="AdditionalAttributes">
-    <CascadingValue Value="this" IsFixed="false">
+    <CascadingValue Value="@_context" IsFixed="false">
         @ChildContent
     </CascadingValue>
 </div>
@@ -15,9 +15,18 @@
     [Parameter] public string? Class { get; set; }
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
+    private RadioGroupContext _context = null!;
+
+    protected override void OnParametersSet()
+    {
+        _context = new RadioGroupContext(this, Value);
+    }
+
     internal async Task SelectValue(string value)
     {
         Value = value;
+        _context = new RadioGroupContext(this, Value);
+        StateHasChanged();
         await ValueChanged.InvokeAsync(value);
     }
 }
