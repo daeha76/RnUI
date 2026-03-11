@@ -34,9 +34,6 @@ jobs:
       - name: Build RnUI Library
         run: dotnet build src/Daeha.RnUI/Daeha.RnUI.csproj -c Release
 
-      - name: Build Demo
-        run: dotnet build src/Daeha.RnUI.Demo/Daeha.RnUI.Demo.csproj -c Release
-
       - name: Build WASM Demo
         run: dotnet build src/Daeha.RnUI.Demo.Wasm/Daeha.RnUI.Demo.Wasm.csproj -c Release
 
