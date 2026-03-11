@@ -41,68 +41,68 @@ Add the RnUI package source path to your Tailwind v4 config so it scans componen
 
 ## Components
 
-**53 component categories** ported from shadcn/ui:
+**54 component categories** ported from shadcn/ui:
 
-**Buttons & Inputs** — Button, ButtonGroup, Input, InputOTP, Textarea, Label, Checkbox, Switch, RadioGroup, Select, Toggle, ToggleGroup, Combobox
+**Buttons & Inputs** — Button, ButtonGroup, Input, InputOTP, Textarea, Label, Checkbox, Switch, RadioGroup, Select, Toggle, ToggleGroup, Combobox, Field, Form
 
 **Cards & Containers** — Card, Alert, Badge, AspectRatio, ScrollArea, Separator, Resizable
 
-**Data Display** — Table, Avatar, Progress, Slider, Skeleton, Spinner, Kbd, Calendar
+**Data Display** — Table, DataTable, Avatar, Progress, Slider, Skeleton, Spinner, Kbd, Calendar
 
 **Navigation** — Tabs, Breadcrumb, Pagination, NavigationMenu, Sidebar, Menubar
 
-**Overlays** — Dialog, AlertDialog, Sheet, Drawer, Popover, Tooltip, HoverCard, DropdownMenu, ContextMenu
+**Overlays** — Dialog, AlertDialog, Sheet, Drawer, Popover, Tooltip, HoverCard, DropdownMenu, ContextMenu, Toast
 
 **Disclosure** — Accordion, Collapsible
 
-**Other** — Form, Command, Carousel, DatePicker, Toast, Empty
+**Other** — Command, Carousel, DatePicker, Gantt, Empty
 
 ## Usage Examples
 
 ### Button
 
 ```razor
-<Button>Default</Button>
-<Button Variant="ButtonVariant.Secondary">Secondary</Button>
-<Button Variant="ButtonVariant.Outline">Outline</Button>
-<Button Size="ButtonSize.Sm">Small</Button>
+<RnButton>Default</RnButton>
+<RnButton Variant="ButtonVariant.Secondary">Secondary</RnButton>
+<RnButton Variant="ButtonVariant.Outline">Outline</RnButton>
+<RnButton Size="ButtonSize.Sm">Small</RnButton>
 ```
 
 ### Card
 
 ```razor
-<Card>
-    <CardHeader>
-        <CardTitle>Card Title</CardTitle>
-        <CardDescription>Description here.</CardDescription>
-    </CardHeader>
-    <CardContent>
+<RnCard>
+    <RnCardHeader>
+        <RnCardTitle>Card Title</RnCardTitle>
+        <RnCardDescription>Description here.</RnCardDescription>
+    </RnCardHeader>
+    <RnCardContent>
         <p>Card content.</p>
-    </CardContent>
-    <CardFooter>
-        <Button>Action</Button>
-    </CardFooter>
-</Card>
+    </RnCardContent>
+    <RnCardFooter>
+        <RnButton>Action</RnButton>
+    </RnCardFooter>
+</RnCard>
 ```
 
 ### Dialog
 
 ```razor
-<Button OnClick="() => _open = true">Open</Button>
-<Dialog @bind-Open="_open">
-    <DialogHeader>
-        <DialogTitle>Title</DialogTitle>
-    </DialogHeader>
-    <DialogContent>Content here.</DialogContent>
-    <DialogFooter>
-        <Button OnClick="() => _open = false">Close</Button>
-    </DialogFooter>
-</Dialog>
+<RnButton OnClick="() => _open = true">Open</RnButton>
+<RnDialog @bind-Open="_open">
+    <RnDialogHeader>
+        <RnDialogTitle>Title</RnDialogTitle>
+    </RnDialogHeader>
+    <p>Content here.</p>
+    <RnDialogFooter>
+        <RnButton OnClick="() => _open = false">Close</RnButton>
+    </RnDialogFooter>
+</RnDialog>
 ```
 
 ## Key Features
 
-- 53 component categories faithfully ported from shadcn/ui
+- 54 component categories faithfully ported from shadcn/ui
 - Tailwind CSS v4 with oklch color system
 - Light / dark mode support via CSS custom properties
 - Fully accessible
