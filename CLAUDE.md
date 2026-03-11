@@ -183,6 +183,15 @@ public class Rn{Name}Tests : BunitContext
 3. `.agents/knowledge/block-catalog.md` — 블록 목록 (해당 시)
 4. 데모 코드블록 (`DataTable01Demo` 등) — 사용법 코드
 
+## 버전 관리
+
+- **Semantic Versioning (SemVer)** 준수: `MAJOR.MINOR.PATCH`
+- PATCH: 버그 수정, CSS 미세 조정, 문서 수정
+- MINOR: 새 컴포넌트/기능 추가
+- MAJOR: Breaking Changes (API 변경, 컴포넌트 삭제 등)
+- 버전은 `src/Daeha.RnUI/Daeha.RnUI.csproj`의 `<Version>`에서만 관리
+- 상세: `.agents/knowledge/versioning-strategy.md` 참조
+
 ## 절대 금지
 
 - `shadcn.css` 직접 수정
