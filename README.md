@@ -807,7 +807,7 @@ Default와 Line 변형, 가로/세로 방향을 지원합니다.
 ### ScrollArea
 
 ```razor
-<RnScrollArea MaxHeight="200px">
+<RnScrollArea Class="h-[200px] rounded-md border">
     <div class="p-4">
         @for (int i = 1; i <= 50; i++)
         {

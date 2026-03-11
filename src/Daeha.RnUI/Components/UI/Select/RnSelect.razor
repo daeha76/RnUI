@@ -1,17 +1,25 @@
 @* RnSelect component - Blazor port of shadcn/ui RnSelect *@
 
-<div data-slot="select" class="@CssUtils.Cn("relative", Class)" @attributes="AdditionalAttributes">
+@implements IAsyncDisposable
+@inject RnUIInteropService Interop
+
+<div data-slot="select" class="@CssUtils.Cn("relative", Class)" @ref="_rootRef" @attributes="AdditionalAttributes">
     <button type="button" data-slot="select-trigger" data-size="@SizeValue"
-            data-placeholder="@(string.IsNullOrEmpty(Value) ? "" : null)"
             class="cn-select-trigger"
             disabled="@(Disabled ? true : (object?)null)"
             aria-expanded="@(_open.ToString().ToLower())"
             aria-haspopup="listbox"
             @onclick="ToggleOpen">
-        <span data-slot="select-value" class="cn-select-value">
-            @if (!string.IsNullOrEmpty(Value))
+        <span data-slot="select-value"
+              data-placeholder="@(IsPlaceholder ? "" : null)"
+              class="cn-select-value">
+            @if (_selectedContent is not null)
             {
-                @(_displayText ?? Value)
+                @_selectedContent
+            }
+            else if (!string.IsNullOrEmpty(Value))
+            {
+                @Value
             }
             else
             {
@@ -27,7 +35,7 @@
 
     @if (_open)
     {
-        <div data-slot="select-content" role="listbox" class="cn-select-content absolute mt-1">
+        <div data-slot="select-content" role="listbox" data-state="open" class="cn-select-content absolute mt-1">
             <CascadingValue Value="this" IsFixed="false">
                 @ChildContent
             </CascadingValue>
@@ -36,6 +44,13 @@
 </div>
 
 @code {
+    private ElementReference _rootRef;
+    private DotNetObjectReference<RnSelect>? _dotNetRef;
+    private readonly string _id = Guid.NewGuid().ToString("N")[..8];
+    private bool _open;
+    private bool _listenerActive;
+    private RenderFragment? _selectedContent;
+
     [Parameter] public RenderFragment? ChildContent { get; set; }
 
     /// <summary>Selected value.</summary>
@@ -58,18 +73,49 @@
 
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
-    private bool _open;
-    private string? _displayText;
-
     private string SizeValue => Size == ComponentSize.Sm ? "sm" : "default";
+    private bool IsPlaceholder => _selectedContent is null && string.IsNullOrEmpty(Value);
 
     private void ToggleOpen() => _open = !_open;
 
-    internal async Task SelectItem(string value, string? displayText = null)
+    internal async Task SelectItem(string value, RenderFragment? content = null)
     {
         Value = value;
-        _displayText = displayText;
+        _selectedContent = content;
         _open = false;
         await ValueChanged.InvokeAsync(value);
+        StateHasChanged();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            _dotNetRef = DotNetObjectReference.Create(this);
+
+        if (_open && !_listenerActive)
+        {
+            await Interop.AddClickOutsideListenerAsync(_id, _rootRef, _dotNetRef!, nameof(CloseFromOutside));
+            _listenerActive = true;
+        }
+        else if (!_open && _listenerActive)
+        {
+            await Interop.RemoveClickOutsideListenerAsync(_id);
+            _listenerActive = false;
+        }
+    }
+
+    [JSInvokable]
+    public void CloseFromOutside()
+    {
+        _open = false;
+        _listenerActive = false;
+        StateHasChanged();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_listenerActive)
+            await Interop.RemoveClickOutsideListenerAsync(_id);
+        _dotNetRef?.Dispose();
     }
 }

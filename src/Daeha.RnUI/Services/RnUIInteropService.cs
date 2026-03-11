@@ -176,6 +176,30 @@ public sealed class RnUIInteropService : IAsyncDisposable
         catch (JSDisconnectedException) { return null; }
     }
 
+    // ─── Scroll Area ────────────────────────────────────────────────────────
+
+    /// <summary>Initializes custom scrollbar tracking for a scroll area viewport.</summary>
+    public async ValueTask InitScrollAreaAsync(string id, ElementReference viewport)
+    {
+        try
+        {
+            var module = await _moduleTask.Value;
+            await module.InvokeVoidAsync("initScrollArea", id, viewport);
+        }
+        catch (JSDisconnectedException) { }
+    }
+
+    /// <summary>Disposes scroll area listeners and observers.</summary>
+    public async ValueTask DisposeScrollAreaAsync(string id)
+    {
+        try
+        {
+            var module = await _moduleTask.Value;
+            await module.InvokeVoidAsync("disposeScrollArea", id);
+        }
+        catch (JSDisconnectedException) { }
+    }
+
     // ─── Dispose All ─────────────────────────────────────────────────────────
 
     /// <summary>Removes all JS listeners registered under <paramref name="id"/>.</summary>

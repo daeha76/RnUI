@@ -3,9 +3,7 @@
 @code {
     public static ComponentDemo GetDemo() => new(
         "Sheet", "sheet", "Extends the Dialog component to display content that complements the main content of the screen.",
-        Demo: @<div>
-                <RnButton Variant="ButtonVariant.Outline">Open Sheet</RnButton>
-            </div>,
+        Demo: @<SheetDemoContent />,
         Thumbnail: @<RnButton Size="ButtonSize.Sm" Variant="ButtonVariant.Outline">Open Sheet</RnButton>,
         Code: @"<RnButton Variant=""ButtonVariant.Outline"" OnClick=""() => _open = true"">Open Sheet</RnButton>
 <RnSheet @bind-Open=""_open"" Side=""Side.Right"">

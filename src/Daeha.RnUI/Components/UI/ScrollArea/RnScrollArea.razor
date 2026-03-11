@@ -1,14 +1,59 @@
-﻿@* RnScrollArea component - Blazor port of shadcn/ui RnScrollArea *@
+@* RnScrollArea — Blazor port of shadcn/ui ScrollArea *@
+@using RnUI.Utils
+@implements IAsyncDisposable
+@inject RnUIInteropService Interop
 
-<div data-slot="scroll-area" class="@CssUtils.Cn("cn-scroll-area", Class)" @attributes="AdditionalAttributes">
-    <div class="h-full w-full overflow-auto" style="@(MaxHeight is not null ? $"max-height: {MaxHeight};" : "")">
+<div data-slot="scroll-area"
+     class="@ComputedClass"
+     @attributes="AdditionalAttributes">
+    <div data-slot="scroll-area-viewport"
+         class="cn-scroll-area-viewport"
+         @ref="_viewportRef">
         @ChildContent
     </div>
+    @if (Orientation is ScrollAreaOrientation.Vertical or ScrollAreaOrientation.Both)
+    {
+        <RnScrollBar Orientation="ScrollBarOrientation.Vertical" />
+    }
+    @if (Orientation is ScrollAreaOrientation.Horizontal or ScrollAreaOrientation.Both)
+    {
+        <RnScrollBar Orientation="ScrollBarOrientation.Horizontal" />
+    }
 </div>
 
 @code {
+    private ElementReference _viewportRef;
+    private string _id = Guid.NewGuid().ToString("N")[..8];
+    private bool _initialized;
+
+    /// <summary>Scrollable content.</summary>
     [Parameter] public RenderFragment? ChildContent { get; set; }
-    [Parameter] public string? MaxHeight { get; set; }
+
+    /// <summary>Scroll direction. Defaults to Vertical.</summary>
+    [Parameter] public ScrollAreaOrientation Orientation { get; set; } = ScrollAreaOrientation.Vertical;
+
+    /// <summary>Additional CSS classes for the root element.</summary>
     [Parameter] public string? Class { get; set; }
-    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string ComputedClass => CssUtils.Cn("cn-scroll-area", Class);
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Interop.InitScrollAreaAsync(_id, _viewportRef);
+            _initialized = true;
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_initialized)
+        {
+            await Interop.DisposeScrollAreaAsync(_id);
+        }
+    }
 }

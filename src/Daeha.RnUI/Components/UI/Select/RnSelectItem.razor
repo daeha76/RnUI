@@ -30,6 +30,6 @@
     private async Task HandleClick()
     {
         if (!Disabled && Parent is not null)
-            await Parent.SelectItem(Value);
+            await Parent.SelectItem(Value, ChildContent);
     }
 }

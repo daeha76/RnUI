@@ -126,7 +126,7 @@ Components/UI/{Name}/
 - **oklch() 색공간** 사용 (Tailwind v4)
 - 라이트모드 기본값: `@theme {}` 블록
 - 다크모드 오버라이드: `.dark {}` 블록
-- subtle border: `var(--color-border-subtle)` 사용 (`border-b` Tailwind 클래스 대신)
+- **테두리는 반드시 `var(--color-border-subtle)` 사용** — Tailwind의 `border-b`, `border-l` 등은 `--color-border`(진한 색)를 사용하므로 금지. 대신 `border-bottom: 1px solid var(--color-border-subtle);` 형태로 직접 지정. RnCard의 테두리가 기준 (참조: `.cn-card`)
 - 컴포넌트 CSS는 `@apply`로 Tailwind 유틸리티 활용
 
 ```css
@@ -195,6 +195,7 @@ public class Rn{Name}Tests : BunitContext
 - `AdditionalAttributes` 미포함
 - `IAsyncDisposable` 미구현 (오버레이 컴포넌트)
 - **라이브러리 CSS만 빌드하고 데모 CSS 빌드 누락** (새 utility 클래스 미적용)
+- **Tailwind `border-b/t/l/r` 클래스로 테두리 색 지정** — `--color-border`(진한 색) 사용됨. 반드시 `border-*: 1px solid var(--color-border-subtle);`로 직접 지정
 
 ## 기술 스택
 

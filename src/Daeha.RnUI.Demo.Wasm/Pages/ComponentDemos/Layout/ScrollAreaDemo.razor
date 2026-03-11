@@ -3,7 +3,7 @@
 @code {
     public static ComponentDemo GetDemo() => new(
         "Scroll Area", "scroll-area", "Augments native scroll functionality for custom, cross-browser styling.",
-        Demo: @<RnScrollArea MaxHeight="288px" Class="w-48 rounded-md border">
+        Demo: @<RnScrollArea Class="h-72 w-48 rounded-md border border-border-subtle">
                 <div class="p-4">
                     <h4 class="mb-4 text-sm font-medium leading-none">Tags</h4>
                     @foreach (var tag in new[] { "v1.2.0-beta.42", "v1.2.0-beta.41", "v1.2.0-beta.40", "v1.2.0-beta.39", "v1.2.0-beta.38", "v1.2.0-beta.37", "v1.2.0-beta.36", "v1.2.0-beta.35", "v1.2.0-beta.34", "v1.2.0-beta.33", "v1.2.0-beta.32", "v1.2.0-beta.31", "v1.2.0-beta.30" })
@@ -14,7 +14,7 @@
                 </div>
             </RnScrollArea>,
         Thumbnail: @<div class="text-xs text-muted-foreground">Scroll Area</div>,
-        Code: @"<RnScrollArea MaxHeight=""288px"" Class=""w-48 rounded-md border"">
+        Code: @"<RnScrollArea Class=""h-72 w-48 rounded-md border border-border-subtle"">
     <div class=""p-4"">
         <h4 class=""mb-4 text-sm font-medium leading-none"">Tags</h4>
         @foreach (var tag in tags)
@@ -26,8 +26,20 @@
 </RnScrollArea>",
         UsageCode: @"@using RnUI.Components.UI.ScrollArea
 
-<RnScrollArea MaxHeight=""200px"">
-    Content
+<RnScrollArea Class=""h-72 w-48 rounded-md border border-border-subtle"">
+    Scrollable content here
+</RnScrollArea>
+
+@* Horizontal scrolling *@
+<RnScrollArea Orientation=""ScrollAreaOrientation.Horizontal"" Class=""w-96 rounded-md border border-border-subtle"">
+    <div class=""flex w-max space-x-4 p-4"">
+        Wide content here
+    </div>
+</RnScrollArea>
+
+@* Both directions *@
+<RnScrollArea Orientation=""ScrollAreaOrientation.Both"" Class=""h-72 w-96 rounded-md border border-border-subtle"">
+    Large content
 </RnScrollArea>"
     );
 }

@@ -2,16 +2,18 @@
 @implements IAsyncDisposable
 @inject RnUIInteropService Interop
 
-@if (Open)
+@if (_visible)
 {
     <div data-slot="sheet">
         <div data-slot="sheet-overlay"
+             data-state="@StateValue"
              class="cn-sheet-overlay fixed inset-0 z-50"
              @onclick="Close"></div>
 
         <div @ref="_contentRef"
              data-slot="sheet-content"
              data-side="@SideValue"
+             data-state="@StateValue"
              role="dialog"
              aria-modal="true"
              aria-labelledby="@(_id + "-title")"
@@ -55,10 +57,15 @@
 
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
+    private const int CloseAnimationMs = 200;
     private readonly string _id = Guid.NewGuid().ToString("N")[..8];
     private ElementReference _contentRef;
     private DotNetObjectReference<RnSheet>? _dotNetRef;
     private bool _previousOpen;
+    private bool _visible;
+    private bool _closing;
+
+    private string StateValue => _closing ? "closed" : "open";
 
     private string SideValue => Side switch
     {
@@ -68,6 +75,25 @@
         _ => "right"
     };
 
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Open && !_previousOpen)
+        {
+            _closing = false;
+            _visible = true;
+            _previousOpen = true;
+        }
+        else if (!Open && _previousOpen && !_closing)
+        {
+            _closing = true;
+            _previousOpen = false;
+            StateHasChanged();
+            await Task.Delay(CloseAnimationMs);
+            _visible = false;
+            _closing = false;
+        }
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -75,16 +101,14 @@
             _dotNetRef = DotNetObjectReference.Create(this);
         }
 
-        if (Open && !_previousOpen)
+        if (Open && _visible && !_closing)
         {
-            _previousOpen = true;
             await Interop.LockBodyScrollAsync();
             await Interop.EnableFocusTrapAsync(_id, _contentRef);
             await Interop.AddEscapeListenerAsync(_id, _dotNetRef!, nameof(Close));
         }
-        else if (!Open && _previousOpen)
+        else if (!_visible)
         {
-            _previousOpen = false;
             await Interop.DisposeAllAsync(_id);
             await Interop.UnlockBodyScrollAsync();
         }
@@ -95,7 +119,7 @@
 
     public async ValueTask DisposeAsync()
     {
-        if (_previousOpen)
+        if (_visible)
         {
             await Interop.DisposeAllAsync(_id);
             await Interop.UnlockBodyScrollAsync();
