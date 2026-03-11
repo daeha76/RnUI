@@ -3,52 +3,140 @@
         "Gantt", "gantt", "A timeline chart for visualizing resource allocations and project schedules.",
         Demo: @<GanttDemoContent />,
         Thumbnail: @<div class="text-xs text-muted-foreground">Gantt</div>,
-        Code: @"<RnGantt Rows=""rows"" ViewMode=""GanttViewMode.Month""
-         OnBarClick=""HandleBarClick""
+        Code: @"<RnGantt @ref=""_gantt""
+         Rows=""_rows""
+         ViewMode=""_viewMode""
+         Today=""DateTime.Today""
          ShowTodayMarker=""true""
          ShowLegend=""true""
-         LegendItems=""legendItems"">
-    <Toolbar>
-        <div class=""flex items-center gap-2"">
-            <RnButton Variant=""ButtonVariant.Outline"" Size=""ButtonSize.Sm""
-                      OnClick=""@(() => gantt.ZoomOut())"">-</RnButton>
-            <RnButton Variant=""ButtonVariant.Outline"" Size=""ButtonSize.Sm""
-                      OnClick=""@(() => gantt.ZoomIn())"">+</RnButton>
-        </div>
-    </Toolbar>
+         LegendItems=""_legendItems""
+         OnBarClick=""HandleBarClick"">
 </RnGantt>",
         UsageCode: @"@using RnUI.Components.UI.Gantt
 
-<RnGantt Rows=""rows""
-         ViewMode=""GanttViewMode.Month""
-         OnBarClick=""HandleBarClick"">
-</RnGantt>
+<div style=""height: 500px;"">
+    <RnGantt @ref=""_gantt""
+             Rows=""_rows""
+             ViewMode=""GanttViewMode.Month""
+             Today=""DateTime.Today""
+             ShowTodayMarker=""true""
+             ShowLegend=""true""
+             LegendItems=""_legendItems""
+             OnBarClick=""HandleBarClick""
+             Class=""h-full"">
+    </RnGantt>
+</div>
 
 @code {
-    private List<GanttRow> rows =
+    private RnGantt _gantt = default!;
+    private GanttTask? _selectedTask;
+
+    private void HandleBarClick(GanttTask task)
+    {
+        _selectedTask = task;
+    }
+
+    // Legend configuration
+    private readonly List<GanttLegendItem> _legendItems =
+    [
+        new() { Label = ""Structural"", Variant = BarVariant.Blue },
+        new() { Label = ""MEP"", Variant = BarVariant.Green },
+        new() { Label = ""Civil"", Variant = BarVariant.Orange },
+        new() { Label = ""Pending"", Variant = BarVariant.Muted },
+    ];
+
+    // Row data with tasks
+    private readonly List<GanttRow> _rows =
     [
         new()
         {
-            Id = ""1"", Label = ""Alex Morgan"",
-            SubLabel = ""Senior Engineer"",
+            Id = ""1"",
+            Label = ""Alex Morgan"",
+            SubLabel = ""Senior Structural Eng."",
             Tasks =
             [
                 new()
                 {
                     Id = ""t1"",
-                    Label = ""Alpha Project"",
+                    Label = ""Alpha Tower Foundation"",
                     StartDate = new(2026, 1, 1),
                     EndDate = new(2026, 4, 30),
+                    Variant = BarVariant.Blue,
+                    TooltipText = ""Foundation and structural work""
+                },
+                new()
+                {
+                    Id = ""t2"",
+                    Label = ""Beta Bridge Phase 2"",
+                    StartDate = new(2026, 6, 1),
+                    EndDate = new(2026, 9, 30),
                     Variant = BarVariant.Blue
+                }
+            ]
+        },
+        new()
+        {
+            Id = ""2"",
+            Label = ""Sarah Chen"",
+            SubLabel = ""MEP Coordinator"",
+            Tasks =
+            [
+                new()
+                {
+                    Id = ""t3"",
+                    Label = ""Gamma Mall HVAC"",
+                    StartDate = new(2026, 2, 15),
+                    EndDate = new(2026, 7, 31),
+                    Variant = BarVariant.Green,
+                    TooltipText = ""HVAC system installation""
+                }
+            ]
+        },
+        new()
+        {
+            Id = ""3"",
+            Label = ""David Miller"",
+            SubLabel = ""Civil Engineer"",
+            Tasks =
+            [
+                new()
+                {
+                    Id = ""t4"",
+                    Label = ""Road Expansion"",
+                    StartDate = new(2026, 3, 1),
+                    EndDate = new(2026, 5, 31),
+                    Variant = BarVariant.Orange
+                },
+                new()
+                {
+                    Id = ""t5"",
+                    Label = ""Pending Allocation"",
+                    StartDate = new(2026, 8, 1),
+                    EndDate = new(2026, 12, 31),
+                    Variant = BarVariant.Muted,
+                    TooltipText = ""Tentative assignment""
                 }
             ]
         }
     ];
 
-    private void HandleBarClick(GanttTask task)
-    {
-        // Open edit dialog
-    }
+    // --- Custom sidebar columns ---
+    // Use SidebarHeaderTemplate + SidebarRowTemplate for multi-column layout:
+    //
+    // <RnGantt Rows=""_rows"" ...>
+    //     <SidebarHeaderTemplate>
+    //         <div class=""flex items-center w-full gap-2"">
+    //             <span class=""flex-1 text-xs font-semibold"">Name</span>
+    //             <span class=""w-16 text-xs font-semibold text-right"">Role</span>
+    //         </div>
+    //     </SidebarHeaderTemplate>
+    //     <SidebarRowTemplate Context=""row"">
+    //         <div class=""flex items-center w-full gap-2"">
+    //             <span class=""flex-1 text-sm truncate"">@row.Label</span>
+    //             <span class=""w-16 text-xs text-right"">@row.SubLabel</span>
+    //         </div>
+    //     </SidebarRowTemplate>
+    // </RnGantt>
 }"
     );
 }

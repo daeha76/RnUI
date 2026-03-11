@@ -1939,9 +1939,19 @@
 }
 
 .cn-gantt-sidebar-header {
-  @apply flex items-end px-3 pb-2 shrink-0;
-  border-bottom: 1px solid var(--color-border-subtle);
+  @apply flex flex-col shrink-0;
+}
+
+.cn-gantt-sidebar-header-primary {
+  @apply flex items-center px-3 shrink-0;
   background: color-mix(in oklch, var(--color-muted) 50%, transparent);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.cn-gantt-sidebar-header-secondary {
+  @apply flex items-center px-3 shrink-0;
+  background: color-mix(in oklch, var(--color-muted) 30%, transparent);
+  border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .cn-gantt-sidebar-header-label {
@@ -2006,7 +2016,6 @@
 
 .cn-gantt-timeline-header {
   @apply overflow-hidden shrink-0;
-  border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .cn-gantt-header-row {
@@ -2022,6 +2031,7 @@
 .cn-gantt-header-secondary {
   @apply text-xs text-muted-foreground;
   background: color-mix(in oklch, var(--color-muted) 30%, transparent);
+  border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .cn-gantt-header-cell {
@@ -2162,6 +2172,29 @@
 
 /* --- Gantt bar tooltip --- */
 
+.cn-gantt-bar-tooltip-content {
+  @apply max-w-sm whitespace-nowrap;
+  z-index: 60;
+}
+
 .cn-gantt-bar-tooltip {
   @apply flex flex-col gap-0.5;
+}
+
+.cn-gantt-bar-tooltip-label {
+  @apply font-medium;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.cn-gantt-bar-tooltip-period {
+  @apply text-muted-foreground whitespace-nowrap;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.cn-gantt-bar-tooltip-desc {
+  @apply mt-0.5;
+  font-size: 10px;
+  line-height: 1.4;
 }

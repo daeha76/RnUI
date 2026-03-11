@@ -55,6 +55,7 @@
 
     // --- Templates ---
     [Parameter] public RenderFragment? Toolbar { get; set; }
+    [Parameter] public RenderFragment? SidebarHeaderTemplate { get; set; }
     [Parameter] public RenderFragment<GanttRow>? SidebarRowTemplate { get; set; }
     [Parameter] public RenderFragment<GanttTask>? BarTemplate { get; set; }
     [Parameter] public RenderFragment<GanttTask>? BarTooltipTemplate { get; set; }

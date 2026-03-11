@@ -7,7 +7,23 @@
     <div data-slot="gantt-sidebar-header"
          class="cn-gantt-sidebar-header"
          style="height: @(Parent.State.TotalHeaderHeightPx)px;">
-        <span class="cn-gantt-sidebar-header-label">Name</span>
+        @if (Parent.State.PrimaryHeaderHeightPx > 0)
+        {
+            <div class="cn-gantt-sidebar-header-primary"
+                 style="height: @(Parent.State.PrimaryHeaderHeightPx)px;">
+            </div>
+        }
+        <div class="cn-gantt-sidebar-header-secondary"
+             style="height: @(Parent.State.SecondaryHeaderHeightPx)px;">
+            @if (Parent.SidebarHeaderTemplate != null)
+            {
+                @Parent.SidebarHeaderTemplate
+            }
+            else
+            {
+                <span class="cn-gantt-sidebar-header-label">Name</span>
+            }
+        </div>
     </div>
 
     <div data-slot="gantt-sidebar-body"

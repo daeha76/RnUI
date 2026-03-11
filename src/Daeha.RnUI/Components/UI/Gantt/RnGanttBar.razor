@@ -9,7 +9,7 @@
 }
 
 <div class="cn-gantt-bar-wrapper" style="@wrapperStyle">
-    <RnTooltip Side="Side.Top">
+    <RnTooltip Side="Side.Top" Class="cn-gantt-bar-tooltip-content">
         <Trigger>
             <div data-slot="gantt-bar"
                  data-variant="@Task.Variant.ToString().ToLowerInvariant()"
@@ -38,13 +38,13 @@
             else
             {
                 <div class="cn-gantt-bar-tooltip">
-                    <div class="font-medium text-sm">@Task.Label</div>
-                    <div class="text-xs text-muted-foreground">
+                    <div class="cn-gantt-bar-tooltip-label">@Task.Label</div>
+                    <div class="cn-gantt-bar-tooltip-period">
                         @Task.StartDate.ToString("yyyy-MM-dd") ~ @Task.EndDate.ToString("yyyy-MM-dd")
                     </div>
                     @if (!string.IsNullOrEmpty(Task.TooltipText))
                     {
-                        <div class="text-xs mt-1">@Task.TooltipText</div>
+                        <div class="cn-gantt-bar-tooltip-desc">@Task.TooltipText</div>
                     }
                 </div>
             }
