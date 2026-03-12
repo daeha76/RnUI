@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>RnUI</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- 상위 프로젝트의 TreatWarningsAsErrors 전파 방지 -->
+    <NoWarn>$(NoWarn);1591</NoWarn>
 
     <!-- NuGet Package Metadata -->
     <PackageId>Daeha.RnUI</PackageId>
