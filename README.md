@@ -11,7 +11,9 @@ Beautifully designed, accessible UI components built with Tailwind CSS for .NET 
 [![License](https://img.shields.io/github/license/daeha76/RnUI?style=flat-square)](LICENSE.md)
 [![.NET](https://img.shields.io/badge/.NET-8.0%20%7C%209.0%20%7C%2010.0-512bd4?style=flat-square&logo=dotnet)](https://dotnet.microsoft.com)
 
-> 이 라이브러리는 딸 리안(Rian)의 이름을 담아 만든 Blazor UI 컴포넌트 라이브러리입니다. 💕
+[**Live Demo**](https://daeha76.github.io/RnUI/)
+
+**Documentation**: [한국어](docs/README.ko.md) | [中文](docs/README.zh-CN.md) | [Español](docs/README.es.md) | [Deutsch](docs/README.de.md) | [日本語](docs/README.ja.md)
 
 </div>
 
@@ -19,131 +21,186 @@ Beautifully designed, accessible UI components built with Tailwind CSS for .NET 
 
 ## Why RnUI?
 
-- **54 component categories** — 194개의 Razor 컴포넌트 파일로 구성된 포괄적인 UI 라이브러리
-- **shadcn/ui 기반** — 웹에서 검증된 디자인 시스템을 Blazor로 그대로 이식
-- **Tailwind CSS** — oklch 컬러 시스템과 CSS 커스텀 프로퍼티 기반 테마
-- **다크 모드** — 라이트/다크 모드 기본 지원
-- **접근성** — 접근 가능한 컴포넌트 설계
-- **외부 의존성 없음** — ASP.NET Core 프레임워크 참조만 사용
-- **멀티 타겟** — .NET 8.0, 9.0, 10.0 지원 | Blazor Server & WebAssembly 호환
+- **54 component categories** — A comprehensive UI library with 194 Razor component files
+- **Based on shadcn/ui** — A proven design system from the web, ported directly to Blazor
+- **Tailwind CSS** — oklch color system with CSS custom property-based theming
+- **Dark mode** — Built-in light/dark mode support
+- **Accessible** — Components designed with accessibility in mind
+- **Zero external dependencies** — Only ASP.NET Core framework references
+- **Multi-target** — .NET 8.0, 9.0, 10.0 support | Blazor Server & WebAssembly compatible
 
 ---
 
 ## Quick Start
 
-### 1. 패키지 설치
+### 1. Install the package
 
 ```bash
 dotnet add package Daeha.RnUI
 ```
 
-### 2. Import 추가
+### 2. Add imports
 
-`_Imports.razor`에 다음을 추가합니다:
+Add the following to your `_Imports.razor`:
 
 ```razor
 @using Daeha.RnUI.Components.UI
 ```
 
-### 3. 스타일시트 연결
+### 3. Link the stylesheet
 
-`App.razor` 또는 `_Host.cshtml`에 CSS를 추가합니다:
+Add the CSS to your `App.razor` or `_Host.cshtml`:
 
 ```html
 <link rel="stylesheet" href="_content/Daeha.RnUI/css/shadcn.css" />
 ```
 
-### 4. Tailwind CSS 설정
+### 4. Set up Tailwind CSS
 
-Blazor 프로젝트에 Tailwind CSS가 설정되어 있어야 하며, RnUI 패키지의 클래스명을 스캔하도록 구성합니다.
+RnUI uses Tailwind CSS v4. You need to set up Tailwind CSS in your Blazor project to scan and compile utility classes.
+
+#### 4-1. Install Tailwind CSS
+
+Install Tailwind CSS in your project root:
+
+```bash
+npm init -y
+npm install -D tailwindcss @tailwindcss/cli
+```
+
+#### 4-2. Create the CSS entry file
+
+Create a `wwwroot/input.css` file and include your Razor files as scan targets:
+
+```css
+@import "tailwindcss";
+@source "../**/*.razor";
+```
+
+> **When using the NuGet package**: If installed via NuGet, the library's `.razor` files are not available locally. However, RnUI component base styles (`.cn-*` classes) are already included in `shadcn.css`, so they work without additional `@source` configuration. You only need to scan Tailwind utility classes used in your own `.razor` files.
+
+#### 4-3. Add build scripts
+
+Add build scripts to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "build:css": "npx @tailwindcss/cli -i wwwroot/input.css -o wwwroot/css/tailwindcss.css",
+    "watch:css": "npx @tailwindcss/cli -i wwwroot/input.css -o wwwroot/css/tailwindcss.css --watch"
+  }
+}
+```
+
+#### 4-4. Link the stylesheets
+
+Link both the RnUI styles and the Tailwind CSS output file in your `App.razor` or `_Host.cshtml`:
+
+```html
+<!-- RnUI component styles -->
+<link rel="stylesheet" href="_content/Daeha.RnUI/css/shadcn.css" />
+<!-- Tailwind utility classes -->
+<link rel="stylesheet" href="css/tailwindcss.css" />
+```
+
+#### 4-5. Build CSS
+
+Use watch mode during development and build for production:
+
+```bash
+npm run watch:css   # Development (watches for file changes)
+npm run build:css   # Production (one-time build)
+```
 
 ---
 
 ## Components
 
+> See live demos and detailed usage for each component on the [**Demo Site**](https://daeha76.github.io/RnUI/components).
+
 ### Buttons & Inputs
 
-| Component | Description |
-|---|---|
-| `RnButton` | Default, Secondary, Outline, Ghost, Destructive, Link 변형 지원 |
-| `RnInput` | 텍스트 입력 필드 |
-| `RnTextarea` | 여러 줄 텍스트 입력 |
-| `RnLabel` | 폼 레이블 |
-| `RnCheckbox` | 체크박스 |
-| `RnSwitch` | 토글 스위치 |
-| `RnRadioGroup` | 라디오 버튼 그룹 |
-| `RnSelect` | 드롭다운 선택 |
-| `RnToggle` | 토글 버튼 |
-| `RnToggleGroup` | 토글 버튼 그룹 |
-| `RnCombobox` | 검색 가능한 드롭다운 선택 |
-| `RnInputOTP` | OTP 입력 필드 |
-| `RnField` | 필드 컨테이너 (Label, Description, Error 통합) |
-| `RnForm` | 폼 유효성 검사 |
+| Component | Description | Demo |
+|---|---|---|
+| `RnButton` | Supports Default, Secondary, Outline, Ghost, Destructive, Link variants | [Live](https://daeha76.github.io/RnUI/components/button) |
+| `RnInput` | Text input field | [Live](https://daeha76.github.io/RnUI/components/input) |
+| `RnTextarea` | Multi-line text input | [Live](https://daeha76.github.io/RnUI/components/textarea) |
+| `RnLabel` | Form label | [Live](https://daeha76.github.io/RnUI/components/label) |
+| `RnCheckbox` | Checkbox | [Live](https://daeha76.github.io/RnUI/components/checkbox) |
+| `RnSwitch` | Toggle switch | [Live](https://daeha76.github.io/RnUI/components/switch) |
+| `RnRadioGroup` | Radio button group | [Live](https://daeha76.github.io/RnUI/components/radio-group) |
+| `RnSelect` | Dropdown selection | [Live](https://daeha76.github.io/RnUI/components/select) |
+| `RnToggle` | Toggle button | [Live](https://daeha76.github.io/RnUI/components/toggle) |
+| `RnToggleGroup` | Toggle button group | [Live](https://daeha76.github.io/RnUI/components/toggle-group) |
+| `RnCombobox` | Searchable dropdown selection | [Live](https://daeha76.github.io/RnUI/components/combobox) |
+| `RnInputOTP` | OTP input field | [Live](https://daeha76.github.io/RnUI/components/input-otp) |
+| `RnField` | Field container (integrates Label, Description, Error) | [Live](https://daeha76.github.io/RnUI/components/field) |
+| `RnForm` | Form validation | [Live](https://daeha76.github.io/RnUI/components/form) |
 
 ### Cards & Containers
 
-| Component | Description |
-|---|---|
-| `RnCard` | Header, Title, Description, Content, Footer, Action 구성 |
-| `RnAlert` | 알림 메시지 (Default, Destructive) |
-| `RnBadge` | 상태 뱃지 |
-| `RnAspectRatio` | 종횡비 컨테이너 |
-| `RnScrollArea` | 커스텀 스크롤 영역 |
-| `RnSeparator` | 구분선 |
-| `RnResizable` | 크기 조절 가능 패널 |
+| Component | Description | Demo |
+|---|---|---|
+| `RnCard` | Composed of Header, Title, Description, Content, Footer, Action | [Live](https://daeha76.github.io/RnUI/components/card) |
+| `RnAlert` | Alert message (Default, Destructive) | [Live](https://daeha76.github.io/RnUI/components/alert) |
+| `RnBadge` | Status badge | [Live](https://daeha76.github.io/RnUI/components/badge) |
+| `RnAspectRatio` | Aspect ratio container | [Live](https://daeha76.github.io/RnUI/components/aspect-ratio) |
+| `RnScrollArea` | Custom scroll area | [Live](https://daeha76.github.io/RnUI/components/scroll-area) |
+| `RnSeparator` | Divider | [Live](https://daeha76.github.io/RnUI/components/separator) |
+| `RnResizable` | Resizable panels | [Live](https://daeha76.github.io/RnUI/components/resizable) |
 
 ### Data Display
 
-| Component | Description |
-|---|---|
-| `RnTable` | 기본 테이블 (Head, Body, Row, Header, Cell) |
-| `RnDataTable` | 고급 데이터 테이블 (정렬, 필터, 페이지네이션, 선택, 행 확장) |
-| `RnAvatar` | 사용자 아바타 (그룹 지원) |
-| `RnProgress` | 진행률 표시 |
-| `RnSlider` | 슬라이더 |
-| `RnSkeleton` | 로딩 스켈레톤 |
-| `RnSpinner` | 로딩 스피너 |
-| `RnKbd` | 키보드 단축키 표시 |
-| `RnCalendar` | 달력 |
+| Component | Description | Demo |
+|---|---|---|
+| `RnTable` | Basic table (Head, Body, Row, Header, Cell) | [Live](https://daeha76.github.io/RnUI/components/table) |
+| `RnDataTable` | Advanced data table (sorting, filtering, pagination, selection, row expansion) | [Live](https://daeha76.github.io/RnUI/components/data-table) |
+| `RnAvatar` | User avatar (with group support) | [Live](https://daeha76.github.io/RnUI/components/avatar) |
+| `RnProgress` | Progress bar | [Live](https://daeha76.github.io/RnUI/components/progress) |
+| `RnSlider` | Slider | [Live](https://daeha76.github.io/RnUI/components/slider) |
+| `RnSkeleton` | Loading skeleton | [Live](https://daeha76.github.io/RnUI/components/skeleton) |
+| `RnSpinner` | Loading spinner | [Live](https://daeha76.github.io/RnUI/components/spinner) |
+| `RnKbd` | Keyboard shortcut display | [Live](https://daeha76.github.io/RnUI/components/kbd) |
+| `RnCalendar` | Calendar | [Live](https://daeha76.github.io/RnUI/components/calendar) |
 
 ### Navigation
 
-| Component | Description |
-|---|---|
-| `RnTabs` | 탭 컴포넌트 (Default, Line 변형) |
-| `RnBreadcrumb` | 경로 탐색 |
-| `RnPagination` | 페이지네이션 |
-| `RnNavigationMenu` | 내비게이션 메뉴 |
-| `RnSidebar` | 사이드바 (Header, Content, Footer, Group, Menu) |
-| `RnMenubar` | 메뉴바 |
+| Component | Description | Demo |
+|---|---|---|
+| `RnTabs` | Tab component (Default, Line variants) | [Live](https://daeha76.github.io/RnUI/components/tabs) |
+| `RnBreadcrumb` | Breadcrumb navigation | [Live](https://daeha76.github.io/RnUI/components/breadcrumb) |
+| `RnPagination` | Pagination | [Live](https://daeha76.github.io/RnUI/components/pagination) |
+| `RnNavigationMenu` | Navigation menu | [Live](https://daeha76.github.io/RnUI/components/navigation-menu) |
+| `RnSidebar` | Sidebar (Header, Content, Footer, Group, Menu) | [Live](https://daeha76.github.io/RnUI/components/sidebar) |
+| `RnMenubar` | Menu bar | [Live](https://daeha76.github.io/RnUI/components/menubar) |
 
 ### Overlays
 
-| Component | Description |
-|---|---|
-| `RnDialog` | 모달 다이얼로그 |
-| `RnAlertDialog` | 확인 다이얼로그 |
-| `RnSheet` | 사이드 시트 |
-| `RnPopover` | 팝오버 |
-| `RnTooltip` | 툴팁 |
-| `RnHoverCard` | 호버 카드 |
-| `RnDropdownMenu` | 드롭다운 메뉴 |
-| `RnContextMenu` | 컨텍스트 메뉴 |
-| `RnDrawer` | 드로어 (모바일 하단 시트) |
-| `RnToast` | 토스트 알림 |
+| Component | Description | Demo |
+|---|---|---|
+| `RnDialog` | Modal dialog | [Live](https://daeha76.github.io/RnUI/components/dialog) |
+| `RnAlertDialog` | Confirmation dialog | [Live](https://daeha76.github.io/RnUI/components/alert-dialog) |
+| `RnSheet` | Side sheet | [Live](https://daeha76.github.io/RnUI/components/sheet) |
+| `RnPopover` | Popover | [Live](https://daeha76.github.io/RnUI/components/popover) |
+| `RnTooltip` | Tooltip | [Live](https://daeha76.github.io/RnUI/components/tooltip) |
+| `RnHoverCard` | Hover card | [Live](https://daeha76.github.io/RnUI/components/hover-card) |
+| `RnDropdownMenu` | Dropdown menu | [Live](https://daeha76.github.io/RnUI/components/dropdown-menu) |
+| `RnContextMenu` | Context menu | [Live](https://daeha76.github.io/RnUI/components/context-menu) |
+| `RnDrawer` | Drawer (mobile bottom sheet) | [Live](https://daeha76.github.io/RnUI/components/drawer) |
+| `RnToast` | Toast notification | [Live](https://daeha76.github.io/RnUI/components/toast) |
 
 ### Disclosure & Misc
 
-| Component | Description |
-|---|---|
-| `RnAccordion` | 아코디언 |
-| `RnCollapsible` | 접기/펼치기 |
-| `RnEmpty` | 빈 상태 표시 |
-| `RnCarousel` | 캐러셀/슬라이더 |
-| `RnCommand` | 커맨드 팔레트 |
-| `RnDatePicker` | 날짜 선택기 |
-| `RnGantt` | 간트 차트 |
-| `RnButtonGroup` | 버튼 그룹 |
+| Component | Description | Demo |
+|---|---|---|
+| `RnAccordion` | Accordion | [Live](https://daeha76.github.io/RnUI/components/accordion) |
+| `RnCollapsible` | Collapsible | [Live](https://daeha76.github.io/RnUI/components/collapsible) |
+| `RnEmpty` | Empty state | [Live](https://daeha76.github.io/RnUI/components/empty) |
+| `RnCarousel` | Carousel / slider | [Live](https://daeha76.github.io/RnUI/components/carousel) |
+| `RnCommand` | Command palette | [Live](https://daeha76.github.io/RnUI/components/command) |
+| `RnDatePicker` | Date picker | [Live](https://daeha76.github.io/RnUI/components/date-picker) |
+| `RnGantt` | Gantt chart | [Live](https://daeha76.github.io/RnUI/components/gantt) |
+| `RnButtonGroup` | Button group | [Live](https://daeha76.github.io/RnUI/components/button-group) |
 
 ---
 
@@ -151,7 +208,7 @@ Blazor 프로젝트에 Tailwind CSS가 설정되어 있어야 하며, RnUI 패�
 
 ### Button
 
-6가지 Variant와 8가지 Size를 지원합니다.
+Supports 6 variants and 8 sizes.
 
 ```razor
 @* Variants *@
@@ -163,130 +220,13 @@ Blazor 프로젝트에 Tailwind CSS가 설정되어 있어야 하며, RnUI 패�
 <RnButton Variant="ButtonVariant.Link">Link</RnButton>
 
 @* Sizes *@
-<RnButton Size="ButtonSize.Xs">Extra Small</RnButton>
 <RnButton Size="ButtonSize.Sm">Small</RnButton>
 <RnButton Size="ButtonSize.Default">Default</RnButton>
 <RnButton Size="ButtonSize.Lg">Large</RnButton>
-
-@* Icon Buttons *@
 <RnButton Size="ButtonSize.Icon">🔔</RnButton>
-<RnButton Size="ButtonSize.IconSm">✏️</RnButton>
-
-@* Disabled & Click Event *@
-<RnButton Disabled="true">Disabled</RnButton>
-<RnButton OnClick="HandleClick">Click Me</RnButton>
-<RnButton Type="submit">Submit Form</RnButton>
-```
-
-### Input & Textarea
-
-```razor
-@* 기본 텍스트 입력 *@
-<RnInput Placeholder="Enter your name" @bind-Value="_name" />
-
-@* 타입별 입력 *@
-<RnInput Type="email" Placeholder="you@example.com" @bind-Value="_email" />
-<RnInput Type="password" Placeholder="Password" @bind-Value="_password" />
-<RnInput Type="number" Placeholder="0" @bind-Value="_number" />
-
-@* Disabled *@
-<RnInput Disabled="true" Value="Read only value" />
-
-@* Textarea *@
-<RnTextarea Placeholder="Write your message..." @bind-Value="_message" Rows="5" />
-<RnTextarea Disabled="true" Value="Read only textarea" />
-```
-
-### Label
-
-```razor
-<div class="space-y-2">
-    <RnLabel For="email">Email Address</RnLabel>
-    <RnInput id="email" Type="email" Placeholder="you@example.com" @bind-Value="_email" />
-</div>
-```
-
-### Checkbox & Switch
-
-```razor
-@* Checkbox *@
-<div class="flex items-center space-x-2">
-    <RnCheckbox @bind-Checked="_accepted" />
-    <RnLabel>Accept terms and conditions</RnLabel>
-</div>
-
-<div class="flex items-center space-x-2">
-    <RnCheckbox @bind-Checked="_marketing" Disabled="true" />
-    <RnLabel>Disabled checkbox</RnLabel>
-</div>
-
-@* Switch *@
-<div class="flex items-center space-x-2">
-    <RnSwitch @bind-Checked="_darkMode" />
-    <RnLabel>Dark Mode</RnLabel>
-</div>
-
-<div class="flex items-center space-x-2">
-    <RnSwitch @bind-Checked="_airplane" Size="ComponentSize.Sm" />
-    <RnLabel>Airplane Mode (Small)</RnLabel>
-</div>
-```
-
-### RadioGroup
-
-```razor
-<RnRadioGroup @bind-Value="_plan">
-    <div class="flex items-center space-x-2">
-        <RnRadioGroupItem Value="free" />
-        <RnLabel>Free</RnLabel>
-    </div>
-    <div class="flex items-center space-x-2">
-        <RnRadioGroupItem Value="pro" />
-        <RnLabel>Pro</RnLabel>
-    </div>
-    <div class="flex items-center space-x-2">
-        <RnRadioGroupItem Value="enterprise" Disabled="true" />
-        <RnLabel>Enterprise (Coming soon)</RnLabel>
-    </div>
-</RnRadioGroup>
-```
-
-### Select
-
-```razor
-<RnSelect @bind-Value="_fruit" Placeholder="Select a fruit">
-    <RnSelectItem Value="apple">Apple</RnSelectItem>
-    <RnSelectItem Value="banana">Banana</RnSelectItem>
-    <RnSelectItem Value="cherry">Cherry</RnSelectItem>
-    <RnSelectItem Value="grape" Disabled="true">Grape (Sold out)</RnSelectItem>
-</RnSelect>
-
-@* Small size *@
-<RnSelect @bind-Value="_size" Placeholder="Size" Size="ComponentSize.Sm">
-    <RnSelectItem Value="sm">Small</RnSelectItem>
-    <RnSelectItem Value="md">Medium</RnSelectItem>
-    <RnSelectItem Value="lg">Large</RnSelectItem>
-</RnSelect>
-```
-
-### Toggle
-
-```razor
-<RnToggle @bind-Pressed="_bold">
-    <strong>B</strong>
-</RnToggle>
-
-<RnToggle @bind-Pressed="_italic" Variant="ToggleVariant.Outline">
-    <em>I</em>
-</RnToggle>
-
-<RnToggle @bind-Pressed="_small" Size="ToggleSize.Sm">Sm</RnToggle>
-<RnToggle @bind-Pressed="_large" Size="ToggleSize.Lg">Lg</RnToggle>
 ```
 
 ### Card
-
-Header, Title, Description, Content, Footer, Action으로 구성합니다.
 
 ```razor
 <RnCard>
@@ -302,248 +242,6 @@ Header, Title, Description, Content, Footer, Action으로 구성합니다.
         <RnButton Variant="ButtonVariant.Outline">Cancel</RnButton>
     </RnCardFooter>
 </RnCard>
-
-@* Small size card *@
-<RnCard Size="ComponentSize.Sm">
-    <RnCardHeader>
-        <RnCardTitle>Compact Card</RnCardTitle>
-    </RnCardHeader>
-    <RnCardContent>
-        <p>Smaller padding for compact layouts.</p>
-    </RnCardContent>
-</RnCard>
-
-@* Card with action button *@
-<RnCard>
-    <RnCardHeader>
-        <RnCardTitle>Notifications</RnCardTitle>
-        <RnCardAction>
-            <RnButton Size="ButtonSize.IconSm" Variant="ButtonVariant.Ghost">⚙️</RnButton>
-        </RnCardAction>
-    </RnCardHeader>
-    <RnCardContent>
-        <p>You have 3 unread messages.</p>
-    </RnCardContent>
-</RnCard>
-```
-
-### Alert
-
-```razor
-@* Default *@
-<RnAlert>
-    <RnAlertTitle>Heads up!</RnAlertTitle>
-    <RnAlertDescription>You can add components to your app using the CLI.</RnAlertDescription>
-</RnAlert>
-
-@* Destructive *@
-<RnAlert Variant="AlertVariant.Destructive">
-    <RnAlertTitle>Error</RnAlertTitle>
-    <RnAlertDescription>Your session has expired. Please log in again.</RnAlertDescription>
-</RnAlert>
-```
-
-### Badge
-
-```razor
-<RnBadge>Default</RnBadge>
-<RnBadge Variant="BadgeVariant.Secondary">Secondary</RnBadge>
-<RnBadge Variant="BadgeVariant.Outline">Outline</RnBadge>
-<RnBadge Variant="BadgeVariant.Destructive">Destructive</RnBadge>
-<RnBadge Variant="BadgeVariant.Ghost">Ghost</RnBadge>
-```
-
-### Avatar
-
-```razor
-@* Image avatar *@
-<RnAvatar Src="/images/profile.jpg" Alt="User Name" />
-
-@* Fallback (이미지 없을 때 이니셜 표시) *@
-<RnAvatar>
-    <Fallback>JD</Fallback>
-</RnAvatar>
-
-@* Size variants *@
-<RnAvatar Src="/images/user.jpg" Size="ComponentSize.Sm" />
-<RnAvatar Src="/images/user.jpg" Size="ComponentSize.Default" />
-
-@* Avatar Group *@
-<RnAvatarGroup>
-    <RnAvatar Src="/images/user1.jpg" />
-    <RnAvatar Src="/images/user2.jpg" />
-    <RnAvatar><Fallback>+3</Fallback></RnAvatar>
-</RnAvatarGroup>
-```
-
-### Progress & Slider
-
-```razor
-@* Progress *@
-<RnProgress Value="60" />
-<RnProgress Value="@_progress">
-    <span>@_progress%</span>
-</RnProgress>
-
-@* Slider *@
-<RnSlider @bind-Value="_volume" Min="0" Max="100" Step="1" />
-<RnSlider @bind-Value="_opacity" Min="0" Max="1" Step="0.1" Disabled="true" />
-```
-
-### Skeleton & Spinner
-
-```razor
-@* Skeleton - 로딩 플레이스홀더 *@
-<RnSkeleton Class="h-4 w-[250px]" />
-<RnSkeleton Class="h-4 w-[200px]" />
-<RnSkeleton Class="h-12 w-12 rounded-full" />
-
-@* Spinner *@
-<RnSpinner />
-<RnSpinner Size="ComponentSize.Sm" />
-<RnSpinner Size="ComponentSize.Lg" />
-```
-
-### DataTable
-
-정렬, 필터, 페이지네이션, 행 선택, 행 확장을 지원하는 고급 데이터 테이블입니다.
-
-```razor
-@using RnUI.Components.UI.DataTable
-
-<RnDataTable TItem="PaymentRecord"
-             Items="_payments"
-             SelectionMode="SelectionMode.Multiple"
-             PageSize="10"
-             PageSizeOptions="@(new[] { 5, 10, 20, 50 })">
-    <Toolbar>
-        <div class="flex items-center justify-between w-full">
-            <RnDataTableSearch TItem="PaymentRecord" Placeholder="Search..." />
-            <RnDataTableColumnToggle TItem="PaymentRecord" />
-        </div>
-    </Toolbar>
-    <Columns>
-        <RnDataTableColumn TItem="PaymentRecord" Property="x => x.Id" Title="ID" Sortable />
-        <RnDataTableColumn TItem="PaymentRecord" Property="x => x.Name" Title="Name" Sortable Filterable />
-        <RnDataTableColumn TItem="PaymentRecord" Property="x => x.Amount" Title="Amount" Sortable>
-            <CellTemplate Context="item">
-                <div class="text-right font-medium">@item.Amount.ToString("C")</div>
-            </CellTemplate>
-        </RnDataTableColumn>
-        <RnDataTableColumn TItem="PaymentRecord" Title="" Id="actions">
-            <CellTemplate Context="item">
-                <RnDataTableRowActions>
-                    <RnDropdownMenuItem>View</RnDropdownMenuItem>
-                    <RnDropdownMenuItem Class="text-destructive">Delete</RnDropdownMenuItem>
-                </RnDataTableRowActions>
-            </CellTemplate>
-        </RnDataTableColumn>
-    </Columns>
-    <EmptyContent>
-        <p class="py-10 text-center text-muted-foreground">No results.</p>
-    </EmptyContent>
-</RnDataTable>
-
-@code {
-    public record PaymentRecord(string Id, string Name, decimal Amount);
-
-    // Important: use non-readonly list and immutable updates for add/remove
-    private List<PaymentRecord> _payments = [ /* your data */ ];
-}
-```
-
-### Table
-
-```razor
-<RnTable>
-    <RnTableHeader>
-        <RnTableRow>
-            <RnTableHead>Name</RnTableHead>
-            <RnTableHead>Email</RnTableHead>
-            <RnTableHead>Role</RnTableHead>
-        </RnTableRow>
-    </RnTableHeader>
-    <RnTableBody>
-        <RnTableRow>
-            <RnTableCell>John Doe</RnTableCell>
-            <RnTableCell>john@example.com</RnTableCell>
-            <RnTableCell>Admin</RnTableCell>
-        </RnTableRow>
-        <RnTableRow>
-            <RnTableCell>Jane Smith</RnTableCell>
-            <RnTableCell>jane@example.com</RnTableCell>
-            <RnTableCell>User</RnTableCell>
-        </RnTableRow>
-    </RnTableBody>
-</RnTable>
-```
-
-### Tabs
-
-Default와 Line 변형, 가로/세로 방향을 지원합니다.
-
-```razor
-@* Default tabs *@
-<RnTabs @bind-ActiveTab="_activeTab">
-    <RnTabsList>
-        <RnTabsTrigger Value="account">Account</RnTabsTrigger>
-        <RnTabsTrigger Value="password">Password</RnTabsTrigger>
-        <RnTabsTrigger Value="settings">Settings</RnTabsTrigger>
-    </RnTabsList>
-    <RnTabsContent Value="account">
-        <p>Account settings here.</p>
-    </RnTabsContent>
-    <RnTabsContent Value="password">
-        <p>Password settings here.</p>
-    </RnTabsContent>
-    <RnTabsContent Value="settings">
-        <p>General settings here.</p>
-    </RnTabsContent>
-</RnTabs>
-
-@* Line variant *@
-<RnTabs @bind-ActiveTab="_tab2">
-    <RnTabsList Variant="TabsListVariant.Line">
-        <RnTabsTrigger Value="overview">Overview</RnTabsTrigger>
-        <RnTabsTrigger Value="analytics">Analytics</RnTabsTrigger>
-    </RnTabsList>
-    <RnTabsContent Value="overview">Overview content</RnTabsContent>
-    <RnTabsContent Value="analytics">Analytics content</RnTabsContent>
-</RnTabs>
-
-@* Vertical orientation *@
-<RnTabs @bind-ActiveTab="_tab3" Orientation="Orientation.Vertical">
-    <RnTabsList>
-        <RnTabsTrigger Value="general">General</RnTabsTrigger>
-        <RnTabsTrigger Value="display">Display</RnTabsTrigger>
-    </RnTabsList>
-    <RnTabsContent Value="general">General settings</RnTabsContent>
-    <RnTabsContent Value="display">Display settings</RnTabsContent>
-</RnTabs>
-```
-
-### Breadcrumb
-
-```razor
-<RnBreadcrumb>
-    <RnBreadcrumbItem>
-        <RnBreadcrumbLink Href="/">Home</RnBreadcrumbLink>
-    </RnBreadcrumbItem>
-    <RnBreadcrumbSeparator />
-    <RnBreadcrumbItem>
-        <RnBreadcrumbLink Href="/components">Components</RnBreadcrumbLink>
-    </RnBreadcrumbItem>
-    <RnBreadcrumbSeparator />
-    <RnBreadcrumbItem>
-        <RnBreadcrumbPage>Breadcrumb</RnBreadcrumbPage>
-    </RnBreadcrumbItem>
-</RnBreadcrumb>
-```
-
-### Pagination
-
-```razor
-<RnPagination @bind-CurrentPage="_page" TotalPages="10" />
 ```
 
 ### Dialog
@@ -565,294 +263,34 @@ Default와 Line 변형, 가로/세로 방향을 지원합니다.
         <RnButton OnClick="Save">Save Changes</RnButton>
     </RnDialogFooter>
 </RnDialog>
-
-@* Close 버튼 숨기기 *@
-<RnDialog @bind-Open="_dialog2" ShowCloseButton="false">
-    <RnDialogHeader>
-        <RnDialogTitle>Custom Dialog</RnDialogTitle>
-    </RnDialogHeader>
-    <p>This dialog has no close button.</p>
-</RnDialog>
 ```
 
-### AlertDialog
-
-사용자 확인이 필요한 중요한 액션에 사용합니다. 오버레이 클릭으로 닫히지 않습니다.
+### DataTable
 
 ```razor
-<RnButton Variant="ButtonVariant.Destructive" OnClick="() => _alertOpen = true">
-    Delete Account
-</RnButton>
-
-<RnAlertDialog @bind-Open="_alertOpen">
-    <RnAlertDialogHeader>
-        <RnAlertDialogTitle>Are you absolutely sure?</RnAlertDialogTitle>
-        <RnAlertDialogDescription>
-            This action cannot be undone. This will permanently delete your account.
-        </RnAlertDialogDescription>
-    </RnAlertDialogHeader>
-    <RnAlertDialogFooter>
-        <RnButton Variant="ButtonVariant.Outline" OnClick="() => _alertOpen = false">Cancel</RnButton>
-        <RnButton Variant="ButtonVariant.Destructive" OnClick="DeleteAccount">Delete</RnButton>
-    </RnAlertDialogFooter>
-</RnAlertDialog>
+<RnDataTable TItem="PaymentRecord"
+             Items="_payments"
+             SelectionMode="SelectionMode.Multiple"
+             PageSize="10">
+    <Columns>
+        <RnDataTableColumn TItem="PaymentRecord" Property="x => x.Id" Title="ID" Sortable />
+        <RnDataTableColumn TItem="PaymentRecord" Property="x => x.Name" Title="Name" Sortable Filterable />
+        <RnDataTableColumn TItem="PaymentRecord" Property="x => x.Amount" Title="Amount" Sortable>
+            <CellTemplate Context="item">
+                <div class="text-right font-medium">@item.Amount.ToString("C")</div>
+            </CellTemplate>
+        </RnDataTableColumn>
+    </Columns>
+</RnDataTable>
 ```
 
-### Sheet
-
-화면 가장자리에서 슬라이드되는 패널입니다. Top, Bottom, Left, Right 방향을 지원합니다.
-
-```razor
-<RnButton OnClick="() => _sheetOpen = true">Open Sheet</RnButton>
-
-<RnSheet @bind-Open="_sheetOpen" Side="Side.Right">
-    <RnSheetHeader>
-        <RnSheetTitle>Edit Profile</RnSheetTitle>
-        <RnSheetDescription>Make changes to your profile.</RnSheetDescription>
-    </RnSheetHeader>
-    <div class="py-4">
-        <RnInput Placeholder="Name" @bind-Value="_name" />
-    </div>
-    <RnSheetFooter>
-        <RnButton OnClick="() => _sheetOpen = false">Save</RnButton>
-    </RnSheetFooter>
-</RnSheet>
-
-@* Left side sheet *@
-<RnSheet @bind-Open="_menuOpen" Side="Side.Left" ShowCloseButton="false">
-    <RnSheetHeader>
-        <RnSheetTitle>Navigation</RnSheetTitle>
-    </RnSheetHeader>
-    <nav>Menu items here</nav>
-</RnSheet>
-```
-
-### Popover
-
-```razor
-<RnPopover Side="Side.Bottom" Align="Alignment.Start">
-    <Trigger>
-        <RnButton Variant="ButtonVariant.Outline">Open Popover</RnButton>
-    </Trigger>
-    <ChildContent>
-        <div class="space-y-2 p-4">
-            <h4 class="font-medium">Dimensions</h4>
-            <RnInput Placeholder="Width" @bind-Value="_width" />
-            <RnInput Placeholder="Height" @bind-Value="_height" />
-        </div>
-    </ChildContent>
-</RnPopover>
-```
-
-### Tooltip
-
-```razor
-<RnTooltip Side="Side.Top">
-    <Trigger>
-        <RnButton Variant="ButtonVariant.Outline">Hover me</RnButton>
-    </Trigger>
-    <ChildContent>
-        <p>This is the tooltip content.</p>
-    </ChildContent>
-</RnTooltip>
-
-@* 방향별 *@
-<RnTooltip Side="Side.Bottom">
-    <Trigger><RnButton>Bottom</RnButton></Trigger>
-    <ChildContent><p>Bottom tooltip</p></ChildContent>
-</RnTooltip>
-
-<RnTooltip Side="Side.Left">
-    <Trigger><RnButton>Left</RnButton></Trigger>
-    <ChildContent><p>Left tooltip</p></ChildContent>
-</RnTooltip>
-```
-
-### HoverCard
-
-```razor
-<RnHoverCard Side="Side.Bottom" Align="Alignment.Start">
-    <Trigger>
-        <a href="#" class="underline">@shadcn</a>
-    </Trigger>
-    <ChildContent>
-        <div class="flex gap-4">
-            <RnAvatar Src="/images/user.jpg" />
-            <div>
-                <h4 class="font-semibold">shadcn</h4>
-                <p class="text-sm text-muted-foreground">
-                    Creator of shadcn/ui and taxonomy.
-                </p>
-            </div>
-        </div>
-    </ChildContent>
-</RnHoverCard>
-```
-
-### DropdownMenu
-
-```razor
-<RnDropdownMenu Side="Side.Bottom" Align="Alignment.End">
-    <Trigger>
-        <RnButton Variant="ButtonVariant.Outline">Open Menu</RnButton>
-    </Trigger>
-    <ChildContent>
-        <RnDropdownMenuLabel>My Account</RnDropdownMenuLabel>
-        <RnDropdownMenuSeparator />
-        <RnDropdownMenuItem OnClick="GoToProfile">Profile</RnDropdownMenuItem>
-        <RnDropdownMenuItem OnClick="GoToSettings">Settings</RnDropdownMenuItem>
-        <RnDropdownMenuSeparator />
-        <RnDropdownMenuItem Variant="destructive" OnClick="Logout">Log out</RnDropdownMenuItem>
-    </ChildContent>
-</RnDropdownMenu>
-```
-
-### ContextMenu
-
-우클릭(컨텍스트 메뉴)으로 열리는 메뉴입니다.
-
-```razor
-<RnContextMenu>
-    <Trigger>
-        <div class="flex h-32 w-full items-center justify-center rounded-md border border-dashed">
-            Right click here
-        </div>
-    </Trigger>
-    <ChildContent>
-        <RnDropdownMenuItem OnClick="Cut">Cut</RnDropdownMenuItem>
-        <RnDropdownMenuItem OnClick="Copy">Copy</RnDropdownMenuItem>
-        <RnDropdownMenuItem OnClick="Paste">Paste</RnDropdownMenuItem>
-    </ChildContent>
-</RnContextMenu>
-```
-
-### Accordion
-
-단일 선택 / 다중 선택 모드를 지원합니다.
-
-```razor
-@* 단일 선택 (기본) *@
-<RnAccordion @bind-ExpandedItem="_expandedItem">
-    <RnAccordionItem Value="item-1">
-        <RnAccordionTrigger>Is it accessible?</RnAccordionTrigger>
-        <RnAccordionContent>
-            Yes. It adheres to the WAI-ARIA design pattern.
-        </RnAccordionContent>
-    </RnAccordionItem>
-    <RnAccordionItem Value="item-2">
-        <RnAccordionTrigger>Is it styled?</RnAccordionTrigger>
-        <RnAccordionContent>
-            Yes. It comes with default styles using Tailwind CSS.
-        </RnAccordionContent>
-    </RnAccordionItem>
-    <RnAccordionItem Value="item-3">
-        <RnAccordionTrigger>Is it animated?</RnAccordionTrigger>
-        <RnAccordionContent>
-            Yes. It uses CSS transitions for smooth open/close animations.
-        </RnAccordionContent>
-    </RnAccordionItem>
-</RnAccordion>
-
-@* 다중 선택 *@
-<RnAccordion Multiple="true">
-    <RnAccordionItem Value="a">
-        <RnAccordionTrigger>Section A</RnAccordionTrigger>
-        <RnAccordionContent>Content A</RnAccordionContent>
-    </RnAccordionItem>
-    <RnAccordionItem Value="b">
-        <RnAccordionTrigger>Section B</RnAccordionTrigger>
-        <RnAccordionContent>Content B</RnAccordionContent>
-    </RnAccordionItem>
-</RnAccordion>
-```
-
-### Collapsible
-
-```razor
-<RnCollapsible @bind-Open="_isOpen">
-    <Trigger>
-        <RnButton Variant="ButtonVariant.Ghost">
-            Toggle Content @(_isOpen ? "▲" : "▼")
-        </RnButton>
-    </Trigger>
-    <ChildContent>
-        <div class="rounded-md border p-4">
-            This content can be toggled on and off.
-        </div>
-    </ChildContent>
-</RnCollapsible>
-```
-
-### Separator
-
-```razor
-@* Horizontal (기본) *@
-<RnSeparator />
-
-@* Vertical *@
-<div class="flex h-5 items-center space-x-4">
-    <span>Blog</span>
-    <RnSeparator Orientation="Orientation.Vertical" />
-    <span>Docs</span>
-    <RnSeparator Orientation="Orientation.Vertical" />
-    <span>Source</span>
-</div>
-```
-
-### AspectRatio
-
-```razor
-@* 16:9 (기본) *@
-<RnAspectRatio>
-    <img src="/images/photo.jpg" alt="Photo" class="object-cover w-full h-full rounded-md" />
-</RnAspectRatio>
-
-@* 4:3 *@
-<RnAspectRatio Ratio="4.0/3.0">
-    <img src="/images/photo.jpg" alt="Photo" class="object-cover w-full h-full" />
-</RnAspectRatio>
-
-@* 1:1 (정사각형) *@
-<RnAspectRatio Ratio="1">
-    <img src="/images/photo.jpg" alt="Photo" class="object-cover w-full h-full rounded-full" />
-</RnAspectRatio>
-```
-
-### ScrollArea
-
-```razor
-<RnScrollArea Class="h-[200px] rounded-md border">
-    <div class="p-4">
-        @for (int i = 1; i <= 50; i++)
-        {
-            <p>Item @i</p>
-        }
-    </div>
-</RnScrollArea>
-```
-
-### Kbd
-
-```razor
-<p>Press <RnKbd>Ctrl</RnKbd> + <RnKbd>S</RnKbd> to save</p>
-<p>Press <RnKbd>⌘</RnKbd> + <RnKbd>K</RnKbd> to search</p>
-```
-
-### Empty
-
-```razor
-<RnEmpty>
-    <p class="text-lg font-medium">No results found</p>
-    <p class="text-sm text-muted-foreground">Try adjusting your search or filters.</p>
-    <RnButton Class="mt-4" Variant="ButtonVariant.Outline">Clear Filters</RnButton>
-</RnEmpty>
-```
+> For more examples, visit the [Demo Site](https://daeha76.github.io/RnUI/).
 
 ---
 
 ## Customization
 
-RnUI는 CSS 커스텀 프로퍼티를 사용하여 테마를 구성합니다. 아래 변수를 오버라이드하여 색상을 커스터마이즈할 수 있습니다:
+RnUI uses CSS custom properties for theming. Override the following variables to customize colors:
 
 ```css
 :root {
@@ -874,26 +312,31 @@ RnUI는 CSS 커스텀 프로퍼티를 사용하여 테마를 구성합니다. �
 
 ## Demo
 
-데모 앱이 `src/Daeha.RnUI.Demo`에 포함되어 있습니다:
+**Online demo**: [https://daeha76.github.io/RnUI/](https://daeha76.github.io/RnUI/)
+
+To run the demo locally, use the `Daeha.RnUI.Demo.Wasm` project:
 
 ```bash
-cd src/Daeha.RnUI.Demo
-dotnet run
+# Build demo CSS
+cd src/Daeha.RnUI.Demo.Wasm && npm install && npm run build:css
+
+# Run the demo
+dotnet run --project src/Daeha.RnUI.Demo.Wasm
 ```
 
-브라우저에서 `https://localhost:7100`을 열어 모든 컴포넌트를 확인할 수 있습니다.
+Open `https://localhost:7256` in your browser to explore all components.
 
 ---
 
 ## Contributing
 
-기여를 환영합니다! 이슈나 풀 리퀘스트를 자유롭게 제출해 주세요.
+Contributions are welcome! Feel free to submit issues or pull requests.
 
-1. 이 저장소를 Fork합니다
-2. 피처 브랜치를 생성합니다 (`git checkout -b feature/amazing-feature`)
-3. 변경 사항을 커밋합니다 (`git commit -m 'feat: Add amazing feature'`)
-4. 브랜치에 Push합니다 (`git push origin feature/amazing-feature`)
-5. Pull Request를 생성합니다
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ---
 
