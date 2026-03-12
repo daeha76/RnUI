@@ -178,10 +178,15 @@ public class Rn{Name}Tests : BunitContext
 
 컴포넌트/블록 추가 또는 수정 시 반드시 아래 문서를 함께 업데이트:
 
-1. `README.md` — Components 테이블 + Usage Examples
-2. `.agents/knowledge/component-catalog.md` — 컴포넌트 목록
-3. `.agents/knowledge/block-catalog.md` — 블록 목록 (해당 시)
-4. 데모 코드블록 (`DataTable01Demo` 등) — 사용법 코드
+1. `README.md` — Components 테이블 + Usage Examples (영문)
+2. `docs/README.ko.md` — 한국어 README
+3. `docs/README.zh-CN.md` — 중국어 README
+4. `docs/README.es.md` — 스페인어 README
+5. `docs/README.de.md` — 독일어 README
+6. `docs/README.ja.md` — 일본어 README
+7. `.agents/knowledge/component-catalog.md` — 컴포넌트 목록
+8. `.agents/knowledge/block-catalog.md` — 블록 목록 (해당 시)
+9. 데모 코드블록 (`DataTable01Demo` 등) — 사용법 코드
 
 ## 버전 관리
 
