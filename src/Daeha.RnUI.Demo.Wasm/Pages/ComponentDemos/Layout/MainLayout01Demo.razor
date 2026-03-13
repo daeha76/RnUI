@@ -1,0 +1,77 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Main Layout 01", "main-layout-01",
+        "A three-slot layout (Header / Content / Footer) designed for use inside RnSidebarInset. Content scrolls while header and footer stay pinned.",
+        Demo: @<div class="w-full rounded-xl border bg-sidebar" style="height: 360px;">
+                <RnMainLayout01>
+                    <Header>
+                        <div class="flex h-10 items-center gap-2 border-b bg-background px-4 rounded-t-xl">
+                            <RnIcon Icon="RnIcons.Menu" Size="16" CssClass="text-muted-foreground" />
+                            <RnSeparator Orientation="Orientation.Vertical" Class="h-4" />
+                            <span class="text-sm text-muted-foreground">Header slot (breadcrumb, toolbar, etc.)</span>
+                        </div>
+                    </Header>
+                    <ChildContent>
+                        <div class="space-y-4 p-4">
+                            @for (var i = 1; i <= 12; i++)
+                            {
+                                <div class="rounded-lg border bg-card p-4 text-sm text-muted-foreground">
+                                    Content block @i — scroll to see more
+                                </div>
+                            }
+                        </div>
+                    </ChildContent>
+                    <Footer>
+                        <div class="border-t bg-muted/30 px-4 py-2 rounded-b-xl">
+                            <span class="text-xs text-muted-foreground">Footer slot (always pinned to bottom)</span>
+                        </div>
+                    </Footer>
+                </RnMainLayout01>
+            </div>,
+        Thumbnail: @<div class="flex flex-col w-[120px] h-[80px] rounded-md border overflow-hidden text-[10px]">
+                <div class="shrink-0 border-b px-2 py-1 bg-background">Header</div>
+                <div class="flex-1 bg-muted/20 px-2 py-1 text-muted-foreground overflow-hidden">Content...</div>
+                <div class="shrink-0 border-t px-2 py-1 bg-muted/30">Footer</div>
+            </div>,
+        Code: @"<RnSidebarInset>
+    <RnMainLayout01>
+        <Header>
+            <div class=""flex h-12 items-center gap-2 border-b bg-background px-4"">
+                <RnSidebarTrigger />
+                <RnBreadcrumb>...</RnBreadcrumb>
+            </div>
+        </Header>
+        <ChildContent>
+            <div class=""p-4"">
+                @Body
+            </div>
+        </ChildContent>
+        <Footer>
+            <div class=""border-t bg-muted/30 px-4 py-2"">
+                &copy; 2026 My App
+            </div>
+        </Footer>
+    </RnMainLayout01>
+</RnSidebarInset>",
+        UsageCode: @"<RnMainLayout01>
+    <Header>
+        @* Pinned header (breadcrumbs, toolbar) *@
+    </Header>
+    <ChildContent>
+        @* Scrollable content *@
+    </ChildContent>
+    <Footer>
+        @* Pinned footer *@
+    </Footer>
+</RnMainLayout01>
+
+@* Parameters:
+    Header        RenderFragment?   Pinned top slot
+    ChildContent  RenderFragment?   Scrollable content
+    Footer        RenderFragment?   Pinned bottom slot
+    Class         string?           Additional CSS classes
+*@"
+    );
+}

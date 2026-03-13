@@ -1,0 +1,42 @@
+@* RnMainLayout01 — Header / Content (scrollable) / Footer layout for SidebarInset *@
+
+<div data-slot="main-layout-01"
+     class="@CssUtils.Cn("cn-main-layout-01", Class)"
+     @attributes="AdditionalAttributes">
+
+    @if (Header is not null)
+    {
+        <header data-slot="main-layout-01-header" class="cn-main-layout-01-header">
+            @Header
+        </header>
+    }
+
+    <div data-slot="main-layout-01-content" class="cn-main-layout-01-content">
+        @ChildContent
+    </div>
+
+    @if (Footer is not null)
+    {
+        <footer data-slot="main-layout-01-footer" class="cn-main-layout-01-footer">
+            @Footer
+        </footer>
+    }
+</div>
+
+@code {
+    /// <summary>Header slot (pinned top, e.g. breadcrumb bar).</summary>
+    [Parameter] public RenderFragment? Header { get; set; }
+
+    /// <summary>Main scrollable content area.</summary>
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Footer slot (pinned bottom).</summary>
+    [Parameter] public RenderFragment? Footer { get; set; }
+
+    /// <summary>Additional CSS classes on the root element.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    /// <summary>Captured unmatched HTML attributes.</summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}
