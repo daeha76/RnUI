@@ -163,6 +163,7 @@ npm run build:css   # 本番用（一回限りのビルド）
 | `RnPagination` | ページネーション | [Live](https://daeha76.github.io/RnUI/components/pagination) |
 | `RnNavigationMenu` | ナビゲーションメニュー | [Live](https://daeha76.github.io/RnUI/components/navigation-menu) |
 | `RnSidebar` | サイドバー（Header, Content, Footer, Group, Menu） | [Live](https://daeha76.github.io/RnUI/components/sidebar) |
+| `RnMainLayout01` | 3スロットレイアウト（Header/Content/Footer）、RnSidebarInset 内で使用 | [Live](https://daeha76.github.io/RnUI/components/main-layout-01) |
 | `RnMenubar` | メニューバー | [Live](https://daeha76.github.io/RnUI/components/menubar) |
 
 ### オーバーレイ

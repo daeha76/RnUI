@@ -165,6 +165,7 @@ npm run build:css   # 프로덕션 (일회성 빌드)
 | `RnPagination` | 페이지네이션 | [Live](https://daeha76.github.io/RnUI/components/pagination) |
 | `RnNavigationMenu` | 내비게이션 메뉴 | [Live](https://daeha76.github.io/RnUI/components/navigation-menu) |
 | `RnSidebar` | 사이드바 (Header, Content, Footer, Group, Menu) | [Live](https://daeha76.github.io/RnUI/components/sidebar) |
+| `RnMainLayout01` | 3슬롯 레이아웃 (Header/Content/Footer), RnSidebarInset 내부에서 사용 | [Live](https://daeha76.github.io/RnUI/components/main-layout-01) |
 | `RnMenubar` | 메뉴바 | [Live](https://daeha76.github.io/RnUI/components/menubar) |
 
 ### 오버레이

@@ -163,6 +163,7 @@ npm run build:css   # Producción (compilación única)
 | `RnPagination` | Paginación | [Ver](https://daeha76.github.io/RnUI/components/pagination) |
 | `RnNavigationMenu` | Menú de navegación | [Ver](https://daeha76.github.io/RnUI/components/navigation-menu) |
 | `RnSidebar` | Barra lateral (Header, Content, Footer, Group, Menu) | [Ver](https://daeha76.github.io/RnUI/components/sidebar) |
+| `RnMainLayout01` | Diseño de tres ranuras (Header/Content/Footer) para usar dentro de RnSidebarInset | [Ver](https://daeha76.github.io/RnUI/components/main-layout-01) |
 | `RnMenubar` | Barra de menú | [Ver](https://daeha76.github.io/RnUI/components/menubar) |
 
 ### Superposiciones

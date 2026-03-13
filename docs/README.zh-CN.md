@@ -163,6 +163,7 @@ npm run build:css   # 生产环境（一次性构建）
 | `RnPagination` | 分页器 | [查看](https://daeha76.github.io/RnUI/components/pagination) |
 | `RnNavigationMenu` | 导航菜单 | [查看](https://daeha76.github.io/RnUI/components/navigation-menu) |
 | `RnSidebar` | 侧边栏（Header、Content、Footer、Group、Menu） | [查看](https://daeha76.github.io/RnUI/components/sidebar) |
+| `RnMainLayout01` | 三插槽布局（Header/Content/Footer），用于 RnSidebarInset 内部 | [查看](https://daeha76.github.io/RnUI/components/main-layout-01) |
 | `RnMenubar` | 菜单栏 | [查看](https://daeha76.github.io/RnUI/components/menubar) |
 
 ### 覆盖层

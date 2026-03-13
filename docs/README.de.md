@@ -163,6 +163,7 @@ npm run build:css   # Produktion (einmaliger Build)
 | `RnPagination` | Seitennavigation | [Live](https://daeha76.github.io/RnUI/components/pagination) |
 | `RnNavigationMenu` | Navigationsmenue | [Live](https://daeha76.github.io/RnUI/components/navigation-menu) |
 | `RnSidebar` | Seitenleiste (Header, Content, Footer, Group, Menu) | [Live](https://daeha76.github.io/RnUI/components/sidebar) |
+| `RnMainLayout01` | Drei-Slot-Layout (Header/Content/Footer) fuer die Verwendung in RnSidebarInset | [Live](https://daeha76.github.io/RnUI/components/main-layout-01) |
 | `RnMenubar` | Menuezeile | [Live](https://daeha76.github.io/RnUI/components/menubar) |
 
 ### Overlays

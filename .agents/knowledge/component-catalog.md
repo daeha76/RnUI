@@ -52,6 +52,7 @@
 
 | 컴포넌트 | 파일 | Variant/Size | 패턴 |
 |----------|------|-------------|------|
+| **MainLayout01** | RnMainLayout01 | — | Composite |
 | **Dialog** | RnDialog + Header/Title/Description/Footer | — | Overlay |
 | **AlertDialog** | RnAlertDialog + Header/Title/Description/Footer | — | Overlay |
 | **Sheet** | RnSheet + Header/Title/Description/Footer | — | Overlay |
