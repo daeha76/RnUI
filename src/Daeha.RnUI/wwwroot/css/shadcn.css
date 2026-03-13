@@ -2625,6 +2625,12 @@
 .cn-select-value[data-placeholder] {
   color: var(--color-muted-foreground);
 }
+.cn-dropdown-menu-trigger {
+  cursor: pointer;
+  & * {
+    cursor: pointer;
+  }
+}
 .cn-dropdown-menu-content {
   z-index: 50;
   min-width: 8rem;
@@ -2654,8 +2660,21 @@
     outline: 2px solid transparent;
     outline-offset: 2px;
   }
+  transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
+  transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+  transition-duration: var(--tw-duration, var(--default-transition-duration));
   -webkit-user-select: none;
   user-select: none;
+  &:hover {
+    @media (hover: hover) {
+      background-color: var(--color-accent);
+    }
+  }
+  &:hover {
+    @media (hover: hover) {
+      color: var(--color-accent-foreground);
+    }
+  }
   &:focus {
     background-color: var(--color-accent);
   }
@@ -4689,11 +4708,24 @@
     color: var(--color-sidebar-accent-foreground);
   }
 }
+[data-variant="inset"] > .cn-sidebar-gap.cn-sidebar-gap-inset {
+  width: var(--sidebar-width);
+}
+[data-variant="inset"] > .cn-sidebar-container-floating {
+  padding-right: 0;
+}
+[data-variant="inset"][data-side="right"] > .cn-sidebar-container-floating {
+  padding-right: 0.5rem;
+  padding-left: 0;
+}
 [data-collapsible="icon"][data-state="collapsed"] > .cn-sidebar-gap {
   width: var(--sidebar-width-icon);
 }
 [data-collapsible="icon"][data-state="collapsed"] > .cn-sidebar-gap.cn-sidebar-gap-inset {
   width: calc(var(--sidebar-width-icon) + 1rem);
+}
+[data-variant="inset"][data-collapsible="icon"][data-state="collapsed"] > .cn-sidebar-gap.cn-sidebar-gap-inset {
+  width: var(--sidebar-width-icon);
 }
 [data-collapsible="icon"][data-state="collapsed"] > .cn-sidebar-container {
   width: var(--sidebar-width-icon);
@@ -4884,6 +4916,29 @@
   cursor: not-allowed;
   color: var(--color-muted-foreground);
   opacity: 50%;
+}
+.cn-calendar[data-size="sm"] {
+  padding: calc(var(--spacing) * 2);
+}
+.cn-calendar[data-size="sm"] .cn-calendar-nav-button {
+  width: calc(var(--spacing) * 7);
+  height: calc(var(--spacing) * 7);
+}
+.cn-calendar[data-size="sm"] .cn-calendar-caption {
+  font-size: var(--text-xs);
+  line-height: var(--tw-leading, var(--text-xs--line-height));
+}
+.cn-calendar[data-size="sm"] .cn-calendar-weekday {
+  height: calc(var(--spacing) * 7);
+  width: calc(var(--spacing) * 7);
+  font-size: var(--text-xs);
+  line-height: var(--tw-leading, var(--text-xs--line-height));
+}
+.cn-calendar[data-size="sm"] .cn-calendar-day {
+  width: calc(var(--spacing) * 7);
+  height: calc(var(--spacing) * 7);
+  font-size: var(--text-xs);
+  line-height: var(--tw-leading, var(--text-xs--line-height));
 }
 .cn-carousel {
   position: relative;

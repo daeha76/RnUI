@@ -693,13 +693,20 @@
 }
 
 /* Dropdown Menu */
+.cn-dropdown-menu-trigger {
+  cursor: pointer;
+  & * {
+    cursor: pointer;
+  }
+}
+
 .cn-dropdown-menu-content {
   @apply z-50 min-w-[8rem] overflow-hidden rounded-md bg-popover p-1 text-popover-foreground shadow-md;
   border: 1px solid var(--color-border-subtle);
 }
 
 .cn-dropdown-menu-item {
-  @apply relative flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground;
+  @apply relative flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground;
 }
 
 .cn-dropdown-menu-item[data-variant="destructive"] {
@@ -1375,6 +1382,22 @@
   @apply flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground outline-hidden ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground text-sm data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground;
 }
 
+/* ── Inset Variant: flush against content ──────────────────────────────────── */
+/* Remove the right gap between sidebar and content for left-side inset */
+[data-variant="inset"] > .cn-sidebar-gap.cn-sidebar-gap-inset {
+  width: var(--sidebar-width);
+}
+
+[data-variant="inset"] > .cn-sidebar-container-floating {
+  padding-right: 0;
+}
+
+/* Right-side inset: remove left gap instead */
+[data-variant="inset"][data-side="right"] > .cn-sidebar-container-floating {
+  padding-right: 0.5rem;
+  padding-left: 0;
+}
+
 /* ── Icon Collapsible Mode ─────────────────────────────────────────────────── */
 /* When sidebar is collapsed in icon mode, shrink to icon-only width */
 
@@ -1384,6 +1407,11 @@
 
 [data-collapsible="icon"][data-state="collapsed"] > .cn-sidebar-gap.cn-sidebar-gap-inset {
   width: calc(var(--sidebar-width-icon) + theme(spacing.4));
+}
+
+/* Inset variant: no extra gap in icon collapsed mode */
+[data-variant="inset"][data-collapsible="icon"][data-state="collapsed"] > .cn-sidebar-gap.cn-sidebar-gap-inset {
+  width: var(--sidebar-width-icon);
 }
 
 [data-collapsible="icon"][data-state="collapsed"] > .cn-sidebar-container {
@@ -1498,6 +1526,27 @@
 
 .cn-calendar-day-disabled {
   @apply text-muted-foreground opacity-50 cursor-not-allowed;
+}
+
+/* Calendar Sm size variant */
+.cn-calendar[data-size="sm"] {
+  @apply p-2;
+}
+
+.cn-calendar[data-size="sm"] .cn-calendar-nav-button {
+  @apply size-7;
+}
+
+.cn-calendar[data-size="sm"] .cn-calendar-caption {
+  @apply text-xs;
+}
+
+.cn-calendar[data-size="sm"] .cn-calendar-weekday {
+  @apply h-7 w-7 text-xs;
+}
+
+.cn-calendar[data-size="sm"] .cn-calendar-day {
+  @apply size-7 text-xs;
 }
 
 /* Carousel */

@@ -1,6 +1,6 @@
 @* RnCalendar component - Blazor port of shadcn/ui Calendar *@
 
-<div data-slot="calendar" class="@CssUtils.Cn("cn-calendar", Class)" @attributes="AdditionalAttributes">
+<div data-slot="calendar" data-size="@SizeValue" class="@ComputedClass" @attributes="AdditionalAttributes">
     @* Header: month navigation *@
     <div class="cn-calendar-nav">
         <button type="button" class="cn-calendar-nav-button" @onclick="PreviousMonth">
@@ -59,10 +59,17 @@
     /// <summary>Maximum selectable date (inclusive).</summary>
     [Parameter] public DateTime? MaxDate { get; set; }
 
+    /// <summary>Size of the calendar.</summary>
+    [Parameter] public ComponentSize Size { get; set; } = ComponentSize.Default;
+
     /// <summary>Additional CSS classes.</summary>
     [Parameter] public string? Class { get; set; }
 
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string SizeValue => Size == ComponentSize.Sm ? "sm" : "default";
+
+    private string ComputedClass => CssUtils.Cn("cn-calendar", Class);
 
     private DateTime _displayMonth;
 

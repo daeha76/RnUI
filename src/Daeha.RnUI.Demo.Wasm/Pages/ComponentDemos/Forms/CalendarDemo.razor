@@ -3,11 +3,21 @@
 @code {
     public static ComponentDemo GetDemo() => new(
         "Calendar", "calendar", "A date field component that allows users to enter and edit date.",
-        Demo: @<div>
-                <RnCalendar />
+        Demo: @<div class="flex items-start gap-8">
+                <div>
+                    <p class="text-sm text-muted-foreground mb-2">Default</p>
+                    <RnCalendar />
+                </div>
+                <div>
+                    <p class="text-sm text-muted-foreground mb-2">Small</p>
+                    <RnCalendar Size="ComponentSize.Sm" />
+                </div>
             </div>,
         Thumbnail: @<div class="text-xs text-muted-foreground">Calendar</div>,
         Code: @"<RnCalendar @bind-Selected=""_date"" />
+
+@* Small size — ideal for sidebars *@
+<RnCalendar @bind-Selected=""_date"" Size=""ComponentSize.Sm"" />
 
 @code {
     private DateTime? _date;
@@ -15,6 +25,9 @@
         UsageCode: @"@using RnUI.Components.UI.Calendar
 
 <RnCalendar @bind-Selected=""_date"" />
+
+@* Small size — ideal for sidebars *@
+<RnCalendar @bind-Selected=""_date"" Size=""ComponentSize.Sm"" />
 
 @code {
     private DateTime? _date;
