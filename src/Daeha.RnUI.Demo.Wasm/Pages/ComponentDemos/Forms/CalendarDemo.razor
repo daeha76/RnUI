@@ -12,12 +12,19 @@
                     <p class="text-sm text-muted-foreground mb-2">Small</p>
                     <RnCalendar Size="ComponentSize.Sm" />
                 </div>
+                 <div>
+                    <p class="text-sm text-muted-foreground mb-2">Extra Small</p>
+                    <RnCalendar Size="ComponentSize.Xs" />
+                </div>
             </div>,
         Thumbnail: @<div class="text-xs text-muted-foreground">Calendar</div>,
         Code: @"<RnCalendar @bind-Selected=""_date"" />
 
 @* Small size — ideal for sidebars *@
 <RnCalendar @bind-Selected=""_date"" Size=""ComponentSize.Sm"" />
+
+@* Extra Small size *@
+<RnCalendar @bind-Selected=""_date"" Size=""ComponentSize.Xs"" />
 
 @code {
     private DateTime? _date;
@@ -28,6 +35,9 @@
 
 @* Small size — ideal for sidebars *@
 <RnCalendar @bind-Selected=""_date"" Size=""ComponentSize.Sm"" />
+
+@* Extra Small size *@
+<RnCalendar @bind-Selected=""_date"" Size=""ComponentSize.Xs"" />
 
 @code {
     private DateTime? _date;

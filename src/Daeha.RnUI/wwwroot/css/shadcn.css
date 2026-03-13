@@ -4804,6 +4804,7 @@
   display: inline-flex;
   width: calc(var(--spacing) * 8);
   height: calc(var(--spacing) * 8);
+  cursor: pointer;
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-md);
@@ -4868,6 +4869,7 @@
   display: inline-flex;
   width: calc(var(--spacing) * 8);
   height: calc(var(--spacing) * 8);
+  cursor: pointer;
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-md);
