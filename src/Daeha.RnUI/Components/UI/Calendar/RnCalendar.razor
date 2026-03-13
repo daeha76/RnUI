@@ -67,7 +67,12 @@
 
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
-    private string SizeValue => Size == ComponentSize.Sm ? "sm" : "default";
+    private string SizeValue => Size switch
+    {
+        ComponentSize.Xs => "xs",
+        ComponentSize.Sm => "sm",
+        _ => "default"
+    };
 
     private string ComputedClass => CssUtils.Cn("cn-calendar", Class);
 

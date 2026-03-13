@@ -28,6 +28,7 @@ public enum Orientation
 public enum ComponentSize
 {
     Default,
+    Xs,
     Sm,
     Lg
 }
