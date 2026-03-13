@@ -17,7 +17,7 @@
     </div>
 
     @* Day headers *@
-    <div class="cn-calendar-weekdays border-b border-muted pb-2 pt-2">
+    <div class="cn-calendar-weekdays">
         @foreach (var day in new[] { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" })
         {
             <div class="p-2 text-center text-sm font-medium text-muted-foreground w-full">@day</div>
@@ -25,7 +25,7 @@
     </div>
 
     @* Day grid *@
-    <div class="cn-calendar-grid">
+    <div class="cn-calendar-grid border-t border-border">
         @foreach (var date in GetCalendarDays())
         {
             var isCurrentMonth = date.Month == _displayMonth.Month;
@@ -34,7 +34,10 @@
             var isDisabled = (MinDate.HasValue && date.Date < MinDate.Value.Date) ||
                              (MaxDate.HasValue && date.Date > MaxDate.Value.Date);
             var capturedDate = date;
-            var dayEvents = Events?.Where(e => e.Start.Date == capturedDate.Date).OrderBy(e => e.Start).ToList() ?? new List<RnCalendarEvent>();
+            var dayEvents = Events?.Where(e => e.Start.Date == capturedDate.Date).OrderBy(e => !e.IsAllDay).ThenBy(e => e.Start).ToList() ?? new List<RnCalendarEvent>();
+            
+            var displayEvents = dayEvents.Take(MaxEventsPerDay).ToList();
+            var overflowCount = dayEvents.Count - MaxEventsPerDay;
 
             <div class="@GetDayContainerClass(isCurrentMonth, isSelected, isToday, isDisabled)"
                  @onclick="() => SelectDate(capturedDate)">
@@ -44,8 +47,8 @@
                     </span>
                 </div>
                 
-                <div class="flex-1 overflow-y-auto space-y-1 pr-1 custom-scrollbar">
-                    @foreach (var ev in dayEvents)
+                <div class="flex-1 overflow-hidden space-y-1 pr-1 custom-scrollbar flex flex-col">
+                    @foreach (var ev in displayEvents)
                     {
                         var capturedEvent = ev;
                         <button type="button"
@@ -58,6 +61,12 @@
                             }
                             <span class="truncate">@ev.Title</span>
                         </button>
+                    }
+                    @if (overflowCount > 0)
+                    {
+                        <div class="text-xs text-muted-foreground font-medium pl-1 pt-0.5 select-none">
+                            + @overflowCount more
+                        </div>
                     }
                 </div>
             </div>
@@ -101,6 +110,15 @@
     /// <summary>Maximum selectable date (inclusive).</summary>
     [Parameter] public DateTime? MaxDate { get; set; }
 
+    /// <summary>Type of view to display (Month or Weeks).</summary>
+    [Parameter] public CalendarViewMode ViewMode { get; set; } = CalendarViewMode.Month;
+    
+    /// <summary>Number of weeks to display in Weeks view.</summary>
+    [Parameter] public int NumberOfWeeks { get; set; } = 1;
+
+    /// <summary>Maximum events to render before showing a '+ N more' indicator.</summary>
+    [Parameter] public int MaxEventsPerDay { get; set; } = 3;
+
     /// <summary>Additional CSS classes.</summary>
     [Parameter] public string? Class { get; set; }
 
@@ -121,19 +139,34 @@
 
     private IEnumerable<DateTime> GetCalendarDays()
     {
-        var firstOfMonth = new DateTime(_displayMonth.Year, _displayMonth.Month, 1);
-        var startDate = firstOfMonth.AddDays(-(int)firstOfMonth.DayOfWeek);
-
-        for (var i = 0; i < 42; i++)
+        if (ViewMode == CalendarViewMode.Month)
         {
-            yield return startDate.AddDays(i);
+            var firstOfMonth = new DateTime(_displayMonth.Year, _displayMonth.Month, 1);
+            var startDate = firstOfMonth.AddDays(-(int)firstOfMonth.DayOfWeek);
+
+            for (var i = 0; i < 42; i++) // 6 weeks
+            {
+                yield return startDate.AddDays(i);
+            }
+        }
+        else
+        {
+            // Weeks view: start from the Sunday of the currently selected week (or display month if none selected)
+            var referenceDate = Selected ?? _displayMonth;
+            var startDate = referenceDate.AddDays(-(int)referenceDate.DayOfWeek);
+            
+            int daysToYield = Math.Max(1, Math.Min(4, NumberOfWeeks)) * 7;
+            for (var i = 0; i < daysToYield; i++)
+            {
+                yield return startDate.AddDays(i);
+            }
         }
     }
 
     private string GetDayContainerClass(bool isCurrentMonth, bool isSelected, bool isToday, bool isDisabled)
     {
-        // EventCalendar uses a taller, custom grid cell instead of the standard button-based day
-        var classes = "min-h-[120px] p-2 border-r border-b border-muted transition-colors flex flex-col relative group cursor-pointer hover:bg-muted/30";
+        // Use a fixed height (h-32) and prevent doubling right/bottom borders
+        var classes = "h-32 p-1.5 border-r border-b border-border [&:nth-child(7n)]:border-r-0 transition-colors flex flex-col relative group cursor-pointer hover:bg-muted/30";
 
         if (isDisabled)
             classes += " opacity-50 cursor-not-allowed bg-muted/20";
@@ -199,5 +232,14 @@
     private async Task HandleEventClick(RnCalendarEvent ev)
     {
         await OnEventClicked.InvokeAsync(ev);
+    }
+}
+
+namespace RnUI.Components.UI.Calendar
+{
+    public enum CalendarViewMode
+    {
+        Month,
+        Weeks
     }
 }

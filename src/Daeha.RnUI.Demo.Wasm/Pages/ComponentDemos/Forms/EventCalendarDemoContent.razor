@@ -5,9 +5,22 @@
         <h3 class="text-lg font-medium">Team Schedule</h3>
         <span class="text-sm text-muted-foreground">Selected: @(_selectedDate?.ToString("yyyy-MM-dd") ?? "None")</span>
     </div>
+    
+    <div class="flex items-center gap-2 mb-4">
+        <label class="text-sm font-medium">View Mode:</label>
+        <select @bind="_currentViewMode" class="flex h-9 w-40 items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs focus:outline-none focus:ring-1 focus:ring-ring">
+            <option value="Month">Month</option>
+            <option value="Week1">1 Week</option>
+            <option value="Week2">2 Weeks</option>
+            <option value="Week3">3 Weeks</option>
+            <option value="Week4">4 Weeks</option>
+        </select>
+    </div>
 
     <RnEventCalendar Events="_events"
                      @bind-Selected="_selectedDate"
+                     ViewMode="_calendarViewMode"
+                     NumberOfWeeks="_numberOfWeeks"
                      OnEventClicked="HandleEventClick" />
 
     @if (_selectedEvent != null)
@@ -24,6 +37,18 @@
 @code {
     private DateTime? _selectedDate = DateTime.Today;
     private RnCalendarEvent? _selectedEvent;
+    
+    private string _currentViewMode = "Month";
+    
+    private CalendarViewMode _calendarViewMode => _currentViewMode == "Month" ? CalendarViewMode.Month : CalendarViewMode.Weeks;
+    private int _numberOfWeeks => _currentViewMode switch 
+    {
+        "Week1" => 1,
+        "Week2" => 2,
+        "Week3" => 3,
+        "Week4" => 4,
+        _ => 1
+    };
     
     private List<RnCalendarEvent> _events = new();
 
