@@ -33,7 +33,12 @@ public record RnCalendarEvent
     public bool IsAllDay { get; init; }
     
     /// <summary>
-    /// Optional CSS class for custom styling based on the event's category, status, or theme.
+    /// Color variant for the event. Uses the same color palette as Gantt BarVariant.
+    /// </summary>
+    public EventVariant Variant { get; init; } = EventVariant.Default;
+
+    /// <summary>
+    /// Optional CSS class override for custom styling. When set, takes precedence over Variant.
     /// </summary>
     public string? EventCssClass { get; init; }
 }

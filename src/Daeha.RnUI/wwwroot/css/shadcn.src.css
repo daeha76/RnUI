@@ -1579,6 +1579,306 @@
   @apply size-5 text-[0.6rem];
 }
 
+/* Event Calendar */
+.cn-event-calendar {
+  @apply rounded-lg overflow-hidden w-full bg-background flex flex-col;
+  border: 1px solid var(--color-border-subtle);
+}
+
+.cn-event-calendar-body {
+  @apply flex flex-col flex-1;
+  min-height: 21rem; /* 6 rows × 3.5rem (mobile) */
+}
+
+@media (min-width: 768px) {
+  .cn-event-calendar-body {
+    min-height: 48rem; /* 6 rows × 8rem (desktop) */
+  }
+}
+
+.cn-event-calendar-header {
+  @apply flex items-center justify-between px-4 py-3;
+}
+
+.cn-event-calendar-header .cn-calendar-caption {
+  @apply text-lg font-semibold select-none;
+}
+
+.cn-event-calendar-weekdays {
+  @apply grid grid-cols-7;
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.cn-event-calendar-weekday {
+  @apply p-2 text-center text-sm font-medium text-muted-foreground select-none;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.cn-event-calendar-grid {
+  @apply grid grid-cols-7 flex-1;
+}
+
+.cn-event-calendar-cell {
+  @apply relative flex flex-col p-1 transition-colors cursor-pointer;
+  min-height: 3.5rem;
+  border-right: 1px solid var(--color-border-subtle);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+@media (min-width: 768px) {
+  .cn-event-calendar-cell {
+    @apply p-1.5;
+    min-height: 8rem;
+  }
+}
+
+.cn-event-calendar-cell:nth-child(7n) {
+  border-right: none;
+}
+
+.cn-event-calendar-grid > .cn-event-calendar-cell:nth-last-child(-n+7) {
+  border-bottom: none;
+}
+
+.cn-event-calendar-cell:hover {
+  background: color-mix(in oklch, var(--color-muted) 30%, transparent);
+}
+
+.cn-event-calendar-cell-outside {
+  background: color-mix(in oklch, var(--color-muted) 5%, transparent);
+}
+
+.cn-event-calendar-cell-outside .cn-event-calendar-day-number {
+  @apply opacity-50;
+}
+
+.cn-event-calendar-cell-selected {
+  background: color-mix(in oklch, var(--color-accent) 10%, transparent);
+}
+
+.cn-event-calendar-cell-selected::before {
+  content: "";
+  @apply absolute inset-0 pointer-events-none z-10;
+  border: 2px solid var(--color-primary);
+}
+
+.cn-event-calendar-cell-disabled {
+  @apply opacity-50 pointer-events-none;
+  background: color-mix(in oklch, var(--color-muted) 20%, transparent);
+}
+
+.cn-event-calendar-day-number {
+  @apply inline-flex h-7 w-7 items-center justify-center rounded-full text-sm font-medium transition-colors select-none;
+}
+
+.cn-event-calendar-day-number-today {
+  @apply bg-primary text-primary-foreground;
+}
+
+.cn-event-calendar-day-number-selected {
+  @apply bg-accent text-accent-foreground;
+}
+
+/* Desktop: event list (hidden on mobile) */
+.cn-event-calendar-events {
+  @apply hidden flex-1 flex-col gap-0.5 overflow-y-auto min-h-0 min-w-0 w-full pr-0.5;
+}
+
+@media (min-width: 768px) {
+  .cn-event-calendar-events {
+    @apply flex;
+  }
+}
+
+.cn-event-calendar-events::-webkit-scrollbar {
+  width: 3px;
+}
+
+.cn-event-calendar-events::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.cn-event-calendar-events::-webkit-scrollbar-thumb {
+  background-color: color-mix(in oklch, var(--color-muted-foreground) 30%, transparent);
+  border-radius: 10px;
+}
+
+.cn-event-calendar-event {
+  @apply w-full flex items-center text-xs px-1.5 py-0.5 rounded-sm text-left transition-colors cursor-pointer min-w-0 shrink-0;
+  @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1;
+}
+
+.cn-event-calendar-event:hover {
+  filter: brightness(0.92);
+}
+
+.cn-event-calendar-event-time {
+  @apply font-medium mr-1 shrink-0;
+}
+
+.cn-event-calendar-event-title {
+  @apply truncate min-w-0;
+}
+
+/* Event variant colors — light mode */
+.cn-event-calendar-event-variant-default {
+  @apply bg-primary/20 text-primary;
+}
+
+.cn-event-calendar-event-variant-blue {
+  background-color: oklch(0.55 0.18 245 / 0.25);
+  color: oklch(0.42 0.18 245);
+}
+
+.cn-event-calendar-event-variant-green {
+  background-color: oklch(0.58 0.16 150 / 0.25);
+  color: oklch(0.42 0.16 150);
+}
+
+.cn-event-calendar-event-variant-orange {
+  background-color: oklch(0.65 0.18 55 / 0.25);
+  color: oklch(0.48 0.18 55);
+}
+
+.cn-event-calendar-event-variant-red {
+  background-color: oklch(0.55 0.22 25 / 0.25);
+  color: oklch(0.42 0.22 25);
+}
+
+.cn-event-calendar-event-variant-purple {
+  background-color: oklch(0.50 0.20 300 / 0.25);
+  color: oklch(0.38 0.20 300);
+}
+
+.cn-event-calendar-event-variant-yellow {
+  background-color: oklch(0.78 0.15 85 / 0.25);
+  color: oklch(0.45 0.12 85);
+}
+
+.cn-event-calendar-event-variant-teal {
+  background-color: oklch(0.55 0.12 195 / 0.25);
+  color: oklch(0.42 0.12 195);
+}
+
+/* Event variant colors — dark mode */
+.dark .cn-event-calendar-event-variant-default {
+  @apply bg-primary/30;
+}
+
+.dark .cn-event-calendar-event-variant-blue {
+  background-color: oklch(0.55 0.18 245 / 0.35);
+  color: oklch(0.75 0.14 245);
+}
+
+.dark .cn-event-calendar-event-variant-green {
+  background-color: oklch(0.58 0.16 150 / 0.35);
+  color: oklch(0.78 0.12 150);
+}
+
+.dark .cn-event-calendar-event-variant-orange {
+  background-color: oklch(0.65 0.18 55 / 0.35);
+  color: oklch(0.80 0.14 55);
+}
+
+.dark .cn-event-calendar-event-variant-red {
+  background-color: oklch(0.55 0.22 25 / 0.35);
+  color: oklch(0.75 0.16 25);
+}
+
+.dark .cn-event-calendar-event-variant-purple {
+  background-color: oklch(0.50 0.20 300 / 0.35);
+  color: oklch(0.75 0.14 300);
+}
+
+.dark .cn-event-calendar-event-variant-yellow {
+  background-color: oklch(0.78 0.15 85 / 0.35);
+  color: oklch(0.82 0.12 85);
+}
+
+.dark .cn-event-calendar-event-variant-teal {
+  background-color: oklch(0.55 0.12 195 / 0.35);
+  color: oklch(0.75 0.10 195);
+}
+
+.cn-event-calendar-event-variant-muted {
+  @apply bg-muted text-muted-foreground;
+}
+
+/* Mobile: dot indicators (hidden on desktop) */
+.cn-event-calendar-dots {
+  @apply flex gap-0.5 justify-center items-center h-2;
+}
+
+@media (min-width: 768px) {
+  .cn-event-calendar-dots {
+    @apply hidden;
+  }
+}
+
+.cn-event-calendar-dot {
+  @apply w-1.5 h-1.5 rounded-full;
+}
+
+.cn-event-calendar-dot-variant-default {
+  @apply bg-primary;
+}
+
+.cn-event-calendar-dot-variant-blue {
+  background-color: oklch(0.55 0.18 245);
+}
+
+.cn-event-calendar-dot-variant-green {
+  background-color: oklch(0.58 0.16 150);
+}
+
+.cn-event-calendar-dot-variant-orange {
+  background-color: oklch(0.65 0.18 55);
+}
+
+.cn-event-calendar-dot-variant-red {
+  background-color: oklch(0.55 0.22 25);
+}
+
+.cn-event-calendar-dot-variant-purple {
+  background-color: oklch(0.50 0.20 300);
+}
+
+.cn-event-calendar-dot-variant-yellow {
+  background-color: oklch(0.78 0.15 85);
+}
+
+.cn-event-calendar-dot-variant-teal {
+  background-color: oklch(0.55 0.12 195);
+}
+
+.cn-event-calendar-dot-variant-muted {
+  @apply bg-muted-foreground;
+}
+
+/* Overflow indicator */
+.cn-event-calendar-overflow {
+  @apply text-xs text-muted-foreground font-medium pl-1 pt-0.5 select-none shrink-0;
+}
+
+/* Multi-day spanning event bar */
+.cn-event-calendar-span {
+  @apply absolute left-0 right-0 flex items-center text-xs px-1.5 cursor-pointer min-w-0 z-20 overflow-hidden whitespace-nowrap;
+  height: 18px;
+  @apply focus:outline-none focus:ring-2 focus:ring-ring;
+}
+
+.cn-event-calendar-span-start {
+  @apply rounded-l-sm;
+}
+
+.cn-event-calendar-span-end {
+  @apply rounded-r-sm;
+}
+
+.cn-event-calendar-span-single {
+  @apply rounded-sm;
+}
+
 /* Carousel */
 .cn-carousel {
   @apply relative;

@@ -5,6 +5,9 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Daeha.RnUI.Demo.Wasm</RootNamespace>
+    <BlazorWebAssemblyLoadAllGlobalizationData>false</BlazorWebAssemblyLoadAllGlobalizationData>
+    <!-- Workaround: .NET 10 blazor-devserver 404s on fingerprinted PDB files -->
+    <DebugType>none</DebugType>
   </PropertyGroup>
 
   <ItemGroup>

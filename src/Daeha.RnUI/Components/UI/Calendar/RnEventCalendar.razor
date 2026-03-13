@@ -1,94 +1,156 @@
-@using RnUI.Components.UI.Calendar
+@* RnEventCalendar — Monthly event calendar grid (Naver Calendar style UI shell) *@
 
-@* RnEventCalendar component - Extension of RnCalendar for scheduling and events *@
+<div data-slot="event-calendar"
+     role="grid"
+     aria-label="Event calendar"
+     class="@ComputedClass"
+     @attributes="AdditionalAttributes">
 
-<div data-slot="calendar" data-size="event" class="@ComputedClass" @attributes="AdditionalAttributes">
-    @* Header: month navigation *@
-    <div class="cn-calendar-nav mb-4">
-        <button type="button" class="cn-calendar-nav-button" @onclick="PreviousMonth">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4"><path d="m15 18-6-6 6-6"/></svg>
+    @* Header: month navigation (reuses cn-calendar-nav styles) *@
+    <div class="cn-event-calendar-header">
+        <button type="button"
+                class="cn-calendar-nav-button"
+                aria-label="Previous month"
+                @onclick="PreviousPeriod">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" class="size-4"><path d="m15 18-6-6 6-6"/></svg>
         </button>
         <div class="cn-calendar-caption text-lg font-semibold">
             @_displayMonth.ToString("MMMM yyyy")
         </div>
-        <button type="button" class="cn-calendar-nav-button" @onclick="NextMonth">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4"><path d="m9 18 6-6-6-6"/></svg>
+        <button type="button"
+                class="cn-calendar-nav-button"
+                aria-label="Next month"
+                @onclick="NextPeriod">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" class="size-4"><path d="m9 18 6-6-6-6"/></svg>
         </button>
     </div>
 
-    @* Day headers *@
-    <div class="cn-calendar-weekdays">
-        @foreach (var day in new[] { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" })
+    @* Weekday headers *@
+    <div class="cn-event-calendar-weekdays" role="row">
+        @foreach (var day in _weekDays)
         {
-            <div class="p-2 text-center text-sm font-medium text-muted-foreground w-full">@day</div>
+            <div class="cn-event-calendar-weekday" role="columnheader">@day</div>
         }
     </div>
 
-    @* Day grid *@
-    <div class="cn-calendar-grid border-t border-border">
-        @foreach (var date in GetCalendarDays())
-        {
-            var isCurrentMonth = date.Month == _displayMonth.Month;
-            var isSelected = Selected.HasValue && date.Date == Selected.Value.Date;
-            var isToday = date.Date == DateTime.Today;
-            var isDisabled = (MinDate.HasValue && date.Date < MinDate.Value.Date) ||
-                             (MaxDate.HasValue && date.Date > MaxDate.Value.Date);
-            var capturedDate = date;
-            var dayEvents = Events?.Where(e => e.Start.Date == capturedDate.Date).OrderBy(e => !e.IsAllDay).ThenBy(e => e.Start).ToList() ?? new List<RnCalendarEvent>();
-            
-            var displayEvents = dayEvents.Take(MaxEventsPerDay).ToList();
-            var overflowCount = dayEvents.Count - MaxEventsPerDay;
+    @* Day grid — rendered week by week for multi-day span support *@
+    @{ var allDays = GetCalendarDays().ToList(); }
+    <div class="cn-event-calendar-body">
+    @for (var weekIndex = 0; weekIndex < allDays.Count / 7; weekIndex++)
+    {
+        var weekStart = allDays[weekIndex * 7];
+        var weekDays = allDays.Skip(weekIndex * 7).Take(7).ToList();
+        var spanSlots = _eventList is not null
+            ? EventCalendarLayout.CalculateWeekSlots(_eventList, weekStart, MaxEventsPerDay)
+            : Array.Empty<EventCalendarSlot>();
+        var maxSpanRow = spanSlots.Count > 0 ? spanSlots.Max(s => s.Row) + 1 : 0;
 
-            <div class="@GetDayContainerClass(isCurrentMonth, isSelected, isToday, isDisabled)"
-                 @onclick="() => SelectDate(capturedDate)">
-                <div class="flex justify-between items-start mb-1">
-                    <span class="@GetDayNumberClass(isCurrentMonth, isSelected, isToday, isDisabled)">
-                        @date.Day
-                    </span>
-                </div>
-                
-                <div class="flex-1 overflow-hidden space-y-1 pr-1 custom-scrollbar flex flex-col">
-                    @foreach (var ev in displayEvents)
-                    {
-                        var capturedEvent = ev;
-                        <button type="button"
-                                class="@GetEventClass(ev)"
-                                @onclick="() => HandleEventClick(capturedEvent)"
-                                @onclick:stopPropagation>
-                            @if (!ev.IsAllDay)
+        <div class="cn-event-calendar-grid" role="row" style="position: relative;">
+            @* Multi-day spanning bars (desktop only, positioned absolutely) *@
+            @foreach (var slot in spanSlots)
+            {
+                var capturedSlot = slot;
+                <button type="button"
+                        class="@GetSpanClass(slot)"
+                        style="@GetSpanStyle(slot)"
+                        aria-label="@GetEventAriaLabel(slot.Event)"
+                        @onclick="() => HandleEventClick(capturedSlot.Event)"
+                        @onclick:stopPropagation>
+                    <span class="cn-event-calendar-event-title">@slot.Event.Title</span>
+                </button>
+            }
+
+            @* Day cells *@
+            @foreach (var date in weekDays)
+            {
+                var isCurrentMonth = date.Month == _displayMonth.Month;
+                var isSelected = Selected.HasValue && date.Date == Selected.Value.Date;
+                var isToday = date.Date == DateTime.Today;
+                var isDisabled = (MinDate.HasValue && date.Date < MinDate.Value.Date) ||
+                                 (MaxDate.HasValue && date.Date > MaxDate.Value.Date);
+                var capturedDate = date;
+
+                var singleDayEvents = _eventList is not null
+                    ? EventCalendarLayout.GetSingleDayEvents(_eventList, date)
+                    : Array.Empty<RnCalendarEvent>();
+
+                var allDayEvents = _eventList?.Where(e =>
+                    date.Date >= e.Start.Date &&
+                    date.Date <= (e.End?.Date ?? e.Start.Date)).ToList()
+                    ?? new List<RnCalendarEvent>();
+
+                var displayEvents = singleDayEvents.Take(MaxEventsPerDay).ToList();
+                var overflowCount = singleDayEvents.Count - MaxEventsPerDay;
+
+                <div class="@GetCellClass(isCurrentMonth, isSelected, isToday, isDisabled)"
+                     role="gridcell"
+                     aria-selected="@(isSelected ? "true" : "false")"
+                     aria-disabled="@(isDisabled ? "true" : (object?)null)"
+                     aria-current="@(isToday ? "date" : (object?)null)"
+                     @onclick="() => SelectDate(capturedDate)">
+
+                    <div class="flex justify-center md:justify-start items-start">
+                        <div class="flex flex-col items-center md:items-start w-full">
+                            <span class="@GetDayNumberClass(isCurrentMonth, isSelected, isToday)">
+                                @date.Day
+                            </span>
+
+                            @* Mobile: dot indicators *@
+                            @if (allDayEvents.Count > 0)
                             {
-                                <span class="font-medium mr-1 shrink-0">@ev.Start.ToString("HH:mm")</span>
+                                <div class="cn-event-calendar-dots mt-0.5">
+                                    @foreach (var ev in allDayEvents.Take(3))
+                                    {
+                                        <div class="cn-event-calendar-dot @GetDotVariantClass(ev)"></div>
+                                    }
+                                    @if (allDayEvents.Count > 3)
+                                    {
+                                        <div class="cn-event-calendar-dot cn-event-calendar-dot-variant-muted"></div>
+                                    }
+                                </div>
                             }
-                            <span class="truncate">@ev.Title</span>
-                        </button>
-                    }
-                    @if (overflowCount > 0)
+                        </div>
+                    </div>
+
+                    @* Desktop: single-day event list *@
+                    @if (displayEvents.Count > 0 || overflowCount > 0 || maxSpanRow > 0)
                     {
-                        <div class="text-xs text-muted-foreground font-medium pl-1 pt-0.5 select-none">
-                            + @overflowCount more
+                        <div class="cn-event-calendar-events" style="@(maxSpanRow > 0 ? $"padding-top: {maxSpanRow * 20}px;" : "")">
+                            @foreach (var ev in displayEvents)
+                            {
+                                var capturedEvent = ev;
+                                <button type="button"
+                                        class="cn-event-calendar-event @GetEventVariantClass(ev)"
+                                        aria-label="@GetEventAriaLabel(ev)"
+                                        @onclick="() => HandleEventClick(capturedEvent)"
+                                        @onclick:stopPropagation>
+                                    @if (!ev.IsAllDay)
+                                    {
+                                        <span class="cn-event-calendar-event-time">@ev.Start.ToString("HH:mm")</span>
+                                    }
+                                    <span class="cn-event-calendar-event-title">@ev.Title</span>
+                                </button>
+                            }
+                            @if (overflowCount > 0)
+                            {
+                                <div class="cn-event-calendar-overflow">+ @overflowCount more</div>
+                            }
                         </div>
                     }
                 </div>
-            </div>
-        }
+            }
+        </div>
+    }
     </div>
 </div>
 
-<style>
-    /* Custom scrollbar for event cells to keep them looking clean */
-    .custom-scrollbar::-webkit-scrollbar {
-        width: 3px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-        background: transparent;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: hsl(var(--muted));
-        border-radius: 10px;
-    }
-</style>
-
 @code {
+    private static readonly string[] _weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
     /// <summary>The events to display on the calendar.</summary>
     [Parameter] public IEnumerable<RnCalendarEvent>? Events { get; set; }
 
@@ -97,7 +159,7 @@
 
     /// <summary>Callback when selected date changes.</summary>
     [Parameter] public EventCallback<DateTime?> SelectedChanged { get; set; }
-    
+
     /// <summary>Callback when an event item is clicked.</summary>
     [Parameter] public EventCallback<RnCalendarEvent> OnEventClicked { get; set; }
 
@@ -112,29 +174,32 @@
 
     /// <summary>Type of view to display (Month or Weeks).</summary>
     [Parameter] public CalendarViewMode ViewMode { get; set; } = CalendarViewMode.Month;
-    
+
     /// <summary>Number of weeks to display in Weeks view.</summary>
     [Parameter] public int NumberOfWeeks { get; set; } = 1;
 
-    /// <summary>Maximum events to render before showing a '+ N more' indicator.</summary>
+    /// <summary>Maximum events to render per day before showing overflow.</summary>
     [Parameter] public int MaxEventsPerDay { get; set; } = 3;
 
     /// <summary>Additional CSS classes.</summary>
     [Parameter] public string? Class { get; set; }
 
-    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
-    // We use cn-card to get the rounded border and shadow (per user request)
-    private string ComputedClass => CssUtils.Cn("cn-card overflow-hidden w-full bg-background", Class);
+    private string ComputedClass => CssUtils.Cn("cn-event-calendar", Class);
 
     private DateTime _displayMonth;
+    private IReadOnlyList<RnCalendarEvent>? _eventList;
 
     protected override void OnParametersSet()
     {
         if (_displayMonth == default)
         {
-            _displayMonth = new DateTime(DisplayMonth.Year, DisplayMonth.Month, 1);
+            _displayMonth = Selected ?? DisplayMonth;
         }
+
+        _eventList = Events?.ToList();
     }
 
     private IEnumerable<DateTime> GetCalendarDays()
@@ -143,84 +208,127 @@
         {
             var firstOfMonth = new DateTime(_displayMonth.Year, _displayMonth.Month, 1);
             var startDate = firstOfMonth.AddDays(-(int)firstOfMonth.DayOfWeek);
-
-            for (var i = 0; i < 42; i++) // 6 weeks
-            {
+            for (var i = 0; i < 42; i++)
                 yield return startDate.AddDays(i);
-            }
         }
         else
         {
-            // Weeks view: start from the Sunday of the currently selected week (or display month if none selected)
-            var referenceDate = Selected ?? _displayMonth;
+            var referenceDate = _displayMonth;
             var startDate = referenceDate.AddDays(-(int)referenceDate.DayOfWeek);
-            
-            int daysToYield = Math.Max(1, Math.Min(4, NumberOfWeeks)) * 7;
+            var daysToYield = Math.Max(1, Math.Min(4, NumberOfWeeks)) * 7;
             for (var i = 0; i < daysToYield; i++)
-            {
                 yield return startDate.AddDays(i);
-            }
         }
     }
 
-    private string GetDayContainerClass(bool isCurrentMonth, bool isSelected, bool isToday, bool isDisabled)
+    private static string GetCellClass(bool isCurrentMonth, bool isSelected, bool isToday, bool isDisabled)
     {
-        // Use a fixed height (h-32) and prevent doubling right/bottom borders
-        var classes = "h-32 p-1.5 border-r border-b border-border [&:nth-child(7n)]:border-r-0 transition-colors flex flex-col relative group cursor-pointer hover:bg-muted/30";
+        var cls = "cn-event-calendar-cell";
 
         if (isDisabled)
-            classes += " opacity-50 cursor-not-allowed bg-muted/20";
-        else if (isSelected)
-            classes += " bg-accent/10 relative before:absolute before:inset-0 before:border-2 before:border-primary before:z-10 before:pointer-events-none";
-            
-        if (!isCurrentMonth && !isDisabled)
-            classes += " bg-muted/5";
+            return $"{cls} cn-event-calendar-cell-disabled";
+        if (isSelected)
+            cls += " cn-event-calendar-cell-selected";
+        if (!isCurrentMonth)
+            cls += " cn-event-calendar-cell-outside";
 
-        return classes;
+        return cls;
     }
 
-    private string GetDayNumberClass(bool isCurrentMonth, bool isSelected, bool isToday, bool isDisabled)
+    private static string GetDayNumberClass(bool isCurrentMonth, bool isSelected, bool isToday)
     {
-        var classes = "inline-flex h-7 w-7 items-center justify-center rounded-full text-sm font-medium transition-colors";
+        var cls = "cn-event-calendar-day-number";
 
         if (isToday)
-            classes += " bg-primary text-primary-foreground";
-        else if (isSelected)
-            classes += " bg-accent text-accent-foreground";
-        else if (!isCurrentMonth)
-            classes += " text-muted-foreground opacity-50";
+            return $"{cls} cn-event-calendar-day-number-today";
+        if (isSelected)
+            return $"{cls} cn-event-calendar-day-number-selected";
+        if (!isCurrentMonth)
+            cls += " text-muted-foreground";
 
-        return classes;
+        return cls;
     }
-    
-    private string GetEventClass(RnCalendarEvent ev)
+
+    private static string GetEventVariantClass(RnCalendarEvent ev)
     {
-        var baseClasses = "w-full flex items-center text-xs px-1.5 py-1 rounded-sm text-left transition-colors truncate focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1";
-        
         if (!string.IsNullOrEmpty(ev.EventCssClass))
+            return ev.EventCssClass;
+
+        return ev.Variant switch
         {
-             return $"{baseClasses} {ev.EventCssClass}";
-        }
-        
-        // Default styling if no custom class provided
+            EventVariant.Blue => "cn-event-calendar-event-variant-blue",
+            EventVariant.Green => "cn-event-calendar-event-variant-green",
+            EventVariant.Orange => "cn-event-calendar-event-variant-orange",
+            EventVariant.Red => "cn-event-calendar-event-variant-red",
+            EventVariant.Purple => "cn-event-calendar-event-variant-purple",
+            EventVariant.Yellow => "cn-event-calendar-event-variant-yellow",
+            EventVariant.Teal => "cn-event-calendar-event-variant-teal",
+            EventVariant.Muted => "cn-event-calendar-event-variant-muted",
+            _ => "cn-event-calendar-event-variant-default"
+        };
+    }
+
+    private static string GetDotVariantClass(RnCalendarEvent ev)
+    {
+        return ev.Variant switch
+        {
+            EventVariant.Blue => "cn-event-calendar-dot-variant-blue",
+            EventVariant.Green => "cn-event-calendar-dot-variant-green",
+            EventVariant.Orange => "cn-event-calendar-dot-variant-orange",
+            EventVariant.Red => "cn-event-calendar-dot-variant-red",
+            EventVariant.Purple => "cn-event-calendar-dot-variant-purple",
+            EventVariant.Yellow => "cn-event-calendar-dot-variant-yellow",
+            EventVariant.Teal => "cn-event-calendar-dot-variant-teal",
+            EventVariant.Muted => "cn-event-calendar-dot-variant-muted",
+            _ => "cn-event-calendar-dot-variant-default"
+        };
+    }
+
+    private static string GetSpanClass(EventCalendarSlot slot)
+    {
+        var cls = $"cn-event-calendar-span {GetEventVariantClass(slot.Event)} hidden md:flex";
+
+        if (slot.IsStart && slot.IsEnd)
+            cls += " cn-event-calendar-span-single";
+        else if (slot.IsStart)
+            cls += " cn-event-calendar-span-start";
+        else if (slot.IsEnd)
+            cls += " cn-event-calendar-span-end";
+
+        return cls;
+    }
+
+    private static string GetSpanStyle(EventCalendarSlot slot)
+    {
+        var leftPct = (slot.StartColumn * 100.0 / 7).ToString("F4", System.Globalization.CultureInfo.InvariantCulture);
+        var widthPct = (slot.ColumnSpan * 100.0 / 7).ToString("F4", System.Globalization.CultureInfo.InvariantCulture);
+        // Each row is ~18px tall, offset from top after the day number area (~28px)
+        var topPx = 28 + (slot.Row * 20);
+        return $"left: {leftPct}%; width: {widthPct}%; top: {topPx}px;";
+    }
+
+    private static string GetEventAriaLabel(RnCalendarEvent ev)
+    {
         if (ev.IsAllDay)
-        {
-            return $"{baseClasses} bg-primary/10 text-primary font-medium hover:bg-primary/20 hover:text-primary";
-        }
-        else
-        {
-            return $"{baseClasses} hover:bg-muted/80";
-        }
+            return $"{ev.Title}, all day on {ev.Start:MMMM d}";
+
+        return ev.End.HasValue
+            ? $"{ev.Title}, {ev.Start:MMMM d HH:mm} to {ev.End:MMMM d HH:mm}"
+            : $"{ev.Title}, {ev.Start:MMMM d HH:mm}";
     }
 
-    private void PreviousMonth()
+    private void PreviousPeriod()
     {
-        _displayMonth = _displayMonth.AddMonths(-1);
+        _displayMonth = ViewMode == CalendarViewMode.Month
+            ? _displayMonth.AddMonths(-1)
+            : _displayMonth.AddDays(-7 * Math.Max(1, NumberOfWeeks));
     }
 
-    private void NextMonth()
+    private void NextPeriod()
     {
-        _displayMonth = _displayMonth.AddMonths(1);
+        _displayMonth = ViewMode == CalendarViewMode.Month
+            ? _displayMonth.AddMonths(1)
+            : _displayMonth.AddDays(7 * Math.Max(1, NumberOfWeeks));
     }
 
     private async Task SelectDate(DateTime date)
@@ -228,7 +336,7 @@
         Selected = date;
         await SelectedChanged.InvokeAsync(date);
     }
-    
+
     private async Task HandleEventClick(RnCalendarEvent ev)
     {
         await OnEventClicked.InvokeAsync(ev);

@@ -4,7 +4,7 @@
     {
       "name": "demo-wasm",
       "runtimeExecutable": "dotnet",
-      "runtimeArgs": ["watch", "run", "--project", "src/Daeha.RnUI.Demo.Wasm/Daeha.RnUI.Demo.Wasm.csproj", "--urls", "http://localhost:5102"],
+      "runtimeArgs": ["run", "--project", "src/Daeha.RnUI.Demo.Wasm/Daeha.RnUI.Demo.Wasm.csproj", "--urls", "http://localhost:5102"],
       "port": 5102
     }
   ]

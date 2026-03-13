@@ -58,45 +58,46 @@
         
         _events = new List<RnCalendarEvent>
         {
-            new RnCalendarEvent 
-            { 
-                Id = "1", 
-                Title = "Weekly Planning", 
-                Start = today.AddHours(10), 
+            new RnCalendarEvent
+            {
+                Id = "1",
+                Title = "Weekly Planning",
+                Start = today.AddHours(10),
                 End = today.AddHours(11),
-                EventCssClass = "bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-300"
+                Variant = EventVariant.Blue
             },
-            new RnCalendarEvent 
-            { 
-                Id = "2", 
-                Title = "Lunch with Team", 
-                Start = today.AddHours(12), 
+            new RnCalendarEvent
+            {
+                Id = "2",
+                Title = "Lunch with Team",
+                Start = today.AddHours(12),
                 End = today.AddHours(13),
-                EventCssClass = "bg-orange-100 text-orange-700 hover:bg-orange-200 dark:bg-orange-900/30 dark:text-orange-300"
+                Variant = EventVariant.Orange
             },
-            new RnCalendarEvent 
-            { 
-                Id = "3", 
-                Title = "Project Review", 
-                Start = today.AddDays(1).AddHours(14), 
-                End = today.AddDays(1).AddHours(16)
+            new RnCalendarEvent
+            {
+                Id = "3",
+                Title = "Project Review",
+                Start = today.AddDays(1).AddHours(14),
+                End = today.AddDays(1).AddHours(16),
+                Variant = EventVariant.Green
             },
-            new RnCalendarEvent 
-            { 
-                Id = "4", 
-                Title = "Company Holiday", 
-                Start = today.AddDays(3), 
+            new RnCalendarEvent
+            {
+                Id = "4",
+                Title = "Company Holiday",
+                Start = today.AddDays(3),
                 IsAllDay = true,
-                EventCssClass = "bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-300"
+                Variant = EventVariant.Red
             },
-            new RnCalendarEvent 
-            { 
-                Id = "5", 
-                Title = "Conference", 
-                Start = today.AddDays(3), 
+            new RnCalendarEvent
+            {
+                Id = "5",
+                Title = "Conference",
+                Start = today.AddDays(3),
                 End = today.AddDays(5),
                 IsAllDay = true,
-                EventCssClass = "bg-purple-100 text-purple-700 hover:bg-purple-200 dark:bg-purple-900/30 dark:text-purple-300"
+                Variant = EventVariant.Purple
             }
         };
     }
