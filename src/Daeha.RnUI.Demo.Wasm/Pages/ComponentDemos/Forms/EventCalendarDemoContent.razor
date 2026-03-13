@@ -1,0 +1,83 @@
+@using Daeha.RnUI.Components.UI.Calendar
+
+<div class="space-y-4">
+    <div class="flex items-center justify-between">
+        <h3 class="text-lg font-medium">Team Schedule</h3>
+        <span class="text-sm text-muted-foreground">Selected: @(_selectedDate?.ToString("yyyy-MM-dd") ?? "None")</span>
+    </div>
+
+    <RnEventCalendar Events="_events"
+                     @bind-Selected="_selectedDate"
+                     OnEventClicked="HandleEventClick" />
+
+    @if (_selectedEvent != null)
+    {
+        <div class="mt-4 p-4 rounded-md border border-border bg-muted/50">
+            <h4 class="font-semibold mb-2">Selected Event Details</h4>
+            <p class="text-sm"><span class="font-medium">Title:</span> @_selectedEvent.Title</p>
+            <p class="text-sm"><span class="font-medium">Time:</span> @_selectedEvent.Start.ToString("g") @(!_selectedEvent.IsAllDay && _selectedEvent.End.HasValue ? $" - {_selectedEvent.End.Value.ToString("g")}" : "")</p>
+            <p class="text-sm"><span class="font-medium">All Day:</span> @(_selectedEvent.IsAllDay ? "Yes" : "No")</p>
+        </div>
+    }
+</div>
+
+@code {
+    private DateTime? _selectedDate = DateTime.Today;
+    private RnCalendarEvent? _selectedEvent;
+    
+    private List<RnCalendarEvent> _events = new();
+
+    protected override void OnInitialized()
+    {
+        var today = DateTime.Today;
+        
+        _events = new List<RnCalendarEvent>
+        {
+            new RnCalendarEvent 
+            { 
+                Id = "1", 
+                Title = "Weekly Planning", 
+                Start = today.AddHours(10), 
+                End = today.AddHours(11),
+                EventCssClass = "bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-300"
+            },
+            new RnCalendarEvent 
+            { 
+                Id = "2", 
+                Title = "Lunch with Team", 
+                Start = today.AddHours(12), 
+                End = today.AddHours(13),
+                EventCssClass = "bg-orange-100 text-orange-700 hover:bg-orange-200 dark:bg-orange-900/30 dark:text-orange-300"
+            },
+            new RnCalendarEvent 
+            { 
+                Id = "3", 
+                Title = "Project Review", 
+                Start = today.AddDays(1).AddHours(14), 
+                End = today.AddDays(1).AddHours(16)
+            },
+            new RnCalendarEvent 
+            { 
+                Id = "4", 
+                Title = "Company Holiday", 
+                Start = today.AddDays(3), 
+                IsAllDay = true,
+                EventCssClass = "bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-300"
+            },
+            new RnCalendarEvent 
+            { 
+                Id = "5", 
+                Title = "Conference", 
+                Start = today.AddDays(3), 
+                End = today.AddDays(5),
+                IsAllDay = true,
+                EventCssClass = "bg-purple-100 text-purple-700 hover:bg-purple-200 dark:bg-purple-900/30 dark:text-purple-300"
+            }
+        };
+    }
+
+    private void HandleEventClick(RnCalendarEvent ev)
+    {
+        _selectedEvent = ev;
+    }
+}

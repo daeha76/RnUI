@@ -1,0 +1,36 @@
+@using Daeha.RnUI.Demo.Wasm.Models
+@using RnUI.Components.UI.Calendar
+
+@code {
+    public static ComponentDemo GetDemo() => new(
+        "Event Calendar", "event-calendar", "An advanced date grid component that displays and manages scheduled events.",
+        Demo: @<EventCalendarDemoContent />,
+        Thumbnail: @<div class="text-xs text-muted-foreground w-full h-full flex items-center justify-center p-2 border border-border rounded-md bg-background">Event Calendar</div>,
+        Code: @"<RnEventCalendar Events=""_events"" 
+                 @bind-Selected=""_selectedDate""
+                 OnEventClicked=""HandleEventClick"" />
+
+@code {
+    private DateTime? _selectedDate = DateTime.Today;
+    private List<RnCalendarEvent> _events = new();
+    
+    // Setup initial events...
+}",
+        UsageCode: @"@using RnUI.Components.UI.Calendar
+
+<RnEventCalendar Events=""_events"" 
+                 @bind-Selected=""_selectedDate""
+                 OnEventClicked=""HandleEventClick"" />"
+    );
+}
+
+@* 
+    Since the Demo record in ComponentDemo requires a RenderFragment,
+    we create a local component here to handle the state.
+*@
+<CascadingValue Value="this" IsFixed="true">
+    @* The main view rendered by the Demo record *@
+</CascadingValue>
+
+@* Define the demo content component inline for this file *@
+@if (false) { } @* Trick blazor compiler to allow nested components basically we just put everything in a namespace/class below? No, we can just use a normal component approach *@

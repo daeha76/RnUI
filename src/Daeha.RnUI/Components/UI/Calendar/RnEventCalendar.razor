@@ -1,0 +1,202 @@
+@using Daeha.RnUI.Components.UI.Calendar
+
+@* RnEventCalendar component - Extension of RnCalendar for scheduling and events *@
+
+<div data-slot="calendar" data-size="event" class="@ComputedClass" @attributes="AdditionalAttributes">
+    @* Header: month navigation *@
+    <div class="cn-calendar-nav mb-4">
+        <button type="button" class="cn-calendar-nav-button" @onclick="PreviousMonth">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="cn-calendar-caption text-lg font-semibold">
+            @_displayMonth.ToString("MMMM yyyy")
+        </div>
+        <button type="button" class="cn-calendar-nav-button" @onclick="NextMonth">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+    </div>
+
+    @* Day headers *@
+    <div class="grid grid-cols-7 border-b border-border">
+        @foreach (var day in new[] { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" })
+        {
+            <div class="p-2 text-center text-sm font-medium text-muted-foreground">@day</div>
+        }
+    </div>
+
+    @* Day grid *@
+    <div class="grid grid-cols-7 border-l border-border">
+        @foreach (var date in GetCalendarDays())
+        {
+            var isCurrentMonth = date.Month == _displayMonth.Month;
+            var isSelected = Selected.HasValue && date.Date == Selected.Value.Date;
+            var isToday = date.Date == DateTime.Today;
+            var isDisabled = (MinDate.HasValue && date.Date < MinDate.Value.Date) ||
+                             (MaxDate.HasValue && date.Date > MaxDate.Value.Date);
+            var capturedDate = date;
+            var dayEvents = Events?.Where(e => e.Start.Date == capturedDate.Date).OrderBy(e => e.Start).ToList() ?? new List<RnCalendarEvent>();
+
+            <div class="@GetDayContainerClass(isCurrentMonth, isSelected, isToday, isDisabled)"
+                 @onclick="() => SelectDate(capturedDate)">
+                <div class="flex justify-between items-start mb-1">
+                    <span class="@GetDayNumberClass(isCurrentMonth, isSelected, isToday, isDisabled)">
+                        @date.Day
+                    </span>
+                </div>
+                
+                <div class="flex-1 overflow-y-auto space-y-1 pr-1 custom-scrollbar">
+                    @foreach (var ev in dayEvents)
+                    {
+                        var capturedEvent = ev;
+                        <button type="button"
+                                class="@GetEventClass(ev)"
+                                @onclick="() => HandleEventClick(capturedEvent)"
+                                @onclick:stopPropagation>
+                            @if (!ev.IsAllDay)
+                            {
+                                <span class="font-medium mr-1 shrink-0">@ev.Start.ToString("HH:mm")</span>
+                            }
+                            <span class="truncate">@ev.Title</span>
+                        </button>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    /* Custom scrollbar for event cells to keep them looking clean */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 3px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: hsl(var(--muted));
+        border-radius: 10px;
+    }
+</style>
+
+@code {
+    /// <summary>The events to display on the calendar.</summary>
+    [Parameter] public IEnumerable<RnCalendarEvent>? Events { get; set; }
+
+    /// <summary>Currently selected date.</summary>
+    [Parameter] public DateTime? Selected { get; set; }
+
+    /// <summary>Callback when selected date changes.</summary>
+    [Parameter] public EventCallback<DateTime?> SelectedChanged { get; set; }
+    
+    /// <summary>Callback when an event item is clicked.</summary>
+    [Parameter] public EventCallback<RnCalendarEvent> OnEventClicked { get; set; }
+
+    /// <summary>Currently displayed month.</summary>
+    [Parameter] public DateTime DisplayMonth { get; set; } = DateTime.Today;
+
+    /// <summary>Minimum selectable date (inclusive).</summary>
+    [Parameter] public DateTime? MinDate { get; set; }
+
+    /// <summary>Maximum selectable date (inclusive).</summary>
+    [Parameter] public DateTime? MaxDate { get; set; }
+
+    /// <summary>Additional CSS classes.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string ComputedClass => CssUtils.Cn("w-full bg-background rounded-md border border-border shadow-sm overflow-hidden", Class);
+
+    private DateTime _displayMonth;
+
+    protected override void OnParametersSet()
+    {
+        if (_displayMonth == default)
+        {
+            _displayMonth = new DateTime(DisplayMonth.Year, DisplayMonth.Month, 1);
+        }
+    }
+
+    private IEnumerable<DateTime> GetCalendarDays()
+    {
+        var firstOfMonth = new DateTime(_displayMonth.Year, _displayMonth.Month, 1);
+        var startDate = firstOfMonth.AddDays(-(int)firstOfMonth.DayOfWeek);
+
+        for (var i = 0; i < 42; i++)
+        {
+            yield return startDate.AddDays(i);
+        }
+    }
+
+    private string GetDayContainerClass(bool isCurrentMonth, bool isSelected, bool isToday, bool isDisabled)
+    {
+        // EventCalendar uses a taller, custom grid cell instead of the standard button-based day
+        var classes = "min-h-[120px] p-2 border-r border-b border-border transition-colors flex flex-col relative group cursor-pointer hover:bg-muted/30";
+
+        if (isDisabled)
+            classes += " opacity-50 cursor-not-allowed bg-muted/20";
+        else if (isSelected)
+            classes += " bg-accent/10 relative before:absolute before:inset-0 before:border-2 before:border-primary before:z-10 before:pointer-events-none";
+            
+        if (!isCurrentMonth && !isDisabled)
+            classes += " bg-muted/5";
+
+        return classes;
+    }
+
+    private string GetDayNumberClass(bool isCurrentMonth, bool isSelected, bool isToday, bool isDisabled)
+    {
+        var classes = "inline-flex h-7 w-7 items-center justify-center rounded-full text-sm font-medium transition-colors";
+
+        if (isToday)
+            classes += " bg-primary text-primary-foreground";
+        else if (isSelected)
+            classes += " bg-accent text-accent-foreground";
+        else if (!isCurrentMonth)
+            classes += " text-muted-foreground opacity-50";
+
+        return classes;
+    }
+    
+    private string GetEventClass(RnCalendarEvent ev)
+    {
+        var baseClasses = "w-full flex items-center text-xs px-1.5 py-1 rounded-sm text-left transition-colors truncate focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1";
+        
+        if (!string.IsNullOrEmpty(ev.EventCssClass))
+        {
+             return $"{baseClasses} {ev.EventCssClass}";
+        }
+        
+        // Default styling if no custom class provided
+        if (ev.IsAllDay)
+        {
+            return $"{baseClasses} bg-primary/10 text-primary font-medium hover:bg-primary/20 hover:text-primary";
+        }
+        else
+        {
+            return $"{baseClasses} hover:bg-muted/80";
+        }
+    }
+
+    private void PreviousMonth()
+    {
+        _displayMonth = _displayMonth.AddMonths(-1);
+    }
+
+    private void NextMonth()
+    {
+        _displayMonth = _displayMonth.AddMonths(1);
+    }
+
+    private async Task SelectDate(DateTime date)
+    {
+        Selected = date;
+        await SelectedChanged.InvokeAsync(date);
+    }
+    
+    private async Task HandleEventClick(RnCalendarEvent ev)
+    {
+        await OnEventClicked.InvokeAsync(ev);
+    }
+}
