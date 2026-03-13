@@ -17,15 +17,15 @@
     </div>
 
     @* Day headers *@
-    <div class="grid grid-cols-7 border-b border-border">
+    <div class="cn-calendar-weekdays border-b border-muted pb-2 pt-2">
         @foreach (var day in new[] { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" })
         {
-            <div class="p-2 text-center text-sm font-medium text-muted-foreground">@day</div>
+            <div class="p-2 text-center text-sm font-medium text-muted-foreground w-full">@day</div>
         }
     </div>
 
     @* Day grid *@
-    <div class="grid grid-cols-7 border-l border-border">
+    <div class="cn-calendar-grid">
         @foreach (var date in GetCalendarDays())
         {
             var isCurrentMonth = date.Month == _displayMonth.Month;
@@ -106,7 +106,8 @@
 
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
-    private string ComputedClass => CssUtils.Cn("w-full bg-background rounded-md border border-border shadow-sm overflow-hidden", Class);
+    // We use cn-card to get the rounded border and shadow (per user request)
+    private string ComputedClass => CssUtils.Cn("cn-card overflow-hidden w-full bg-background", Class);
 
     private DateTime _displayMonth;
 
@@ -132,7 +133,7 @@
     private string GetDayContainerClass(bool isCurrentMonth, bool isSelected, bool isToday, bool isDisabled)
     {
         // EventCalendar uses a taller, custom grid cell instead of the standard button-based day
-        var classes = "min-h-[120px] p-2 border-r border-b border-border transition-colors flex flex-col relative group cursor-pointer hover:bg-muted/30";
+        var classes = "min-h-[120px] p-2 border-r border-b border-muted transition-colors flex flex-col relative group cursor-pointer hover:bg-muted/30";
 
         if (isDisabled)
             classes += " opacity-50 cursor-not-allowed bg-muted/20";
