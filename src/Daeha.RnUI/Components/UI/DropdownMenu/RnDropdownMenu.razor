@@ -12,13 +12,15 @@
 
     @if (_open)
     {
-        <div @ref="_contentRef"
-             data-slot="dropdown-menu-content"
-             role="menu"
-             class="@CssUtils.Cn("cn-dropdown-menu-content absolute", Class)"
-             style="@PositionUtils.GetPositionStyle(Side, Align)">
-            @ChildContent
-        </div>
+        <CascadingValue Value="this" IsFixed="true">
+            <div @ref="_contentRef"
+                 data-slot="dropdown-menu-content"
+                 role="menu"
+                 class="@CssUtils.Cn("cn-dropdown-menu-content absolute", Class)"
+                 style="@PositionUtils.GetPositionStyle(Side, Align)">
+                @ChildContent
+            </div>
+        </CascadingValue>
     }
 </div>
 
@@ -66,10 +68,10 @@
     private void ToggleOpen() => _open = !_open;
 
     [JSInvokable]
-    public void CloseMenu()
+    public Task CloseMenu()
     {
         _open = false;
-        StateHasChanged();
+        return InvokeAsync(StateHasChanged);
     }
 
     public async ValueTask DisposeAsync()
