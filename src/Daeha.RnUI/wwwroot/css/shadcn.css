@@ -4788,8 +4788,10 @@
   border: 1px solid var(--color-border-subtle);
 }
 .cn-calendar {
+  border-radius: var(--radius-lg);
   background-color: var(--color-background);
   padding: calc(var(--spacing) * 3);
+  border: 1px solid var(--color-border-subtle);
 }
 .cn-calendar-nav {
   position: relative;
@@ -4943,34 +4945,32 @@
   line-height: var(--tw-leading, var(--text-xs--line-height));
 }
 .cn-calendar[data-size="xs"] {
-  border-radius: var(--radius-lg);
-  padding: calc(var(--spacing) * 1.5);
-  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  padding: calc(var(--spacing) * 1);
 }
 .cn-calendar[data-size="xs"] .cn-calendar-nav {
-  margin-bottom: calc(var(--spacing) * 2);
+  margin-bottom: calc(var(--spacing) * 1);
 }
 .cn-calendar[data-size="xs"] .cn-calendar-nav-button {
-  width: calc(var(--spacing) * 6);
-  height: calc(var(--spacing) * 6);
+  width: calc(var(--spacing) * 5);
+  height: calc(var(--spacing) * 5);
 }
 .cn-calendar[data-size="xs"] .cn-calendar-nav-button svg {
   width: calc(var(--spacing) * 3);
   height: calc(var(--spacing) * 3);
 }
 .cn-calendar[data-size="xs"] .cn-calendar-caption {
-  font-size: var(--text-xs);
-  line-height: var(--tw-leading, var(--text-xs--line-height));
+  font-size: 0.65rem;
 }
 .cn-calendar[data-size="xs"] .cn-calendar-weekday {
-  height: calc(var(--spacing) * 6);
-  width: auto;
-  font-size: 0.65rem;
+  width: calc(var(--spacing) * 5);
+  height: calc(var(--spacing) * 5);
+  font-size: 0.6rem;
 }
 .cn-calendar[data-size="xs"] .cn-calendar-day {
-  height: calc(var(--spacing) * 6);
-  width: auto;
-  font-size: 0.65rem;
+  width: calc(var(--spacing) * 5);
+  height: calc(var(--spacing) * 5);
+  font-size: 0.6rem;
 }
 .cn-carousel {
   position: relative;

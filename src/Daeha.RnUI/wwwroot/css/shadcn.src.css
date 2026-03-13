@@ -1481,7 +1481,8 @@
 
 /* Calendar */
 .cn-calendar {
-  @apply bg-background p-3;
+  @apply rounded-lg bg-background p-3;
+  border: 1px solid var(--color-border-subtle);
 }
 
 .cn-calendar-nav {
@@ -1551,16 +1552,15 @@
 
 /* Calendar Xs size variant */
 .cn-calendar[data-size="xs"] {
-  @apply p-1.5 rounded-lg;
-  border: 1px solid var(--color-border-subtle);
+  @apply p-1 rounded-md;
 }
 
 .cn-calendar[data-size="xs"] .cn-calendar-nav {
-  @apply mb-2;
+  @apply mb-1;
 }
 
 .cn-calendar[data-size="xs"] .cn-calendar-nav-button {
-  @apply size-6;
+  @apply size-5;
 }
 
 .cn-calendar[data-size="xs"] .cn-calendar-nav-button svg {
@@ -1568,15 +1568,15 @@
 }
 
 .cn-calendar[data-size="xs"] .cn-calendar-caption {
-  @apply text-xs;
+  @apply text-[0.65rem];
 }
 
 .cn-calendar[data-size="xs"] .cn-calendar-weekday {
-  @apply h-6 w-auto text-[0.65rem];
+  @apply size-5 text-[0.6rem];
 }
 
 .cn-calendar[data-size="xs"] .cn-calendar-day {
-  @apply h-6 w-auto text-[0.65rem];
+  @apply size-5 text-[0.6rem];
 }
 
 /* Carousel */
