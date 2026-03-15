@@ -1,0 +1,22 @@
+@import "tailwindcss";
+@source "../**/*.razor";
+
+/*
+ * RnUI App — Tailwind CSS Entry Point
+ *
+ * [Important] Design tokens (colors, fonts, dark mode) are defined in
+ * the RnUI library's shadcn.css. Do NOT duplicate them here.
+ *
+ * This file only scans .razor files for Tailwind utility classes
+ * and adds any app-specific custom CSS below.
+ */
+
+/* container default padding (Tailwind v4 has no auto-padding) */
+.container {
+  padding-inline: 1rem;
+}
+@media (width >= 1024px) {
+  .container {
+    padding-inline: 2rem;
+  }
+}
