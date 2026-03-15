@@ -122,6 +122,11 @@ Override CSS custom properties to theme all components:
 }
 ```
 
+## Changelog
+
+### v0.11.4
+- **RnDataTable**: Added `OnRowDoubleClick` (`EventCallback<TItem>`) parameter — triggers on row double-click; rows automatically apply `cursor-pointer` when the callback is bound
+
 ## License
 
 [MIT](https://licenses.nuget.org/MIT)

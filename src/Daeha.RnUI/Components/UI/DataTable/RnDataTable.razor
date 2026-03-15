@@ -211,9 +211,12 @@
                         var rowIndex = i;
                         var item = State.PagedItems[rowIndex];
                         var isSelected = State.IsSelected(item);
-                        var rowClass = RowClass?.Invoke(item);
+                        var rowClass = CssUtils.Cn(
+                            RowClass?.Invoke(item),
+                            OnRowDoubleClick.HasDelegate ? "cursor-pointer" : null);
 
                         <RnTableRow Class="@rowClass"
+                                    @ondblclick="() => HandleRowDoubleClick(item)"
                                     @attributes="@(new Dictionary<string, object> { ["data-state"] = isSelected ? "selected" : "" })">
                             @if (State.SelectionMode != SelectionMode.None)
                             {
@@ -301,6 +304,7 @@
     [Parameter] public SelectionMode SelectionMode { get; set; } = SelectionMode.None;
     [Parameter] public HashSet<TItem>? SelectedItems { get; set; }
     [Parameter] public EventCallback<HashSet<TItem>> SelectedItemsChanged { get; set; }
+    [Parameter] public EventCallback<TItem> OnRowDoubleClick { get; set; }
     [Parameter] public int PageSize { get; set; } = 10;
     [Parameter] public int[]? PageSizeOptions { get; set; }
     [Parameter] public FilterMode FilterMode { get; set; } = FilterMode.Contains;
@@ -413,6 +417,14 @@
     {
         State.ToggleRowExpansion(rowIndex);
         StateHasChanged();
+    }
+
+    private async Task HandleRowDoubleClick(TItem item)
+    {
+        if (OnRowDoubleClick.HasDelegate)
+        {
+            await OnRowDoubleClick.InvokeAsync(item);
+        }
     }
 
     private async Task NotifySelectionChanged()
