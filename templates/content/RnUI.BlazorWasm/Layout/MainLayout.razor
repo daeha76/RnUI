@@ -1,0 +1,23 @@
+@inherits LayoutComponentBase
+
+<div class="min-h-screen bg-background text-foreground">
+    <header class="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60" style="border-bottom: 1px solid var(--color-border-subtle)">
+        <div class="container flex h-14 items-center">
+            <div class="mr-4 flex">
+                <a href="/" class="mr-6 flex items-center space-x-2">
+                    <span class="font-bold">RnUIApp</span>
+                </a>
+            </div>
+            <nav class="flex items-center gap-4 text-sm ml-auto">
+                <a href="/" class="text-foreground/60 hover:text-foreground transition-colors">Home</a>
+                <a href="/counter" class="text-foreground/60 hover:text-foreground transition-colors">Counter</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container py-6">
+        @Body
+    </main>
+
+    <RnToastProvider />
+</div>

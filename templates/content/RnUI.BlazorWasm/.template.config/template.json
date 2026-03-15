@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Daeha",
+  "classifications": [
+    "Web",
+    "Blazor",
+    "WebAssembly",
+    "RnUI",
+    "shadcn"
+  ],
+  "identity": "Daeha.RnUI.BlazorWasm",
+  "name": "RnUI Blazor WebAssembly App",
+  "shortName": "rnui-wasm",
+  "description": "A Blazor WebAssembly project pre-configured with RnUI (shadcn/ui for Blazor) and Tailwind CSS v4.",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "RnUIApp",
+  "preferNameDirectory": true,
+  "symbols": {
+    "framework": {
+      "type": "parameter",
+      "description": "The target framework for the project.",
+      "datatype": "choice",
+      "choices": [
+        { "choice": "net8.0", "description": ".NET 8" },
+        { "choice": "net9.0", "description": ".NET 9" },
+        { "choice": "net10.0", "description": ".NET 10" }
+      ],
+      "defaultValue": "net10.0",
+      "replaces": "net10.0"
+    },
+    "rnuiVersion": {
+      "type": "parameter",
+      "description": "The version of Daeha.RnUI NuGet package.",
+      "datatype": "string",
+      "defaultValue": "0.11.4",
+      "replaces": "RNUI_VERSION"
+    },
+    "lucazorVersion": {
+      "type": "parameter",
+      "description": "The version of Daeha.RnLucazor.Blazor NuGet package.",
+      "datatype": "string",
+      "defaultValue": "0.4.0",
+      "replaces": "LUCAZOR_VERSION"
+    }
+  },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "exclude": [
+            "node_modules/**",
+            "bin/**",
+            "obj/**",
+            "wwwroot/css/tailwindcss.css"
+          ]
+        }
+      ]
+    }
+  ],
+  "postActions": [
+    {
+      "id": "restore",
+      "condition": true,
+      "description": "Restore NuGet packages",
+      "manualInstructions": [
+        { "text": "Run 'dotnet restore'" }
+      ],
+      "actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025",
+      "continueOnError": true
+    },
+    {
+      "id": "npm-install",
+      "condition": true,
+      "description": "Install npm packages for Tailwind CSS",
+      "manualInstructions": [
+        { "text": "Run 'npm install' to install Tailwind CSS, then 'dotnet build' to compile CSS and build the project." }
+      ],
+      "actionId": "AC1156F7-BB77-4DB8-B28F-24EEBCCA1E5C"
+    }
+  ]
+}

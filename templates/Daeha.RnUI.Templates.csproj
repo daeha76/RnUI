@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageType>Template</PackageType>
+    <PackageId>Daeha.RnUI.Templates</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Daeha</Authors>
+    <Description>Project templates for creating Blazor applications with RnUI (shadcn/ui for Blazor) and Tailwind CSS v4.</Description>
+    <PackageTags>dotnet-new;templates;blazor;rnui;shadcn;tailwindcss</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/daeha76/RnUI</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/daeha76/RnUI</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+
+    <TargetFramework>net10.0</TargetFramework>
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <ContentTargetFolders>content</ContentTargetFolders>
+    <NoDefaultExcludes>true</NoDefaultExcludes>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="content/**" />
+    <Content Include="content/**/*" Exclude="content/**/bin/**;content/**/obj/**;content/**/node_modules/**" />
+  </ItemGroup>
+
+</Project>

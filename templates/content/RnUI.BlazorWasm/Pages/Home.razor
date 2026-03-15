@@ -1,0 +1,64 @@
+@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<div class="flex flex-col items-center justify-center gap-8 py-12">
+    <div class="text-center space-y-4">
+        <h1 class="text-4xl font-bold tracking-tight">Welcome to RnUI</h1>
+        <p class="text-lg text-muted-foreground max-w-md">
+            Beautifully designed Blazor components built with Tailwind CSS.
+            A port of shadcn/ui.
+        </p>
+    </div>
+
+    <div class="flex gap-3">
+        <RnButton Variant="ButtonVariant.Default">
+            <RnIcon Icon="RnIcons.Rocket" Size="16" CssClass="mr-2" />
+            Get Started
+        </RnButton>
+        <RnButton Variant="ButtonVariant.Outline">
+            <RnIcon Icon="RnIcons.Github" Size="16" CssClass="mr-2" />
+            GitHub
+        </RnButton>
+    </div>
+
+    <RnSeparator Class="my-4 max-w-md" />
+
+    <div class="grid gap-4 md:grid-cols-3 max-w-3xl w-full">
+        <RnCard>
+            <RnCardHeader>
+                <RnCardTitle>Components</RnCardTitle>
+                <RnCardDescription>50+ accessible UI components</RnCardDescription>
+            </RnCardHeader>
+            <RnCardContent>
+                <p class="text-sm text-muted-foreground">
+                    Buttons, Cards, Dialogs, Tables, Forms, and more.
+                </p>
+            </RnCardContent>
+        </RnCard>
+
+        <RnCard>
+            <RnCardHeader>
+                <RnCardTitle>Tailwind CSS v4</RnCardTitle>
+                <RnCardDescription>Modern styling with oklch colors</RnCardDescription>
+            </RnCardHeader>
+            <RnCardContent>
+                <p class="text-sm text-muted-foreground">
+                    Design tokens, dark mode, and utility-first CSS.
+                </p>
+            </RnCardContent>
+        </RnCard>
+
+        <RnCard>
+            <RnCardHeader>
+                <RnCardTitle>Lucide Icons</RnCardTitle>
+                <RnCardDescription>400+ beautiful icons included</RnCardDescription>
+            </RnCardHeader>
+            <RnCardContent>
+                <p class="text-sm text-muted-foreground">
+                    Use any Lucide icon with the RnIcon component.
+                </p>
+            </RnCardContent>
+        </RnCard>
+    </div>
+</div>

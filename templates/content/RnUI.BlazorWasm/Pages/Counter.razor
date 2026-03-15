@@ -1,0 +1,43 @@
+@page "/counter"
+
+<PageTitle>Counter</PageTitle>
+
+<div class="flex flex-col items-center justify-center gap-6 py-12">
+    <h1 class="text-3xl font-bold tracking-tight">Counter</h1>
+
+    <RnCard Class="w-full max-w-sm">
+        <RnCardHeader Class="text-center">
+            <RnCardTitle Class="text-5xl font-mono">@_count</RnCardTitle>
+            <RnCardDescription>Current count</RnCardDescription>
+        </RnCardHeader>
+        <RnCardContent>
+            <div class="flex gap-2 justify-center">
+                <RnButton Variant="ButtonVariant.Outline" OnClick="Decrement">
+                    <RnIcon Icon="RnIcons.Minus" Size="16" />
+                </RnButton>
+                <RnButton OnClick="Increment">
+                    <RnIcon Icon="RnIcons.Plus" Size="16" CssClass="mr-2" />
+                    Increment
+                </RnButton>
+                <RnButton Variant="ButtonVariant.Ghost" OnClick="Reset">
+                    <RnIcon Icon="RnIcons.RotateCcw" Size="16" />
+                </RnButton>
+            </div>
+        </RnCardContent>
+    </RnCard>
+
+    <RnAlert Class="max-w-sm">
+        <RnAlertTitle>RnUI Components</RnAlertTitle>
+        <RnAlertDescription>
+            This page demonstrates RnButton, RnCard, RnAlert, and RnIcon components.
+        </RnAlertDescription>
+    </RnAlert>
+</div>
+
+@code {
+    private int _count;
+
+    private void Increment() => _count++;
+    private void Decrement() => _count--;
+    private void Reset() => _count = 0;
+}
