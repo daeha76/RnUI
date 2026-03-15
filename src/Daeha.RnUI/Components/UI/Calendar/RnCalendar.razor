@@ -77,14 +77,21 @@
     private string ComputedClass => CssUtils.Cn("cn-calendar", Class);
 
     private DateTime _displayMonth;
+    private DateTime _lastExternalDisplayMonth;
 
     protected override void OnParametersSet()
     {
-        // Sync internal display month from parameter when it changes
-        // but only if _displayMonth hasn't been set yet (first render)
+        var paramMonth = new DateTime(DisplayMonth.Year, DisplayMonth.Month, 1);
         if (_displayMonth == default)
         {
-            _displayMonth = new DateTime(DisplayMonth.Year, DisplayMonth.Month, 1);
+            _displayMonth = paramMonth;
+            _lastExternalDisplayMonth = paramMonth;
+        }
+        else if (paramMonth != _lastExternalDisplayMonth)
+        {
+            // Parent explicitly changed DisplayMonth — follow it
+            _displayMonth = paramMonth;
+            _lastExternalDisplayMonth = paramMonth;
         }
     }
 

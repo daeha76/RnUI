@@ -1,28 +1,38 @@
 @* RnDatePicker component - Blazor port of shadcn/ui DatePicker *@
+@* Supports both direct text input (yyyy-MM-dd) and calendar popover selection *@
 @implements IAsyncDisposable
 @inject RnUIInteropService Interop
 
-<div data-slot="date-picker" class="@CssUtils.Cn("relative inline-block", Class)" @attributes="AdditionalAttributes">
-    <button @ref="_triggerRef"
-            type="button"
-            data-slot="date-picker-trigger"
-            disabled="@(Disabled ? true : (object?)null)"
-            class="@CssUtils.Cn("cn-button cn-button-variant-outline cn-button-size-default w-[240px] justify-start text-left font-normal inline-flex items-center", Value.HasValue ? "" : "text-muted-foreground")"
-            @onclick="ToggleOpen">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 size-4 shrink-0">
-            <path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>
-        </svg>
-        @(Value.HasValue ? Value.Value.ToString(DateFormat ?? "MMM dd, yyyy") : (Placeholder ?? "Pick a date"))
-    </button>
+<div @ref="_containerRef" data-slot="date-picker" class="@CssUtils.Cn("relative", Class)" @attributes="AdditionalAttributes">
+    <div class="relative">
+        <input type="text"
+               data-slot="date-picker-input"
+               value="@_inputText"
+               placeholder="@(Placeholder ?? "yyyy-MM-dd")"
+               disabled="@(Disabled ? true : (object?)null)"
+               class="cn-input w-full pr-9"
+               @oninput="HandleInput"
+               @onblur="HandleBlur" />
+        <button type="button"
+                data-slot="date-picker-icon"
+                disabled="@(Disabled ? true : (object?)null)"
+                class="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors disabled:pointer-events-none disabled:opacity-50"
+                @onclick="ToggleOpen"
+                tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4">
+                <path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>
+            </svg>
+        </button>
+    </div>
 
     @if (_isOpen)
     {
         <div @ref="_contentRef"
              data-slot="date-picker-content"
-             class="cn-date-picker-content fixed z-50"
-             style="@_positionStyle">
+             class="cn-date-picker-content absolute left-0 top-full z-50 mt-1">
             <RnCalendar Selected="Value"
                         SelectedChanged="HandleDateSelected"
+                        DisplayMonth="@_calendarDisplayMonth"
                         MinDate="MinDate"
                         MaxDate="MaxDate" />
         </div>
@@ -37,10 +47,10 @@
     [Parameter] public EventCallback<DateTime?> ValueChanged { get; set; }
 
     /// <summary>Placeholder text when no date is selected.</summary>
-    [Parameter] public string? Placeholder { get; set; } = "Pick a date";
+    [Parameter] public string? Placeholder { get; set; } = "yyyy-MM-dd";
 
-    /// <summary>Display format string for the selected date.</summary>
-    [Parameter] public string? DateFormat { get; set; } = "MMM dd, yyyy";
+    /// <summary>Display format string for the selected date (used in text input).</summary>
+    [Parameter] public string? DateFormat { get; set; } = "yyyy-MM-dd";
 
     /// <summary>Minimum selectable date (inclusive).</summary>
     [Parameter] public DateTime? MinDate { get; set; }
@@ -51,18 +61,35 @@
     /// <summary>Whether the date picker is disabled.</summary>
     [Parameter] public bool Disabled { get; set; }
 
-    /// <summary>Additional CSS classes.</summary>
+    /// <summary>Additional CSS classes for the container.</summary>
     [Parameter] public string? Class { get; set; }
 
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
     private readonly string _id = Guid.NewGuid().ToString("N")[..8];
-    private ElementReference _triggerRef;
+    private ElementReference _containerRef;
     private ElementReference _contentRef;
     private DotNetObjectReference<RnDatePicker>? _dotNetRef;
     private bool _isOpen;
     private bool _previousOpen;
-    private string _positionStyle = "";
+
+    private string _inputText = "";
+    private DateTime? _previousValue;
+    private DateTime _calendarDisplayMonth = DateTime.Today;
+
+    private static readonly string[] ParseFormats = ["yyyy-MM-dd", "yyyyMMdd", "yyyy/MM/dd"];
+
+    protected override void OnParametersSet()
+    {
+        // Sync input text when Value changes externally
+        if (Value != _previousValue)
+        {
+            _previousValue = Value;
+            _inputText = Value?.ToString(DateFormat ?? "yyyy-MM-dd") ?? "";
+            if (Value.HasValue)
+                _calendarDisplayMonth = new DateTime(Value.Value.Year, Value.Value.Month, 1);
+        }
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -75,20 +102,83 @@
         {
             _previousOpen = true;
 
-            var rect = await Interop.GetElementRectAsync(_triggerRef);
-            if (rect is not null)
-            {
-                _positionStyle = $"top: {rect.Bottom + 4}px; left: {rect.Left}px;";
-                StateHasChanged();
-            }
-
-            await Interop.AddClickOutsideListenerAsync(_id, _contentRef, _dotNetRef!, nameof(ClosePopover));
+            await Interop.AddClickOutsideListenerAsync(_id, _containerRef, _dotNetRef!, nameof(ClosePopover));
             await Interop.AddEscapeListenerAsync(_id, _dotNetRef!, nameof(ClosePopover));
         }
         else if (!_isOpen && _previousOpen)
         {
             _previousOpen = false;
             await Interop.DisposeAllAsync(_id);
+        }
+    }
+
+    private async Task HandleInput(ChangeEventArgs e)
+    {
+        var raw = e.Value?.ToString() ?? "";
+
+        // Auto-format: if user is typing digits only, insert hyphens automatically
+        var digitsOnly = new string(raw.Where(char.IsDigit).ToArray());
+        if (digitsOnly.Length == raw.Replace("-", "").Replace("/", "").Trim().Length && digitsOnly.Length > 4)
+        {
+            // Format as yyyy-MM-dd progressively
+            raw = digitsOnly.Length switch
+            {
+                5 => $"{digitsOnly[..4]}-{digitsOnly[4..]}",
+                6 => $"{digitsOnly[..4]}-{digitsOnly[4..6]}",
+                7 => $"{digitsOnly[..4]}-{digitsOnly[4..6]}-{digitsOnly[6..]}",
+                >= 8 => $"{digitsOnly[..4]}-{digitsOnly[4..6]}-{digitsOnly[6..8]}",
+                _ => raw
+            };
+        }
+
+        _inputText = raw;
+
+        // Full date parse
+        if (DateTime.TryParseExact(_inputText, ParseFormats,
+                System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.DateTimeStyles.None, out var parsed))
+        {
+            Value = parsed;
+            _previousValue = parsed;
+            _calendarDisplayMonth = new DateTime(parsed.Year, parsed.Month, 1);
+            await ValueChanged.InvokeAsync(Value);
+        }
+        // Year only (e.g. "1980") — navigate calendar without selecting
+        else if (_inputText.Length == 4
+                 && int.TryParse(_inputText, out var year)
+                 && year is >= 1900 and <= 2100)
+        {
+            _calendarDisplayMonth = new DateTime(year, 1, 1);
+        }
+        // Year-month (e.g. "1980-03") — navigate calendar without selecting
+        else if (DateTime.TryParseExact(_inputText, ["yyyy-MM", "yyyy/MM"],
+                     System.Globalization.CultureInfo.InvariantCulture,
+                     System.Globalization.DateTimeStyles.None, out var yearMonth))
+        {
+            _calendarDisplayMonth = new DateTime(yearMonth.Year, yearMonth.Month, 1);
+        }
+    }
+
+    private async Task HandleBlur()
+    {
+        // If text is empty, clear value
+        if (string.IsNullOrWhiteSpace(_inputText))
+        {
+            if (Value.HasValue)
+            {
+                Value = null;
+                _previousValue = null;
+                await ValueChanged.InvokeAsync(null);
+            }
+            return;
+        }
+
+        // If text is not a valid full date, revert to last valid value
+        if (!DateTime.TryParseExact(_inputText, ParseFormats,
+                System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.DateTimeStyles.None, out _))
+        {
+            _inputText = Value?.ToString(DateFormat ?? "yyyy-MM-dd") ?? "";
         }
     }
 
@@ -108,6 +198,8 @@
     private async Task HandleDateSelected(DateTime? date)
     {
         Value = date;
+        _previousValue = date;
+        _inputText = date?.ToString(DateFormat ?? "yyyy-MM-dd") ?? "";
         _isOpen = false;
         await ValueChanged.InvokeAsync(Value);
     }
