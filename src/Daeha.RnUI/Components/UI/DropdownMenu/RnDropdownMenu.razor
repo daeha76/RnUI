@@ -3,7 +3,8 @@
 @inject RnUIInteropService Interop
 
 <div data-slot="dropdown-menu" class="relative inline-block" @attributes="AdditionalAttributes">
-    <div data-slot="dropdown-menu-trigger"
+    <div @ref="_triggerRef"
+         data-slot="dropdown-menu-trigger"
          aria-expanded="@_open"
          aria-haspopup="menu"
          class="cn-dropdown-menu-trigger"
@@ -17,8 +18,7 @@
             <div @ref="_contentRef"
                  data-slot="dropdown-menu-content"
                  role="menu"
-                 class="@CssUtils.Cn("cn-dropdown-menu-content absolute", Class)"
-                 style="@PositionUtils.GetPositionStyle(Side, Align)">
+                 class="@CssUtils.Cn("cn-dropdown-menu-content fixed", Class)">
                 @ChildContent
             </div>
         </CascadingValue>
@@ -41,6 +41,7 @@
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
     private readonly string _id = Guid.NewGuid().ToString("N")[..8];
+    private ElementReference _triggerRef;
     private ElementReference _contentRef;
     private DotNetObjectReference<RnDropdownMenu>? _dotNetRef;
     private bool _open;
@@ -56,12 +57,17 @@
         if (_open && !_previousOpen)
         {
             _previousOpen = true;
+            await Interop.PositionDropdownAsync(
+                _id, _triggerRef, _contentRef,
+                Side.ToString(), Align.ToString(), 4,
+                _dotNetRef!, nameof(CloseMenu));
             await Interop.AddClickOutsideListenerAsync(_id, _contentRef, _dotNetRef!, nameof(CloseMenu));
             await Interop.AddEscapeListenerAsync(_id, _dotNetRef!, nameof(CloseMenu));
         }
         else if (!_open && _previousOpen)
         {
             _previousOpen = false;
+            await Interop.DisposeDropdownPositionAsync(_id);
             await Interop.DisposeAllAsync(_id);
         }
     }
@@ -79,6 +85,7 @@
     {
         if (_previousOpen)
         {
+            await Interop.DisposeDropdownPositionAsync(_id);
             await Interop.DisposeAllAsync(_id);
         }
         _dotNetRef?.Dispose();

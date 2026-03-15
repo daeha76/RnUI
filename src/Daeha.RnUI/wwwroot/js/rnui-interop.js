@@ -351,6 +351,89 @@ export function disposeGanttScrollSync(id) {
     _ganttInstances.delete(id);
 }
 
+// ─── Dropdown Fixed Position ────────────────────────────────────────────────
+
+const _dropdowns = new Map();
+
+export function positionDropdown(id, triggerEl, contentEl, side, align, offsetPx, dotNetRef, closeMethodName) {
+    if (!triggerEl || !contentEl) return;
+
+    // Dispose existing if any
+    disposeDropdownPosition(id);
+
+    const update = () => {
+        const tr = triggerEl.getBoundingClientRect();
+        const cr = contentEl.getBoundingClientRect();
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        let top, left;
+
+        // Calculate position based on side
+        switch (side) {
+            case 'Top':
+                top = tr.top - cr.height - offsetPx;
+                break;
+            case 'Left':
+                top = tr.top + (tr.height - cr.height) / 2;
+                left = tr.left - cr.width - offsetPx;
+                break;
+            case 'Right':
+                top = tr.top + (tr.height - cr.height) / 2;
+                left = tr.right + offsetPx;
+                break;
+            default: // Bottom
+                top = tr.bottom + offsetPx;
+                break;
+        }
+
+        // Calculate horizontal alignment for Top/Bottom
+        if (side === 'Top' || side === 'Bottom') {
+            switch (align) {
+                case 'End':
+                    left = tr.right - cr.width;
+                    break;
+                case 'Center':
+                    left = tr.left + (tr.width - cr.width) / 2;
+                    break;
+                default: // Start
+                    left = tr.left;
+                    break;
+            }
+        }
+
+        // Viewport boundary clamping
+        if (left + cr.width > vw - 8) left = vw - cr.width - 8;
+        if (left < 8) left = 8;
+        if (top + cr.height > vh - 8) top = vh - cr.height - 8;
+        if (top < 8) top = 8;
+
+        contentEl.style.top = `${top}px`;
+        contentEl.style.left = `${left}px`;
+    };
+
+    // Initial position
+    requestAnimationFrame(update);
+
+    // Close on any scroll (ancestor scroll containers)
+    const onScroll = (e) => {
+        // Ignore scroll events from within the dropdown content itself
+        if (contentEl.contains(e.target)) return;
+        dotNetRef.invokeMethodAsync(closeMethodName);
+    };
+
+    // Use capture to catch scroll events on any ancestor
+    document.addEventListener('scroll', onScroll, { capture: true, passive: true });
+
+    _dropdowns.set(id, { onScroll });
+}
+
+export function disposeDropdownPosition(id) {
+    const state = _dropdowns.get(id);
+    if (!state) return;
+    document.removeEventListener('scroll', state.onScroll, { capture: true });
+    _dropdowns.delete(id);
+}
+
 // ─── Internal Helpers ────────────────────────────────────────────────────────
 
 function _storeListener(id, type, handler, target, useCapture = false) {

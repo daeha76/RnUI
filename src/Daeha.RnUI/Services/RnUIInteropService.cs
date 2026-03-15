@@ -226,6 +226,38 @@ public sealed class RnUIInteropService : IAsyncDisposable, IDisposable
         catch (JSDisconnectedException) { }
     }
 
+    // ─── Dropdown Fixed Position ────────────────────────────────────────────
+
+    /// <summary>
+    /// Positions a dropdown content element using fixed positioning relative to its trigger,
+    /// and registers a scroll listener that closes the dropdown on ancestor scroll.
+    /// </summary>
+    public async ValueTask PositionDropdownAsync<T>(
+        string id, ElementReference triggerEl, ElementReference contentEl,
+        string side, string align, int offsetPx,
+        DotNetObjectReference<T> dotNetRef, string closeMethodName)
+        where T : class
+    {
+        try
+        {
+            var module = await _moduleTask.Value;
+            await module.InvokeVoidAsync("positionDropdown",
+                id, triggerEl, contentEl, side, align, offsetPx, dotNetRef, closeMethodName);
+        }
+        catch (JSDisconnectedException) { }
+    }
+
+    /// <summary>Disposes dropdown position listeners.</summary>
+    public async ValueTask DisposeDropdownPositionAsync(string id)
+    {
+        try
+        {
+            var module = await _moduleTask.Value;
+            await module.InvokeVoidAsync("disposeDropdownPosition", id);
+        }
+        catch (JSDisconnectedException) { }
+    }
+
     // ─── Dispose All ─────────────────────────────────────────────────────────
 
     /// <summary>Removes all JS listeners registered under <paramref name="id"/>.</summary>
