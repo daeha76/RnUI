@@ -11,6 +11,8 @@ namespace Daeha.RnUI.Tests.Components;
 [Trait("Category", "Unit")]
 public class RnButtonTests : BunitContext
 {
+    // --- Default rendering ---
+
     [Fact]
     public void RnButton_DefaultRender_HasCnButtonClass()
     {
@@ -58,6 +60,61 @@ public class RnButtonTests : BunitContext
 
         cut.Find("button").GetAttribute("type").Should().Be("button");
     }
+
+    // --- data-slot attribute ---
+
+    [Fact]
+    public void RnButton_WithDataSlotAttribute()
+    {
+        var cut = Render<RnButton>(parameters => parameters
+            .AddChildContent("Button"));
+
+        cut.Find("button").GetAttribute("data-slot").Should().Be("button");
+    }
+
+    // --- data-variant attribute ---
+
+    [Fact]
+    public void RnButton_DefaultRender_HasDataVariantDefault()
+    {
+        var cut = Render<RnButton>(parameters => parameters
+            .AddChildContent("Btn"));
+
+        cut.Find("button").GetAttribute("data-variant").Should().Be("default");
+    }
+
+    [Fact]
+    public void RnButton_WithGhostVariant_HasDataVariantGhost()
+    {
+        var cut = Render<RnButton>(parameters => parameters
+            .Add(p => p.Variant, ButtonVariant.Ghost)
+            .AddChildContent("Ghost"));
+
+        cut.Find("button").GetAttribute("data-variant").Should().Be("ghost");
+    }
+
+    // --- data-size attribute ---
+
+    [Fact]
+    public void RnButton_DefaultRender_HasDataSizeDefault()
+    {
+        var cut = Render<RnButton>(parameters => parameters
+            .AddChildContent("Btn"));
+
+        cut.Find("button").GetAttribute("data-size").Should().Be("default");
+    }
+
+    [Fact]
+    public void RnButton_WithLgSize_HasDataSizeLg()
+    {
+        var cut = Render<RnButton>(parameters => parameters
+            .Add(p => p.Size, ButtonSize.Lg)
+            .AddChildContent("Large"));
+
+        cut.Find("button").GetAttribute("data-size").Should().Be("lg");
+    }
+
+    // --- All Variants ---
 
     [Fact]
     public void RnButton_WithDestructiveVariant_AppliesCorrectClass()
@@ -111,16 +168,16 @@ public class RnButtonTests : BunitContext
         cut.Find("button").ClassList.Should().Contain("cn-button-variant-link");
     }
 
+    // --- All Sizes ---
+
     [Fact]
-    public void RnButton_WithLgSize_AppliesCorrectClass()
+    public void RnButton_WithXsSize_AppliesCorrectClass()
     {
         var cut = Render<RnButton>(parameters => parameters
-            .Add(p => p.Size, ButtonSize.Lg)
-            .AddChildContent("Large"));
+            .Add(p => p.Size, ButtonSize.Xs)
+            .AddChildContent("XS"));
 
-        var button = cut.Find("button");
-        button.ClassList.Should().Contain("cn-button-size-lg");
-        button.ClassList.Should().NotContain("cn-button-size-default");
+        cut.Find("button").ClassList.Should().Contain("cn-button-size-xs");
     }
 
     [Fact]
@@ -134,6 +191,18 @@ public class RnButtonTests : BunitContext
     }
 
     [Fact]
+    public void RnButton_WithLgSize_AppliesCorrectClass()
+    {
+        var cut = Render<RnButton>(parameters => parameters
+            .Add(p => p.Size, ButtonSize.Lg)
+            .AddChildContent("Large"));
+
+        var button = cut.Find("button");
+        button.ClassList.Should().Contain("cn-button-size-lg");
+        button.ClassList.Should().NotContain("cn-button-size-default");
+    }
+
+    [Fact]
     public void RnButton_WithIconSize_AppliesCorrectClass()
     {
         var cut = Render<RnButton>(parameters => parameters
@@ -142,6 +211,38 @@ public class RnButtonTests : BunitContext
 
         cut.Find("button").ClassList.Should().Contain("cn-button-size-icon");
     }
+
+    [Fact]
+    public void RnButton_WithIconXsSize_AppliesCorrectClass()
+    {
+        var cut = Render<RnButton>(parameters => parameters
+            .Add(p => p.Size, ButtonSize.IconXs)
+            .AddChildContent("I"));
+
+        cut.Find("button").ClassList.Should().Contain("cn-button-size-icon-xs");
+    }
+
+    [Fact]
+    public void RnButton_WithIconSmSize_AppliesCorrectClass()
+    {
+        var cut = Render<RnButton>(parameters => parameters
+            .Add(p => p.Size, ButtonSize.IconSm)
+            .AddChildContent("I"));
+
+        cut.Find("button").ClassList.Should().Contain("cn-button-size-icon-sm");
+    }
+
+    [Fact]
+    public void RnButton_WithIconLgSize_AppliesCorrectClass()
+    {
+        var cut = Render<RnButton>(parameters => parameters
+            .Add(p => p.Size, ButtonSize.IconLg)
+            .AddChildContent("I"));
+
+        cut.Find("button").ClassList.Should().Contain("cn-button-size-icon-lg");
+    }
+
+    // --- Disabled state ---
 
     [Fact]
     public void RnButton_Disabled_HasDisabledAttribute()
@@ -165,6 +266,8 @@ public class RnButtonTests : BunitContext
         button.HasAttribute("disabled").Should().BeFalse();
     }
 
+    // --- Click handling ---
+
     [Fact]
     public void RnButton_Click_InvokesOnClick()
     {
@@ -176,6 +279,22 @@ public class RnButtonTests : BunitContext
         cut.Find("button").Click();
         clicked.Should().BeTrue();
     }
+
+    [Fact]
+    public void RnButton_MultipleClicks_InvokesEachTime()
+    {
+        var clickCount = 0;
+        var cut = Render<RnButton>(parameters => parameters
+            .Add(p => p.OnClick, EventCallback.Factory.Create<MouseEventArgs>(this, _ => clickCount++))
+            .AddChildContent("Click"));
+
+        cut.Find("button").Click();
+        cut.Find("button").Click();
+        cut.Find("button").Click();
+        clickCount.Should().Be(3);
+    }
+
+    // --- Custom class ---
 
     [Fact]
     public void RnButton_WithCustomClass_IncludesCustomClass()
@@ -197,14 +316,7 @@ public class RnButtonTests : BunitContext
         cut.Find("button").ClassList.Should().Contain("cn-button");
     }
 
-    [Fact]
-    public void RnButton_WithDataSlotAttribute()
-    {
-        var cut = Render<RnButton>(parameters => parameters
-            .AddChildContent("Button"));
-
-        cut.Find("button").GetAttribute("data-slot").Should().Be("button");
-    }
+    // --- Type attribute ---
 
     [Fact]
     public void RnButton_WithSubmitType_RendersCorrectType()
@@ -214,5 +326,37 @@ public class RnButtonTests : BunitContext
             .AddChildContent("Submit"));
 
         cut.Find("button").GetAttribute("type").Should().Be("submit");
+    }
+
+    [Fact]
+    public void RnButton_WithResetType_RendersCorrectType()
+    {
+        var cut = Render<RnButton>(parameters => parameters
+            .Add(p => p.Type, "reset")
+            .AddChildContent("Reset"));
+
+        cut.Find("button").GetAttribute("type").Should().Be("reset");
+    }
+
+    // --- AdditionalAttributes ---
+
+    [Fact]
+    public void RnButton_WithAdditionalAttributes_PassesThrough()
+    {
+        var cut = Render<RnButton>(parameters => parameters
+            .Add(p => p.AdditionalAttributes, new Dictionary<string, object> { { "aria-label", "Close" } })
+            .AddChildContent("X"));
+
+        cut.Find("button").GetAttribute("aria-label").Should().Be("Close");
+    }
+
+    [Fact]
+    public void RnButton_WithId_PassesThrough()
+    {
+        var cut = Render<RnButton>(parameters => parameters
+            .Add(p => p.AdditionalAttributes, new Dictionary<string, object> { { "id", "my-btn" } })
+            .AddChildContent("Btn"));
+
+        cut.Find("button").GetAttribute("id").Should().Be("my-btn");
     }
 }
