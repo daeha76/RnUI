@@ -110,7 +110,7 @@ public class DataTableState<TItem>
             if (column == null) continue;
             var fv = filterValue;
             result = result.Where(item =>
-                column.GetStringValue(item).Contains(fv, StringComparison.OrdinalIgnoreCase));
+                column.GetStringValue(item).Equals(fv, StringComparison.OrdinalIgnoreCase));
         }
 
         return result.ToList();
