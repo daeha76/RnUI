@@ -605,11 +605,6 @@
       opacity: 50%;
     }
   }
-  .has-data-\[variant\=inset\]\:bg-sidebar {
-    &:has(*[data-variant="inset"]) {
-      background-color: var(--color-sidebar);
-    }
-  }
   .md\:block {
     @media (width >= 48rem) {
       display: block;
@@ -4252,12 +4247,15 @@
     min-height: 100svh;
     width: 100%;
   }
+  .cn-sidebar-wrapper:has([data-variant="inset"]) {
+    background: var(--color-sidebar);
+  }
   .cn-sidebar-fixed {
     display: flex;
     height: 100%;
     flex-direction: column;
-    background-color: var(--color-sidebar);
     color: var(--color-sidebar-foreground);
+    background: var(--color-sidebar);
     width: var(--sidebar-width);
   }
   .cn-sidebar-mobile {
@@ -4265,9 +4263,9 @@
     height: 100%;
     width: 100%;
     flex-direction: column;
-    background-color: var(--color-sidebar);
     padding: calc(var(--spacing) * 0);
     color: var(--color-sidebar-foreground);
+    background: var(--color-sidebar);
   }
   .cn-sidebar-gap {
     position: relative;
@@ -4327,7 +4325,7 @@
     height: 100%;
     width: 100%;
     flex-direction: column;
-    background-color: var(--color-sidebar);
+    background: var(--color-sidebar);
     scrollbar-width: thin;
     scrollbar-color: var(--color-sidebar-accent) transparent;
   }

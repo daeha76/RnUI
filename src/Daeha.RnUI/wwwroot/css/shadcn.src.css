@@ -1210,15 +1210,21 @@
   @apply flex min-h-svh w-full;
 }
 
+.cn-sidebar-wrapper:has([data-variant="inset"]) {
+  background: var(--color-sidebar);
+}
+
 /* Non-collapsible sidebar */
 .cn-sidebar-fixed {
-  @apply flex h-full flex-col bg-sidebar text-sidebar-foreground;
+  @apply flex h-full flex-col text-sidebar-foreground;
+  background: var(--color-sidebar);
   width: var(--sidebar-width);
 }
 
 /* Mobile sidebar within Sheet */
 .cn-sidebar-mobile {
-  @apply flex h-full w-full flex-col bg-sidebar p-0 text-sidebar-foreground;
+  @apply flex h-full w-full flex-col p-0 text-sidebar-foreground;
+  background: var(--color-sidebar);
 }
 
 /* Desktop gap div (reserves space in flex layout) */
@@ -1259,7 +1265,8 @@
 
 /* Sidebar inner wrapper */
 .cn-sidebar-inner {
-  @apply flex h-full w-full flex-col bg-sidebar;
+  @apply flex h-full w-full flex-col;
+  background: var(--color-sidebar);
   scrollbar-width: thin;
   scrollbar-color: var(--color-sidebar-accent) transparent;
 }

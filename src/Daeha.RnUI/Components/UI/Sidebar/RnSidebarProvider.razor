@@ -3,7 +3,7 @@
 
 <div data-slot="sidebar-wrapper"
      style="--sidebar-width: @Width; --sidebar-width-icon: @WidthIcon;"
-     class="@CssUtils.Cn("cn-sidebar-wrapper group/sidebar-wrapper", _hasInset ? "has-data-[variant=inset]:bg-sidebar" : null, Class)"
+     class="@CssUtils.Cn("cn-sidebar-wrapper group/sidebar-wrapper", Class)"
      @attributes="AdditionalAttributes">
     <CascadingValue Value="this" IsFixed="false">
         @ChildContent
@@ -24,8 +24,6 @@
     private readonly string _id = $"sidebar-provider-{Guid.NewGuid():N}";
     private DotNetObjectReference<RnSidebarProvider>? _dotNetRef;
     private bool _initialized;
-    private bool _hasInset = true;
-
     public bool OpenMobile { get; private set; }
     public string State => Open ? "expanded" : "collapsed";
 
