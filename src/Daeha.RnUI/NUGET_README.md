@@ -124,11 +124,7 @@ Override CSS custom properties to theme all components:
 
 ## Changelog
 
-### v0.11.5
-- **CSS**: Wrapped all component styles in `@layer components` for better Tailwind CSS v4 cascade control
-
-### v0.11.4
-- **RnDataTable**: Added `OnRowDoubleClick` (`EventCallback<TItem>`) parameter — triggers on row double-click; rows automatically apply `cursor-pointer` when the callback is bound
+[change-log](https://github.com/daeha76/RnUI/blob/main/CHANGELOG.md)
 
 ## License
 
