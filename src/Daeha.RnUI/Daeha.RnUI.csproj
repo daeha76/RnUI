@@ -45,6 +45,12 @@
   </ItemGroup>
 
 
+  <Target Name="NpmInstall" BeforeTargets="BuildTailwindCSS"
+          Inputs="package.json"
+          Outputs="node_modules/.package-lock.json">
+    <Exec Command="npm install" WorkingDirectory="$(MSBuildProjectDirectory)" />
+  </Target>
+
   <Target Name="BuildTailwindCSS" BeforeTargets="Build" Inputs="wwwroot/css/shadcn.src.css" Outputs="wwwroot/css/shadcn.css">
     <Exec Command="npm run build:css" WorkingDirectory="$(MSBuildProjectDirectory)" />
   </Target>

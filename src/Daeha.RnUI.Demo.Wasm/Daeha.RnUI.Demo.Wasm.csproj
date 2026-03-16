@@ -25,6 +25,12 @@
     <None Include="package-lock.json" Exclude="bin/**;obj/**" />
   </ItemGroup>
 
+  <Target Name="NpmInstall" BeforeTargets="BuildTailwindCSS"
+          Inputs="package.json"
+          Outputs="node_modules/.package-lock.json">
+    <Exec Command="npm install" WorkingDirectory="$(MSBuildProjectDirectory)" />
+  </Target>
+
   <Target Name="BuildTailwindCSS" BeforeTargets="Build"
           Inputs="wwwroot/input.css"
           Outputs="wwwroot/css/tailwindcss.css">

@@ -27,9 +27,13 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install npm dependencies
+      - name: Install npm dependencies (Library)
         run: npm install
         working-directory: src/Daeha.RnUI
+
+      - name: Install npm dependencies (Demo)
+        run: npm install
+        working-directory: src/Daeha.RnUI.Demo.Wasm
 
       - name: Build RnUI Library
         run: dotnet build src/Daeha.RnUI/Daeha.RnUI.csproj -c Release
