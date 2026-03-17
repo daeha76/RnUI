@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.10] - 2026-03-17
+
+### Changed
+
+- CSS: added `@custom-variant dark` for improved dark mode support
+- RnInput, RnSelect, RnDataTable page-size select: background changed from `bg-background` to `bg-card`
+
 ## [0.11.9] - 2026-03-17
 
 ### Changed
@@ -168,6 +175,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Legacy demo projects and Bootstrap assets
 
+[0.11.10]: https://github.com/daeha76/RnUI/compare/v0.11.9...v0.11.10
 [0.11.9]: https://github.com/daeha76/RnUI/compare/v0.11.8...v0.11.9
 [0.11.8]: https://github.com/daeha76/RnUI/compare/v0.11.7...v0.11.8
 [0.11.7]: https://github.com/daeha76/RnUI/compare/v0.11.6...v0.11.7
