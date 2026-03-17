@@ -2,7 +2,7 @@
 @typeparam TItem
 @implements IDisposable
 
-<div data-slot="data-table" class="@CssUtils.Cn("cn-data-table", Class)" @attributes="AdditionalAttributes">
+<div data-slot="data-table" class="@CssUtils.Cn("cn-data-table", FullHeight ? "flex-1 min-h-0 flex flex-col [&>div[data-slot=table-container]]:flex-1 [&>div[data-slot=table-container]]:overflow-auto" : null, Class)" @attributes="AdditionalAttributes">
     @* Toolbar *@
     @if (Toolbar != null)
     {
@@ -312,6 +312,7 @@
     [Parameter] public int SkeletonRows { get; set; } = 5;
     [Parameter] public int SkeletonColumns { get; set; } = 4;
     [Parameter] public bool ShowPagination { get; set; } = true;
+    [Parameter] public bool FullHeight { get; set; }
     [Parameter] public string? Class { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }

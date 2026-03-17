@@ -387,6 +387,9 @@
   .max-h-\[200px\] {
     max-height: 200px;
   }
+  .min-h-0 {
+    min-height: calc(var(--spacing) * 0);
+  }
   .w-3 {
     width: calc(var(--spacing) * 3);
   }
@@ -623,6 +626,16 @@
   .md\:justify-start {
     @media (width >= 48rem) {
       justify-content: flex-start;
+    }
+  }
+  .\[\&\>div\[data-slot\=table-container\]\]\:flex-1 {
+    &>div[data-slot=table-container] {
+      flex: 1;
+    }
+  }
+  .\[\&\>div\[data-slot\=table-container\]\]\:overflow-auto {
+    &>div[data-slot=table-container] {
+      overflow: auto;
     }
   }
 }
