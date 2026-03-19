@@ -38,7 +38,12 @@
 
     private string ComputedClass => CssUtils.Cn(
         "cn-toggle-group-item cn-toggle",
-        EffectiveVariant == ToggleVariant.Outline ? "cn-toggle-variant-outline" : null,
+        EffectiveVariant switch
+        {
+            ToggleVariant.Outline => "cn-toggle-variant-outline",
+            ToggleVariant.Primary => "cn-toggle-variant-primary",
+            _ => null
+        },
         EffectiveSize switch
         {
             ToggleSize.Sm => "cn-toggle-size-sm",

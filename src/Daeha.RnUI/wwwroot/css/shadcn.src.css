@@ -1028,6 +1028,10 @@
   @apply border border-input bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground;
 }
 
+.cn-toggle-variant-primary {
+  @apply border border-input bg-transparent shadow-xs hover:bg-primary/10 hover:text-primary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary;
+}
+
 .cn-toggle-size-default {
   @apply h-9 min-w-9 px-2;
 }

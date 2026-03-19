@@ -4,7 +4,8 @@ namespace RnUI.Components.UI;
 public enum ToggleVariant
 {
     Default,
-    Outline
+    Outline,
+    Primary
 }
 
 /// <summary>Size of the toggle.</summary>

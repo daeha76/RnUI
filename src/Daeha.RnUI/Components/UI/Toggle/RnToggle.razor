@@ -35,7 +35,12 @@
 
     private string ComputedClass => CssUtils.Cn(
         "cn-toggle",
-        CssUtils.CnIf(Variant == ToggleVariant.Outline, "cn-toggle-variant-outline"),
+        Variant switch
+        {
+            ToggleVariant.Outline => "cn-toggle-variant-outline",
+            ToggleVariant.Primary => "cn-toggle-variant-primary",
+            _ => null
+        },
         SizeClass,
         Class
     );
