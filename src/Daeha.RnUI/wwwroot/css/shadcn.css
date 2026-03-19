@@ -1243,7 +1243,7 @@
     border-style: var(--tw-border-style);
     border-width: 1px;
     border-color: var(--color-input);
-    background-color: transparent;
+    background-color: var(--color-card);
     padding-inline: calc(var(--spacing) * 3);
     padding-block: calc(var(--spacing) * 2);
     font-size: var(--text-base);
