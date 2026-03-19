@@ -12,7 +12,7 @@
 
 ## 为什么选择 RnUI？
 
-- **54 个组件类别** — 包含 194 个 Razor 组件文件的综合 UI 库
+- **55 个组件类别** — 包含 195 个 Razor 组件文件的综合 UI 库
 - **基于 shadcn/ui** — 源自 Web 端久经验证的设计系统，直接移植到 Blazor
 - **Tailwind CSS** — 采用 oklch 色彩空间，基于 CSS 自定义属性的主题系统
 - **深色模式** — 内置亮色/深色模式支持
@@ -126,6 +126,7 @@ npm run build:css   # 生产环境（一次性构建）
 | `RnCombobox` | 可搜索的下拉选择框 | [查看](https://daeha76.github.io/RnUI/components/combobox) |
 | `RnInputOTP` | OTP 输入框 | [查看](https://daeha76.github.io/RnUI/components/input-otp) |
 | `RnField` | 字段容器（集成 Label、Description、Error） | [查看](https://daeha76.github.io/RnUI/components/field) |
+| `RnTextField` | RnField + RnFieldLabel + RnInput 的便捷封装 | [查看](https://daeha76.github.io/RnUI/components/text-field) |
 | `RnForm` | 表单验证 | [查看](https://daeha76.github.io/RnUI/components/form) |
 
 ### 卡片与容器
@@ -255,6 +256,15 @@ npm run build:css   # 生产环境（一次性构建）
         <RnButton OnClick="Save">Save Changes</RnButton>
     </RnDialogFooter>
 </RnDialog>
+```
+
+### TextField
+
+将 RnField + RnFieldLabel + RnInput 组合为单个组件的便捷封装。
+
+```razor
+<RnTextField Label="姓名" @bind-Value="_name" Placeholder="请输入姓名" />
+<RnTextField Label="邮箱" @bind-Value="_email" Type="email" Placeholder="请输入邮箱" />
 ```
 
 ### DataTable

@@ -12,7 +12,7 @@ Componentes de interfaz de usuario bellamente diseñados y accesibles, construid
 
 ## ¿Por qué RnUI?
 
-- **54 categorías de componentes** — Una biblioteca de UI completa con 194 archivos de componentes Razor
+- **55 categorías de componentes** — Una biblioteca de UI completa con 195 archivos de componentes Razor
 - **Basado en shadcn/ui** — Un sistema de diseño probado de la web, portado directamente a Blazor
 - **Tailwind CSS** — Sistema de color oklch con tematización basada en propiedades personalizadas CSS
 - **Modo oscuro** — Soporte integrado de modo claro/oscuro
@@ -126,6 +126,7 @@ npm run build:css   # Producción (compilación única)
 | `RnCombobox` | Selección desplegable con búsqueda | [Ver](https://daeha76.github.io/RnUI/components/combobox) |
 | `RnInputOTP` | Campo de entrada OTP | [Ver](https://daeha76.github.io/RnUI/components/input-otp) |
 | `RnField` | Contenedor de campo (integra Label, Description, Error) | [Ver](https://daeha76.github.io/RnUI/components/field) |
+| `RnTextField` | Wrapper de conveniencia para RnField + RnFieldLabel + RnInput | [Ver](https://daeha76.github.io/RnUI/components/text-field) |
 | `RnForm` | Validación de formularios | [Ver](https://daeha76.github.io/RnUI/components/form) |
 
 ### Tarjetas y contenedores
@@ -255,6 +256,15 @@ Soporta 6 variantes y 8 tamaños.
         <RnButton OnClick="Save">Save Changes</RnButton>
     </RnDialogFooter>
 </RnDialog>
+```
+
+### TextField
+
+Un wrapper de conveniencia que combina RnField + RnFieldLabel + RnInput en un solo componente.
+
+```razor
+<RnTextField Label="Nombre" @bind-Value="_name" Placeholder="Ingrese su nombre" />
+<RnTextField Label="Correo" @bind-Value="_email" Type="email" Placeholder="Ingrese su correo" />
 ```
 
 ### DataTable

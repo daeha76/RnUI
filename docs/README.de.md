@@ -12,7 +12,7 @@ Ansprechend gestaltete, barrierefreie UI-Komponenten mit Tailwind CSS fuer .NET 
 
 ## Warum RnUI?
 
-- **54 Komponentenkategorien** — Eine umfassende UI-Bibliothek mit 194 Razor-Komponentendateien
+- **55 Komponentenkategorien** — Eine umfassende UI-Bibliothek mit 195 Razor-Komponentendateien
 - **Basierend auf shadcn/ui** — Ein bewaehrtes Designsystem aus dem Web, direkt nach Blazor portiert
 - **Tailwind CSS** — oklch-Farbsystem mit CSS-Custom-Property-basiertem Theming
 - **Dunkelmodus** — Integrierte Unterstuetzung fuer hellen/dunklen Modus
@@ -126,6 +126,7 @@ npm run build:css   # Produktion (einmaliger Build)
 | `RnCombobox` | Durchsuchbare Dropdown-Auswahl | [Live](https://daeha76.github.io/RnUI/components/combobox) |
 | `RnInputOTP` | OTP-Eingabefeld | [Live](https://daeha76.github.io/RnUI/components/input-otp) |
 | `RnField` | Feldcontainer (integriert Label, Beschreibung, Fehlermeldung) | [Live](https://daeha76.github.io/RnUI/components/field) |
+| `RnTextField` | Komfort-Wrapper fuer RnField + RnFieldLabel + RnInput | [Live](https://daeha76.github.io/RnUI/components/text-field) |
 | `RnForm` | Formularvalidierung | [Live](https://daeha76.github.io/RnUI/components/form) |
 
 ### Karten & Container
@@ -255,6 +256,15 @@ Unterstuetzt 6 Varianten und 8 Groessen.
         <RnButton OnClick="Save">Aenderungen speichern</RnButton>
     </RnDialogFooter>
 </RnDialog>
+```
+
+### TextField
+
+Ein Komfort-Wrapper, der RnField + RnFieldLabel + RnInput in einer einzigen Komponente kombiniert.
+
+```razor
+<RnTextField Label="Name" @bind-Value="_name" Placeholder="Name eingeben" />
+<RnTextField Label="E-Mail" @bind-Value="_email" Type="email" Placeholder="E-Mail eingeben" />
 ```
 
 ### DataTable

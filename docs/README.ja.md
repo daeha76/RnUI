@@ -12,7 +12,7 @@ Tailwind CSS を使用して構築された、美しくアクセシブルな .NE
 
 ## RnUI を選ぶ理由
 
-- **54 のコンポーネントカテゴリ** — 194 の Razor コンポーネントファイルを含む包括的な UI ライブラリ
+- **55 のコンポーネントカテゴリ** — 195 の Razor コンポーネントファイルを含む包括的な UI ライブラリ
 - **shadcn/ui ベース** — Web で実績のあるデザインシステムを Blazor に直接移植
 - **Tailwind CSS** — oklch カラーシステムと CSS カスタムプロパティベースのテーマ機能
 - **ダークモード** — ライト/ダークモードの組み込みサポート
@@ -126,6 +126,7 @@ npm run build:css   # 本番用（一回限りのビルド）
 | `RnCombobox` | 検索可能なドロップダウン選択 | [Live](https://daeha76.github.io/RnUI/components/combobox) |
 | `RnInputOTP` | OTP 入力フィールド | [Live](https://daeha76.github.io/RnUI/components/input-otp) |
 | `RnField` | フィールドコンテナ（Label, Description, Error を統合） | [Live](https://daeha76.github.io/RnUI/components/field) |
+| `RnTextField` | RnField + RnFieldLabel + RnInput の便利なラッパー | [Live](https://daeha76.github.io/RnUI/components/text-field) |
 | `RnForm` | フォームバリデーション | [Live](https://daeha76.github.io/RnUI/components/form) |
 
 ### カード & コンテナ
@@ -255,6 +256,15 @@ npm run build:css   # 本番用（一回限りのビルド）
         <RnButton OnClick="Save">変更を保存</RnButton>
     </RnDialogFooter>
 </RnDialog>
+```
+
+### TextField
+
+RnField + RnFieldLabel + RnInput を1つのコンポーネントにまとめた便利なラッパーです。
+
+```razor
+<RnTextField Label="名前" @bind-Value="_name" Placeholder="名前を入力してください" />
+<RnTextField Label="メール" @bind-Value="_email" Type="email" Placeholder="メールアドレスを入力してください" />
 ```
 
 ### DataTable

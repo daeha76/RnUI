@@ -14,7 +14,7 @@
 
 ## 왜 RnUI인가?
 
-- **54개 컴포넌트 카테고리** — 194개 Razor 컴포넌트 파일로 구성된 종합 UI 라이브러리
+- **55개 컴포넌트 카테고리** — 195개 Razor 컴포넌트 파일로 구성된 종합 UI 라이브러리
 - **shadcn/ui 기반** — 웹에서 검증된 디자인 시스템을 Blazor로 직접 포팅
 - **Tailwind CSS** — oklch 색공간 기반의 CSS 커스텀 속성 테마 시스템
 - **다크 모드** — 라이트/다크 모드 기본 지원
@@ -128,6 +128,7 @@ npm run build:css   # 프로덕션 (일회성 빌드)
 | `RnCombobox` | 검색 가능한 드롭다운 선택 | [Live](https://daeha76.github.io/RnUI/components/combobox) |
 | `RnInputOTP` | OTP 입력 필드 | [Live](https://daeha76.github.io/RnUI/components/input-otp) |
 | `RnField` | 필드 컨테이너 (Label, Description, Error 통합) | [Live](https://daeha76.github.io/RnUI/components/field) |
+| `RnTextField` | RnField + RnFieldLabel + RnInput 편의 래퍼 | [Live](https://daeha76.github.io/RnUI/components/text-field) |
 | `RnForm` | 폼 유효성 검사 | [Live](https://daeha76.github.io/RnUI/components/form) |
 
 ### 카드 및 컨테이너
@@ -257,6 +258,15 @@ npm run build:css   # 프로덕션 (일회성 빌드)
         <RnButton OnClick="Save">Save Changes</RnButton>
     </RnDialogFooter>
 </RnDialog>
+```
+
+### TextField
+
+RnField + RnFieldLabel + RnInput를 하나의 컴포넌트로 결합한 편의 래퍼입니다.
+
+```razor
+<RnTextField Label="이름" @bind-Value="_name" Placeholder="이름을 입력하세요" />
+<RnTextField Label="이메일" @bind-Value="_email" Type="email" Placeholder="이메일을 입력하세요" />
 ```
 
 ### DataTable
