@@ -2,7 +2,7 @@
 @implements IAsyncDisposable
 @inject RnUIInteropService Interop
 
-<div data-slot="combobox" class="@CssUtils.Cn("relative inline-block", Class)" @attributes="AdditionalAttributes">
+<div data-slot="combobox" class="@CssUtils.Cn("cn-combobox", Class)" @attributes="AdditionalAttributes">
     <button type="button"
             data-slot="combobox-trigger"
             data-placeholder="@(string.IsNullOrEmpty(Value) ? "" : null)"

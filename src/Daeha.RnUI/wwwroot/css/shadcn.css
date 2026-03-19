@@ -2074,6 +2074,11 @@
     }
     &:is(:where(.group\/tabs-list)[data-variant="line"] *) {
       &[data-state="active"] {
+        border-color: transparent;
+      }
+    }
+    &:is(:where(.group\/tabs-list)[data-variant="line"] *) {
+      &[data-state="active"] {
         background-color: transparent;
       }
     }
@@ -5656,9 +5661,14 @@
       z-index: 10;
     }
   }
+  .cn-combobox {
+    position: relative;
+    display: inline-block;
+    width: 200px;
+  }
   .cn-combobox-trigger {
     display: flex;
-    width: 200px;
+    width: 100%;
     align-items: center;
     justify-content: space-between;
     border-radius: var(--radius-md);

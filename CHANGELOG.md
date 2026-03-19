@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.11] - 2026-03-19
+
+### Fixed
+
+- RnCombobox: extracted wrapper styles into `.cn-combobox` class (`relative inline-block w-[200px]`)
+- RnCombobox: trigger width changed from fixed `w-[200px]` to `w-full` (width now controlled by container)
+- CSS: Tabs line variant `border-transparent` fix applied to light mode as well as dark mode
+
 ## [0.11.10] - 2026-03-17
 
 ### Changed
