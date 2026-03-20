@@ -12,7 +12,7 @@
 
 ## 为什么选择 RnUI？
 
-- **55 个组件类别** — 包含 195 个 Razor 组件文件的综合 UI 库
+- **56 个组件类别** — 包含 195+ 个 Razor 组件文件的综合 UI 库
 - **基于 shadcn/ui** — 源自 Web 端久经验证的设计系统，直接移植到 Blazor
 - **Tailwind CSS** — 采用 oklch 色彩空间，基于 CSS 自定义属性的主题系统
 - **深色模式** — 内置亮色/深色模式支持
@@ -127,6 +127,7 @@ npm run build:css   # 生产环境（一次性构建）
 | `RnInputOTP` | OTP 输入框 | [查看](https://daeha76.github.io/RnUI/components/input-otp) |
 | `RnField` | 字段容器（集成 Label、Description、Error） | [查看](https://daeha76.github.io/RnUI/components/field) |
 | `RnTextField` | RnField + RnFieldLabel + RnInput 的便捷封装 | [查看](https://daeha76.github.io/RnUI/components/text-field) |
+| `RnDateField` | RnField + RnFieldLabel + RnDatePicker 的便捷封装（string? 绑定） | [查看](https://daeha76.github.io/RnUI/components/date-field) |
 | `RnForm` | 表单验证 | [查看](https://daeha76.github.io/RnUI/components/form) |
 
 ### 卡片与容器
@@ -265,6 +266,15 @@ npm run build:css   # 生产环境（一次性构建）
 ```razor
 <RnTextField Label="姓名" @bind-Value="_name" Placeholder="请输入姓名" />
 <RnTextField Label="邮箱" @bind-Value="_email" Type="email" Placeholder="请输入邮箱" />
+```
+
+### DateField
+
+将 RnField + RnFieldLabel + RnDatePicker 组合为单个组件的便捷封装。支持 `string?` 绑定（yyyy-MM-dd 格式），便于迁移。
+
+```razor
+<RnDateField Label="出生日期" @bind-Value="_birthDate" />
+<RnDateField Label="开始日期" @bind-Value="_startDate" Placeholder="选择日期..." />
 ```
 
 ### DataTable

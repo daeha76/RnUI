@@ -1,0 +1,96 @@
+@* RnDateField component - Convenience wrapper for RnField + RnFieldLabel + RnDatePicker *@
+@* Accepts string? binding for easy migration from input type="date" patterns *@
+
+<RnField Orientation="@Orientation" Class="@Class">
+    @if (Label is not null)
+    {
+        <RnFieldLabel For="@Id" Class="@LabelClass">@Label</RnFieldLabel>
+    }
+    <RnDatePicker Value="@_dateValue"
+                  ValueChanged="HandleDateChanged"
+                  Placeholder="@(Placeholder ?? "yyyy-MM-dd")"
+                  DateFormat="@DateFormat"
+                  MinDate="@MinDate"
+                  MaxDate="@MaxDate"
+                  Disabled="@Disabled"
+                  Class="@InputClass"
+                  @attributes="AdditionalAttributes" />
+    @if (Description is not null)
+    {
+        <RnFieldDescription>@Description</RnFieldDescription>
+    }
+</RnField>
+
+@code {
+    /// <summary>Label text. When null, no label is rendered.</summary>
+    [Parameter] public string? Label { get; set; }
+
+    /// <summary>Optional description text below the date picker.</summary>
+    [Parameter] public string? Description { get; set; }
+
+    /// <summary>Date value as string (yyyy-MM-dd format). Enables easy migration from input type="date".</summary>
+    [Parameter] public string? Value { get; set; }
+
+    /// <summary>Callback when value changes (returns yyyy-MM-dd string or null).</summary>
+    [Parameter] public EventCallback<string?> ValueChanged { get; set; }
+
+    /// <summary>Placeholder text.</summary>
+    [Parameter] public string? Placeholder { get; set; }
+
+    /// <summary>Display format for the selected date.</summary>
+    [Parameter] public string DateFormat { get; set; } = "yyyy-MM-dd";
+
+    /// <summary>Minimum selectable date.</summary>
+    [Parameter] public DateTime? MinDate { get; set; }
+
+    /// <summary>Maximum selectable date.</summary>
+    [Parameter] public DateTime? MaxDate { get; set; }
+
+    /// <summary>Whether the date picker is disabled.</summary>
+    [Parameter] public bool Disabled { get; set; }
+
+    /// <summary>Id for accessibility linking with label.</summary>
+    [Parameter] public string? Id { get; set; }
+
+    /// <summary>Layout orientation of the field.</summary>
+    [Parameter] public FieldOrientation Orientation { get; set; } = FieldOrientation.Vertical;
+
+    /// <summary>Additional CSS classes for the outer RnField wrapper.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    /// <summary>Additional CSS classes for the inner RnDatePicker.</summary>
+    [Parameter] public string? InputClass { get; set; }
+
+    /// <summary>Additional CSS classes for the RnFieldLabel.</summary>
+    [Parameter] public string? LabelClass { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private static readonly string[] ParseFormats = ["yyyy-MM-dd", "yyyyMMdd", "yyyy/MM/dd"];
+
+    private DateTime? _dateValue;
+    private string? _previousValue;
+
+    protected override void OnParametersSet()
+    {
+        if (Value != _previousValue)
+        {
+            _previousValue = Value;
+            _dateValue = !string.IsNullOrWhiteSpace(Value)
+                && DateTime.TryParseExact(Value, ParseFormats,
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    System.Globalization.DateTimeStyles.None, out var parsed)
+                ? parsed
+                : null;
+        }
+    }
+
+    private async Task HandleDateChanged(DateTime? newDate)
+    {
+        _dateValue = newDate;
+        var newValue = newDate?.ToString("yyyy-MM-dd");
+        _previousValue = newValue;
+        Value = newValue;
+        await ValueChanged.InvokeAsync(newValue);
+    }
+}

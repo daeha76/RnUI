@@ -21,7 +21,7 @@ Beautifully designed, accessible UI components built with Tailwind CSS for .NET 
 
 ## Why RnUI?
 
-- **55 component categories** — A comprehensive UI library with 195 Razor component files
+- **56 component categories** — A comprehensive UI library with 195+ Razor component files
 - **Based on shadcn/ui** — A proven design system from the web, ported directly to Blazor
 - **Tailwind CSS** — oklch color system with CSS custom property-based theming
 - **Dark mode** — Built-in light/dark mode support
@@ -136,6 +136,7 @@ npm run build:css   # Production (one-time build)
 | `RnInputOTP` | OTP input field | [Live](https://daeha76.github.io/RnUI/components/input-otp) |
 | `RnField` | Field container (integrates Label, Description, Error) | [Live](https://daeha76.github.io/RnUI/components/field) |
 | `RnTextField` | Convenience wrapper for RnField + RnFieldLabel + RnInput | [Live](https://daeha76.github.io/RnUI/components/text-field) |
+| `RnDateField` | Convenience wrapper for RnField + RnFieldLabel + RnDatePicker (string? binding) | [Live](https://daeha76.github.io/RnUI/components/date-field) |
 | `RnForm` | Form validation | [Live](https://daeha76.github.io/RnUI/components/form) |
 
 ### Cards & Containers
@@ -274,6 +275,15 @@ A convenience wrapper that combines RnField + RnFieldLabel + RnInput into a sing
 ```razor
 <RnTextField Label="Name" @bind-Value="_name" Placeholder="Enter your name" />
 <RnTextField Label="Email" @bind-Value="_email" Type="email" Placeholder="Enter your email" />
+```
+
+### DateField
+
+A convenience wrapper that combines RnField + RnFieldLabel + RnDatePicker into a single component. Accepts `string?` binding (yyyy-MM-dd format) for easy migration.
+
+```razor
+<RnDateField Label="Date of Birth" @bind-Value="_birthDate" />
+<RnDateField Label="Start Date" @bind-Value="_startDate" Placeholder="Select a date..." />
 ```
 
 ### DataTable
